@@ -4,7 +4,11 @@ package ffmpeg
 #include <libavutil/avutil.h>
 */
 import "C"
-import "unsafe"
+import (
+	"unsafe"
+)
+
+type FILE C.FILE
 
 // AvutilVersion returns the LIBAVUTIL_VERSION_INT constant.
 func AvutilVersion() uint32 {
@@ -27,7 +31,7 @@ func AvutilLicense() string {
 }
 
 // Media Type
-type AvMediaType int32
+type AvMediaType = C.enum_AVMediaType
 
 const (
 	AVMEDIA_TYPE_UNKNOWN    = AvMediaType(C.AVMEDIA_TYPE_UNKNOWN)
@@ -64,7 +68,7 @@ var (
 )
 
 // AvPictureType, pixel formats and basic image planes manipulation.
-type AvPictureType int32
+type AvPictureType = C.enum_AVPictureType
 
 const (
 	AV_PICTURE_TYPE_NONE = AvPictureType(C.AV_PICTURE_TYPE_NONE)
@@ -93,9 +97,20 @@ func AvIntListLengthForSize(elsize uint32, list unsafe.Pointer, term uint64) uin
 	return (uint32)(C.av_int_list_length_for_size((C.uint)(elsize), list, (C.uint64_t)(term)))
 }
 
-// TODO. av_int_list_length
+// AvIntListLength
+func AvIntListLength[T any](list *T, term uint64) uint32 {
+	elsize := unsafe.Sizeof(*list)
+	return (uint32)(C.av_int_list_length_for_size((C.uint)(elsize), (unsafe.Pointer)(list), (C.uint64_t)(term)))
+}
 
-// TODO. av_fopen_utf8
+// AvFopenUtf8
+func AvFopenUtf8(path, mode string) *FILE {
+	pathPtr, pathFunc := StringCasting(path)
+	defer pathFunc()
+	modePtr, modeFunc := StringCasting(mode)
+	defer modeFunc()
+	return (*FILE)(C.av_fopen_utf8((*C.char)(pathPtr), (*C.char)(modePtr)))
+}
 
 // AvGetTimeBaseQ returns the fractional representation of the internal time base.
 func AvGetTimeBaseQ() AvRational {

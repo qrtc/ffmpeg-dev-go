@@ -73,7 +73,7 @@ const (
 	AV_CH_LAYOUT_22POINT2          = uint64(C.AV_CH_LAYOUT_22POINT2)
 )
 
-type AvMatrixEncoding int32
+type AvMatrixEncoding = C.enum_AVMatrixEncoding
 
 const (
 	AV_MATRIX_ENCODING_NONE           = AvMatrixEncoding(C.AV_MATRIX_ENCODING_NONE)
@@ -101,10 +101,14 @@ func AvGetExtendedChannelLayout(name string, channelLayout *uint64, nbChannels *
 		(*C.uint64_t)(channelLayout), (*C.int32_t)(nbChannels)))
 }
 
+const AV_CH_LAYOUT_MAX_STRING_SIZE = 256
+
 // AvGetChannelLayoutString returns a description of a channel layout.
-func AvGetChannelLayoutString(buf *int8, bufSize, nbChannels int32, channelLayout uint64) {
-	C.av_get_channel_layout_string((*C.char)(buf), (C.int)(bufSize),
+func AvGetChannelLayoutString(nbChannels int32, channelLayout uint64) string {
+	buf := make([]C.char, AV_CH_LAYOUT_MAX_STRING_SIZE)
+	C.av_get_channel_layout_string((*C.char)(&buf[0]), (C.int)(AV_CH_LAYOUT_MAX_STRING_SIZE),
 		(C.int)(nbChannels), (C.uint64_t)(channelLayout))
+	return C.GoString((*C.char)(&buf[0]))
 }
 
 // AvBprintChannelLayout appends a description of a channel layout to a bprint buffer.

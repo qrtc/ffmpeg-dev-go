@@ -109,12 +109,12 @@ func SwsInitContext(sctx *SwsContext, srcFilter, dstFilter *SwsFilter) int32 {
 }
 
 // SwsFreecontext frees the swscaler context swsContext.
-func SwsFreecontext(sctx *SwsContext) {
+func SwsFreeContext(sctx *SwsContext) {
 	C.sws_freeContext((*C.struct_SwsContext)(sctx))
 }
 
 // SwsGetcontext allocates and returns an SwsContext.
-func SwsGetcontext(srcW, srcH int32, srcFormat AvPixelFormat,
+func SwsGetContext(srcW, srcH int32, srcFormat AvPixelFormat,
 	dstW, dstH int32, dstFormat AvPixelFormat,
 	flags int32, srcFilter, dstFilter *SwsFilter, param *float64) *SwsContext {
 	return (*SwsContext)(C.sws_getContext((C.int)(srcW), (C.int)(srcH), (C.enum_AVPixelFormat)(srcFormat),
@@ -135,17 +135,29 @@ func SwsScale(sctx *SwsContext, srcSlice []*uint8, srcStride []int32,
 }
 
 // SwsSetColorspaceDetails
-func SwsSetColorspaceDetails(sctx *SwsContext, invTable [4]int32, srcRange int32,
-	table [4]int32, dstRange int32, brightness, contrast, saturation int32) int32 {
+func SwsSetColorSpaceDetails(sctx *SwsContext, invTable []int32, srcRange int32,
+	table []int32, dstRange int32, brightness, contrast, saturation int32) int32 {
+	if len(invTable) != 4 {
+		panic("invTable need len = 4")
+	}
+	if len(table) != 4 {
+		panic("table need len = 4")
+	}
 	return (int32)(C.sws_setColorspaceDetails((*C.struct_SwsContext)(sctx),
 		(*C.int)(unsafe.Pointer(&invTable[0])), (C.int)(srcRange),
 		(*C.int)(unsafe.Pointer(&table[0])), (C.int)(dstRange),
 		(C.int)(brightness), (C.int)(contrast), (C.int)(saturation)))
 }
 
-// SwsGetColorspaceDetails
-func SwsGetColorspaceDetails(sctx *SwsContext, invTable [4]int32, srcRange *int32,
-	table [4]int32, dstRange *int32, brightness, contrast, saturation *int32) int32 {
+// SwsGetColorSpaceDetails
+func SwsGetColorSpaceDetails(sctx *SwsContext, invTable []int32, srcRange *int32,
+	table []int32, dstRange *int32, brightness, contrast, saturation *int32) int32 {
+	if len(invTable) != 4 {
+		panic("invTable need len = 4")
+	}
+	if len(table) != 4 {
+		panic("table need len = 4")
+	}
 	invTablePtr := unsafe.Pointer(&invTable[0])
 	tablePtr := unsafe.Pointer(&table[0])
 	return (int32)(C.sws_getColorspaceDetails((*C.struct_SwsContext)(sctx),

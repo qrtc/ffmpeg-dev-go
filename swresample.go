@@ -11,7 +11,7 @@ const (
 )
 
 // Dithering algorithms
-type SwrDitherType int32
+type SwrDitherType = C.enum_SwrDitherType
 
 const (
 	SWR_DITHER_NONE                   = SwrDitherType(C.SWR_DITHER_NONE)
@@ -30,7 +30,7 @@ const (
 )
 
 // Resampling Engines
-type SwrEngine int32
+type SwrEngine = C.enum_SwrEngine
 
 const (
 	SWR_ENGINE_SWR  = SwrEngine(C.SWR_ENGINE_SWR)
@@ -39,7 +39,7 @@ const (
 )
 
 // Resampling Filter Types
-type SwrFilterType int32
+type SwrFilterType = C.enum_SwrFilterType
 
 const (
 	SWR_FILTER_TYPE_CUBIC            = SwrFilterType(C.SWR_FILTER_TYPE_CUBIC)

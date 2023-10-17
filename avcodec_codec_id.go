@@ -6,7 +6,7 @@ package ffmpeg
 import "C"
 
 // AvCodecID
-type AvCodecID int32
+type AvCodecID = C.enum_AVCodecID
 
 const (
 	AV_CODEC_ID_NONE = AvCodecID(C.AV_CODEC_ID_NONE)

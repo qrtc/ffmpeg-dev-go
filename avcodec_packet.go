@@ -7,7 +7,7 @@ import "C"
 import "unsafe"
 
 // AvPacketSideDataType
-type AvPacketSideDataType int32
+type AvPacketSideDataType = C.enum_AVPacketSideDataType
 
 const (
 	AV_PKT_DATA_PALETTE                    = AvPacketSideDataType(C.AV_PKT_DATA_PALETTE)
@@ -247,7 +247,7 @@ const (
 )
 
 // AvSideDataParamChangeFlags
-type AvSideDataParamChangeFlags int32
+type AvSideDataParamChangeFlags = C.enum_AVSideDataParamChangeFlags
 
 const (
 	AV_SIDE_DATA_PARAM_CHANGE_CHANNEL_COUNT  = AvSideDataParamChangeFlags(C.AV_SIDE_DATA_PARAM_CHANGE_CHANNEL_COUNT)

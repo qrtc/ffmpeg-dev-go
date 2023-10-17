@@ -6,7 +6,7 @@ package ffmpeg
 import "C"
 
 // Pixel format.
-type AvPixelFormat int32
+type AvPixelFormat = C.enum_AVPixelFormat
 
 const (
 	AV_PIX_FMT_NONE      = AvPixelFormat(C.AV_PIX_FMT_NONE)
@@ -343,7 +343,7 @@ const (
 )
 
 // Chromaticity coordinates of the source primaries.
-type AvColorPrimaries int32
+type AvColorPrimaries = C.enum_AVColorPrimaries
 
 const (
 	AVCOL_PRI_RESERVED0   = AvColorPrimaries(C.AVCOL_PRI_RESERVED0)
@@ -367,7 +367,7 @@ const (
 )
 
 // Color Transfer Characteristic.
-type AvColorTransferCharacteristic int32
+type AvColorTransferCharacteristic = C.enum_AVColorTransferCharacteristic
 
 const (
 	AVCOL_TRC_RESERVED0    = AvColorTransferCharacteristic(C.AVCOL_TRC_RESERVED0)
@@ -395,7 +395,7 @@ const (
 )
 
 // AvColorSpace
-type AvColorSpace int32
+type AvColorSpace = C.enum_AVColorSpace
 
 const (
 	AVCOL_SPC_RGB                = AvColorSpace(C.AVCOL_SPC_RGB)
@@ -418,7 +418,7 @@ const (
 )
 
 // AvColorRange
-type AvColorRange int32
+type AvColorRange = C.enum_AVColorRange
 
 const (
 	AVCOL_RANGE_UNSPECIFIED = AvColorRange(C.AVCOL_RANGE_UNSPECIFIED)
@@ -428,7 +428,7 @@ const (
 )
 
 // AvChromaLocation
-type AvChromaLocation int32
+type AvChromaLocation = C.enum_AVChromaLocation
 
 const (
 	AVCHROMA_LOC_UNSPECIFIED = AvChromaLocation(C.AVCHROMA_LOC_UNSPECIFIED)

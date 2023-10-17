@@ -145,8 +145,14 @@ func AvGetPixFmtString(buf *int8, bufSize int32, pixFmt AvPixelFormat) string {
 
 // AvReadImageLine2 reads a line from an image, and write the values of the
 // pixel format component c to dst.
-func AvReadImageLine2(dst unsafe.Pointer, data [4]*uint8, linesize [4]int,
+func AvReadImageLine2(dst unsafe.Pointer, data []*uint8, linesize []int,
 	desc *AvPixFmtDescriptor, x, y, c, w, readPalComponent, dstElementSize int32) {
+	if len(data) != 4 {
+		panic("data need len = 4")
+	}
+	if len(linesize) != 4 {
+		panic("linesize need len = 4")
+	}
 	C.av_read_image_line2(dst,
 		(**C.uint8_t)(unsafe.Pointer(&data[0])),
 		(*C.int)(unsafe.Pointer(&linesize[0])),
@@ -157,8 +163,14 @@ func AvReadImageLine2(dst unsafe.Pointer, data [4]*uint8, linesize [4]int,
 
 // AvReadImageLine reads a line from an image, and write the values of the
 // pixel format component c to dst.
-func AvReadImageLine(dst *uint16, data [4]*uint8, linesize [4]int,
+func AvReadImageLine(dst *uint16, data []*uint8, linesize []int,
 	desc *AvPixFmtDescriptor, x, y, c, w, readPalComponent int32) {
+	if len(data) != 4 {
+		panic("data need len = 4")
+	}
+	if len(linesize) != 4 {
+		panic("linesize need len = 4")
+	}
 	C.av_read_image_line((*C.uint16_t)(dst),
 		(**C.uint8_t)(unsafe.Pointer(&data[0])),
 		(*C.int)(unsafe.Pointer(&linesize[0])),
@@ -168,8 +180,14 @@ func AvReadImageLine(dst *uint16, data [4]*uint8, linesize [4]int,
 }
 
 // AvWriteImageLine2 writes the values from src to the pixel format component c of an image line.
-func AvWriteImageLine2(src unsafe.Pointer, data [4]*uint8, linesize [4]int,
+func AvWriteImageLine2(src unsafe.Pointer, data []*uint8, linesize []int,
 	desc *AvPixFmtDescriptor, x, y, c, w, srcElementSize int32) {
+	if len(data) != 4 {
+		panic("data need len = 4")
+	}
+	if len(linesize) != 4 {
+		panic("linesize need len = 4")
+	}
 	C.av_write_image_line2(src,
 		(**C.uint8_t)(unsafe.Pointer(&data[0])),
 		(*C.int)(unsafe.Pointer(&linesize[0])),
@@ -179,8 +197,14 @@ func AvWriteImageLine2(src unsafe.Pointer, data [4]*uint8, linesize [4]int,
 }
 
 // AvWriteImageLine writes the values from src to the pixel format component c of an image line.
-func AvWriteImageLine(src *uint16, data [4]*uint8, linesize [4]int,
+func AvWriteImageLine(src *uint16, data []*uint8, linesize []int,
 	desc *AvPixFmtDescriptor, x, y, c, w int32) {
+	if len(data) != 4 {
+		panic("data need len = 4")
+	}
+	if len(linesize) != 4 {
+		panic("linesize need len = 4")
+	}
 	C.av_write_image_line((*C.uint16_t)(src),
 		(**C.uint8_t)(unsafe.Pointer(&data[0])),
 		(*C.int)(unsafe.Pointer(&linesize[0])),

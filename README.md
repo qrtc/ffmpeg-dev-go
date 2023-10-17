@@ -8,15 +8,14 @@ Go bindings for FFmpeg.
 - macOS
 
 	```shell
-	brew install ffmpeg
+	brew install pkg-config ffmpeg
 	```
 - Debian
 
 	```shell
-	apt install \
-	libavdevice-dev libavformat-dev libavfilter-dev \
-	libavresample-dev libavcodec-dev libpostproc-dev \
-	libswscale-dev libswresample-dev libavutil-dev
+	sudo apt install build-essential pkg-config \
+		libavdevice-dev libavformat-dev libavfilter-dev libavcodec-dev \
+		libpostproc-dev libswscale-dev libswresample-dev libavutil-dev
 	```
 - Custom
 
@@ -44,7 +43,7 @@ func main() {
 ### Step 3: Get ffmpeg-go-dev
 
 ```shell
-go get github.com/qrtc/ffmpeg-dev-go@4.4
+go get github.com/qrtc/ffmpeg-dev-go@<FFMPEG_VERSION>
 ```
 
 ### Step 4: Verify

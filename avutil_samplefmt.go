@@ -7,7 +7,7 @@ import "C"
 import "unsafe"
 
 // AvSampleFormat
-type AvSampleFormat int32
+type AvSampleFormat = C.enum_AVSampleFormat
 
 const (
 	AV_SAMPLE_FMT_NONE = AvSampleFormat(C.AV_SAMPLE_FMT_NONE)

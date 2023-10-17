@@ -208,7 +208,7 @@ func (ifmt *AvInputFormat) GetMimeType() string {
 }
 
 // AvStreamParseType
-type AvStreamParseType int32
+type AvStreamParseType = C.enum_AVStreamParseType
 
 const (
 	AVSTREAM_PARSE_NONE       = AvStreamParseType(C.AVSTREAM_PARSE_NONE)
@@ -312,8 +312,8 @@ func (stm *AvStream) SetPrivData(v unsafe.Pointer) {
 }
 
 // Custom: GetPrivDataAddr gets `AVStream.priv_data` address.
-func (stm *AvStream) GetPrivDataAddr() *unsafe.Pointer {
-	return &stm.priv_data
+func (stm *AvStream) GetPrivDataAddr() unsafe.Pointer {
+	return (unsafe.Pointer)(&stm.priv_data)
 }
 
 // Custom: GetTimeBase gets `AVStream.time_base` value.
@@ -831,7 +831,7 @@ type AvFormatControlMessageFunc C.av_format_control_message
 type AvOpenCallbackFunc C.AVOpenCallback
 
 // AvDurationEstimationMethod
-type AvDurationEstimationMethod int32
+type AvDurationEstimationMethod = C.enum_AVDurationEstimationMethod
 
 const (
 	AVFMT_DURATION_FROM_PTS     = AvDurationEstimationMethod(C.AVFMT_DURATION_FROM_PTS)
@@ -901,8 +901,8 @@ func (s *AvFormatContext) SetPrivData(v unsafe.Pointer) {
 }
 
 // Custom: GetPrivDataAddr gets `AVFormatContext.priv_data` address.
-func (s *AvFormatContext) GetPrivDataAddr() *unsafe.Pointer {
-	return (*unsafe.Pointer)(unsafe.Pointer(&s.priv_data))
+func (s *AvFormatContext) GetPrivDataAddr() unsafe.Pointer {
+	return (unsafe.Pointer)(&s.priv_data)
 }
 
 // Custom: GetPb gets `AVFormatContext.pb` value.
@@ -990,7 +990,7 @@ func (s *AvFormatContext) SetUrl(v string) {
 	if s.url != nil {
 		C.free(unsafe.Pointer(s.url))
 	}
-	s.url = vPtr
+	s.url = (*C.char)(vPtr)
 }
 
 // Custom: GetStartTime gets `AVFormatContext.start_time` value.
@@ -1782,8 +1782,8 @@ func (s *AvFormatContext) SetOpaque(v unsafe.Pointer) {
 }
 
 // Custom: GetOpaqueAddr gets `AVFormatContext.opaque` address.
-func (s *AvFormatContext) GetOpaqueAddr() *unsafe.Pointer {
-	return (*unsafe.Pointer)(&s.opaque)
+func (s *AvFormatContext) GetOpaqueAddr() unsafe.Pointer {
+	return (unsafe.Pointer)(&s.opaque)
 }
 
 // Custom: GetOutputTsOffset gets `AVFormatContext.output_ts_offset` value.
@@ -2336,16 +2336,23 @@ func AvGetOutputTimestamp(ic *AvFormatContext, stream int32, dts, wall *int64) i
 		(C.int)(stream), (*C.int64_t)(dts), (*C.int64_t)(wall)))
 }
 
-// TODO. av_hex_dump
+// AvHexDump sends a nice hexadecimal dump of a buffer to the specified file stream.
+func AvHexDump(f *FILE, buf *uint8, size int32) {
+	C.av_hex_dump((*C.FILE)(f), (*C.uint8_t)(buf), (C.int)(size))
+}
 
-// AvHexDumpLog
+// AvHexDumpLog sends a nice hexadecimal dump of a buffer to the log.
 func AvHexDumpLog(avcl unsafe.Pointer, level int32, buf *uint8, size int32) {
 	C.av_hex_dump_log(avcl, (C.int)(level), (*C.uint8_t)(buf), (C.int)(size))
 }
 
-// TODO. av_pkt_dump2
+// AvPktDump2 sends a nice dump of a packet to the specified file stream.
+func AvPktDump2(f *FILE, pkt *AvPacket, dumpPayload int32, st *AvStream) {
+	C.av_pkt_dump2((*C.FILE)(f), (*C.struct_AVPacket)(pkt),
+		(C.int)(dumpPayload), (*C.struct_AVStream)(st))
+}
 
-// AvPktDumpLog2
+// AvPktDumpLog2 sends a nice dump of a packet to the log.
 func av_pkt_dump_log2(avcl unsafe.Pointer, level int32, pkt *AvPacket, dumpPayload int32, st *AvStream) {
 	C.av_pkt_dump_log2(avcl, (C.int)(level), (*C.struct_AVPacket)(pkt),
 		(C.int)(dumpPayload), (*C.struct_AVStream)(st))
@@ -2526,7 +2533,7 @@ func AvApplyBitstreamFilters(codec *AvCodecContext, pkt *AvPacket, bsfc *AvBitSt
 }
 
 // AvTimebaseSource
-type AvTimebaseSource int32
+type AvTimebaseSource = C.enum_AVTimebaseSource
 
 const (
 	AVFMT_TBCF_AUTO        = AvTimebaseSource(C.AVFMT_TBCF_AUTO)

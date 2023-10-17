@@ -447,7 +447,7 @@ func initOutputFrame(outputcodecContext *ffmpeg.AvCodecContext,
 	// are assumed for simplicity.
 	frame.SetNbSamples(frameSize)
 	frame.SetChannelLayout(outputcodecContext.GetChannelLayout())
-	frame.SetFormat(int32(outputcodecContext.GetSampleFmt()))
+	frame.SetFormat(outputcodecContext.GetSampleFmt())
 	frame.SetSampleRate(outputcodecContext.GetSampleRate())
 
 	// Allocate the samples of the created frame. This call will make

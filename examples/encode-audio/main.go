@@ -141,7 +141,7 @@ func main() {
 	}
 
 	frame.SetNbSamples(avctx.GetFrameSize())
-	frame.SetFormat(int32(avctx.GetSampleFmt()))
+	frame.SetFormat(avctx.GetSampleFmt())
 	frame.SetChannelLayout(avctx.GetChannelLayout())
 
 	// allocate the data buffers

@@ -50,7 +50,7 @@ func AvOutputVideoDeviceNext(d *AvOutputFormat) *AvOutputFormat {
 type AvDeviceRect C.struct_AVDeviceRect
 
 // AvAppToDevMessageType
-type AvAppToDevMessageType int32
+type AvAppToDevMessageType = C.enum_AVAppToDevMessageType
 
 const (
 	AV_APP_TO_DEV_NONE           = AvAppToDevMessageType(C.AV_APP_TO_DEV_NONE)
@@ -68,7 +68,7 @@ const (
 )
 
 // AvDevToAppMessageType
-type AvDevToAppMessageType int32
+type AvDevToAppMessageType = C.enum_AVDevToAppMessageType
 
 const (
 	AV_DEV_TO_APP_NONE                  = AvDevToAppMessageType(C.AV_DEV_TO_APP_NONE)

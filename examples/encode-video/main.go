@@ -101,7 +101,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Could not allocate video frame\n")
 		os.Exit(1)
 	}
-	frame.SetFormat(int32(avctx.GetPixFmt()))
+	frame.SetFormat(avctx.GetPixFmt())
 	frame.SetWidth(avctx.GetWidth())
 	frame.SetHeight(avctx.GetHeight())
 

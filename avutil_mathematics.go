@@ -5,7 +5,7 @@ package ffmpeg
 */
 import "C"
 
-type AvRounding int32
+type AvRounding = C.enum_AVRounding
 
 const (
 	AV_ROUND_ZERO        = AvRounding(C.AV_ROUND_ZERO)

@@ -2,32 +2,42 @@ package ffmpeg
 
 /*
 #include <libavutil/opt.h>
+
+int av_opt_set_int_list_wrap(void *obj, const char *name, void *val, uint64_t term, int flags, int size) {
+	if (av_int_list_length(val, term) > INT_MAX / size) {
+		return AVERROR(EINVAL);
+	}
+	return av_opt_set_bin(obj, name, (const uint8_t *)val, av_int_list_length(val, term) * size , flags);
+}
 */
 import "C"
-import "unsafe"
+import (
+	"unsafe"
+)
 
-type AvOptionType int32
+// AvOptionType
+type AvOptionType = int32
 
 const (
-	AV_OPT_TYPE_FLAGS          = int32(C.AV_OPT_TYPE_FLAGS)
-	AV_OPT_TYPE_INT            = int32(C.AV_OPT_TYPE_INT)
-	AV_OPT_TYPE_INT64          = int32(C.AV_OPT_TYPE_INT64)
-	AV_OPT_TYPE_DOUBLE         = int32(C.AV_OPT_TYPE_DOUBLE)
-	AV_OPT_TYPE_FLOAT          = int32(C.AV_OPT_TYPE_FLOAT)
-	AV_OPT_TYPE_STRING         = int32(C.AV_OPT_TYPE_STRING)
-	AV_OPT_TYPE_RATIONAL       = int32(C.AV_OPT_TYPE_RATIONAL)
-	AV_OPT_TYPE_BINARY         = int32(C.AV_OPT_TYPE_BINARY)
-	AV_OPT_TYPE_DICT           = int32(C.AV_OPT_TYPE_DICT)
-	AV_OPT_TYPE_UINT64         = int32(C.AV_OPT_TYPE_UINT64)
-	AV_OPT_TYPE_CONST          = int32(C.AV_OPT_TYPE_CONST)
-	AV_OPT_TYPE_IMAGE_SIZE     = int32(C.AV_OPT_TYPE_IMAGE_SIZE)
-	AV_OPT_TYPE_PIXEL_FMT      = int32(C.AV_OPT_TYPE_PIXEL_FMT)
-	AV_OPT_TYPE_SAMPLE_FMT     = int32(C.AV_OPT_TYPE_SAMPLE_FMT)
-	AV_OPT_TYPE_VIDEO_RATE     = int32(C.AV_OPT_TYPE_VIDEO_RATE)
-	AV_OPT_TYPE_DURATION       = int32(C.AV_OPT_TYPE_DURATION)
-	AV_OPT_TYPE_COLOR          = int32(C.AV_OPT_TYPE_COLOR)
-	AV_OPT_TYPE_CHANNEL_LAYOUT = int32(C.AV_OPT_TYPE_CHANNEL_LAYOUT)
-	AV_OPT_TYPE_BOOL           = int32(C.AV_OPT_TYPE_BOOL)
+	AV_OPT_TYPE_FLAGS          = AvOptionType(C.AV_OPT_TYPE_FLAGS)
+	AV_OPT_TYPE_INT            = AvOptionType(C.AV_OPT_TYPE_INT)
+	AV_OPT_TYPE_INT64          = AvOptionType(C.AV_OPT_TYPE_INT64)
+	AV_OPT_TYPE_DOUBLE         = AvOptionType(C.AV_OPT_TYPE_DOUBLE)
+	AV_OPT_TYPE_FLOAT          = AvOptionType(C.AV_OPT_TYPE_FLOAT)
+	AV_OPT_TYPE_STRING         = AvOptionType(C.AV_OPT_TYPE_STRING)
+	AV_OPT_TYPE_RATIONAL       = AvOptionType(C.AV_OPT_TYPE_RATIONAL)
+	AV_OPT_TYPE_BINARY         = AvOptionType(C.AV_OPT_TYPE_BINARY)
+	AV_OPT_TYPE_DICT           = AvOptionType(C.AV_OPT_TYPE_DICT)
+	AV_OPT_TYPE_UINT64         = AvOptionType(C.AV_OPT_TYPE_UINT64)
+	AV_OPT_TYPE_CONST          = AvOptionType(C.AV_OPT_TYPE_CONST)
+	AV_OPT_TYPE_IMAGE_SIZE     = AvOptionType(C.AV_OPT_TYPE_IMAGE_SIZE)
+	AV_OPT_TYPE_PIXEL_FMT      = AvOptionType(C.AV_OPT_TYPE_PIXEL_FMT)
+	AV_OPT_TYPE_SAMPLE_FMT     = AvOptionType(C.AV_OPT_TYPE_SAMPLE_FMT)
+	AV_OPT_TYPE_VIDEO_RATE     = AvOptionType(C.AV_OPT_TYPE_VIDEO_RATE)
+	AV_OPT_TYPE_DURATION       = AvOptionType(C.AV_OPT_TYPE_DURATION)
+	AV_OPT_TYPE_COLOR          = AvOptionType(C.AV_OPT_TYPE_COLOR)
+	AV_OPT_TYPE_CHANNEL_LAYOUT = AvOptionType(C.AV_OPT_TYPE_CHANNEL_LAYOUT)
+	AV_OPT_TYPE_BOOL           = AvOptionType(C.AV_OPT_TYPE_BOOL)
 )
 
 type AvOption C.struct_AVOption
@@ -82,7 +92,7 @@ func AvSetOptionsString(ctx unsafe.Pointer, opts, keyValSep, pairsSep string) in
 		(*C.char)(keyValSepPtr), (*C.char)(pairsSepPtr)))
 }
 
-// TODO. av_opt_set_from_string
+// NONEED: av_opt_set_from_string
 
 // AvOptFree frees all allocated objects in obj.
 func AvOptFree(obj unsafe.Pointer) {
@@ -109,7 +119,7 @@ func AvOptSetDict2(obj unsafe.Pointer, options **AvDictionary, searchFlags int32
 		(C.int)(searchFlags)))
 }
 
-// TODO. av_opt_get_key_value
+// NONEED: av_opt_get_key_value
 
 const (
 	AV_OPT_FLAG_IMPLICIT_KEY = int32(C.AV_OPT_FLAG_IMPLICIT_KEY)
@@ -171,7 +181,8 @@ func AvOptFind(obj unsafe.Pointer, name, unit string, optFlags, searchFlags int3
 	defer nameFunc()
 	unitPtr, unitFunc := StringCasting(unit)
 	defer unitFunc()
-	return (*AvOption)(C.av_opt_find(obj, namePtr, unitPtr, (C.int)(optFlags), (C.int)(searchFlags)))
+	return (*AvOption)(C.av_opt_find(obj, (*C.char)(namePtr), (*C.char)(unitPtr),
+		(C.int)(optFlags), (C.int)(searchFlags)))
 }
 
 // AvOptFind2 looks for an option in an object. Consider only options which
@@ -182,7 +193,7 @@ func AvOptFind2(obj unsafe.Pointer, name, unit string, optFlags, searchFlags int
 	defer nameFunc()
 	unitPtr, unitFunc := StringCasting(unit)
 	defer unitFunc()
-	return (*AvOption)(C.av_opt_find2(obj, namePtr, unitPtr,
+	return (*AvOption)(C.av_opt_find2(obj, (*C.char)(namePtr), (*C.char)(unitPtr),
 		(C.int)(optFlags), (C.int)(searchFlags), targetObj))
 }
 
@@ -286,7 +297,15 @@ func AvOptSetDictVal(obj unsafe.Pointer, name string, val *AvDictionary, searchF
 	return (int32)(C.av_opt_set_dict_val(obj, (*C.char)(namePtr), (*C.struct_AVDictionary)(val), (C.int)(searchFlags)))
 }
 
-// TODO. av_opt_set_int_list
+// AvOptSetIntList sets a binary option to an integer list.
+func av_opt_set_int_list[T HelperInteger](obj unsafe.Pointer, name string,
+	val *T, term uint64, flags int32) int32 {
+	namePtr, nameFunc := StringCasting(name)
+	defer nameFunc()
+	size := (int32)(unsafe.Sizeof(*val))
+	return (int32)(C.av_opt_set_int_list_wrap(obj, (*C.char)(namePtr),
+		unsafe.Pointer(val), (C.uint64_t)(term), (C.int)(flags), (C.int)(size)))
+}
 
 // AvOptGet
 func AvOptGet(obj unsafe.Pointer, name string, searchFlags int32, outVal **uint8) int32 {

@@ -59,7 +59,7 @@ func AvMdctEnd(s *FftContext) {
 	C.av_mdct_end((*C.struct_FFTContext)(s))
 }
 
-type RDFTransformType int32
+type RDFTransformType = C.enum_RDFTransformType
 
 const (
 	DFT_R2C  = RDFTransformType(C.DFT_R2C)
@@ -88,7 +88,7 @@ func AvRdftEnd(r *RDFTContext) {
 
 type DCTContext C.struct_DCTContext
 
-type DCTTransformType int32
+type DCTTransformType = C.enum_DCTTransformType
 
 const (
 	DCT_II  = DCTTransformType(C.DCT_II)

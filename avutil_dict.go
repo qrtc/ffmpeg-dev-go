@@ -35,7 +35,7 @@ func AvDictCount(m *AvDictionary) int32 {
 }
 
 // AvDictSet sets the given entry in *pm, overwriting an existing entry.
-func av_dict_set(pm **AvDictionary, key, value string, flags int32) int32 {
+func AvDictSet(pm **AvDictionary, key, value string, flags int32) int32 {
 	keyPtr, keyFunc := StringCasting(key)
 	defer keyFunc()
 	valuePtr, valueFunc := StringCasting(value)
@@ -71,7 +71,7 @@ func AvDictCopy(dst **AvDictionary, src *AvDictionary, flags int32) int32 {
 }
 
 // AvDictFree frees all the memory allocated for an AVDictionary struct and all keys and values.
-func AvDictFree(m *AvDictionary) {
+func AvDictFree(m **AvDictionary) {
 	C.av_dict_free((**C.struct_AVDictionary)(unsafe.Pointer(m)))
 }
 

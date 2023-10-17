@@ -6,7 +6,7 @@ package ffmpeg
 import "C"
 import "unsafe"
 
-type AvFieldOrder int32
+type AvFieldOrder = C.enum_AVFieldOrder
 
 const (
 	AV_FIELD_UNKNOWN     = AvFieldOrder(C.AV_FIELD_UNKNOWN)

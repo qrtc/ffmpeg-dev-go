@@ -12,8 +12,162 @@ type AvBSFInternal C.struct_AVBSFInternal
 // AvBSFContext
 type AvBSFContext C.struct_AVBSFContext
 
+// Custom: GetAvClass gets `AVBSFContext.av_class` value.
+func (bsfc *AvBSFContext) GetAvClass() *AvClass {
+	return (*AvClass)(bsfc.av_class)
+}
+
+// Custom: SetAvClass sets `AVBSFContext.av_class` value.
+func (bsfc *AvBSFContext) SetAvClass(v *AvClass) {
+	bsfc.av_class = (*C.struct_AVClass)(v)
+}
+
+// Custom: GetAvClassAddr gets `AVBSFContext.av_class` address.
+func (bsfc *AvBSFContext) GetAvClassAddr() **AvClass {
+	return (**AvClass)(unsafe.Pointer(&bsfc.av_class))
+}
+
+// Custom: GetFilter gets `AVBSFContext.filter` value.
+func (bsfc *AvBSFContext) GetFilter() *AvBitStreamFilter {
+	return (*AvBitStreamFilter)(bsfc.filter)
+}
+
+// Custom: SetFilter sets `AVBSFContext.filter` value.
+func (bsfc *AvBSFContext) SetFilter(v *AvBitStreamFilter) {
+	bsfc.filter = (*C.struct_AVBitStreamFilter)(v)
+}
+
+// Custom: GetFilterAddr gets `AVBSFContext.filter` address.
+func (bsfc *AvBSFContext) GetFilterAddr() **AvBitStreamFilter {
+	return (**AvBitStreamFilter)(unsafe.Pointer(&bsfc.filter))
+}
+
+// Custom: GetInternal gets `AVBSFContext.internal` value.
+func (bsfc *AvBSFContext) GetInternal() *AvBSFInternal {
+	return (*AvBSFInternal)(bsfc.internal)
+}
+
+// Custom: SetInternal sets `AVBSFContext.internal` value.
+func (bsfc *AvBSFContext) SetInternal(v *AvBSFInternal) {
+	bsfc.internal = (*C.struct_AVBSFInternal)(v)
+}
+
+// Custom: GetInternalAddr gets `AVBSFContext.internal` address.
+func (bsfc *AvBSFContext) GetInternalAddr() **AvBSFInternal {
+	return (**AvBSFInternal)(unsafe.Pointer(&bsfc.internal))
+}
+
+// Custom: GetPrivData gets `AVBSFContext.priv_data` value.
+func (bsfc *AvBSFContext) GetPrivData() unsafe.Pointer {
+	return bsfc.priv_data
+}
+
+// Custom: SetPrivData sets `AVBSFContext.priv_data` value.
+func (bsfc *AvBSFContext) SetPrivData(v unsafe.Pointer) {
+	bsfc.priv_data = v
+}
+
+// Custom: GetPrivDataAddr gets `AVBSFContext.priv_data` address.
+func (bsfc *AvBSFContext) GetPrivDataAddr() unsafe.Pointer {
+	return (unsafe.Pointer)(&bsfc.priv_data)
+}
+
+// Custom: GetParIn gets `AVBSFContext.par_in` value.
+func (bsfc *AvBSFContext) GetParIn() *AvCodecParameters {
+	return (*AvCodecParameters)(bsfc.par_in)
+}
+
+// Custom: SetParIn sets `AVBSFContext.par_in` value.
+func (bsfc *AvBSFContext) SetParIn(v *AvCodecParameters) {
+	bsfc.par_in = (*C.struct_AVCodecParameters)(v)
+}
+
+// Custom: GetParInAddr gets `AVBSFContext.par_in` address.
+func (bsfc *AvBSFContext) GetParInAddr() **AvCodecParameters {
+	return (**AvCodecParameters)(unsafe.Pointer(&bsfc.par_in))
+}
+
+// Custom: GetParOut gets `AVBSFContext.par_out` value.
+func (bsfc *AvBSFContext) GetParOut() *AvCodecParameters {
+	return (*AvCodecParameters)(bsfc.par_out)
+}
+
+// Custom: SetParOut sets `AVBSFContext.par_out` value.
+func (bsfc *AvBSFContext) SetParOut(v *AvCodecParameters) {
+	bsfc.par_out = (*C.struct_AVCodecParameters)(v)
+}
+
+// Custom: GetParOutAddr gets `AVBSFContext.par_out` address.
+func (bsfc *AvBSFContext) GetParOutAddr() **AvCodecParameters {
+	return (**AvCodecParameters)(unsafe.Pointer(&bsfc.par_out))
+}
+
+// Custom: GetTimeBaseIn gets `AVBSFContext.time_base_in` value.
+func (bsfc *AvBSFContext) GetTimeBaseIn() AvRational {
+	return (AvRational)(bsfc.time_base_in)
+}
+
+// Custom: SetTimeBaseIn sets `AVBSFContext.time_base_in` value.
+func (bsfc *AvBSFContext) SetTimeBaseIn(v AvRational) {
+	bsfc.time_base_in = (C.AVRational)(v)
+}
+
+// Custom: GetTimeBaseInAddr gets `AVBSFContext.time_base_in` address.
+func (bsfc *AvBSFContext) GetTimeBaseInAddr() *AvRational {
+	return (*AvRational)(&bsfc.time_base_in)
+}
+
+// Custom: GetTimeBaseOut gets `AVBSFContext.time_base_out` value.
+func (bsfc *AvBSFContext) GetTimeBaseOut() AvRational {
+	return (AvRational)(bsfc.time_base_out)
+}
+
+// Custom: SetTimeBaseOut sets `AVBSFContext.time_base_out` value.
+func (bsfc *AvBSFContext) SetTimeBaseOut(v AvRational) {
+	bsfc.time_base_out = (C.AVRational)(v)
+}
+
+// Custom: GetTimeBaseOutAddr gets `AVBSFContext.time_base_out` address.
+func (bsfc *AvBSFContext) GetTimeBaseOutAddr() *AvRational {
+	return (*AvRational)(&bsfc.time_base_out)
+}
+
 // AvBitStreamFilter
 type AvBitStreamFilter C.struct_AVBitStreamFilter
+
+// Custom: GetName gets `AVBitStreamFilter.name` value.
+func (bsf *AvBitStreamFilter) GetName() string {
+	return C.GoString(bsf.name)
+}
+
+// Custom: GetCodecIds gets `AVBitStreamFilter.codec_ids` value.
+func (bsf *AvBitStreamFilter) GetCodecIds() (v []AvCodecID) {
+	if bsf.codec_ids == nil {
+		return v
+	}
+	ptr := (*AvCodecID)(bsf.codec_ids)
+	for *ptr != AV_CODEC_ID_NONE {
+		v = append(v, *ptr)
+		ptr = (*AvCodecID)(unsafe.Pointer(uintptr(unsafe.Pointer(ptr)) +
+			uintptr(unsafe.Sizeof(*ptr))))
+	}
+	return v
+}
+
+// Custom: GetPrivClass gets `AVBitStreamFilter.priv_class` value.
+func (bsf *AvBitStreamFilter) GetPrivClass() *AvClass {
+	return (*AvClass)(bsf.priv_class)
+}
+
+// Custom: SetPrivClass sets `AVBitStreamFilter.priv_class` value.
+func (bsf *AvBitStreamFilter) SetPrivClass(v *AvClass) {
+	bsf.priv_class = (*C.struct_AVClass)(v)
+}
+
+// Custom: GetPrivClassAddr gets `AVBitStreamFilter.priv_class` address.
+func (bsf *AvBitStreamFilter) GetPrivClassAddr() **AvClass {
+	return (**AvClass)(unsafe.Pointer(&bsf.priv_class))
+}
 
 // AvBsfGetByName returns a bitstream filter with the specified name or NULL if no such
 // bitstream filter exists.

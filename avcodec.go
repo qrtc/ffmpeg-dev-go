@@ -17,7 +17,7 @@ const (
 )
 
 // AvDiscard
-type AvDiscard int32
+type AvDiscard = C.enum_AVDiscard
 
 const (
 	AVDISCARD_NONE     = AvDiscard(C.AVDISCARD_NONE)
@@ -30,7 +30,7 @@ const (
 )
 
 // AvAudioServiceType
-type AvAudioServiceType int32
+type AvAudioServiceType = C.enum_AVAudioServiceType
 
 const (
 	AV_AUDIO_SERVICE_TYPE_MAIN              = AvAudioServiceType(C.AV_AUDIO_SERVICE_TYPE_MAIN)
@@ -215,8 +215,8 @@ func (avctx *AvCodecContext) SetPrivData(v unsafe.Pointer) {
 }
 
 // Custom: GetPrivDataAddr gets `AVCodecContext.priv_data` address.
-func (avctx *AvCodecContext) GetPrivDataAddr() *unsafe.Pointer {
-	return (*unsafe.Pointer)(&avctx.priv_data)
+func (avctx *AvCodecContext) GetPrivDataAddr() unsafe.Pointer {
+	return (unsafe.Pointer)(&avctx.priv_data)
 }
 
 // Custom: Get Opaque gets `AVCodecContext.opaque` value.
@@ -230,8 +230,8 @@ func (avctx *AvCodecContext) SetOpaque(v unsafe.Pointer) {
 }
 
 // Custom: GetOpaqueAddr gets `AVCodecContext.opaque` address.
-func (avctx *AvCodecContext) GetOpaqueAddr() *unsafe.Pointer {
-	return (*unsafe.Pointer)(&avctx.opaque)
+func (avctx *AvCodecContext) GetOpaqueAddr() unsafe.Pointer {
+	return (unsafe.Pointer)(&avctx.opaque)
 }
 
 // Custom: Get BitRate gets `AVCodecContext.bit_rate` value.
@@ -2176,8 +2176,8 @@ func (avctx *AvCodecContext) SetHwaccelContext(v unsafe.Pointer) {
 }
 
 // Custom: GetHwaccelContextAddr gets `AVCodecContext.hwaccel_context` address.
-func (avctx *AvCodecContext) GetHwaccelContextAddr() *unsafe.Pointer {
-	return (*unsafe.Pointer)(&avctx.hwaccel_context)
+func (avctx *AvCodecContext) GetHwaccelContextAddr() unsafe.Pointer {
+	return (unsafe.Pointer)(&avctx.hwaccel_context)
 }
 
 // Custom: Get DctAlgo gets `AVCodecContext.dct_algo` value.
@@ -3168,7 +3168,7 @@ const (
 type AvPicture C.struct_AVPicture
 
 // AvSubtitleType
-type AvSubtitleType int32
+type AvSubtitleType = C.enum_AVSubtitleType
 
 const (
 	SUBTITLE_NONE   = AvSubtitleType(C.SUBTITLE_NONE)
@@ -3377,7 +3377,7 @@ func AvCodecGetHwFramesParameters(avctx *AvCodecContext, deviceRef *AvBufferRef,
 }
 
 // AvPictureStructure
-type AvPictureStructure int32
+type AvPictureStructure = C.enum_AVPictureStructure
 
 const (
 	AV_PICTURE_STRUCTURE_UNKNOWN      = AvPictureStructure(C.AV_PICTURE_STRUCTURE_UNKNOWN)
@@ -3706,7 +3706,7 @@ func AvHwaccelNext(hwaccel *AvHWAccel) *AvHWAccel {
 }
 
 // AvLockOp
-type AvLockOp int32
+type AvLockOp = C.enum_AVLockOp
 
 const (
 	AV_LOCK_CREATE  = AvLockOp(C.AV_LOCK_CREATE)

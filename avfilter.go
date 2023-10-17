@@ -59,6 +59,76 @@ const (
 // callback functions used to interact with the filter.
 type AvFilter C.struct_AVFilter
 
+// Custom: GetName gets `AVMotionVector.name` value.
+func (flt *AvFilter) GetName() string {
+	return C.GoString(flt.name)
+}
+
+// Custom: GetDescription gets `AVMotionVector.description` value.
+func (flt *AvFilter) GetDescription() string {
+	return C.GoString(flt.description)
+}
+
+// Custom: GetInputs gets `AVMotionVector.inputs` value.
+func (flt *AvFilter) GetInputs() *AvFilterPad {
+	return (*AvFilterPad)(flt.inputs)
+}
+
+// Custom: SetInputs sets `AVMotionVector.inputs` value.
+func (flt *AvFilter) SetInputs(v *AvFilterPad) {
+	flt.inputs = (*C.struct_AVFilterPad)(v)
+}
+
+// Custom: GetInputsAddr gets `AVMotionVector.inputs` address.
+func (flt *AvFilter) GetInputsAddr() **AvFilterPad {
+	return (**AvFilterPad)(unsafe.Pointer(&flt.inputs))
+}
+
+// Custom: GetOutputs gets `AVMotionVector.outputs` value.
+func (flt *AvFilter) GetOutputs() *AvFilterPad {
+	return (*AvFilterPad)(flt.outputs)
+}
+
+// Custom: SetOutputs sets `AVMotionVector.outputs` value.
+func (flt *AvFilter) SetOutputs(v *AvFilterPad) {
+	flt.outputs = (*C.struct_AVFilterPad)(v)
+}
+
+// Custom: GetOutputsAddr gets `AVMotionVector.outputs` address.
+func (flt *AvFilter) GetOutputsAddr() **AvFilterPad {
+	return (**AvFilterPad)(unsafe.Pointer(&flt.outputs))
+}
+
+// Custom: GetPrivClass gets `AVMotionVector.priv_class` value.
+func (flt *AvFilter) GetPrivClass() *AvClass {
+	return (*AvClass)(flt.priv_class)
+}
+
+// Custom: SetPrivClass sets `AVMotionVector.priv_class` value.
+func (flt *AvFilter) SetPrivClass(v *AvClass) {
+	flt.priv_class = (*C.struct_AVClass)(v)
+}
+
+// Custom: GetPrivClassAddr gets `AVMotionVector.priv_class` address.
+func (flt *AvFilter) GetPrivClassAddr() **AvClass {
+	return (**AvClass)(unsafe.Pointer(&flt.priv_class))
+}
+
+// Custom: GetFlags gets `AVMotionVector.flags` value.
+func (flt *AvFilter) GetFlags() int32 {
+	return (int32)(flt.flags)
+}
+
+// Custom: SetFlags sets `AVMotionVector.flags` value.
+func (flt *AvFilter) SetFlags(v int32) {
+	flt.flags = (C.int)(v)
+}
+
+// Custom: GetFlagsAddr gets `AVMotionVector.flags` address.
+func (flt *AvFilter) GetFlagsAddr() *int32 {
+	return (*int32)(&flt.flags)
+}
+
 const (
 	AVFILTER_THREAD_SLICE = C.AVFILTER_THREAD_SLICE
 )
@@ -75,8 +145,8 @@ type AvFilterFormatsConfig C.struct_AVFilterFormatsConfig
 // AvFilterLink
 type AvFilterLink C.struct_AVFilterLink
 
-// AvFilterContextLink links two filters together.
-func AvFilterContextLink(src *AvFilterContext, srcpad uint32,
+// AvFilterLink2 links two filters together.
+func AvFilterLink2(src *AvFilterContext, srcpad uint32,
 	dst *AvFilterContext, dstpad uint32) int32 {
 	return (int32)(C.avfilter_link((*C.struct_AVFilterContext)(src), (C.uint)(srcpad),
 		(*C.struct_AVFilterContext)(dst), (C.uint)(dstpad)))

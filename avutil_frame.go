@@ -7,7 +7,7 @@ import "C"
 import "unsafe"
 
 // AvFrameSideDataType
-type AvFrameSideDataType int32
+type AvFrameSideDataType = C.enum_AVFrameSideDataType
 
 const (
 	AV_FRAME_DATA_PANSCAN                    = AvFrameSideDataType(C.AV_FRAME_DATA_PANSCAN)
@@ -37,7 +37,7 @@ const (
 )
 
 // AvActiveFormatDescription
-type AvActiveFormatDescription int32
+type AvActiveFormatDescription = C.enum_AVActiveFormatDescription
 
 const (
 	AV_AFD_SAME         = AvActiveFormatDescription(C.AV_AFD_SAME)
@@ -125,6 +125,18 @@ func (frame *AvFrame) SetExtendedData(v **uint8) {
 // Custom: GetExtendedDataAddr gets `AVFrame.extended_data` address.
 func (frame *AvFrame) GetExtendedDataAddr() ***uint8 {
 	return (***uint8)(unsafe.Pointer(&frame.extended_data))
+}
+
+// Custom: GetExtendedDataIdx gets `AVFrame.extended_data` index value.
+func (frame *AvFrame) GetExtendedDataIdx(idx int) *uint8 {
+	if frame.extended_data == nil {
+		return nil
+	}
+	return *(**uint8)(unsafe.Pointer(uintptr(unsafe.Pointer(frame.extended_data)) +
+		uintptr(unsafe.Sizeof(*frame.extended_data))*(uintptr(idx))))
+
+	// Another way.
+	// return unsafe.Slice((**uint8)(unsafe.Pointer(frame.extended_data)), idx+1)[idx]
 }
 
 // Custom: GetWidth gets `AVFrame.width` value.

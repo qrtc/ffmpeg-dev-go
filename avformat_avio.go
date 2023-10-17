@@ -6,9 +6,16 @@ package ffmpeg
 typedef int (*avio_context_read_packet_func)(void *opaque, uint8_t *buf, int buf_size);
 typedef int (*avio_context_write_packet_func)(void *opaque, uint8_t *buf, int buf_size);
 typedef int64_t (*avio_context_seek_func)(void *opaque, int64_t offset, int whence);
+
+int avio_printf_wrap(AVIOContext *s, const char *fmt) {
+	return avio_printf(s, fmt, NULL);
+}
 */
 import "C"
-import "unsafe"
+import (
+	"fmt"
+	"unsafe"
+)
 
 const (
 	AVIO_SEEKABLE_NORMAL = C.AVIO_SEEKABLE_NORMAL
@@ -22,7 +29,7 @@ type AvIOInterruptCB C.struct_AVIOInterruptCB
 type AvIODirEntry C.struct_AVIODirEntry
 
 // AvIODirEntryType
-type AvIODirEntryType int32
+type AvIODirEntryType = C.enum_AVIODirEntryType
 
 const (
 	AVIO_ENTRY_UNKNOWN          = AvIODirEntryType(C.AVIO_ENTRY_UNKNOWN)
@@ -42,7 +49,7 @@ const (
 type AvIODirContext C.struct_AVIODirContext
 
 // AvIODataMarkerType
-type AvIODataMarkerType int32
+type AvIODataMarkerType = C.enum_AVIODataMarkerType
 
 const (
 	AVIO_DATA_MARKER_HEADER         = AvIODataMarkerType(C.AVIO_DATA_MARKER_HEADER)
@@ -247,11 +254,22 @@ func AvIOFeof(s *AvIOContext) int32 {
 	return (int32)(C.avio_feof((*C.struct_AVIOContext)(s)))
 }
 
-// TODO. avio_printf
+// AvIOPrintf Writes a formatted string to the context.
+func AvIOPrintf(s *AvIOContext, _fmt string, va ...any) int32 {
+	fmtPtr, fmtFunc := StringCasting(fmt.Sprintf(_fmt, va...))
+	defer fmtFunc()
+	return (int32)(C.avio_printf_wrap((*C.struct_AVIOContext)(s), (*C.char)(fmtPtr)))
+}
 
-// TODO. avio_print_string_array
+// NONEED: avio_print_string_array
 
-// TODO. avio_print
+// AvIOPrint
+func AvIOPrint(s *AvIOContext, va ...any) {
+	fmtPtr, fmtFunc := StringCasting(fmt.Sprint(va...))
+	defer fmtFunc()
+	fmtArray := []*C.char{(*C.char)(fmtPtr), nil}
+	C.avio_print_string_array((*C.struct_AVIOContext)(s), &fmtArray[0])
+}
 
 // AvIOFlush forces flushing of buffered data.
 func AvIOFlush(s *AvIOContext) {
