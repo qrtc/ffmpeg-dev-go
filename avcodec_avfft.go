@@ -5,60 +5,64 @@ package ffmpeg
 */
 import "C"
 
-type FftSample C.FFTSample
+// FFTSample
+type FFTSample C.FFTSample
 
-type FftComplex C.struct_FFTComplex
+// FFTComplex
+type FFTComplex C.struct_FFTComplex
 
-type FftContext C.struct_FFTContext
+// FFTContext
+type FFTContext C.struct_FFTContext
 
 // AvFftInit sets up a complex FFT.
-func AvFftInit(nbits, inverse int32) *FftContext {
-	return (*FftContext)(C.av_fft_init((C.int)(nbits), (C.int)(inverse)))
+func AvFftInit(nbits, inverse int32) *FFTContext {
+	return (*FFTContext)(C.av_fft_init((C.int)(nbits), (C.int)(inverse)))
 }
 
 // AvFftPermute does the permutation needed BEFORE calling FfFftCalc().
-func AvFftPermute(s *FftContext, z *FftComplex) {
+func AvFftPermute(s *FFTContext, z *FFTComplex) {
 	C.av_fft_permute((*C.struct_FFTContext)(s), (*C.struct_FFTComplex)(z))
 }
 
 // FfFftCalc does a complex FFT with the parameters defined in AvFftInit().
-func FfFftCalc(s *FftContext, z *FftComplex) {
+func FfFftCalc(s *FFTContext, z *FFTComplex) {
 	C.av_fft_calc((*C.struct_FFTContext)(s), (*C.struct_FFTComplex)(z))
 }
 
 // AvFftEnd
-func AvFftEnd(s *FftContext) {
+func AvFftEnd(s *FFTContext) {
 	C.av_fft_end((*C.struct_FFTContext)(s))
 }
 
 // AvMdctInit
-func AvMdctInit(nbits, inverse int32, scale float64) *FftContext {
-	return (*FftContext)(C.av_mdct_init((C.int)(nbits), (C.int)(inverse), (C.double)(scale)))
+func AvMdctInit(nbits, inverse int32, scale float64) *FFTContext {
+	return (*FFTContext)(C.av_mdct_init((C.int)(nbits), (C.int)(inverse), (C.double)(scale)))
 }
 
 // AvImdctCalc
-func AvImdctCalc(s *FftContext, output, input *FftSample) {
+func AvImdctCalc(s *FFTContext, output, input *FFTSample) {
 	C.av_imdct_calc((*C.struct_FFTContext)(s),
 		(*C.FFTSample)(output), (*C.FFTSample)(input))
 }
 
 // AvImdctHalf
-func AvImdctHalf(s *FftContext, output, input *FftSample) {
+func AvImdctHalf(s *FFTContext, output, input *FFTSample) {
 	C.av_imdct_half((*C.struct_FFTContext)(s),
 		(*C.FFTSample)(output), (*C.FFTSample)(input))
 }
 
 // AvMdctCalc
-func AvMdctCalc(s *FftContext, output, input *FftSample) {
+func AvMdctCalc(s *FFTContext, output, input *FFTSample) {
 	C.av_mdct_calc((*C.struct_FFTContext)(s),
 		(*C.FFTSample)(output), (*C.FFTSample)(input))
 }
 
 // AvMdctEnd
-func AvMdctEnd(s *FftContext) {
+func AvMdctEnd(s *FFTContext) {
 	C.av_mdct_end((*C.struct_FFTContext)(s))
 }
 
+// RDFTransformType
 type RDFTransformType = C.enum_RDFTransformType
 
 const (
@@ -68,6 +72,7 @@ const (
 	DFT_C2R  = RDFTransformType(C.DFT_C2R)
 )
 
+// RDFTContext
 type RDFTContext C.struct_RDFTContext
 
 // AvRdftInit
@@ -77,7 +82,7 @@ func AvRdftInit(nbits int32, trans RDFTransformType) *RDFTContext {
 }
 
 // AvRdftCalc
-func AvRdftCalc(r *RDFTContext, data *FftSample) {
+func AvRdftCalc(r *RDFTContext, data *FFTSample) {
 	C.av_rdft_calc((*C.struct_RDFTContext)(r), (*C.FFTSample)(data))
 }
 
@@ -86,8 +91,10 @@ func AvRdftEnd(r *RDFTContext) {
 	C.av_rdft_end((*C.struct_RDFTContext)(r))
 }
 
+// DCTContext
 type DCTContext C.struct_DCTContext
 
+// DCTTransformType
 type DCTTransformType = C.enum_DCTTransformType
 
 const (
@@ -104,7 +111,7 @@ func AvDctInit(nbits int32, _type RDFTransformType) *DCTContext {
 }
 
 // AvDctCalc
-func AvDctCalc(d *DCTContext, data *FftSample) {
+func AvDctCalc(d *DCTContext, data *FFTSample) {
 	C.av_dct_calc((*C.struct_DCTContext)(d), (*C.FFTSample)(data))
 }
 

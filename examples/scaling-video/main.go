@@ -72,7 +72,7 @@ func main() {
 			"fmt:%s s:%dx%d -> fmt:%s s:%dx%d\n",
 			ffmpeg.AvGetPixFmtName(srcPixFmt), srcW, srcH,
 			ffmpeg.AvGetPixFmtName(dstPixFmt), dstW, dstH)
-		ret = ffmpeg.AVERROR(int32(syscall.EINVAL))
+		ret = ffmpeg.AVERROR(syscall.EINVAL)
 		goto end
 	}
 
@@ -106,8 +106,8 @@ func main() {
 
 end:
 	dstFile.Close()
-	ffmpeg.AvFreep(unsafe.Pointer(&srcData[0]))
-	ffmpeg.AvFreep(unsafe.Pointer(&dstData[0]))
+	ffmpeg.AvFreep(&srcData[0])
+	ffmpeg.AvFreep(&dstData[0])
 	ffmpeg.SwsFreeContext(swsCtx)
 	if ret < 0 {
 		os.Exit(1)

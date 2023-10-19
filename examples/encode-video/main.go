@@ -9,7 +9,7 @@ import (
 	ffmpeg "github.com/qrtc/ffmpeg-dev-go"
 )
 
-func encode(encCtx *ffmpeg.AvCodecContext, frame *ffmpeg.AvFrame, pkt *ffmpeg.AvPacket, outfile *os.File) {
+func encode(encCtx *ffmpeg.AVCodecContext, frame *ffmpeg.AVFrame, pkt *ffmpeg.AVPacket, outfile *os.File) {
 	if frame != nil {
 		fmt.Fprintf(os.Stdout, "Send frame %3d\n", frame.GetPts())
 	}
@@ -22,7 +22,7 @@ func encode(encCtx *ffmpeg.AvCodecContext, frame *ffmpeg.AvFrame, pkt *ffmpeg.Av
 
 	for ret >= 0 {
 		ret = ffmpeg.AvCodecReceivePacket(encCtx, pkt)
-		if ret == ffmpeg.AVERROR(int32(syscall.EAGAIN)) || ret == ffmpeg.AVERROR_EOF {
+		if ret == ffmpeg.AVERROR(syscall.EAGAIN) || ret == ffmpeg.AVERROR_EOF {
 			return
 		} else if ret < 0 {
 			fmt.Fprintf(os.Stderr, "Error during encoding\n")

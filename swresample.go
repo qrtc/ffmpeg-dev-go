@@ -51,9 +51,9 @@ const (
 type SwrContext C.struct_SwrContext
 
 // SwrGetClass gets the AVClass for SwrContext. It can be used in combination with
-// AV_OPT_SEARCH_FAKE_OBJ for examining options.
-func SwrGetClass() *AvClass {
-	return (*AvClass)(C.swr_get_class())
+// Av_OPT_SEARCH_FAKE_OBJ for examining options.
+func SwrGetClass() *AVClass {
+	return (*AVClass)(C.swr_get_class())
 }
 
 // SwrAlloc allocates SwrContext.
@@ -73,13 +73,13 @@ func SwrIsInitialized(s *SwrContext) int32 {
 
 // SwrAllocSetOpts allocates SwrContext if needed and set/reset common parameters.
 func SwrAllocSetOpts(s *SwrContext,
-	outChLayout int64, outSampleFmt AvSampleFormat, outSampleRate int32,
-	inChLayout int64, inSampleFmt AvSampleFormat, inSampleRate int32,
-	logOffset int32, logCtx unsafe.Pointer) *SwrContext {
+	outChLayout int64, outSampleFmt AVSampleFormat, outSampleRate int32,
+	inChLayout int64, inSampleFmt AVSampleFormat, inSampleRate int32,
+	logOffset int32, logCtx CVoidPointer) *SwrContext {
 	return (*SwrContext)(C.swr_alloc_set_opts((*C.struct_SwrContext)(s),
 		(C.int64_t)(outChLayout), (C.enum_AVSampleFormat)(outSampleFmt), (C.int)(outSampleRate),
 		(C.int64_t)(inChLayout), (C.enum_AVSampleFormat)(inSampleFmt), (C.int)(inSampleRate),
-		(C.int)(logOffset), logCtx))
+		(C.int)(logOffset), VoidPointer(logCtx)))
 }
 
 // SwrFree frees the given SwrContext and set the pointer to NULL.
@@ -121,11 +121,11 @@ func SwrSetChannelMapping(s *SwrContext, channelMap *int32) int32 {
 func SwrBuildMatrix(inLayout, outLayout uint64,
 	centerMixLevel, surroundMixLevel, lfeMixLevel float64,
 	rematrixMaxval, rematrixVolume float64,
-	matrix *float64, stride int32, matrixEncoding AvMatrixEncoding, logCtx unsafe.Pointer) int32 {
+	matrix *float64, stride int32, matrixEncoding AVMatrixEncoding, logCtx CVoidPointer) int32 {
 	return (int32)(C.swr_build_matrix((C.uint64_t)(inLayout), (C.uint64_t)(outLayout),
 		(C.double)(centerMixLevel), (C.double)(surroundMixLevel), (C.double)(lfeMixLevel),
 		(C.double)(rematrixMaxval), (C.double)(rematrixVolume),
-		(*C.double)(matrix), (C.int)(stride), (C.enum_AVMatrixEncoding)(matrixEncoding), logCtx))
+		(*C.double)(matrix), (C.int)(stride), (C.enum_AVMatrixEncoding)(matrixEncoding), VoidPointer(logCtx)))
 }
 
 // SwrSetMatrix sets a customized remix matrix.
@@ -170,13 +170,13 @@ func SwResampleLicense() string {
 }
 
 // SwrConvertFrame converts the samples in the input AVFrame and write them to the output AVFrame.
-func SwrConvertFrame(s *SwrContext, output, input *AvFrame) int32 {
+func SwrConvertFrame(s *SwrContext, output, input *AVFrame) int32 {
 	return (int32)(C.swr_convert_frame((*C.struct_SwrContext)(s),
 		(*C.struct_AVFrame)(output), (*C.struct_AVFrame)(input)))
 }
 
 // SwrConfigFrame configures or reconfigure the SwrContext using the information provided by the AVFrames.
-func SwrConfigFrame(s *SwrContext, out, in *AvFrame) int32 {
+func SwrConfigFrame(s *SwrContext, out, in *AVFrame) int32 {
 	return (int32)(C.swr_config_frame((*C.struct_SwrContext)(s),
 		(*C.struct_AVFrame)(out), (*C.struct_AVFrame)(in)))
 }

@@ -15,8 +15,8 @@ const (
 )
 
 // Open an input file and the required decoder.
-func openInputFile(fileName string) (inputFormatContext *ffmpeg.AvFormatContext,
-	inputCodecContext *ffmpeg.AvCodecContext, ret int32) {
+func openInputFile(fileName string) (inputFormatContext *ffmpeg.AVFormatContext,
+	inputCodecContext *ffmpeg.AVCodecContext, ret int32) {
 
 	// Open the input file to read from it.
 	if ret = ffmpeg.AvFormatOpenInput(&inputFormatContext, fileName, nil, nil); ret < 0 {
@@ -51,7 +51,7 @@ func openInputFile(fileName string) (inputFormatContext *ffmpeg.AvFormatContext,
 	if avctx == nil {
 		fmt.Fprintf(os.Stderr, "Could not allocate a decoding context\n")
 		ffmpeg.AvFormatCloseInput(&inputFormatContext)
-		return nil, nil, ffmpeg.AVERROR(int32(syscall.ENOMEM))
+		return nil, nil, ffmpeg.AVERROR(syscall.ENOMEM)
 	}
 
 	// Initialize the stream parameters with demuxer information.
@@ -76,13 +76,13 @@ func openInputFile(fileName string) (inputFormatContext *ffmpeg.AvFormatContext,
 }
 
 // Open an output file and the required encoder.
-func openOutputFile(filename string, inputCodecContext *ffmpeg.AvCodecContext) (outputFormatContext *ffmpeg.AvFormatContext,
-	outputCodecContext *ffmpeg.AvCodecContext, ret int32) {
+func openOutputFile(filename string, inputCodecContext *ffmpeg.AVCodecContext) (outputFormatContext *ffmpeg.AVFormatContext,
+	outputCodecContext *ffmpeg.AVCodecContext, ret int32) {
 
-	var outputIOContext *ffmpeg.AvIOContext
-	var outputCodec *ffmpeg.AvCodec
-	var stream *ffmpeg.AvStream
-	var avctx *ffmpeg.AvCodecContext
+	var outputIOContext *ffmpeg.AVIOContext
+	var outputCodec *ffmpeg.AVCodec
+	var stream *ffmpeg.AVStream
+	var avctx *ffmpeg.AVCodecContext
 
 	// Open the output file to write to it.
 	if ret = ffmpeg.AvIOOpen(&outputIOContext, filename, ffmpeg.AVIO_FLAG_WRITE); ret < 0 {
@@ -93,7 +93,7 @@ func openOutputFile(filename string, inputCodecContext *ffmpeg.AvCodecContext) (
 	// Create a new format context for the output container format.
 	if outputFormatContext = ffmpeg.AvFormatAllocContext(); outputFormatContext == nil {
 		fmt.Fprintf(os.Stderr, "Could not allocate output format context\n")
-		return nil, nil, ffmpeg.AVERROR(int32(syscall.ENOMEM))
+		return nil, nil, ffmpeg.AVERROR(syscall.ENOMEM)
 	}
 
 	// Associate the output file (pointer) with the container format context.
@@ -109,7 +109,7 @@ func openOutputFile(filename string, inputCodecContext *ffmpeg.AvCodecContext) (
 	outputFormatContext.SetUrl(filename)
 	if len(outputFormatContext.GetUrl()) == 0 {
 		fmt.Fprintf(os.Stderr, "Could not allocate url.\n")
-		ret = ffmpeg.AVERROR(int32(syscall.ENOMEM))
+		ret = ffmpeg.AVERROR(syscall.ENOMEM)
 		goto cleanup
 	}
 
@@ -122,13 +122,13 @@ func openOutputFile(filename string, inputCodecContext *ffmpeg.AvCodecContext) (
 	// Create a new audio stream in the output file container.
 	if stream = ffmpeg.AvFormatNewStream(outputFormatContext, nil); stream == nil {
 		fmt.Fprintf(os.Stderr, "Could not create new stream\n")
-		ret = ffmpeg.AVERROR(int32(syscall.ENOMEM))
+		ret = ffmpeg.AVERROR(syscall.ENOMEM)
 		goto cleanup
 	}
 
 	if avctx = ffmpeg.AvCodecAllocContext3(outputCodec); avctx == nil {
 		fmt.Fprintf(os.Stderr, "Could not allocate an encoding context\n")
-		ret = ffmpeg.AVERROR(int32(syscall.ENOMEM))
+		ret = ffmpeg.AVERROR(syscall.ENOMEM)
 		goto cleanup
 	}
 
@@ -179,19 +179,19 @@ cleanup:
 }
 
 // Initialize one data packet for reading or writing.
-func initPacket() (packet *ffmpeg.AvPacket, ret int32) {
+func initPacket() (packet *ffmpeg.AVPacket, ret int32) {
 	if packet = ffmpeg.AvPacketAlloc(); packet == nil {
 		fmt.Fprintf(os.Stderr, "Could not allocate packet\n")
-		return nil, ffmpeg.AVERROR(int32(syscall.ENOMEM))
+		return nil, ffmpeg.AVERROR(syscall.ENOMEM)
 	}
 	return packet, 0
 }
 
 // Initialize one audio frame for reading from the input file.
-func initInputFrame() (frame *ffmpeg.AvFrame, ret int32) {
+func initInputFrame() (frame *ffmpeg.AVFrame, ret int32) {
 	if frame = ffmpeg.AvFrameAlloc(); frame == nil {
 		fmt.Fprintf(os.Stderr, "Could not allocate input frame\n")
-		return nil, ffmpeg.AVERROR(int32(syscall.ENOMEM))
+		return nil, ffmpeg.AVERROR(syscall.ENOMEM)
 	}
 	return frame, 0
 }
@@ -199,7 +199,7 @@ func initInputFrame() (frame *ffmpeg.AvFrame, ret int32) {
 // Initialize the audio resampler based on the input and output codec settings.
 // If the input and output sample formats differ, a conversion is required
 // libswresample takes care of this, but requires initialization.
-func initResampler(inputCodecContext, outputCodecContext *ffmpeg.AvCodecContext) (
+func initResampler(inputCodecContext, outputCodecContext *ffmpeg.AVCodecContext) (
 	resampleContext *ffmpeg.SwrContext, ret int32) {
 
 	// Create a resampler context for the conversion.
@@ -216,7 +216,7 @@ func initResampler(inputCodecContext, outputCodecContext *ffmpeg.AvCodecContext)
 		inputCodecContext.GetSampleRate(),
 		0, nil); resampleContext == nil {
 		fmt.Fprintf(os.Stderr, "Could not allocate resample context\n")
-		return nil, ffmpeg.AVERROR(int32(syscall.ENOMEM))
+		return nil, ffmpeg.AVERROR(syscall.ENOMEM)
 	}
 
 	if outputCodecContext.GetSampleRate() != inputCodecContext.GetSampleRate() {
@@ -233,18 +233,18 @@ func initResampler(inputCodecContext, outputCodecContext *ffmpeg.AvCodecContext)
 }
 
 // Initialize a FIFO buffer for the audio samples to be encoded.
-func initFifo(outputCodecContext *ffmpeg.AvCodecContext) (fifo *ffmpeg.AvAudioFifo, ret int32) {
+func initFifo(outputCodecContext *ffmpeg.AVCodecContext) (fifo *ffmpeg.AVAudioFifo, ret int32) {
 	// Create the FIFO buffer based on the specified output sample format
 	if fifo = ffmpeg.AvAudioFifoAlloc(outputCodecContext.GetSampleFmt(),
 		outputCodecContext.GetChannels(), 1); fifo == nil {
 		fmt.Fprintf(os.Stderr, "Could not allocate FIFO\n")
-		return nil, ffmpeg.AVERROR(int32(syscall.ENOMEM))
+		return nil, ffmpeg.AVERROR(syscall.ENOMEM)
 	}
 	return fifo, 0
 }
 
 // Write the header of the output file container.
-func writeOutputFileHeader(outputFormatContext *ffmpeg.AvFormatContext) int32 {
+func writeOutputFileHeader(outputFormatContext *ffmpeg.AVFormatContext) int32 {
 	if ret := ffmpeg.AvFormatWriteHeader(outputFormatContext, nil); ret < 0 {
 		fmt.Fprintf(os.Stderr, "Could not write output file header (error '%s')\n", ffmpeg.AvErr2str(ret))
 		return ret
@@ -253,9 +253,9 @@ func writeOutputFileHeader(outputFormatContext *ffmpeg.AvFormatContext) int32 {
 }
 
 // Decode one audio frame from the input file.
-func decodeAudioFrame(frame *ffmpeg.AvFrame,
-	inputFormatContext *ffmpeg.AvFormatContext,
-	inputCodecContext *ffmpeg.AvCodecContext) (dataPresent, finished, ret int32) {
+func decodeAudioFrame(frame *ffmpeg.AVFrame,
+	inputFormatContext *ffmpeg.AVFormatContext,
+	inputCodecContext *ffmpeg.AVCodecContext) (dataPresent, finished, ret int32) {
 	// Packet used for temporary storage.
 	inputPacket, ret := initPacket()
 	if ret < 0 {
@@ -285,7 +285,7 @@ func decodeAudioFrame(frame *ffmpeg.AvFrame,
 	switch {
 	// If the decoder asks for more data to be able to decode a frame,
 	// return indicating that no data is present.
-	case ret == ffmpeg.AVERROR(int32(syscall.EAGAIN)):
+	case ret == ffmpeg.AVERROR(syscall.EAGAIN):
 		ret = 0
 		goto cleanup
 	// If the end of the input file is reached, stop decoding.
@@ -310,16 +310,16 @@ cleanup:
 // Initialize a temporary storage for the specified number of audio samples.
 // The conversion requires temporary storage due to the different format.
 // The number of audio samples to be allocated is specified in frame_size.
-func initConvertedSamples(outputCodecContext *ffmpeg.AvCodecContext,
+func initConvertedSamples(outputCodecContext *ffmpeg.AVCodecContext,
 	frameSize int32) (convertedInputSamples **uint8, ret int32) {
 
 	// Allocate as many pointers as there are audio channels.
 	// Each pointer will later point to the audio samples of the corresponding
 	// channels (although it may be NULL for interleaved formats).
-	if convertedInputSamples = (**uint8)(ffmpeg.AvCalloc(uint(outputCodecContext.GetChannels()),
-		uint(unsafe.Sizeof(*convertedInputSamples)))); convertedInputSamples == nil {
+	if convertedInputSamples = (**uint8)(ffmpeg.AvCalloc(outputCodecContext.GetChannels(),
+		unsafe.Sizeof(*convertedInputSamples))); convertedInputSamples == nil {
 		fmt.Fprintf(os.Stderr, "Could not allocate converted input sample pointers\n")
-		return nil, ffmpeg.AVERROR(int32(syscall.ENOMEM))
+		return nil, ffmpeg.AVERROR(syscall.ENOMEM)
 	}
 
 	// Allocate memory for the samples of all channels in one consecutive
@@ -329,7 +329,7 @@ func initConvertedSamples(outputCodecContext *ffmpeg.AvCodecContext,
 		frameSize,
 		outputCodecContext.GetSampleFmt(), 0); ret < 0 {
 		fmt.Fprintf(os.Stderr, "Could not allocate converted input samples (error '%s')\n", ffmpeg.AvErr2str(ret))
-		ffmpeg.AvFreep(unsafe.Pointer(&convertedInputSamples))
+		ffmpeg.AvFreep(&convertedInputSamples)
 		return nil, ret
 	}
 	return convertedInputSamples, 0
@@ -340,9 +340,7 @@ func initConvertedSamples(outputCodecContext *ffmpeg.AvCodecContext,
 // specified by frame_size.
 func convertSamples(inputData, convertedData **uint8,
 	frameSize int32, resampleContext *ffmpeg.SwrContext) (ret int32) {
-	if ret = ffmpeg.SwrConvert(resampleContext,
-		convertedData, frameSize,
-		inputData, frameSize); ret < 0 {
+	if ret = ffmpeg.SwrConvert(resampleContext, convertedData, frameSize, inputData, frameSize); ret < 0 {
 		fmt.Fprintf(os.Stderr, "Could not convert input samples (error '%s')\n", ffmpeg.AvErr2str(ret))
 		return ret
 	}
@@ -350,7 +348,7 @@ func convertSamples(inputData, convertedData **uint8,
 }
 
 // Add converted input audio samples to the FIFO buffer for later processing.
-func addSamplesToFifo(fifo *ffmpeg.AvAudioFifo, convertedInputSamples **uint8, frameSize int32) int32 {
+func addSamplesToFifo(fifo *ffmpeg.AVAudioFifo, convertedInputSamples **uint8, frameSize int32) int32 {
 	//  Make the FIFO as large as it needs to be to hold both,
 	// the old and the new samples.
 	if ret := ffmpeg.AvAudioFifoRealloc(fifo, ffmpeg.AvAudioFifoSize(fifo)+frameSize); ret < 0 {
@@ -359,8 +357,7 @@ func addSamplesToFifo(fifo *ffmpeg.AvAudioFifo, convertedInputSamples **uint8, f
 	}
 
 	// Store the new samples in the FIFO buffer.
-	if ret := ffmpeg.AvAudioFifoWrite(fifo, (*unsafe.Pointer)(unsafe.Pointer(convertedInputSamples)),
-		frameSize); ret < frameSize {
+	if ret := ffmpeg.AvAudioFifoWrite(fifo, convertedInputSamples, frameSize); ret < frameSize {
 		fmt.Fprintf(os.Stderr, "Could not write data to FIFO\n")
 		return ffmpeg.AVERROR_EXIT
 	}
@@ -368,14 +365,14 @@ func addSamplesToFifo(fifo *ffmpeg.AvAudioFifo, convertedInputSamples **uint8, f
 }
 
 // Read one audio frame from the input file, decode, convert and store it in the FIFO buffer.
-func readDecodeConvertAndStore(fifo *ffmpeg.AvAudioFifo,
-	inputFormatContext *ffmpeg.AvFormatContext,
-	inputCodecContext *ffmpeg.AvCodecContext,
-	outputCodecContext *ffmpeg.AvCodecContext,
+func readDecodeConvertAndStore(fifo *ffmpeg.AVAudioFifo,
+	inputFormatContext *ffmpeg.AVFormatContext,
+	inputCodecContext *ffmpeg.AVCodecContext,
+	outputCodecContext *ffmpeg.AVCodecContext,
 	resamplerContext *ffmpeg.SwrContext) (finished, ret int32) {
 
 	// Temporary storage of the input samples of the frame read from the file.
-	var inputFrame *ffmpeg.AvFrame
+	var inputFrame *ffmpeg.AVFrame
 	// Temporary storage for the converted input samples.
 	var convertedInputSamples **uint8
 	var dataPresent int32
@@ -423,7 +420,7 @@ func readDecodeConvertAndStore(fifo *ffmpeg.AvAudioFifo,
 
 cleanup:
 	if convertedInputSamples != nil {
-		ffmpeg.AvFreep(unsafe.Pointer(&convertedInputSamples))
+		ffmpeg.AvFreep(&convertedInputSamples)
 	}
 	ffmpeg.AvFrameFree(&inputFrame)
 
@@ -431,8 +428,8 @@ cleanup:
 }
 
 // Initialize one input frame for writing to the output file.
-func initOutputFrame(outputcodecContext *ffmpeg.AvCodecContext,
-	frameSize int32) (frame *ffmpeg.AvFrame, ret int32) {
+func initOutputFrame(outputcodecContext *ffmpeg.AVCodecContext,
+	frameSize int32) (frame *ffmpeg.AVFrame, ret int32) {
 
 	// Create a new frame to store the audio samples.
 	if frame = ffmpeg.AvFrameAlloc(); frame == nil {
@@ -465,11 +462,11 @@ func initOutputFrame(outputcodecContext *ffmpeg.AvCodecContext,
 var pts int64
 
 // Encode one frame worth of audio to the output file.
-func encodeAudioFrame(frame *ffmpeg.AvFrame,
-	outputFormatContext *ffmpeg.AvFormatContext,
-	outputCodecContext *ffmpeg.AvCodecContext) (dataPresent, ret int32) {
+func encodeAudioFrame(frame *ffmpeg.AVFrame,
+	outputFormatContext *ffmpeg.AVFormatContext,
+	outputCodecContext *ffmpeg.AVCodecContext) (dataPresent, ret int32) {
 	// Packet used for temporary storage.
-	var outputPacket *ffmpeg.AvPacket
+	var outputPacket *ffmpeg.AVPacket
 
 	if outputPacket, ret = initPacket(); ret < 0 {
 		return dataPresent, ret
@@ -496,7 +493,7 @@ func encodeAudioFrame(frame *ffmpeg.AvFrame,
 	ret = ffmpeg.AvCodecReceivePacket(outputCodecContext, outputPacket)
 	// If the encoder asks for more data to be able to provide an
 	// encoded frame, return indicating that no data is present.
-	if ret == ffmpeg.AVERROR(int32(syscall.EAGAIN)) {
+	if ret == ffmpeg.AVERROR(syscall.EAGAIN) {
 		ret = 0
 		goto cleanup
 	} else if ret == ffmpeg.AVERROR_EOF {
@@ -525,11 +522,11 @@ cleanup:
 }
 
 // Load one audio frame from the FIFO buffer, encode and write it to the output file.
-func loadEncodeAndWrite(fifo *ffmpeg.AvAudioFifo,
-	outputFormatContext *ffmpeg.AvFormatContext,
-	outputCodecContext *ffmpeg.AvCodecContext) (ret int32) {
+func loadEncodeAndWrite(fifo *ffmpeg.AVAudioFifo,
+	outputFormatContext *ffmpeg.AVFormatContext,
+	outputCodecContext *ffmpeg.AVCodecContext) (ret int32) {
 	// Temporary storage of the output samples of the frame written to the file.
-	var outputFrame *ffmpeg.AvFrame
+	var outputFrame *ffmpeg.AVFrame
 	// Use the maximum number of possible samples per frame.
 	// If there is less than the maximum possible frame size in the FIFO
 	// buffer use this number. Otherwise, use the maximum possible frame size.
@@ -542,8 +539,7 @@ func loadEncodeAndWrite(fifo *ffmpeg.AvAudioFifo,
 
 	// Read as many samples from the FIFO buffer as required to fill the frame.
 	// The samples are stored in the frame temporarily.
-	if ret = ffmpeg.AvAudioFifoRead(fifo,
-		(*unsafe.Pointer)(unsafe.Pointer(outputFrame.GetData())), frameSize); ret < frameSize {
+	if ret = ffmpeg.AvAudioFifoRead(fifo, outputFrame.GetData(), frameSize); ret < frameSize {
 		fmt.Fprintf(os.Stderr, "Could not read data from FIFO\n")
 		ffmpeg.AvFrameFree(&outputFrame)
 		return ffmpeg.AVERROR_EXIT
@@ -560,7 +556,7 @@ func loadEncodeAndWrite(fifo *ffmpeg.AvAudioFifo,
 }
 
 // Write the trailer of the output file container.
-func writeOutputFileTrailer(outputFormatContext *ffmpeg.AvFormatContext) int32 {
+func writeOutputFileTrailer(outputFormatContext *ffmpeg.AVFormatContext) int32 {
 	if ret := ffmpeg.AvWriteTrailer(outputFormatContext); ret < 0 {
 		fmt.Fprintf(os.Stderr, "Could not write output file trailer (error '%s')\n", ffmpeg.AvErr2str(ret))
 		return ret
@@ -570,12 +566,12 @@ func writeOutputFileTrailer(outputFormatContext *ffmpeg.AvFormatContext) int32 {
 
 func main() {
 	var ret int32 = ffmpeg.AVERROR_EXIT
-	var inputFormatContext *ffmpeg.AvFormatContext
-	var inputCodecContext *ffmpeg.AvCodecContext
-	var outputFormatContext *ffmpeg.AvFormatContext
-	var outputCodecContext *ffmpeg.AvCodecContext
+	var inputFormatContext *ffmpeg.AVFormatContext
+	var inputCodecContext *ffmpeg.AVCodecContext
+	var outputFormatContext *ffmpeg.AVFormatContext
+	var outputCodecContext *ffmpeg.AVCodecContext
 	var resampleContext *ffmpeg.SwrContext
-	var fifo *ffmpeg.AvAudioFifo
+	var fifo *ffmpeg.AVAudioFifo
 
 	if len(os.Args) != 3 {
 		fmt.Fprintf(os.Stdout, "Usage: %s <input file> <output file>\n", os.Args[0])

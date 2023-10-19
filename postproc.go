@@ -35,11 +35,11 @@ func PpPostprocess(src []*uint8, srcStride []int32,
 	horizontalSize, verticalSize int32,
 	QPStore *int8, QPStride int32,
 	ppMode *PpMode, ppContext *PpContext, pictType int32) {
-	if len(src) != 3 {
-		panic("src need len = 3")
+	if len(src) < 3 {
+		panic("src len < 3")
 	}
-	if len(dst) != 3 {
-		panic("dst need len = 3")
+	if len(dst) < 3 {
+		panic("dst len < 3")
 	}
 	C.pp_postprocess((**C.uint8_t)(unsafe.Pointer(&src[0])), (*C.int)(&srcStride[0]),
 		(**C.uint8_t)(unsafe.Pointer(&dst[0])), (*C.int)(&dstStride[0]),

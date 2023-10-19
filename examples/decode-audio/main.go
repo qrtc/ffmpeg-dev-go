@@ -13,9 +13,9 @@ const (
 	AUDIO_REFILL_THRESH = 4096
 )
 
-func getFormatFromSampleFmt(sampleFmt ffmpeg.AvSampleFormat) (string, int32) {
+func getFormatFromSampleFmt(sampleFmt ffmpeg.AVSampleFormat) (string, int32) {
 	sampleFmtEntry := []struct {
-		sampleFmt ffmpeg.AvSampleFormat
+		sampleFmt ffmpeg.AVSampleFormat
 		fmtBe     string
 		fmtLe     string
 	}{
@@ -37,7 +37,7 @@ func getFormatFromSampleFmt(sampleFmt ffmpeg.AvSampleFormat) (string, int32) {
 	return "", -1
 }
 
-func decode(decCtx *ffmpeg.AvCodecContext, pkt *ffmpeg.AvPacket, frame *ffmpeg.AvFrame, outfile *os.File) {
+func decode(decCtx *ffmpeg.AVCodecContext, pkt *ffmpeg.AVPacket, frame *ffmpeg.AVFrame, outfile *os.File) {
 	// send the packet with the compressed data to the decoder
 	ret := ffmpeg.AvCodecSendPacket(decCtx, pkt)
 	if ret < 0 {
@@ -48,7 +48,7 @@ func decode(decCtx *ffmpeg.AvCodecContext, pkt *ffmpeg.AvPacket, frame *ffmpeg.A
 	// read all the output frames (in general there may be any number of them
 	for ret >= 0 {
 		ret = ffmpeg.AvCodecReceiveFrame(decCtx, frame)
-		if ret == ffmpeg.AVERROR(int32(syscall.EAGAIN)) || ret == ffmpeg.AVERROR_EOF {
+		if ret == ffmpeg.AVERROR(syscall.EAGAIN) || ret == ffmpeg.AVERROR_EOF {
 			return
 		} else if ret < 0 {
 			fmt.Fprintf(os.Stderr, "Error during decoding\n")
@@ -62,7 +62,7 @@ func decode(decCtx *ffmpeg.AvCodecContext, pkt *ffmpeg.AvPacket, frame *ffmpeg.A
 		}
 		for i := int32(0); i < frame.GetNbSamples(); i++ {
 			for ch := 0; ch < int(decCtx.GetChannels()); ch++ {
-				outfile.Write(ffmpeg.SliceWithOffset(frame.GetDataIdx(ch), dataSize*i, dataSize))
+				outfile.Write(ffmpeg.ByteSliceWithOffset(frame.GetDataIdx(ch), dataSize*i, dataSize))
 			}
 		}
 	}
@@ -114,7 +114,7 @@ func main() {
 	}
 
 	// decode until eof
-	var decodedFrame *ffmpeg.AvFrame
+	var decodedFrame *ffmpeg.AVFrame
 	inbuf := make([]byte, AUDIO_INBUF_SIZE+ffmpeg.AV_INPUT_BUFFER_PADDING_SIZE)
 	dataOffset := 0
 	dataSize, err := f.Read(inbuf[:AUDIO_INBUF_SIZE])

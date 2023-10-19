@@ -7,11 +7,12 @@ package ffmpeg
 import "C"
 
 // AVERROR returns a negative error code from a POSIX error code, to return from library functions.
-func AVERROR(e int32) int32 {
+func AVERROR[T HelperInteger](ie T) (oe int32) {
+	oe = (int32)(ie)
 	if C.EDOM > 0 {
-		return (-e)
+		return (-oe)
 	}
-	return e
+	return oe
 }
 
 // AVUNERROR returns a POSIX error code from a library function error return value.

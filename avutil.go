@@ -31,21 +31,21 @@ func AvutilLicense() string {
 }
 
 // Media Type
-type AvMediaType = C.enum_AVMediaType
+type AVMediaType = C.enum_AVMediaType
 
 const (
-	AVMEDIA_TYPE_UNKNOWN    = AvMediaType(C.AVMEDIA_TYPE_UNKNOWN)
-	AVMEDIA_TYPE_VIDEO      = AvMediaType(C.AVMEDIA_TYPE_VIDEO)
-	AVMEDIA_TYPE_AUDIO      = AvMediaType(C.AVMEDIA_TYPE_AUDIO)
-	AVMEDIA_TYPE_DATA       = AvMediaType(C.AVMEDIA_TYPE_DATA)
-	AVMEDIA_TYPE_SUBTITLE   = AvMediaType(C.AVMEDIA_TYPE_SUBTITLE)
-	AVMEDIA_TYPE_ATTACHMENT = AvMediaType(C.AVMEDIA_TYPE_ATTACHMENT)
-	AVMEDIA_TYPE_NB         = AvMediaType(C.AVMEDIA_TYPE_NB)
+	AVMEDIA_TYPE_UNKNOWN    = AVMediaType(C.AVMEDIA_TYPE_UNKNOWN)
+	AVMEDIA_TYPE_VIDEO      = AVMediaType(C.AVMEDIA_TYPE_VIDEO)
+	AVMEDIA_TYPE_AUDIO      = AVMediaType(C.AVMEDIA_TYPE_AUDIO)
+	AVMEDIA_TYPE_DATA       = AVMediaType(C.AVMEDIA_TYPE_DATA)
+	AVMEDIA_TYPE_SUBTITLE   = AVMediaType(C.AVMEDIA_TYPE_SUBTITLE)
+	AVMEDIA_TYPE_ATTACHMENT = AVMediaType(C.AVMEDIA_TYPE_ATTACHMENT)
+	AVMEDIA_TYPE_NB         = AVMediaType(C.AVMEDIA_TYPE_NB)
 )
 
 // AvGetMediaTypeString returns a string describing the MediaType,
 // Empty string if media_type is unknown.
-func AvGetMediaTypeString(mt AvMediaType) string {
+func AvGetMediaTypeString(mt AVMediaType) string {
 	return C.GoString(C.av_get_media_type_string((C.enum_AVMediaType)(mt)))
 }
 
@@ -64,25 +64,25 @@ const (
 )
 
 var (
-	AV_TIME_BASE_Q = AvRational(C.AV_TIME_BASE_Q)
+	AV_TIME_BASE_Q = AVRational(C.AV_TIME_BASE_Q)
 )
 
 // AvPictureType, pixel formats and basic image planes manipulation.
-type AvPictureType = C.enum_AVPictureType
+type AVPictureType = C.enum_AVPictureType
 
 const (
-	AV_PICTURE_TYPE_NONE = AvPictureType(C.AV_PICTURE_TYPE_NONE)
-	AV_PICTURE_TYPE_I    = AvPictureType(C.AV_PICTURE_TYPE_I)
-	AV_PICTURE_TYPE_P    = AvPictureType(C.AV_PICTURE_TYPE_P)
-	AV_PICTURE_TYPE_B    = AvPictureType(C.AV_PICTURE_TYPE_B)
-	AV_PICTURE_TYPE_S    = AvPictureType(C.AV_PICTURE_TYPE_S)
-	AV_PICTURE_TYPE_SI   = AvPictureType(C.AV_PICTURE_TYPE_SI)
-	AV_PICTURE_TYPE_SP   = AvPictureType(C.AV_PICTURE_TYPE_SP)
-	AV_PICTURE_TYPE_BI   = AvPictureType(C.AV_PICTURE_TYPE_BI)
+	AV_PICTURE_TYPE_NONE = AVPictureType(C.AV_PICTURE_TYPE_NONE)
+	AV_PICTURE_TYPE_I    = AVPictureType(C.AV_PICTURE_TYPE_I)
+	AV_PICTURE_TYPE_P    = AVPictureType(C.AV_PICTURE_TYPE_P)
+	AV_PICTURE_TYPE_B    = AVPictureType(C.AV_PICTURE_TYPE_B)
+	AV_PICTURE_TYPE_S    = AVPictureType(C.AV_PICTURE_TYPE_S)
+	AV_PICTURE_TYPE_SI   = AVPictureType(C.AV_PICTURE_TYPE_SI)
+	AV_PICTURE_TYPE_SP   = AVPictureType(C.AV_PICTURE_TYPE_SP)
+	AV_PICTURE_TYPE_BI   = AVPictureType(C.AV_PICTURE_TYPE_BI)
 )
 
 // AvGetPictureTypeChar returns a single letter to describe the given picture type.
-func AvGetPictureTypeChar(pictType AvPictureType) string {
+func AvGetPictureTypeChar(pictType AVPictureType) string {
 	c := C.av_get_picture_type_char((C.enum_AVPictureType)(pictType))
 	return C.GoStringN(&c, 1)
 }
@@ -93,8 +93,8 @@ func AvXIfNull(p, x unsafe.Pointer) unsafe.Pointer {
 }
 
 // AvIntListLengthForSize computes the length of an integer list.
-func AvIntListLengthForSize(elsize uint32, list unsafe.Pointer, term uint64) uint32 {
-	return (uint32)(C.av_int_list_length_for_size((C.uint)(elsize), list, (C.uint64_t)(term)))
+func AvIntListLengthForSize(elsize uint32, list CVoidPointer, term uint64) uint32 {
+	return (uint32)(C.av_int_list_length_for_size((C.uint)(elsize), VoidPointer(list), (C.uint64_t)(term)))
 }
 
 // AvIntListLength
@@ -113,8 +113,8 @@ func AvFopenUtf8(path, mode string) *FILE {
 }
 
 // AvGetTimeBaseQ returns the fractional representation of the internal time base.
-func AvGetTimeBaseQ() AvRational {
-	return (AvRational)(C.av_get_time_base_q())
+func AvGetTimeBaseQ() AVRational {
+	return (AVRational)(C.av_get_time_base_q())
 }
 
 const (

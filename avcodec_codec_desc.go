@@ -5,8 +5,45 @@ package ffmpeg
 */
 import "C"
 
-// AvCodecDescriptor
-type AvCodecDescriptor C.struct_AVCodecDescriptor
+// AVCodecDescriptor
+type AVCodecDescriptor C.struct_AVCodecDescriptor
+
+// Custom: GetId gets `AVCodecDescriptor.id` value.
+func (hwc *AVCodecDescriptor) GetId() AVCodecID {
+	return (AVCodecID)(hwc.id)
+}
+
+// Custom: GetType gets `AVCodecDescriptor.type` value.
+func (hwc *AVCodecDescriptor) GetType() AVMediaType {
+	return (AVMediaType)(hwc._type)
+}
+
+// Custom: GetName gets `AVCodecDescriptor.name` value.
+func (hwc *AVCodecDescriptor) GetName() string {
+	return C.GoString(hwc.name)
+}
+
+// Custom: GetLongName gets `AVCodecDescriptor.long_name` value.
+func (hwc *AVCodecDescriptor) GetLongName() string {
+	return C.GoString(hwc.long_name)
+}
+
+// Custom: GetProps gets `AVCodecDescriptor.props` value.
+func (hwc *AVCodecDescriptor) GetProps() int32 {
+	return (int32)(hwc.props)
+}
+
+// Custom: GetMimeTypes gets `AVCodecDescriptor.mime_types` value.
+func (hwc *AVCodecDescriptor) GetMimeTypes() (v []string) {
+	return TruncStringSlice(hwc.mime_types)
+}
+
+// Custom: GetProfiles gets `AVCodecDescriptor.profiles` value.
+func (hwc *AVCodecDescriptor) GetProfiles() []AVProfile {
+	return TruncSlice((*AVProfile)(hwc.profiles), func(ap AVProfile) bool {
+		return ap.GetProfile() == FF_PROFILE_UNKNOWN
+	})
+}
 
 const (
 	AV_CODEC_PROP_INTRA_ONLY = C.AV_CODEC_PROP_INTRA_ONLY
@@ -18,19 +55,19 @@ const (
 )
 
 // AvCodecDescriptorGet returns descriptor for given codec ID or NULL if no descriptor exists.
-func AvCodecDescriptorGet(id AvCodecID) *AvCodecDescriptor {
-	return (*AvCodecDescriptor)(C.avcodec_descriptor_get((C.enum_AVCodecID)(id)))
+func AvCodecDescriptorGet(id AVCodecID) *AVCodecDescriptor {
+	return (*AVCodecDescriptor)(C.avcodec_descriptor_get((C.enum_AVCodecID)(id)))
 }
 
 // AvCodecDescriptorNext iterates over all codec descriptors known to libavcodec.
-func AvCodecDescriptorNext(prev *AvCodecDescriptor) *AvCodecDescriptor {
-	return (*AvCodecDescriptor)(C.avcodec_descriptor_next((*C.struct_AVCodecDescriptor)(prev)))
+func AvCodecDescriptorNext(prev *AVCodecDescriptor) *AVCodecDescriptor {
+	return (*AVCodecDescriptor)(C.avcodec_descriptor_next((*C.struct_AVCodecDescriptor)(prev)))
 }
 
 // AvCodecDescriptorGetByName returns codec descriptor with the given name or NULL
 // if no such descriptor exists.
-func AvCodecDescriptorGetByName(name string) *AvCodecDescriptor {
+func AvCodecDescriptorGetByName(name string) *AVCodecDescriptor {
 	namePtr, nameFunc := StringCasting(name)
 	defer nameFunc()
-	return (*AvCodecDescriptor)(C.avcodec_descriptor_get_by_name((*C.char)(namePtr)))
+	return (*AVCodecDescriptor)(C.avcodec_descriptor_get_by_name((*C.char)(namePtr)))
 }

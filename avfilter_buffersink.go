@@ -6,7 +6,7 @@ package ffmpeg
 import "C"
 
 // AvBuffersinkGetFrameFlags gets a frame with filtered data from sink and put it in frame.
-func AvBuffersinkGetFrameFlags(ctx *AvFilterContext, frame *AvFrame, flags int32) int32 {
+func AvBuffersinkGetFrameFlags(ctx *AVFilterContext, frame *AVFrame, flags int32) int32 {
 	return (int32)(C.av_buffersink_get_frame_flags((*C.struct_AVFilterContext)(ctx),
 		(*C.struct_AVFrame)(frame), (C.int)(flags)))
 }
@@ -16,89 +16,131 @@ const (
 	AV_BUFFERSINK_FLAG_NO_REQUEST = C.AV_BUFFERSINK_FLAG_NO_REQUEST
 )
 
-type AvBufferSinkParams C.struct_AVBufferSinkParams
+// AVBufferSinkParams
+type AVBufferSinkParams C.struct_AVBufferSinkParams
 
-// Deprecated: No use
-func AvBuffersinkParamsAlloc() *AvBufferSinkParams {
-	return (*AvBufferSinkParams)(C.av_buffersink_params_alloc())
+// Custom: GetPixelFmts gets `AVBufferSinkParams.pixel_fmts` value.
+func (bsp *AVBufferSinkParams) GetPixelFmts() []AVPixelFormat {
+	return TruncSlice((*AVPixelFormat)(bsp.pixel_fmts), func(pf AVPixelFormat) bool {
+		return pf == AV_PIX_FMT_NONE
+	})
 }
 
-type AvABufferSinkParams C.struct_AVABufferSinkParams
+// Deprecated: No use
+func AvBuffersinkParamsAlloc() *AVBufferSinkParams {
+	return (*AVBufferSinkParams)(C.av_buffersink_params_alloc())
+}
+
+// AVABufferSinkParams
+type AVABufferSinkParams C.struct_AVABufferSinkParams
+
+// Custom: GetSampleFmts gets `AVABufferSinkParams.sample_fmts` value.
+func (absp *AVABufferSinkParams) GetSampleFmts() []AVSampleFormat {
+	return TruncSlice((*AVSampleFormat)(absp.sample_fmts), func(sf AVSampleFormat) bool {
+		return sf == AV_SAMPLE_FMT_NONE
+	})
+}
+
+// Custom: GetChannelLayouts gets `AVABufferSinkParams.channel_layouts` value.
+func (absp *AVABufferSinkParams) GetChannelLayouts() []int64 {
+	return TruncSlice((*int64)(absp.channel_layouts), func(i int64) bool {
+		return i == -1
+	})
+}
+
+// Custom: GetChannelCounts gets `AVABufferSinkParams.channel_counts` value.
+func (absp *AVABufferSinkParams) GetChannelCounts() []int32 {
+	return TruncSlice((*int32)(absp.channel_counts), func(i int32) bool {
+		return i == -1
+	})
+}
+
+// Custom: GetAllChannelCounts gets `AVABufferSinkParams.all_channel_counts` value.
+func (absp *AVABufferSinkParams) GetAllChannelCounts() int32 {
+	return (int32)(absp.all_channel_counts)
+}
+
+// Custom: GetSampleRates gets `AVABufferSinkParams.sample_rates` value.
+func (absp *AVABufferSinkParams) GetSampleRates() []int32 {
+	return TruncSlice((*int32)(absp.sample_rates), func(i int32) bool {
+		return i == -1
+	})
+}
 
 // Deprecated: No use
-func AvAbuffersinkParamsAlloc() *AvABufferSinkParams {
-	return (*AvABufferSinkParams)(C.av_abuffersink_params_alloc())
+func AvAbuffersinkParamsAlloc() *AVABufferSinkParams {
+	return (*AVABufferSinkParams)(C.av_abuffersink_params_alloc())
 }
 
 // AvBuffersinkSetFrameSize sets the frame size for an audio buffer sink.
-func AvBuffersinkSetFrameSize(ctx *AvFilterContext, frameSize uint32) {
+func AvBuffersinkSetFrameSize(ctx *AVFilterContext, frameSize uint32) {
 	C.av_buffersink_set_frame_size((*C.struct_AVFilterContext)(ctx), (C.uint)(frameSize))
 }
 
 // AvBuffersinkGetType
-func AvBuffersinkGetType(ctx *AvFilterContext) AvMediaType {
-	return (AvMediaType)(C.av_buffersink_get_type((*C.struct_AVFilterContext)(ctx)))
+func AvBuffersinkGetType(ctx *AVFilterContext) AVMediaType {
+	return (AVMediaType)(C.av_buffersink_get_type((*C.struct_AVFilterContext)(ctx)))
 }
 
 // AvBuffersinkGetTimeBase
-func AvBuffersinkGetTimeBase(ctx *AvFilterContext) AvRational {
-	return (AvRational)(C.av_buffersink_get_time_base((*C.struct_AVFilterContext)(ctx)))
+func AvBuffersinkGetTimeBase(ctx *AVFilterContext) AVRational {
+	return (AVRational)(C.av_buffersink_get_time_base((*C.struct_AVFilterContext)(ctx)))
 }
 
 // AvBuffersinkGetFormat
-func AvBuffersinkGetFormat(ctx *AvFilterContext) int32 {
+func AvBuffersinkGetFormat(ctx *AVFilterContext) int32 {
 	return (int32)(C.av_buffersink_get_format((*C.struct_AVFilterContext)(ctx)))
 }
 
 // AvBuffersinkGetFrameRate
-func AvBuffersinkGetFrameRate(ctx *AvFilterContext) AvRational {
-	return (AvRational)(C.av_buffersink_get_frame_rate((*C.struct_AVFilterContext)(ctx)))
+func AvBuffersinkGetFrameRate(ctx *AVFilterContext) AVRational {
+	return (AVRational)(C.av_buffersink_get_frame_rate((*C.struct_AVFilterContext)(ctx)))
 }
 
 // AvBuffersinkGetW
-func AvBuffersinkGetW(ctx *AvFilterContext) int32 {
+func AvBuffersinkGetW(ctx *AVFilterContext) int32 {
 	return (int32)(C.av_buffersink_get_w((*C.struct_AVFilterContext)(ctx)))
 }
 
 // AvBuffersinkGetH
-func AvBuffersinkGetH(ctx *AvFilterContext) int32 {
+func AvBuffersinkGetH(ctx *AVFilterContext) int32 {
 	return (int32)(C.av_buffersink_get_h((*C.struct_AVFilterContext)(ctx)))
 }
 
 // AvBuffersinkGetSampleAspectRatio
-func AvBuffersinkGetSampleAspectRatio(ctx *AvFilterContext) AvRational {
-	return (AvRational)(C.av_buffersink_get_sample_aspect_ratio((*C.struct_AVFilterContext)(ctx)))
+func AvBuffersinkGetSampleAspectRatio(ctx *AVFilterContext) AVRational {
+	return (AVRational)(C.av_buffersink_get_sample_aspect_ratio((*C.struct_AVFilterContext)(ctx)))
 }
 
 // AvBuffersinkGetChannels
-func AvBuffersinkGetChannels(ctx *AvFilterContext) int32 {
+func AvBuffersinkGetChannels(ctx *AVFilterContext) int32 {
 	return (int32)(C.av_buffersink_get_channels((*C.struct_AVFilterContext)(ctx)))
 }
 
 // AvBuffersinkGetChannelLayout
-func AvBuffersinkGetChannelLayout(ctx *AvFilterContext) uint64 {
+func AvBuffersinkGetChannelLayout(ctx *AVFilterContext) uint64 {
 	return (uint64)(C.av_buffersink_get_channel_layout((*C.struct_AVFilterContext)(ctx)))
 }
 
 // AvBuffersinkGetSampleRate
-func AvBuffersinkGetSampleRate(ctx *AvFilterContext) int32 {
+func AvBuffersinkGetSampleRate(ctx *AVFilterContext) int32 {
 	return (int32)(C.av_buffersink_get_sample_rate((*C.struct_AVFilterContext)(ctx)))
 }
 
 // AvBuffersinkGetHwFramesCtx
-func AvBuffersinkGetHwFramesCtx(ctx *AvFilterContext) *AvBufferRef {
-	return (*AvBufferRef)(C.av_buffersink_get_hw_frames_ctx((*C.struct_AVFilterContext)(ctx)))
+func AvBuffersinkGetHwFramesCtx(ctx *AVFilterContext) *AVBufferRef {
+	return (*AVBufferRef)(C.av_buffersink_get_hw_frames_ctx((*C.struct_AVFilterContext)(ctx)))
 }
 
 // AvBuffersinkGetFrame gets a frame with filtered data from sink and put it in frame.
-func AvBuffersinkGetFrame(ctx *AvFilterContext, frame *AvFrame) int32 {
+func AvBuffersinkGetFrame(ctx *AVFilterContext, frame *AVFrame) int32 {
 	return (int32)(C.av_buffersink_get_frame((*C.struct_AVFilterContext)(ctx),
 		(*C.struct_AVFrame)(frame)))
 }
 
-// AvBuffersinkGetSamples same as AvBuffersinkGetFrame(), but with the ability to specify the number
-// of samples read. This function is less efficient than AvBuffersinkGetFrame(), because it copies the data around.
-func AvBuffersinkGetSamples(ctx *AvFilterContext, frame *AvFrame, nbSamples int32) int32 {
+// AvBuffersinkGetSamples same as AVBuffersinkGetFrame(), but with the ability to specify the number
+// of samples read. This function is less efficient than AVBuffersinkGetFrame(), because it copies the data around.
+func AvBuffersinkGetSamples(ctx *AVFilterContext, frame *AVFrame, nbSamples int32) int32 {
 	return (int32)(C.av_buffersink_get_samples((*C.struct_AVFilterContext)(ctx),
 		(*C.struct_AVFrame)(frame), (C.int)(nbSamples)))
 }

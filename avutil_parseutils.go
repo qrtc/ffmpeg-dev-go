@@ -7,15 +7,15 @@ import "C"
 import "unsafe"
 
 // AvParseRatio parses str and store the parsed ratio in q.
-func AvParseRatio(q *AvRational, str string, max, logOffset int32, logCtx unsafe.Pointer) int32 {
+func AvParseRatio(q *AVRational, str string, max, logOffset int32, logCtx CVoidPointer) int32 {
 	strPtr, strFunc := StringCasting(str)
 	defer strFunc()
 	return (int32)(C.av_parse_ratio((*C.struct_AVRational)(q),
-		(*C.char)(strPtr), (C.int)(max), (C.int)(logOffset), logCtx))
+		(*C.char)(strPtr), (C.int)(max), (C.int)(logOffset), VoidPointer(logCtx)))
 }
 
 // AvParseRatioQuiet
-func AvParseRatioQuiet(q *AvRational, str string, max int32) int32 {
+func AvParseRatioQuiet(q *AVRational, str string, max int32) int32 {
 	strPtr, strFunc := StringCasting(str)
 	defer strFunc()
 	return (int32)(C.av_parse_ratio((*C.struct_AVRational)(q),
@@ -30,17 +30,17 @@ func AvParseVideoSize(widthPtr, heightPtr *int32, str string) int32 {
 }
 
 // AvParseVideoRate parses str and store the detected values in *rate.
-func AvParseVideoRate(rate *AvRational, str string) int32 {
+func AvParseVideoRate(rate *AVRational, str string) int32 {
 	strPtr, strFunc := StringCasting(str)
 	defer strFunc()
 	return (int32)(C.av_parse_video_rate((*C.struct_AVRational)(rate), (*C.char)(strPtr)))
 }
 
 // AvParseColor puts the RGBA values that correspond to color_string in rgba_color.
-func AvParseColor(rgbaColor *uint8, colorString string, slen int32, logCtx unsafe.Pointer) int32 {
+func AvParseColor(rgbaColor *uint8, colorString string, slen int32, logCtx CVoidPointer) int32 {
 	strPtr, strFunc := StringCasting(colorString)
 	defer strFunc()
-	return (int32)(C.av_parse_color((*C.uint8_t)(rgbaColor), (*C.char)(strPtr), (C.int)(slen), logCtx))
+	return (int32)(C.av_parse_color((*C.uint8_t)(rgbaColor), (*C.char)(strPtr), (C.int)(slen), VoidPointer(logCtx)))
 }
 
 // AvGetKnownColorName gets the name of a color from the internal table of hard-coded named colors.

@@ -6,16 +6,17 @@ package ffmpeg
 import "C"
 import "unsafe"
 
-type AvVorbisParseContext C.struct_AVVorbisParseContext
+// AVVorbisParseContext
+type AVVorbisParseContext C.struct_AVVorbisParseContext
 
 // AvVorbisParseInit allocates and initialize the Vorbis parser using headers in the extradata.
-func AvVorbisParseInit(extradata *uint8, extradataSize int32) *AvVorbisParseContext {
-	return (*AvVorbisParseContext)(C.av_vorbis_parse_init((*C.uint8_t)(extradata),
+func AvVorbisParseInit(extradata *uint8, extradataSize int32) *AVVorbisParseContext {
+	return (*AVVorbisParseContext)(C.av_vorbis_parse_init((*C.uint8_t)(extradata),
 		(C.int)(extradataSize)))
 }
 
 // AvVorbisParseFree frees the parser and everything associated with it.
-func AvVorbisParseFree(s **AvVorbisParseContext) {
+func AvVorbisParseFree(s **AVVorbisParseContext) {
 	C.av_vorbis_parse_free((**C.struct_AVVorbisParseContext)(unsafe.Pointer(s)))
 }
 
@@ -26,18 +27,18 @@ const (
 )
 
 // AvVorbisParseFrameFlags gets the duration for a Vorbis packet.
-func AvVorbisParseFrameFlags(s *AvVorbisParseContext, buf *uint8, bufSize int32, flags *int32) int32 {
+func AvVorbisParseFrameFlags(s *AVVorbisParseContext, buf *uint8, bufSize int32, flags *int32) int32 {
 	return (int32)(C.av_vorbis_parse_frame_flags((*C.struct_AVVorbisParseContext)(s),
 		(*C.uint8_t)(buf), (C.int)(bufSize), (*C.int)(flags)))
 }
 
 // AvVorbisParseFrame gets the duration for a Vorbis packet.
-func AvVorbisParseFrame(s *AvVorbisParseContext, buf *uint8, bufSize int32) int32 {
+func AvVorbisParseFrame(s *AVVorbisParseContext, buf *uint8, bufSize int32) int32 {
 	return (int32)(C.av_vorbis_parse_frame((*C.struct_AVVorbisParseContext)(s),
 		(*C.uint8_t)(buf), (C.int)(bufSize)))
 }
 
-// AvVorbisParseReset
-func AvVorbisParseReset(s *AvVorbisParseContext) {
+// AVVorbisParseReset
+func AvVorbisParseReset(s *AVVorbisParseContext) {
 	C.av_vorbis_parse_reset((*C.struct_AVVorbisParseContext)(s))
 }

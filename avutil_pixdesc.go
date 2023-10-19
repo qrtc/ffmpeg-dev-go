@@ -6,9 +6,175 @@ package ffmpeg
 import "C"
 import "unsafe"
 
-type AvComponentDescriptor C.struct_AVComponentDescriptor
+type AVComponentDescriptor C.struct_AVComponentDescriptor
 
-type AvPixFmtDescriptor C.struct_AVPixFmtDescriptor
+// Custom: GetPlane gets `AVComponentDescriptor.plane` value.
+func (cd *AVComponentDescriptor) GetPlane() int32 {
+	return (int32)(cd.plane)
+}
+
+// Custom: SetPlane sets `AVComponentDescriptor.plane` value.
+func (cd *AVComponentDescriptor) SetPlane(v int32) {
+	cd.plane = (C.int)(v)
+}
+
+// Custom: GetPlaneAddr gets `AVComponentDescriptor.plane` address.
+func (cd *AVComponentDescriptor) GetPlaneAddr() *int32 {
+	return (*int32)(&cd.plane)
+}
+
+// Custom: GetStep gets `AVComponentDescriptor.step` value.
+func (cd *AVComponentDescriptor) GetStep() int32 {
+	return (int32)(cd.step)
+}
+
+// Custom: SetStep sets `AVComponentDescriptor.step` value.
+func (cd *AVComponentDescriptor) SetStep(v int32) {
+	cd.step = (C.int)(v)
+}
+
+// Custom: GetStepAddr gets `AVComponentDescriptor.step` address.
+func (cd *AVComponentDescriptor) GetStepAddr() *int32 {
+	return (*int32)(&cd.step)
+}
+
+// Custom: GetOffset gets `AVComponentDescriptor.offset` value.
+func (cd *AVComponentDescriptor) GetOffset() int32 {
+	return (int32)(cd.offset)
+}
+
+// Custom: SetOffset sets `AVComponentDescriptor.offset` value.
+func (cd *AVComponentDescriptor) SetOffset(v int32) {
+	cd.offset = (C.int)(v)
+}
+
+// Custom: GetOffsetAddr gets `AVComponentDescriptor.offset` address.
+func (cd *AVComponentDescriptor) GetOffsetAddr() *int32 {
+	return (*int32)(&cd.offset)
+}
+
+// Custom: GetShift gets `AVComponentDescriptor.shift` value.
+func (cd *AVComponentDescriptor) GetShift() int32 {
+	return (int32)(cd.shift)
+}
+
+// Custom: SetShift sets `AVComponentDescriptor.shift` value.
+func (cd *AVComponentDescriptor) SetShift(v int32) {
+	cd.shift = (C.int)(v)
+}
+
+// Custom: GetShiftAddr gets `AVComponentDescriptor.shift` address.
+func (cd *AVComponentDescriptor) GetShiftAddr() *int32 {
+	return (*int32)(&cd.shift)
+}
+
+// Custom: GetDepth gets `AVComponentDescriptor.depth` value.
+func (cd *AVComponentDescriptor) GetDepth() int32 {
+	return (int32)(cd.depth)
+}
+
+// Custom: SetDepth sets `AVComponentDescriptor.depth` value.
+func (cd *AVComponentDescriptor) SetDepth(v int32) {
+	cd.depth = (C.int)(v)
+}
+
+// Custom: GetDepthAddr gets `AVComponentDescriptor.depth` address.
+func (cd *AVComponentDescriptor) GetDepthAddr() *int32 {
+	return (*int32)(&cd.depth)
+}
+
+// AVPixFmtDescriptor
+type AVPixFmtDescriptor C.struct_AVPixFmtDescriptor
+
+// Custom: GetName gets `AVPixFmtDescriptor.name` value.
+func (pfd *AVPixFmtDescriptor) GetName() string {
+	return C.GoString(pfd.name)
+}
+
+// Custom: GetNbComponents gets `AVPixFmtDescriptor.nb_components` value.
+func (pfd *AVPixFmtDescriptor) GetNbComponents() uint8 {
+	return (uint8)(pfd.nb_components)
+}
+
+// Custom: SetNbComponents sets `AVPixFmtDescriptor.nb_components` value.
+func (pfd *AVPixFmtDescriptor) SetNbComponents(v uint8) {
+	pfd.nb_components = (C.uint8_t)(v)
+}
+
+// Custom: GetNbComponentsAddr gets `AVPixFmtDescriptor.nb_components` address.
+func (pfd *AVPixFmtDescriptor) GetNbComponentsAddr() *uint8 {
+	return (*uint8)(&pfd.nb_components)
+}
+
+// Custom: GetLog2ChromaW gets `AVPixFmtDescriptor.log2_chroma_w` value.
+func (pfd *AVPixFmtDescriptor) GetLog2ChromaW() uint8 {
+	return (uint8)(pfd.log2_chroma_w)
+}
+
+// Custom: SetLog2ChromaW sets `AVPixFmtDescriptor.log2_chroma_w` value.
+func (pfd *AVPixFmtDescriptor) SetLog2ChromaW(v uint8) {
+	pfd.log2_chroma_w = (C.uint8_t)(v)
+}
+
+// Custom: GetLog2ChromaWAddr gets `AVPixFmtDescriptor.log2_chroma_w` address.
+func (pfd *AVPixFmtDescriptor) GetLog2ChromaWAddr() *uint8 {
+	return (*uint8)(&pfd.log2_chroma_w)
+}
+
+// Custom: GetLog2ChromaH gets `AVPixFmtDescriptor.log2_chroma_h` value.
+func (pfd *AVPixFmtDescriptor) GetLog2ChromaH() uint8 {
+	return (uint8)(pfd.log2_chroma_h)
+}
+
+// Custom: SetLog2ChromaH sets `AVPixFmtDescriptor.log2_chroma_h` value.
+func (pfd *AVPixFmtDescriptor) SetLog2ChromaH(v uint8) {
+	pfd.log2_chroma_h = (C.uint8_t)(v)
+}
+
+// Custom: GetLog2ChromaHAddr gets `AVPixFmtDescriptor.log2_chroma_h` address.
+func (pfd *AVPixFmtDescriptor) GetLog2ChromaHAddr() *uint8 {
+	return (*uint8)(&pfd.log2_chroma_h)
+}
+
+// Custom: GetFlags gets `AVPixFmtDescriptor.flags` value.
+func (pfd *AVPixFmtDescriptor) GetFlags() uint64 {
+	return (uint64)(pfd.flags)
+}
+
+// Custom: SetFlags sets `AVPixFmtDescriptor.flags` value.
+func (pfd *AVPixFmtDescriptor) SetFlags(v uint64) {
+	pfd.flags = (C.uint64_t)(v)
+}
+
+// Custom: GetFlagsAddr gets `AVPixFmtDescriptor.flags` address.
+func (pfd *AVPixFmtDescriptor) GetFlagsAddr() *uint64 {
+	return (*uint64)(&pfd.flags)
+}
+
+// Custom: GetComp gets `AVPixFmtDescriptor.comp` value.
+func (pfd *AVPixFmtDescriptor) GetComp(idx int) []AVComponentDescriptor {
+	return unsafe.Slice((*AVComponentDescriptor)(&pfd.comp[0]), idx)
+}
+
+// Custom: GetCompIdx gets `AVPixFmtDescriptor.comp` index value.
+func (pfd *AVPixFmtDescriptor) GetCompIdx(idx int) AVComponentDescriptor {
+	return (AVComponentDescriptor)(pfd.comp[idx])
+}
+
+// Custom: SetCompIdx sets `AVPixFmtDescriptor.comp` index value.
+func (pfd *AVPixFmtDescriptor) SetCompIdx(idx int, v AVComponentDescriptor) {
+	pfd.comp[idx] = (C.struct_AVComponentDescriptor)(v)
+}
+
+// Custom: GetCompIdxAddr gets `AVPixFmtDescriptor.comp` index address.
+func (pfd *AVPixFmtDescriptor) GetCompIdxAddr(idx int) *AVComponentDescriptor {
+	return (*AVComponentDescriptor)(&pfd.comp[idx])
+}
+
+// Custom: GetAlias gets `AVPixFmtDescriptor.alias` value.
+func (pfd *AVPixFmtDescriptor) GetAlias() string {
+	return C.GoString(pfd.alias)
+}
 
 const (
 	AV_PIX_FMT_FLAG_BE        = C.AV_PIX_FMT_FLAG_BE
@@ -25,51 +191,51 @@ const (
 
 // AvGetBitsPerPixel returns the number of bits per pixel used by the pixel format
 // described by pixdesc.
-func AvGetBitsPerPixel(pixdesc *AvPixFmtDescriptor) int32 {
+func AvGetBitsPerPixel(pixdesc *AVPixFmtDescriptor) int32 {
 	return (int32)(C.av_get_bits_per_pixel((*C.struct_AVPixFmtDescriptor)(pixdesc)))
 }
 
 // AvGetPaddedBitsPerPixel returns the number of bits per pixel for the pixel format
 // described by pixdesc, including any padding or unused bits.
-func AvGetPaddedBitsPerPixel(pixdesc *AvPixFmtDescriptor) int32 {
+func AvGetPaddedBitsPerPixel(pixdesc *AVPixFmtDescriptor) int32 {
 	return (int32)(C.av_get_padded_bits_per_pixel((*C.struct_AVPixFmtDescriptor)(pixdesc)))
 }
 
 // AvPixFmtDescGet returns a pixel format descriptor for provided pixel format or NULL if
 // this pixel format is unknown.
-func AvPixFmtDescGet(pixFmt AvPixelFormat) *AvPixFmtDescriptor {
-	return (*AvPixFmtDescriptor)(C.av_pix_fmt_desc_get((C.enum_AVPixelFormat)(pixFmt)))
+func AvPixFmtDescGet(pixFmt AVPixelFormat) *AVPixFmtDescriptor {
+	return (*AVPixFmtDescriptor)(C.av_pix_fmt_desc_get((C.enum_AVPixelFormat)(pixFmt)))
 }
 
 // AvPixFmtDescNext iterates over all pixel format descriptors known to libavutil.
-func AvPixFmtDescNext(prev *AvPixFmtDescriptor) *AvPixFmtDescriptor {
-	return (*AvPixFmtDescriptor)(C.av_pix_fmt_desc_next((*C.struct_AVPixFmtDescriptor)(prev)))
+func AvPixFmtDescNext(prev *AVPixFmtDescriptor) *AVPixFmtDescriptor {
+	return (*AVPixFmtDescriptor)(C.av_pix_fmt_desc_next((*C.struct_AVPixFmtDescriptor)(prev)))
 }
 
-// AvPixFmtDescGetId returns an AvPixelFormat id described by desc, or AV_PIX_FMT_NONE if desc
+// AvPixFmtDescGetId returns an AVPixelFormat id described by desc, or AV_PIX_FMT_NONE if desc
 // is not a valid pointer to a pixel format descriptor.
-func AvPixFmtDescGetId(desc *AvPixFmtDescriptor) AvPixelFormat {
-	return (AvPixelFormat)(C.av_pix_fmt_desc_get_id((*C.struct_AVPixFmtDescriptor)(desc)))
+func AvPixFmtDescGetId(desc *AVPixFmtDescriptor) AVPixelFormat {
+	return (AVPixelFormat)(C.av_pix_fmt_desc_get_id((*C.struct_AVPixFmtDescriptor)(desc)))
 }
 
-// AvPixFmtGetChromaSubSample accesses log2_chroma_w log2_chroma_h from the pixel format AvPixFmtDescriptor.
-func AvPixFmtGetChromaSubSample(pixFmt AvPixelFormat, hShift, vShift *int32) int32 {
+// AvPixFmtGetChromaSubSample accesses log2_chroma_w log2_chroma_h from the pixel format AVPixFmtDescriptor.
+func AvPixFmtGetChromaSubSample(pixFmt AVPixelFormat, hShift, vShift *int32) int32 {
 	return (int32)(C.av_pix_fmt_get_chroma_sub_sample((C.enum_AVPixelFormat)(pixFmt),
 		(*C.int)(hShift), (*C.int)(vShift)))
 }
 
 // AvPixFmtCountPlanes returns number of planes in pix_fmt, a negative AvERROR if pix_fmt is not a
 // valid pixel format.
-func AvPixFmtCountPlanes(pixFmt AvPixelFormat) int32 {
+func AvPixFmtCountPlanes(pixFmt AVPixelFormat) int32 {
 	return (int32)(C.av_pix_fmt_count_planes((C.enum_AVPixelFormat)(pixFmt)))
 }
 
 // AvColorRangeName returns the name for provided color range or NULL if unknown.
-func AvColorRangeName(_range AvColorRange) string {
+func AvColorRangeName(_range AVColorRange) string {
 	return C.GoString(C.av_color_range_name((C.enum_AVColorRange)(_range)))
 }
 
-// AvColorRangeFromName returns the AvColorRange value for name or an AvError if not found.
+// AvColorRangeFromName returns the AVColorRange value for name or an AvError if not found.
 func AvColorRangeFromName(name string) int32 {
 	namePtr, nameFunc := StringCasting(name)
 	defer nameFunc()
@@ -77,11 +243,11 @@ func AvColorRangeFromName(name string) int32 {
 }
 
 // AvColorPrimariesName returns the name for provided color primaries or NULL if unknown.
-func AvColorPrimariesName(primaries AvColorPrimaries) string {
+func AvColorPrimariesName(primaries AVColorPrimaries) string {
 	return C.GoString(C.av_color_primaries_name((C.enum_AVColorRange)(primaries)))
 }
 
-// AvColorPrimariesFromName returns the AvColorPrimaries value for name or an AVError if not found.
+// AvColorPrimariesFromName returns the AVColorPrimaries value for name or an AVError if not found.
 func AvColorPrimariesFromName(name string) int32 {
 	namePtr, nameFunc := StringCasting(name)
 	defer nameFunc()
@@ -89,11 +255,11 @@ func AvColorPrimariesFromName(name string) int32 {
 }
 
 // AvColorTransferName returns the name for provided color transfer or NULL if unknown.
-func AvColorTransferName(transfer AvColorTransferCharacteristic) string {
+func AvColorTransferName(transfer AVColorTransferCharacteristic) string {
 	return C.GoString(C.av_color_transfer_name((C.enum_AVColorTransferCharacteristic)(transfer)))
 }
 
-// AvColorTransferFromName returns the AvColorTransferCharacteristic value for name or an AvError if not found.
+// AvColorTransferFromName returns the AVColorTransferCharacteristic value for name or an AvError if not found.
 func AvColorTransferFromName(name string) int32 {
 	namePtr, nameFunc := StringCasting(name)
 	defer nameFunc()
@@ -101,11 +267,11 @@ func AvColorTransferFromName(name string) int32 {
 }
 
 // AvColorSpaceName returns the name for provided color space or NULL if unknown.
-func AvColorSpaceName(space AvColorSpace) string {
+func AvColorSpaceName(space AVColorSpace) string {
 	return C.GoString(C.av_color_space_name((C.enum_AVColorSpace)(space)))
 }
 
-// AvColorSpaceFromName returns the AvColorSpace value for name or an AvError if not found.
+// AvColorSpaceFromName returns the AVColorSpace value for name or an AvError if not found.
 func AvColorSpaceFromName(name string) int32 {
 	namePtr, nameFunc := StringCasting(name)
 	defer nameFunc()
@@ -113,11 +279,11 @@ func AvColorSpaceFromName(name string) int32 {
 }
 
 // AvChromaLocationName returns the name for provided chroma location or NULL if unknown.
-func AvChromaLocationName(location AvChromaLocation) string {
+func AvChromaLocationName(location AVChromaLocation) string {
 	return C.GoString(C.av_chroma_location_name((C.enum_AVChromaLocation)(location)))
 }
 
-// AvChromaLocationFromName returns the AvChromaLocation value for name or an AVError if not found.
+// AvChromaLocationFromName returns the AVChromaLocation value for name or an AVError if not found.
 func AvChromaLocationFromName(name string) int32 {
 	namePtr, nameFunc := StringCasting(name)
 	defer nameFunc()
@@ -125,35 +291,35 @@ func AvChromaLocationFromName(name string) int32 {
 }
 
 // AvGetPixFmt returns the pixel format corresponding to name.
-func AvGetPixFmt(name string) AvPixelFormat {
+func AvGetPixFmt(name string) AVPixelFormat {
 	namePtr, nameFunc := StringCasting(name)
 	defer nameFunc()
-	return (AvPixelFormat)(C.av_get_pix_fmt((*C.char)(namePtr)))
+	return (AVPixelFormat)(C.av_get_pix_fmt((*C.char)(namePtr)))
 }
 
 // AvGetPixFmtName returns the short name for a pixel format, NULL in case pix_fmt is unknown.
-func AvGetPixFmtName(pixFmt AvPixelFormat) string {
+func AvGetPixFmtName(pixFmt AVPixelFormat) string {
 	return C.GoString(C.av_get_pix_fmt_name((C.enum_AVPixelFormat)(pixFmt)))
 }
 
 // AvGetPixFmtString prints in buf the string corresponding to the pixel format with
 // number pix_fmt, or a header if pix_fmt is negative.
-func AvGetPixFmtString(buf *int8, bufSize int32, pixFmt AvPixelFormat) string {
+func AvGetPixFmtString(buf *int8, bufSize int32, pixFmt AVPixelFormat) string {
 	return C.GoString(C.av_get_pix_fmt_string((*C.char)(buf), (C.int)(bufSize),
 		(C.enum_AVPixelFormat)(pixFmt)))
 }
 
 // AvReadImageLine2 reads a line from an image, and write the values of the
 // pixel format component c to dst.
-func AvReadImageLine2(dst unsafe.Pointer, data []*uint8, linesize []int,
-	desc *AvPixFmtDescriptor, x, y, c, w, readPalComponent, dstElementSize int32) {
-	if len(data) != 4 {
-		panic("data need len = 4")
+func AvReadImageLine2(dst CVoidPointer, data []*uint8, linesize []int,
+	desc *AVPixFmtDescriptor, x, y, c, w, readPalComponent, dstElementSize int32) {
+	if len(data) < 4 {
+		panic("data len < 4")
 	}
-	if len(linesize) != 4 {
-		panic("linesize need len = 4")
+	if len(linesize) < 4 {
+		panic("linesize len < 4")
 	}
-	C.av_read_image_line2(dst,
+	C.av_read_image_line2(VoidPointer(dst),
 		(**C.uint8_t)(unsafe.Pointer(&data[0])),
 		(*C.int)(unsafe.Pointer(&linesize[0])),
 		(*C.struct_AVPixFmtDescriptor)(desc),
@@ -164,12 +330,12 @@ func AvReadImageLine2(dst unsafe.Pointer, data []*uint8, linesize []int,
 // AvReadImageLine reads a line from an image, and write the values of the
 // pixel format component c to dst.
 func AvReadImageLine(dst *uint16, data []*uint8, linesize []int,
-	desc *AvPixFmtDescriptor, x, y, c, w, readPalComponent int32) {
-	if len(data) != 4 {
-		panic("data need len = 4")
+	desc *AVPixFmtDescriptor, x, y, c, w, readPalComponent int32) {
+	if len(data) < 4 {
+		panic("data len < 4")
 	}
-	if len(linesize) != 4 {
-		panic("linesize need len = 4")
+	if len(linesize) < 4 {
+		panic("linesize len < 4")
 	}
 	C.av_read_image_line((*C.uint16_t)(dst),
 		(**C.uint8_t)(unsafe.Pointer(&data[0])),
@@ -180,15 +346,15 @@ func AvReadImageLine(dst *uint16, data []*uint8, linesize []int,
 }
 
 // AvWriteImageLine2 writes the values from src to the pixel format component c of an image line.
-func AvWriteImageLine2(src unsafe.Pointer, data []*uint8, linesize []int,
-	desc *AvPixFmtDescriptor, x, y, c, w, srcElementSize int32) {
-	if len(data) != 4 {
-		panic("data need len = 4")
+func AvWriteImageLine2(src CVoidPointer, data []*uint8, linesize []int,
+	desc *AVPixFmtDescriptor, x, y, c, w, srcElementSize int32) {
+	if len(data) < 4 {
+		panic("data len < 4")
 	}
-	if len(linesize) != 4 {
-		panic("linesize need len = 4")
+	if len(linesize) < 4 {
+		panic("linesize len < 4")
 	}
-	C.av_write_image_line2(src,
+	C.av_write_image_line2(VoidPointer(src),
 		(**C.uint8_t)(unsafe.Pointer(&data[0])),
 		(*C.int)(unsafe.Pointer(&linesize[0])),
 		(*C.struct_AVPixFmtDescriptor)(desc),
@@ -198,12 +364,12 @@ func AvWriteImageLine2(src unsafe.Pointer, data []*uint8, linesize []int,
 
 // AvWriteImageLine writes the values from src to the pixel format component c of an image line.
 func AvWriteImageLine(src *uint16, data []*uint8, linesize []int,
-	desc *AvPixFmtDescriptor, x, y, c, w int32) {
-	if len(data) != 4 {
-		panic("data need len = 4")
+	desc *AVPixFmtDescriptor, x, y, c, w int32) {
+	if len(data) < 4 {
+		panic("data len < 4")
 	}
-	if len(linesize) != 4 {
-		panic("linesize need len = 4")
+	if len(linesize) < 4 {
+		panic("linesize len < 4")
 	}
 	C.av_write_image_line((*C.uint16_t)(src),
 		(**C.uint8_t)(unsafe.Pointer(&data[0])),
@@ -213,8 +379,8 @@ func AvWriteImageLine(src *uint16, data []*uint8, linesize []int,
 }
 
 // AvPixFmtSwapEndianness
-func AvPixFmtSwapEndianness(pixFmt AvPixelFormat) AvPixelFormat {
-	return (AvPixelFormat)(C.av_pix_fmt_swap_endianness((C.enum_AVPixelFormat)(pixFmt)))
+func AvPixFmtSwapEndianness(pixFmt AVPixelFormat) AVPixelFormat {
+	return (AVPixelFormat)(C.av_pix_fmt_swap_endianness((C.enum_AVPixelFormat)(pixFmt)))
 }
 
 const (
@@ -228,16 +394,16 @@ const (
 
 // AvGetPixFmtLoss computes what kind of losses will occur when converting from one specific
 // pixel format to another.
-func AvGetPixFmtLoss(dstPixFmt, srcPixFmt AvPixelFormat, hasAlpha int32) int32 {
+func AvGetPixFmtLoss(dstPixFmt, srcPixFmt AVPixelFormat, hasAlpha int32) int32 {
 	return (int32)(C.av_get_pix_fmt_loss((C.enum_AVPixelFormat)(dstPixFmt),
 		(C.enum_AVPixelFormat)(srcPixFmt), (C.int)(hasAlpha)))
 }
 
 // AvFindBestPixFmtOf2 compute what kind of losses will occur when converting from one specific
 // pixel format to another.
-func AvFindBestPixFmtOf2(dstPixFmt1, dstPixFmt2, srcPixFmt AvPixelFormat,
-	hasAlpha int32, lossPtr *int32) AvPixelFormat {
-	return (AvPixelFormat)(C.av_find_best_pix_fmt_of_2((C.enum_AVPixelFormat)(dstPixFmt1),
+func AvFindBestPixFmtOf2(dstPixFmt1, dstPixFmt2, srcPixFmt AVPixelFormat,
+	hasAlpha int32, lossPtr *int32) AVPixelFormat {
+	return (AVPixelFormat)(C.av_find_best_pix_fmt_of_2((C.enum_AVPixelFormat)(dstPixFmt1),
 		(C.enum_AVPixelFormat)(dstPixFmt2),
 		(C.enum_AVPixelFormat)(srcPixFmt),
 		(C.int)(hasAlpha), (*C.int)(lossPtr)))

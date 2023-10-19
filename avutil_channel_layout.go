@@ -73,17 +73,17 @@ const (
 	AV_CH_LAYOUT_22POINT2          = uint64(C.AV_CH_LAYOUT_22POINT2)
 )
 
-type AvMatrixEncoding = C.enum_AVMatrixEncoding
+type AVMatrixEncoding = C.enum_AVMatrixEncoding
 
 const (
-	AV_MATRIX_ENCODING_NONE           = AvMatrixEncoding(C.AV_MATRIX_ENCODING_NONE)
-	AV_MATRIX_ENCODING_DOLBY          = AvMatrixEncoding(C.AV_MATRIX_ENCODING_DOLBY)
-	AV_MATRIX_ENCODING_DPLII          = AvMatrixEncoding(C.AV_MATRIX_ENCODING_DPLII)
-	AV_MATRIX_ENCODING_DPLIIX         = AvMatrixEncoding(C.AV_MATRIX_ENCODING_DPLIIX)
-	AV_MATRIX_ENCODING_DPLIIZ         = AvMatrixEncoding(C.AV_MATRIX_ENCODING_DPLIIZ)
-	AV_MATRIX_ENCODING_DOLBYEX        = AvMatrixEncoding(C.AV_MATRIX_ENCODING_DOLBYEX)
-	AV_MATRIX_ENCODING_DOLBYHEADPHONE = AvMatrixEncoding(C.AV_MATRIX_ENCODING_DOLBYHEADPHONE)
-	AV_MATRIX_ENCODING_NB             = AvMatrixEncoding(C.AV_MATRIX_ENCODING_NB)
+	AV_MATRIX_ENCODING_NONE           = AVMatrixEncoding(C.AV_MATRIX_ENCODING_NONE)
+	AV_MATRIX_ENCODING_DOLBY          = AVMatrixEncoding(C.AV_MATRIX_ENCODING_DOLBY)
+	AV_MATRIX_ENCODING_DPLII          = AVMatrixEncoding(C.AV_MATRIX_ENCODING_DPLII)
+	AV_MATRIX_ENCODING_DPLIIX         = AVMatrixEncoding(C.AV_MATRIX_ENCODING_DPLIIX)
+	AV_MATRIX_ENCODING_DPLIIZ         = AVMatrixEncoding(C.AV_MATRIX_ENCODING_DPLIIZ)
+	AV_MATRIX_ENCODING_DOLBYEX        = AVMatrixEncoding(C.AV_MATRIX_ENCODING_DOLBYEX)
+	AV_MATRIX_ENCODING_DOLBYHEADPHONE = AVMatrixEncoding(C.AV_MATRIX_ENCODING_DOLBYHEADPHONE)
+	AV_MATRIX_ENCODING_NB             = AVMatrixEncoding(C.AV_MATRIX_ENCODING_NB)
 )
 
 // AvGetChannelLayout returns a channel layout id that matches name, or 0 if no match is found.
@@ -111,8 +111,8 @@ func AvGetChannelLayoutString(nbChannels int32, channelLayout uint64) string {
 	return C.GoString((*C.char)(&buf[0]))
 }
 
-// AvBprintChannelLayout appends a description of a channel layout to a bprint buffer.
-func AvBprintChannelLayout(bp *AvBPrint, nbChannels int32, channelLayout uint64) {
+// AvBPrintChannelLayout appends a description of a channel layout to a bprint buffer.
+func AvBPrintChannelLayout(bp *AVBPrint, nbChannels int32, channelLayout uint64) {
 	C.av_bprint_channel_layout((*C.struct_AVBPrint)(bp),
 		(C.int)(nbChannels), (C.uint64_t)(channelLayout))
 }

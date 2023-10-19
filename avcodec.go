@@ -3,7 +3,20 @@ package ffmpeg
 /*
 #include <libavcodec/avcodec.h>
 
-typedef int (*avcodec_excute_func)(AVCodecContext *c2, void *arg2);
+typedef int (*avcodec_context_excute_func)(AVCodecContext *c2, void *arg2);
+
+typedef void (*avcodec_context_draw_horiz_band_func)(struct AVCodecContext *s,
+	const AVFrame *src, int offset[AV_NUM_DATA_POINTERS],
+	int y, int type, int height);
+
+typedef enum AVPixelFormat (*avcodec_context_get_format_func)(struct AVCodecContext *s,
+	const enum AVPixelFormat * fmt);
+
+typedef int (*avcodec_context_get_buffer2_func)(struct AVCodecContext *s, AVFrame *frame, int flags);
+
+typedef int (*avcodec_context_get_encode_buffer_func)(struct AVCodecContext *s,
+	 AVPacket *pkt, int flags);
+
 typedef int (*av_lockmgr_cb)(void **mutex, enum AVLockOp op);
 */
 import "C"
@@ -16,33 +29,33 @@ const (
 	AV_INPUT_BUFFER_MIN_SIZE = C.AV_INPUT_BUFFER_MIN_SIZE
 )
 
-// AvDiscard
-type AvDiscard = C.enum_AVDiscard
+// AVDiscard
+type AVDiscard = C.enum_AVDiscard
 
 const (
-	AVDISCARD_NONE     = AvDiscard(C.AVDISCARD_NONE)
-	AVDISCARD_DEFAULT  = AvDiscard(C.AVDISCARD_DEFAULT)
-	AVDISCARD_NONREF   = AvDiscard(C.AVDISCARD_NONREF)
-	AVDISCARD_BIDIR    = AvDiscard(C.AVDISCARD_BIDIR)
-	AVDISCARD_NONINTRA = AvDiscard(C.AVDISCARD_NONINTRA)
-	AVDISCARD_NONKEY   = AvDiscard(C.AVDISCARD_NONKEY)
-	AVDISCARD_ALL      = AvDiscard(C.AVDISCARD_ALL)
+	AVDISCARD_NONE     = AVDiscard(C.AVDISCARD_NONE)
+	AVDISCARD_DEFAULT  = AVDiscard(C.AVDISCARD_DEFAULT)
+	AVDISCARD_NONREF   = AVDiscard(C.AVDISCARD_NONREF)
+	AVDISCARD_BIDIR    = AVDiscard(C.AVDISCARD_BIDIR)
+	AVDISCARD_NONINTRA = AVDiscard(C.AVDISCARD_NONINTRA)
+	AVDISCARD_NONKEY   = AVDiscard(C.AVDISCARD_NONKEY)
+	AVDISCARD_ALL      = AVDiscard(C.AVDISCARD_ALL)
 )
 
-// AvAudioServiceType
-type AvAudioServiceType = C.enum_AVAudioServiceType
+// AVAudioServiceType
+type AVAudioServiceType = C.enum_AVAudioServiceType
 
 const (
-	AV_AUDIO_SERVICE_TYPE_MAIN              = AvAudioServiceType(C.AV_AUDIO_SERVICE_TYPE_MAIN)
-	AV_AUDIO_SERVICE_TYPE_EFFECTS           = AvAudioServiceType(C.AV_AUDIO_SERVICE_TYPE_EFFECTS)
-	AV_AUDIO_SERVICE_TYPE_VISUALLY_IMPAIRED = AvAudioServiceType(C.AV_AUDIO_SERVICE_TYPE_VISUALLY_IMPAIRED)
-	AV_AUDIO_SERVICE_TYPE_HEARING_IMPAIRED  = AvAudioServiceType(C.AV_AUDIO_SERVICE_TYPE_HEARING_IMPAIRED)
-	AV_AUDIO_SERVICE_TYPE_DIALOGUE          = AvAudioServiceType(C.AV_AUDIO_SERVICE_TYPE_DIALOGUE)
-	AV_AUDIO_SERVICE_TYPE_COMMENTARY        = AvAudioServiceType(C.AV_AUDIO_SERVICE_TYPE_COMMENTARY)
-	AV_AUDIO_SERVICE_TYPE_EMERGENCY         = AvAudioServiceType(C.AV_AUDIO_SERVICE_TYPE_EMERGENCY)
-	AV_AUDIO_SERVICE_TYPE_VOICE_OVER        = AvAudioServiceType(C.AV_AUDIO_SERVICE_TYPE_VOICE_OVER)
-	AV_AUDIO_SERVICE_TYPE_KARAOKE           = AvAudioServiceType(C.AV_AUDIO_SERVICE_TYPE_KARAOKE)
-	AV_AUDIO_SERVICE_TYPE_NB                = AvAudioServiceType(C.AV_AUDIO_SERVICE_TYPE_NB)
+	AV_AUDIO_SERVICE_TYPE_MAIN              = AVAudioServiceType(C.AV_AUDIO_SERVICE_TYPE_MAIN)
+	AV_AUDIO_SERVICE_TYPE_EFFECTS           = AVAudioServiceType(C.AV_AUDIO_SERVICE_TYPE_EFFECTS)
+	AV_AUDIO_SERVICE_TYPE_VISUALLY_IMPAIRED = AVAudioServiceType(C.AV_AUDIO_SERVICE_TYPE_VISUALLY_IMPAIRED)
+	AV_AUDIO_SERVICE_TYPE_HEARING_IMPAIRED  = AVAudioServiceType(C.AV_AUDIO_SERVICE_TYPE_HEARING_IMPAIRED)
+	AV_AUDIO_SERVICE_TYPE_DIALOGUE          = AVAudioServiceType(C.AV_AUDIO_SERVICE_TYPE_DIALOGUE)
+	AV_AUDIO_SERVICE_TYPE_COMMENTARY        = AVAudioServiceType(C.AV_AUDIO_SERVICE_TYPE_COMMENTARY)
+	AV_AUDIO_SERVICE_TYPE_EMERGENCY         = AVAudioServiceType(C.AV_AUDIO_SERVICE_TYPE_EMERGENCY)
+	AV_AUDIO_SERVICE_TYPE_VOICE_OVER        = AVAudioServiceType(C.AV_AUDIO_SERVICE_TYPE_VOICE_OVER)
+	AV_AUDIO_SERVICE_TYPE_KARAOKE           = AVAudioServiceType(C.AV_AUDIO_SERVICE_TYPE_KARAOKE)
+	AV_AUDIO_SERVICE_TYPE_NB                = AVAudioServiceType(C.AV_AUDIO_SERVICE_TYPE_NB)
 )
 
 // RcOverride
@@ -94,17 +107,187 @@ const (
 // Pan Scan area.
 // This specifies the area which should be displayed.
 // Note there may be multiple such areas for one frame.
-type AvPanScan C.struct_AVPanScan
+type AVPanScan C.struct_AVPanScan
+
+// Custom: GetId gets `AVPanScan.id` value.
+func (psn *AVPanScan) GetId() int32 {
+	return (int32)(psn.id)
+}
+
+// Custom: SetId sets `AVPanScan.id` value.
+func (psn *AVPanScan) SetId(v int32) {
+	psn.id = (C.int)(v)
+}
+
+// Custom: GetIdAddr gets `AVPanScan.id` address.
+func (psn *AVPanScan) GetIdAddr() *int32 {
+	return (*int32)(&psn.id)
+}
+
+// Custom: GetWidth gets `AVPanScan.width` value.
+func (psn *AVPanScan) GetWidth() int32 {
+	return (int32)(psn.width)
+}
+
+// Custom: SetWidth sets `AVPanScan.width` value.
+func (psn *AVPanScan) SetWidth(v int32) {
+	psn.width = (C.int)(v)
+}
+
+// Custom: GetWidthAddr gets `AVPanScan.width` address.
+func (psn *AVPanScan) GetWidthAddr() *int32 {
+	return (*int32)(&psn.width)
+}
+
+// Custom: GetHeight gets `AVPanScan.height` value.
+func (psn *AVPanScan) GetHeight() int32 {
+	return (int32)(psn.height)
+}
+
+// Custom: SetHeight sets `AVPanScan.height` value.
+func (psn *AVPanScan) SetHeight(v int32) {
+	psn.height = (C.int)(v)
+}
+
+// Custom: GetHeightAddr gets `AVPanScan.height` address.
+func (psn *AVPanScan) GetHeightAddr() *int32 {
+	return (*int32)(&psn.height)
+}
+
+// Custom: GetPosition gets `AVPanScan.position` value.
+func (psn *AVPanScan) GetPosition() []int16 {
+	return unsafe.Slice((*int16)(&psn.position[0][0]), 3*2)
+}
+
+// Custom: GetPositionIdx gets `AVPanScan.position` index value.
+func (psn *AVPanScan) GetPositionIdx(x, y int) int16 {
+	return (int16)(psn.position[x][y])
+}
+
+// Custom: SetPositionIdx sets `AVPanScan.position` index value.
+func (psn *AVPanScan) SetPositionIdx(x, y int, v int16) {
+	psn.position[x][y] = (C.int16_t)(v)
+}
+
+// Custom: GetPositionIdxAddr gets `AVPanScan.position` index address.
+func (psn *AVPanScan) GetPositionIdxAddr(x, y int) *int16 {
+	return (*int16)(&psn.position[x][y])
+}
 
 // This structure describes the bitrate properties of an encoded bitstream. It
 // roughly corresponds to a subset the VBV parameters for MPEG-2 or HRD
 // parameters for H.264/HEVC.
-type AvCPBProperties C.struct_AVCPBProperties
+type AVCPBProperties C.struct_AVCPBProperties
+
+// Custom: GetMaxBitrate gets `AVCPBProperties.max_bitrate` value.
+func (cpbp *AVCPBProperties) GetMaxBitrate() int32 {
+	return (int32)(cpbp.max_bitrate)
+}
+
+// Custom: SetMaxBitrate sets `AVCPBProperties.max_bitrate` value.
+func (cpbp *AVCPBProperties) SetMaxBitrate(v int32) {
+	cpbp.max_bitrate = (C.int)(v)
+}
+
+// Custom: GetMaxBitrateAddr gets `AVCPBProperties.max_bitrate` address.
+func (cpbp *AVCPBProperties) GetMaxBitrateAddr() *int32 {
+	return (*int32)(&cpbp.max_bitrate)
+}
+
+// Custom: GetMinBitrate gets `AVCPBProperties.min_bitrate` value.
+func (cpbp *AVCPBProperties) GetMinBitrate() int32 {
+	return (int32)(cpbp.min_bitrate)
+}
+
+// Custom: SetMinBitrate sets `AVCPBProperties.min_bitrate` value.
+func (cpbp *AVCPBProperties) SetMinBitrate(v int32) {
+	cpbp.min_bitrate = (C.int)(v)
+}
+
+// Custom: GetMinBitrateAddr gets `AVCPBProperties.min_bitrate` address.
+func (cpbp *AVCPBProperties) GetMinBitrateAddr() *int32 {
+	return (*int32)(&cpbp.min_bitrate)
+}
+
+// Custom: GetAvgBitrate gets `AVCPBProperties.avg_bitrate` value.
+func (cpbp *AVCPBProperties) GetAvgBitrate() int32 {
+	return (int32)(cpbp.avg_bitrate)
+}
+
+// Custom: SetAvgBitrate sets `AVCPBProperties.avg_bitrate` value.
+func (cpbp *AVCPBProperties) SetAvgBitrate(v int32) {
+	cpbp.avg_bitrate = (C.int)(v)
+}
+
+// Custom: GetAvgBitrateAddr gets `AVCPBProperties.avg_bitrate` address.
+func (cpbp *AVCPBProperties) GetAvgBitrateAddr() *int32 {
+	return (*int32)(&cpbp.avg_bitrate)
+}
+
+// Custom: GetBufferSize gets `AVCPBProperties.buffer_size` value.
+func (cpbp *AVCPBProperties) GetBufferSize() int32 {
+	return (int32)(cpbp.buffer_size)
+}
+
+// Custom: SetBufferSize sets `AVCPBProperties.buffer_size` value.
+func (cpbp *AVCPBProperties) SetBufferSize(v int32) {
+	cpbp.buffer_size = (C.int)(v)
+}
+
+// Custom: GetBufferSizeAddr gets `AVCPBProperties.buffer_size` address.
+func (cpbp *AVCPBProperties) GetBufferSizeAddr() *int32 {
+	return (*int32)(&cpbp.buffer_size)
+}
+
+// Custom: GetVbvDelay gets `AVCPBProperties.vbv_delay` value.
+func (cpbp *AVCPBProperties) GetVbvDelay() uint64 {
+	return (uint64)(cpbp.vbv_delay)
+}
+
+// Custom: SetVbvDelay sets `AVCPBProperties.vbv_delay` value.
+func (cpbp *AVCPBProperties) SetVbvDelay(v uint64) {
+	cpbp.vbv_delay = (C.uint64_t)(v)
+}
+
+// Custom: GetVbvDelayAddr gets `AVCPBProperties.vbv_delay` address.
+func (cpbp *AVCPBProperties) GetVbvDelayAddr() *uint64 {
+	return (*uint64)(&cpbp.vbv_delay)
+}
 
 // This structure supplies correlation between a packet timestamp and a wall clock
 // production time. The definition follows the Producer Reference Time ('prft')
 // as defined in ISO/IEC 14496-12
-type AvProducerReferenceTime C.struct_AVProducerReferenceTime
+type AVProducerReferenceTime C.struct_AVProducerReferenceTime
+
+// Custom: GetWallclock gets `AVProducerReferenceTime.wallclock` value.
+func (prt *AVProducerReferenceTime) GetWallclock() int64 {
+	return (int64)(prt.wallclock)
+}
+
+// Custom: SetWallclock sets `AVProducerReferenceTime.wallclock` value.
+func (prt *AVProducerReferenceTime) SetWallclock(v int64) {
+	prt.wallclock = (C.int64_t)(v)
+}
+
+// Custom: GetWallclockAddr gets `AVProducerReferenceTime.wallclock` address.
+func (prt *AVProducerReferenceTime) GetWallclockAddr() *int64 {
+	return (*int64)(&prt.wallclock)
+}
+
+// Custom: GetFlags gets `AVProducerReferenceTime.flags` value.
+func (prt *AVProducerReferenceTime) GetFlags() int32 {
+	return (int32)(prt.flags)
+}
+
+// Custom: SetFlags sets `AVProducerReferenceTime.flags` value.
+func (prt *AVProducerReferenceTime) SetFlags(v int32) {
+	prt.flags = (C.int)(v)
+}
+
+// Custom: GetFlagsAddr gets `AVProducerReferenceTime.flags` address.
+func (prt *AVProducerReferenceTime) GetFlagsAddr() *int32 {
+	return (*int32)(&prt.flags)
+}
 
 const (
 	AV_GET_BUFFER_FLAG_REF        = C.AV_GET_BUFFER_FLAG_REF
@@ -112,605 +295,624 @@ const (
 )
 
 // AvCodecContext is main external API structure.
-type AvCodecContext C.struct_AVCodecContext
+type AVCodecContext C.struct_AVCodecContext
 
-// Custom: Get AvClass gets `AVCodecContext.av_class` value.
-func (avctx *AvCodecContext) GetAvClass() *AvClass {
-	return (*AvClass)(avctx.av_class)
+// Custom: GetAVClass gets `AVCodecContext.av_class` value.
+func (avctx *AVCodecContext) GetAvClass() *AVClass {
+	return (*AVClass)(avctx.av_class)
 }
 
 // Custom: SetAvClass sets `AVCodecContext.av_class` value.
-func (avctx *AvCodecContext) SetAvClass(v *AvClass) {
+func (avctx *AVCodecContext) SetAvClass(v *AVClass) {
 	avctx.av_class = (*C.struct_AVClass)(v)
 }
 
 // Custom: GetAvClassAddr gets `AVCodecContext.av_class` address.
-func (avctx *AvCodecContext) GetAvClassAddr() **AvClass {
-	return (**AvClass)(unsafe.Pointer(&avctx.av_class))
+func (avctx *AVCodecContext) GetAvClassAddr() **AVClass {
+	return (**AVClass)(unsafe.Pointer(&avctx.av_class))
 }
 
-// Custom: Get LogLevelOffset gets `AVCodecContext.log_level_offset` value.
-func (avctx *AvCodecContext) GetLogLevelOffset() int32 {
+// Custom: GetLogLevelOffset gets `AVCodecContext.log_level_offset` value.
+func (avctx *AVCodecContext) GetLogLevelOffset() int32 {
 	return (int32)(avctx.log_level_offset)
 }
 
 // Custom: SetLogLevelOffset sets `AVCodecContext.log_level_offset` value.
-func (avctx *AvCodecContext) SetLogLevelOffset(v int32) {
+func (avctx *AVCodecContext) SetLogLevelOffset(v int32) {
 	avctx.log_level_offset = (C.int)(v)
 }
 
 // Custom: GetLogLevelOffsetAddr gets `AVCodecContext.log_level_offset` address.
-func (avctx *AvCodecContext) GetLogLevelOffsetAddr() *int32 {
+func (avctx *AVCodecContext) GetLogLevelOffsetAddr() *int32 {
 	return (*int32)(&avctx.log_level_offset)
 }
 
-// Custom: Get CodecType gets `AVCodecContext.codec_type` value.
-func (avctx *AvCodecContext) GetCodecType() AvMediaType {
-	return (AvMediaType)(avctx.codec_type)
+// Custom: GetCodecType gets `AVCodecContext.codec_type` value.
+func (avctx *AVCodecContext) GetCodecType() AVMediaType {
+	return (AVMediaType)(avctx.codec_type)
 }
 
 // Custom: SetCodecType sets `AVCodecContext.codec_type` value.
-func (avctx *AvCodecContext) SetCodecType(v AvMediaType) {
+func (avctx *AVCodecContext) SetCodecType(v AVMediaType) {
 	avctx.codec_type = (C.enum_AVMediaType)(v)
 }
 
 // Custom: GetCodecTypeAddr gets `AVCodecContext.codec_type` address.
-func (avctx *AvCodecContext) GetCodecTypeAddr() *AvMediaType {
-	return (*AvMediaType)(&avctx.codec_type)
+func (avctx *AVCodecContext) GetCodecTypeAddr() *AVMediaType {
+	return (*AVMediaType)(&avctx.codec_type)
 }
 
-// Custom: Get Codec gets `AVCodecContext.codec` value.
-func (avctx *AvCodecContext) GetCodec() *AvCodec {
-	return (*AvCodec)(avctx.codec)
+// Custom: GetCodec gets `AVCodecContext.codec` value.
+func (avctx *AVCodecContext) GetCodec() *AVCodec {
+	return (*AVCodec)(avctx.codec)
 }
 
 // Custom: SetCodec sets `AVCodecContext.codec` value.
-func (avctx *AvCodecContext) SetCodec(v *AvCodec) {
+func (avctx *AVCodecContext) SetCodec(v *AVCodec) {
 	avctx.codec = (*C.struct_AVCodec)(v)
 }
 
 // Custom: GetCodecAddr gets `AVCodecContext.codec` address.
-func (avctx *AvCodecContext) GetCodecAddr() **AvCodec {
-	return (**AvCodec)(unsafe.Pointer(&avctx.codec))
+func (avctx *AVCodecContext) GetCodecAddr() **AVCodec {
+	return (**AVCodec)(unsafe.Pointer(&avctx.codec))
 }
 
-// Custom: Get CodecId gets `AVCodecContext.codec_id` value.
-func (avctx *AvCodecContext) GetCodecId() AvCodecID {
-	return (AvCodecID)(avctx.codec_id)
+// Custom: GetCodecId gets `AVCodecContext.codec_id` value.
+func (avctx *AVCodecContext) GetCodecId() AVCodecID {
+	return (AVCodecID)(avctx.codec_id)
 }
 
 // Custom: SetCodecId sets `AVCodecContext.codec_id` value.
-func (avctx *AvCodecContext) SetCodecId(v AvCodecID) {
+func (avctx *AVCodecContext) SetCodecId(v AVCodecID) {
 	avctx.codec_id = (C.enum_AVCodecID)(v)
 }
 
 // Custom: GetCodecIdAddr gets `AVCodecContext.codec_id` address.
-func (avctx *AvCodecContext) GetCodecIdAddr() *AvCodecID {
-	return (*AvCodecID)(unsafe.Pointer(&avctx.codec_id))
+func (avctx *AVCodecContext) GetCodecIdAddr() *AVCodecID {
+	return (*AVCodecID)(unsafe.Pointer(&avctx.codec_id))
 }
 
-// Custom: Get CodecTag gets `AVCodecContext.codec_tag` value.
-func (avctx *AvCodecContext) GetCodecTag() uint32 {
+// Custom: GetCodecTag gets `AVCodecContext.codec_tag` value.
+func (avctx *AVCodecContext) GetCodecTag() uint32 {
 	return (uint32)(avctx.codec_tag)
 }
 
 // Custom: SetCodecTag sets `AVCodecContext.codec_tag` value.
-func (avctx *AvCodecContext) SetCodecTag(v uint32) {
+func (avctx *AVCodecContext) SetCodecTag(v uint32) {
 	avctx.codec_tag = (C.uint)(v)
 }
 
 // Custom: GetCodecTagAddr gets `AVCodecContext.codec_tag` address.
-func (avctx *AvCodecContext) GetCodecTagAddr() *uint32 {
+func (avctx *AVCodecContext) GetCodecTagAddr() *uint32 {
 	return (*uint32)(&avctx.codec_tag)
 }
 
-// Custom: Get PrivData gets `AVCodecContext.priv_data` value.
-func (avctx *AvCodecContext) GetPrivData() unsafe.Pointer {
+// Custom: GetPrivData gets `AVCodecContext.priv_data` value.
+func (avctx *AVCodecContext) GetPrivData() unsafe.Pointer {
 	return avctx.priv_data
 }
 
 // Custom: SetPrivData sets `AVCodecContext.priv_data` value.
-func (avctx *AvCodecContext) SetPrivData(v unsafe.Pointer) {
-	avctx.priv_data = v
+func (avctx *AVCodecContext) SetPrivData(v CVoidPointer) {
+	avctx.priv_data = VoidPointer(v)
 }
 
 // Custom: GetPrivDataAddr gets `AVCodecContext.priv_data` address.
-func (avctx *AvCodecContext) GetPrivDataAddr() unsafe.Pointer {
+func (avctx *AVCodecContext) GetPrivDataAddr() unsafe.Pointer {
 	return (unsafe.Pointer)(&avctx.priv_data)
 }
 
-// Custom: Get Opaque gets `AVCodecContext.opaque` value.
-func (avctx *AvCodecContext) GetOpaque() unsafe.Pointer {
-	return (unsafe.Pointer)(avctx.opaque)
+// Custom: GetOpaque gets `AVCodecContext.opaque` value.
+func (avctx *AVCodecContext) GetOpaque() unsafe.Pointer {
+	return avctx.opaque
 }
 
 // Custom: SetOpaque sets `AVCodecContext.opaque` value.
-func (avctx *AvCodecContext) SetOpaque(v unsafe.Pointer) {
-	avctx.opaque = v
+func (avctx *AVCodecContext) SetOpaque(v CVoidPointer) {
+	avctx.opaque = VoidPointer(v)
 }
 
 // Custom: GetOpaqueAddr gets `AVCodecContext.opaque` address.
-func (avctx *AvCodecContext) GetOpaqueAddr() unsafe.Pointer {
+func (avctx *AVCodecContext) GetOpaqueAddr() unsafe.Pointer {
 	return (unsafe.Pointer)(&avctx.opaque)
 }
 
-// Custom: Get BitRate gets `AVCodecContext.bit_rate` value.
-func (avctx *AvCodecContext) GetBitRate() int64 {
+// Custom: GetBitRate gets `AVCodecContext.bit_rate` value.
+func (avctx *AVCodecContext) GetBitRate() int64 {
 	return (int64)(avctx.bit_rate)
 }
 
 // Custom: SetBitRate sets `AVCodecContext.bit_rate` value.
-func (avctx *AvCodecContext) SetBitRate(v int64) {
+func (avctx *AVCodecContext) SetBitRate(v int64) {
 	avctx.bit_rate = (C.int64_t)(v)
 }
 
 // Custom: GetBitRateAddr gets `AVCodecContext.bit_rate` address.
-func (avctx *AvCodecContext) GetBitRateAddr() *int64 {
+func (avctx *AVCodecContext) GetBitRateAddr() *int64 {
 	return (*int64)(&avctx.bit_rate)
 }
 
-// Custom: Get BitRateTolerance gets `AVCodecContext.bit_rate_tolerance` value.
-func (avctx *AvCodecContext) GetBitRateTolerance() int32 {
+// Custom: GetBitRateTolerance gets `AVCodecContext.bit_rate_tolerance` value.
+func (avctx *AVCodecContext) GetBitRateTolerance() int32 {
 	return (int32)(avctx.bit_rate_tolerance)
 }
 
 // Custom: SetBitRateTolerance sets `AVCodecContext.bit_rate_tolerance` value.
-func (avctx *AvCodecContext) SetBitRateTolerance(v int32) {
+func (avctx *AVCodecContext) SetBitRateTolerance(v int32) {
 	avctx.bit_rate_tolerance = (C.int)(v)
 }
 
 // Custom: GetBitRateToleranceAddr gets `AVCodecContext.bit_rate_tolerance` address.
-func (avctx *AvCodecContext) GetBitRateToleranceAddr() *int32 {
+func (avctx *AVCodecContext) GetBitRateToleranceAddr() *int32 {
 	return (*int32)(&avctx.bit_rate_tolerance)
 }
 
-// Custom: Get GlobalQuality gets `AVCodecContext.global_quality` value.
-func (avctx *AvCodecContext) GetGlobalQuality() int32 {
+// Custom: GetGlobalQuality gets `AVCodecContext.global_quality` value.
+func (avctx *AVCodecContext) GetGlobalQuality() int32 {
 	return (int32)(avctx.global_quality)
 }
 
 // Custom: SetGlobalQuality sets `AVCodecContext.global_quality` value.
-func (avctx *AvCodecContext) SetGlobalQuality(v int32) {
+func (avctx *AVCodecContext) SetGlobalQuality(v int32) {
 	avctx.global_quality = (C.int)(v)
 }
 
 // Custom: GetGlobalQualityAddr gets `AVCodecContext.global_quality` address.
-func (avctx *AvCodecContext) GetGlobalQualityAddr() *int32 {
+func (avctx *AVCodecContext) GetGlobalQualityAddr() *int32 {
 	return (*int32)(&avctx.global_quality)
 }
 
-// Custom: Get CompressionLevel gets `AVCodecContext.compression_level` value.
-func (avctx *AvCodecContext) GetCompressionLevel() int32 {
+// Custom: GetCompressionLevel gets `AVCodecContext.compression_level` value.
+func (avctx *AVCodecContext) GetCompressionLevel() int32 {
 	return (int32)(avctx.compression_level)
 }
 
 // Custom: SetCompressionLevel sets `AVCodecContext.compression_level` value.
-func (avctx *AvCodecContext) SetCompressionLevel(v int32) {
+func (avctx *AVCodecContext) SetCompressionLevel(v int32) {
 	avctx.compression_level = (C.int)(v)
 }
 
 // Custom: GetCompressionLevelAddr gets `AVCodecContext.compression_level` address.
-func (avctx *AvCodecContext) GetCompressionLevelAddr() *int32 {
+func (avctx *AVCodecContext) GetCompressionLevelAddr() *int32 {
 	return (*int32)(&avctx.compression_level)
 }
 
-// Custom: Get Flags gets `AVCodecContext.flags` value.
-func (avctx *AvCodecContext) GetFlags() int32 {
+// Custom: GetFlags gets `AVCodecContext.flags` value.
+func (avctx *AVCodecContext) GetFlags() int32 {
 	return (int32)(avctx.flags)
 }
 
 // Custom: SetFlags sets `AVCodecContext.flags` value.
-func (avctx *AvCodecContext) SetFlags(v int32) {
+func (avctx *AVCodecContext) SetFlags(v int32) {
 	avctx.flags = (C.int)(v)
 }
 
 // Custom: GetFlagsAddr gets `AVCodecContext.flags` address.
-func (avctx *AvCodecContext) GetFlagsAddr() *int32 {
+func (avctx *AVCodecContext) GetFlagsAddr() *int32 {
 	return (*int32)(&avctx.flags)
 }
 
-// Custom: Get Flags2 gets `AVCodecContext.flags2` value.
-func (avctx *AvCodecContext) GetFlags2() int32 {
+// Custom: GetFlags2 gets `AVCodecContext.flags2` value.
+func (avctx *AVCodecContext) GetFlags2() int32 {
 	return (int32)(avctx.flags2)
 }
 
 // Custom: SetFlags2 sets `AVCodecContext.flags2` value.
-func (avctx *AvCodecContext) SetFlags2(v int32) {
+func (avctx *AVCodecContext) SetFlags2(v int32) {
 	avctx.flags2 = (C.int)(v)
 }
 
 // Custom: GetFlags2Addr gets `AVCodecContext.flags2` address.
-func (avctx *AvCodecContext) GetFlags2Addr() *int32 {
+func (avctx *AVCodecContext) GetFlags2Addr() *int32 {
 	return (*int32)(&avctx.flags2)
 }
 
-// Custom: Get Extradata gets `AVCodecContext.extradata` value.
-func (avctx *AvCodecContext) GetExtradata() *uint8 {
+// Custom: GetExtradata gets `AVCodecContext.extradata` value.
+func (avctx *AVCodecContext) GetExtradata() *uint8 {
 	return (*uint8)(avctx.extradata)
 }
 
 // Custom: SetExtradata sets `AVCodecContext.extradata` value.
-func (avctx *AvCodecContext) SetExtradata(v *uint8) {
+func (avctx *AVCodecContext) SetExtradata(v *uint8) {
 	avctx.extradata = (*C.uint8_t)(v)
 }
 
 // Custom: GetExtradataAddr gets `AVCodecContext.extradata` address.
-func (avctx *AvCodecContext) GetExtradataAddr() **uint8 {
+func (avctx *AVCodecContext) GetExtradataAddr() **uint8 {
 	return (**uint8)(unsafe.Pointer(&avctx.extradata))
 }
 
-// Custom: Get ExtradataSize gets `AVCodecContext.extradata_size` value.
-func (avctx *AvCodecContext) GetExtradataSize() int32 {
+// Custom: GetExtradataSize gets `AVCodecContext.extradata_size` value.
+func (avctx *AVCodecContext) GetExtradataSize() int32 {
 	return (int32)(avctx.extradata_size)
 }
 
 // Custom: SetExtradataSize sets `AVCodecContext.extradata_size` value.
-func (avctx *AvCodecContext) SetExtradataSize(v int32) {
+func (avctx *AVCodecContext) SetExtradataSize(v int32) {
 	avctx.extradata_size = (C.int)(v)
 }
 
 // Custom: GetExtradataSizeAddr gets `AVCodecContext.extradata_size` address.
-func (avctx *AvCodecContext) GetExtradataSizeAddr() *int32 {
+func (avctx *AVCodecContext) GetExtradataSizeAddr() *int32 {
 	return (*int32)(&avctx.extradata_size)
 }
 
-// Custom: Get TimeBase gets `AVCodecContext.time_base` value.
-func (avctx *AvCodecContext) GetTimeBase() AvRational {
-	return (AvRational)(avctx.time_base)
+// Custom: GetTimeBase gets `AVCodecContext.time_base` value.
+func (avctx *AVCodecContext) GetTimeBase() AVRational {
+	return (AVRational)(avctx.time_base)
 }
 
 // Custom: SetTimeBase sets `AVCodecContext.time_base` value.
-func (avctx *AvCodecContext) SetTimeBase(v AvRational) {
-	avctx.time_base = (C.AVRational)(v)
+func (avctx *AVCodecContext) SetTimeBase(v AVRational) {
+	avctx.time_base = (C.struct_AVRational)(v)
 }
 
 // Custom: GetTimeBaseAddr gets `AVCodecContext.time_base` address.
-func (avctx *AvCodecContext) GetTimeBaseAddr() *AvRational {
-	return (*AvRational)(&avctx.time_base)
+func (avctx *AVCodecContext) GetTimeBaseAddr() *AVRational {
+	return (*AVRational)(&avctx.time_base)
 }
 
-// Custom: Get TicksPerFrame gets `AVCodecContext.ticks_per_frame` value.
-func (avctx *AvCodecContext) GetTicksPerFrame() int32 {
+// Custom: GetTicksPerFrame gets `AVCodecContext.ticks_per_frame` value.
+func (avctx *AVCodecContext) GetTicksPerFrame() int32 {
 	return (int32)(avctx.ticks_per_frame)
 }
 
 // Custom: SetTicksPerFrame sets `AVCodecContext.ticks_per_frame` value.
-func (avctx *AvCodecContext) SetTicksPerFrame(v int32) {
+func (avctx *AVCodecContext) SetTicksPerFrame(v int32) {
 	avctx.ticks_per_frame = (C.int)(v)
 }
 
 // Custom: GetTicksPerFrameAddr gets `AVCodecContext.ticks_per_frame` address.
-func (avctx *AvCodecContext) GetTicksPerFrameAddr() *int32 {
+func (avctx *AVCodecContext) GetTicksPerFrameAddr() *int32 {
 	return (*int32)(&avctx.ticks_per_frame)
 }
 
-// Custom: Get Delay gets `AVCodecContext.delay` value.
-func (avctx *AvCodecContext) GetDelay() int32 {
+// Custom: GetDelay gets `AVCodecContext.delay` value.
+func (avctx *AVCodecContext) GetDelay() int32 {
 	return (int32)(avctx.delay)
 }
 
 // Custom: SetDelay sets `AVCodecContext.delay` value.
-func (avctx *AvCodecContext) SetDelay(v int32) {
+func (avctx *AVCodecContext) SetDelay(v int32) {
 	avctx.delay = (C.int)(v)
 }
 
 // Custom: GetDelayAddr gets `AVCodecContext.delay` address.
-func (avctx *AvCodecContext) GetDelayAddr() *int32 {
+func (avctx *AVCodecContext) GetDelayAddr() *int32 {
 	return (*int32)(&avctx.delay)
 }
 
-// Custom: Get Width gets `AVCodecContext.width` value.
-func (avctx *AvCodecContext) GetWidth() int32 {
+// Custom: GetWidth gets `AVCodecContext.width` value.
+func (avctx *AVCodecContext) GetWidth() int32 {
 	return (int32)(avctx.width)
 }
 
 // Custom: SetWidth sets `AVCodecContext.width` value.
-func (avctx *AvCodecContext) SetWidth(v int32) {
+func (avctx *AVCodecContext) SetWidth(v int32) {
 	avctx.width = (C.int)(v)
 }
 
 // Custom: GetWidthAddr gets `AVCodecContext.width` address.
-func (avctx *AvCodecContext) GetWidthAddr() *int32 {
+func (avctx *AVCodecContext) GetWidthAddr() *int32 {
 	return (*int32)(&avctx.width)
 }
 
-// Custom: Get Height gets `AVCodecContext.height` value.
-func (avctx *AvCodecContext) GetHeight() int32 {
+// Custom: GetHeight gets `AVCodecContext.height` value.
+func (avctx *AVCodecContext) GetHeight() int32 {
 	return (int32)(avctx.height)
 }
 
 // Custom: SetHeight sets `AVCodecContext.height` value.
-func (avctx *AvCodecContext) SetHeight(v int32) {
+func (avctx *AVCodecContext) SetHeight(v int32) {
 	avctx.height = (C.int)(v)
 }
 
 // Custom: GetHeightAddr gets `AVCodecContext.height` address.
-func (avctx *AvCodecContext) GetHeightAddr() *int32 {
+func (avctx *AVCodecContext) GetHeightAddr() *int32 {
 	return (*int32)(&avctx.height)
 }
 
-// Custom: Get CodedWidth gets `AVCodecContext.coded_width` value.
-func (avctx *AvCodecContext) GetCodedWidth() int32 {
+// Custom: GetCodedWidth gets `AVCodecContext.coded_width` value.
+func (avctx *AVCodecContext) GetCodedWidth() int32 {
 	return (int32)(avctx.coded_width)
 }
 
 // Custom: SetCodedWidth sets `AVCodecContext.coded_width` value.
-func (avctx *AvCodecContext) SetCodedWidth(v int32) {
+func (avctx *AVCodecContext) SetCodedWidth(v int32) {
 	avctx.coded_width = (C.int)(v)
 }
 
 // Custom: GetCodedWidthAddr gets `AVCodecContext.coded_width` address.
-func (avctx *AvCodecContext) GetCodedWidthAddr() *int32 {
+func (avctx *AVCodecContext) GetCodedWidthAddr() *int32 {
 	return (*int32)(&avctx.coded_width)
 }
 
-// Custom: Get CodedHeight gets `AVCodecContext.coded_height` value.
-func (avctx *AvCodecContext) GetCodedHeight() int32 {
+// Custom: GetCodedHeight gets `AVCodecContext.coded_height` value.
+func (avctx *AVCodecContext) GetCodedHeight() int32 {
 	return (int32)(avctx.coded_height)
 }
 
 // Custom: SetCodedHeight sets `AVCodecContext.coded_height` value.
-func (avctx *AvCodecContext) SetCodedHeight(v int32) {
+func (avctx *AVCodecContext) SetCodedHeight(v int32) {
 	avctx.coded_height = (C.int)(v)
 }
 
 // Custom: GetCodedHeightAddr gets `AVCodecContext.coded_height` address.
-func (avctx *AvCodecContext) GetCodedHeightAddr() *int32 {
+func (avctx *AVCodecContext) GetCodedHeightAddr() *int32 {
 	return (*int32)(&avctx.coded_height)
 }
 
-// Custom: Get GopSize gets `AVCodecContext.gop_size` value.
-func (avctx *AvCodecContext) GetGopSize() int32 {
+// Custom: GetGopSize gets `AVCodecContext.gop_size` value.
+func (avctx *AVCodecContext) GetGopSize() int32 {
 	return (int32)(avctx.gop_size)
 }
 
 // Custom: SetGopSize sets `AVCodecContext.gop_size` value.
-func (avctx *AvCodecContext) SetGopSize(v int32) {
+func (avctx *AVCodecContext) SetGopSize(v int32) {
 	avctx.gop_size = (C.int)(v)
 }
 
 // Custom: GetGopSizeAddr gets `AVCodecContext.gop_size` address.
-func (avctx *AvCodecContext) GetGopSizeAddr() *int32 {
+func (avctx *AVCodecContext) GetGopSizeAddr() *int32 {
 	return (*int32)(&avctx.gop_size)
 }
 
-// Custom: Get PixFmt gets `AVCodecContext.pix_fmt` value.
-func (avctx *AvCodecContext) GetPixFmt() AvPixelFormat {
-	return (AvPixelFormat)(avctx.pix_fmt)
+// Custom: GetPixFmt gets `AVCodecContext.pix_fmt` value.
+func (avctx *AVCodecContext) GetPixFmt() AVPixelFormat {
+	return (AVPixelFormat)(avctx.pix_fmt)
 }
 
 // Custom: SetPixFmt sets `AVCodecContext.pix_fmt` value.
-func (avctx *AvCodecContext) SetPixFmt(v AvPixelFormat) {
+func (avctx *AVCodecContext) SetPixFmt(v AVPixelFormat) {
 	avctx.pix_fmt = (C.enum_AVPixelFormat)(v)
 }
 
 // Custom: GetPixFmtAddr gets `AVCodecContext.pix_fmt` address.
-func (avctx *AvCodecContext) GetPixFmtAddr() *AvPixelFormat {
-	return (*AvPixelFormat)(&avctx.pix_fmt)
+func (avctx *AVCodecContext) GetPixFmtAddr() *AVPixelFormat {
+	return (*AVPixelFormat)(&avctx.pix_fmt)
 }
 
-// Custom: Get MaxBFrames gets `AVCodecContext.max_b_frames` value.
-func (avctx *AvCodecContext) GetMaxBFrames() int32 {
+// typedef void (*avcodec_context_draw_horiz_band_func)(struct AVCodecContext *s,
+// const AVFrame *src, int offset[AV_NUM_DATA_POINTERS],
+// int y, int type, int height);
+type AVCodecContextDrawHorizBandFunc = C.avcodec_context_draw_horiz_band_func
+
+// Custom: SetDrawHorizBand sets `AVCodecContext.draw_horiz_band` value.
+func (avctx *AVCodecContext) SetDrawHorizBand(v AVCodecContextDrawHorizBandFunc) {
+	avctx.draw_horiz_band = (C.avcodec_context_draw_horiz_band_func)(v)
+}
+
+// Custom: GetMaxBFrames gets `AVCodecContext.max_b_frames` value.
+func (avctx *AVCodecContext) GetMaxBFrames() int32 {
 	return (int32)(avctx.max_b_frames)
 }
 
 // Custom: SetMaxBFrames sets `AVCodecContext.max_b_frames` value.
-func (avctx *AvCodecContext) SetMaxBFrames(v int32) {
+func (avctx *AVCodecContext) SetMaxBFrames(v int32) {
 	avctx.max_b_frames = (C.int)(v)
 }
 
 // Custom: GetMaxBFramesAddr gets `AVCodecContext.max_b_frames` address.
-func (avctx *AvCodecContext) GetMaxBFramesAddr() *int32 {
+func (avctx *AVCodecContext) GetMaxBFramesAddr() *int32 {
 	return (*int32)(&avctx.max_b_frames)
 }
 
-// Custom: Get BQuantFactor gets `AVCodecContext.b_quant_factor` value.
-func (avctx *AvCodecContext) GetBQuantFactor() float32 {
+// typedef enum AVPixelFormat (*avcodec_context_get_format)(struct AVCodecContext *s,
+// const enum AVPixelFormat * fmt);
+type AVCodecContextGetFormatFunc = C.avcodec_context_get_format_func
+
+// Custom: SetGetFormat sets `AVCodecContext.get_format` value.
+func (avctx *AVCodecContext) SetGetFormat(v AVCodecContextGetFormatFunc) {
+	avctx.get_format = (C.avcodec_context_get_format_func)(v)
+}
+
+// Custom: GetBQuantFactor gets `AVCodecContext.b_quant_factor` value.
+func (avctx *AVCodecContext) GetBQuantFactor() float32 {
 	return (float32)(avctx.b_quant_factor)
 }
 
 // Custom: SetBQuantFactor sets `AVCodecContext.b_quant_factor` value.
-func (avctx *AvCodecContext) SetBQuantFactor(v float32) {
+func (avctx *AVCodecContext) SetBQuantFactor(v float32) {
 	avctx.b_quant_factor = (C.float)(v)
 }
 
 // Custom: GetBQuantFactorAddr gets `AVCodecContext.b_quant_factor` address.
-func (avctx *AvCodecContext) GetBQuantFactorAddr() *float32 {
+func (avctx *AVCodecContext) GetBQuantFactorAddr() *float32 {
 	return (*float32)(&avctx.b_quant_factor)
 }
 
-// Custom: Get BFrameStrategy gets `AVCodecContext.b_frame_strategy` value.
-func (avctx *AvCodecContext) GetBFrameStrategy() int32 {
+// Custom: GetBFrameStrategy gets `AVCodecContext.b_frame_strategy` value.
+func (avctx *AVCodecContext) GetBFrameStrategy() int32 {
 	return (int32)(avctx.b_frame_strategy)
 }
 
 // Custom: SetBFrameStrategy sets `AVCodecContext.b_frame_strategy` value.
-func (avctx *AvCodecContext) SetBFrameStrategy(v int32) {
+func (avctx *AVCodecContext) SetBFrameStrategy(v int32) {
 	avctx.b_frame_strategy = (C.int)(v)
 }
 
 // Custom: GetBFrameStrategyAddr gets `AVCodecContext.b_frame_strategy` address.
-func (avctx *AvCodecContext) GetBFrameStrategyAddr() *int32 {
+func (avctx *AVCodecContext) GetBFrameStrategyAddr() *int32 {
 	return (*int32)(&avctx.b_frame_strategy)
 }
 
-// Custom: Get BQuantOffset gets `AVCodecContext.b_quant_offset` value.
-func (avctx *AvCodecContext) GetBQuantOffset() float32 {
+// Custom: GetBQuantOffset gets `AVCodecContext.b_quant_offset` value.
+func (avctx *AVCodecContext) GetBQuantOffset() float32 {
 	return (float32)(avctx.b_quant_offset)
 }
 
 // Custom: SetBQuantOffset sets `AVCodecContext.b_quant_offset` value.
-func (avctx *AvCodecContext) SetBQuantOffset(v float32) {
+func (avctx *AVCodecContext) SetBQuantOffset(v float32) {
 	avctx.b_quant_offset = (C.float)(v)
 }
 
 // Custom: GetBQuantOffsetAddr gets `AVCodecContext.b_quant_offset` address.
-func (avctx *AvCodecContext) GetBQuantOffsetAddr() *float32 {
+func (avctx *AVCodecContext) GetBQuantOffsetAddr() *float32 {
 	return (*float32)(&avctx.b_quant_offset)
 }
 
-// Custom: Get HasBFrames gets `AVCodecContext.has_b_frames` value.
-func (avctx *AvCodecContext) GetHasBFrames() int32 {
+// Custom: GetHasBFrames gets `AVCodecContext.has_b_frames` value.
+func (avctx *AVCodecContext) GetHasBFrames() int32 {
 	return (int32)(avctx.has_b_frames)
 }
 
 // Custom: SetHasBFrames sets `AVCodecContext.has_b_frames` value.
-func (avctx *AvCodecContext) SetHasBFrames(v int32) {
+func (avctx *AVCodecContext) SetHasBFrames(v int32) {
 	avctx.has_b_frames = (C.int)(v)
 }
 
 // Custom: GetHasBFramesAddr gets `AVCodecContext.has_b_frames` address.
-func (avctx *AvCodecContext) GetHasBFramesAddr() *int32 {
+func (avctx *AVCodecContext) GetHasBFramesAddr() *int32 {
 	return (*int32)(&avctx.has_b_frames)
 }
 
-// Custom: Get MpegQuant gets `AVCodecContext.mpeg_quant` value.
-func (avctx *AvCodecContext) GetMpegQuant() int32 {
+// Custom: GetMpegQuant gets `AVCodecContext.mpeg_quant` value.
+func (avctx *AVCodecContext) GetMpegQuant() int32 {
 	return (int32)(avctx.mpeg_quant)
 }
 
 // Custom: SetMpegQuant sets `AVCodecContext.mpeg_quant` value.
-func (avctx *AvCodecContext) SetMpegQuant(v int32) {
+func (avctx *AVCodecContext) SetMpegQuant(v int32) {
 	avctx.mpeg_quant = (C.int)(v)
 }
 
 // Custom: GetMpegQuantAddr gets `AVCodecContext.mpeg_quant` address.
-func (avctx *AvCodecContext) GetMpegQuantAddr() *int32 {
+func (avctx *AVCodecContext) GetMpegQuantAddr() *int32 {
 	return (*int32)(&avctx.mpeg_quant)
 }
 
-// Custom: Get IQuantFactor gets `AVCodecContext.i_quant_factor` value.
-func (avctx *AvCodecContext) GetIQuantFactor() float32 {
+// Custom: GetIQuantFactor gets `AVCodecContext.i_quant_factor` value.
+func (avctx *AVCodecContext) GetIQuantFactor() float32 {
 	return (float32)(avctx.i_quant_factor)
 }
 
 // Custom: SetIQuantFactor sets `AVCodecContext.i_quant_factor` value.
-func (avctx *AvCodecContext) SetIQuantFactor(v float32) {
+func (avctx *AVCodecContext) SetIQuantFactor(v float32) {
 	avctx.i_quant_factor = (C.float)(v)
 }
 
 // Custom: GetIQuantFactorAddr gets `AVCodecContext.i_quant_factor` address.
-func (avctx *AvCodecContext) GetIQuantFactorAddr() *float32 {
+func (avctx *AVCodecContext) GetIQuantFactorAddr() *float32 {
 	return (*float32)(&avctx.i_quant_factor)
 }
 
-// Custom: Get IQuantOffset gets `AVCodecContext.i_quant_offset` value.
-func (avctx *AvCodecContext) GetIQuantOffset() float32 {
+// Custom: GetIQuantOffset gets `AVCodecContext.i_quant_offset` value.
+func (avctx *AVCodecContext) GetIQuantOffset() float32 {
 	return (float32)(avctx.i_quant_offset)
 }
 
 // Custom: SetIQuantOffset sets `AVCodecContext.i_quant_offset` value.
-func (avctx *AvCodecContext) SetIQuantOffset(v float32) {
+func (avctx *AVCodecContext) SetIQuantOffset(v float32) {
 	avctx.i_quant_offset = (C.float)(v)
 }
 
 // Custom: GetIQuantOffsetAddr gets `AVCodecContext.i_quant_offset` address.
-func (avctx *AvCodecContext) GetIQuantOffsetAddr() *float32 {
+func (avctx *AVCodecContext) GetIQuantOffsetAddr() *float32 {
 	return (*float32)(&avctx.i_quant_offset)
 }
 
-// Custom: Get LumiMasking gets `AVCodecContext.lumi_masking` value.
-func (avctx *AvCodecContext) GetLumiMasking() float32 {
+// Custom: GetLumiMasking gets `AVCodecContext.lumi_masking` value.
+func (avctx *AVCodecContext) GetLumiMasking() float32 {
 	return (float32)(avctx.lumi_masking)
 }
 
 // Custom: SetLumiMasking sets `AVCodecContext.lumi_masking` value.
-func (avctx *AvCodecContext) SetLumiMasking(v float32) {
+func (avctx *AVCodecContext) SetLumiMasking(v float32) {
 	avctx.lumi_masking = (C.float)(v)
 }
 
 // Custom: GetLumiMaskingAddr gets `AVCodecContext.lumi_masking` address.
-func (avctx *AvCodecContext) GetLumiMaskingAddr() *float32 {
+func (avctx *AVCodecContext) GetLumiMaskingAddr() *float32 {
 	return (*float32)(&avctx.lumi_masking)
 }
 
-// Custom: Get TemporalCplxMasking gets `AVCodecContext.temporal_cplx_masking` value.
-func (avctx *AvCodecContext) GetTemporalCplxMasking() float32 {
+// Custom: GetTemporalCplxMasking gets `AVCodecContext.temporal_cplx_masking` value.
+func (avctx *AVCodecContext) GetTemporalCplxMasking() float32 {
 	return (float32)(avctx.temporal_cplx_masking)
 }
 
 // Custom: SetTemporalCplxMasking sets `AVCodecContext.temporal_cplx_masking` value.
-func (avctx *AvCodecContext) SetTemporalCplxMasking(v float32) {
+func (avctx *AVCodecContext) SetTemporalCplxMasking(v float32) {
 	avctx.temporal_cplx_masking = (C.float)(v)
 }
 
 // Custom: GetTemporalCplxMaskingAddr gets `AVCodecContext.temporal_cplx_masking` address.
-func (avctx *AvCodecContext) GetTemporalCplxMaskingAddr() *float32 {
+func (avctx *AVCodecContext) GetTemporalCplxMaskingAddr() *float32 {
 	return (*float32)(&avctx.temporal_cplx_masking)
 }
 
-// Custom: Get SpatialCplxMasking gets `AVCodecContext.spatial_cplx_masking` value.
-func (avctx *AvCodecContext) GetSpatialCplxMasking() float32 {
+// Custom: GetSpatialCplxMasking gets `AVCodecContext.spatial_cplx_masking` value.
+func (avctx *AVCodecContext) GetSpatialCplxMasking() float32 {
 	return (float32)(avctx.spatial_cplx_masking)
 }
 
 // Custom: SetSpatialCplxMasking sets `AVCodecContext.spatial_cplx_masking` value.
-func (avctx *AvCodecContext) SetSpatialCplxMasking(v float32) {
+func (avctx *AVCodecContext) SetSpatialCplxMasking(v float32) {
 	avctx.spatial_cplx_masking = (C.float)(v)
 }
 
 // Custom: GetSpatialCplxMaskingAddr gets `AVCodecContext.spatial_cplx_masking` address.
-func (avctx *AvCodecContext) GetSpatialCplxMaskingAddr() *float32 {
+func (avctx *AVCodecContext) GetSpatialCplxMaskingAddr() *float32 {
 	return (*float32)(&avctx.spatial_cplx_masking)
 }
 
-// Custom: Get PMasking gets `AVCodecContext.p_masking` value.
-func (avctx *AvCodecContext) GetPMasking() float32 {
+// Custom: GetPMasking gets `AVCodecContext.p_masking` value.
+func (avctx *AVCodecContext) GetPMasking() float32 {
 	return (float32)(avctx.p_masking)
 }
 
 // Custom: SetPMasking sets `AVCodecContext.p_masking` value.
-func (avctx *AvCodecContext) SetPMasking(v float32) {
+func (avctx *AVCodecContext) SetPMasking(v float32) {
 	avctx.p_masking = (C.float)(v)
 }
 
 // Custom: GetPMaskingAddr gets `AVCodecContext.p_masking` address.
-func (avctx *AvCodecContext) GetPMaskingAddr() *float32 {
+func (avctx *AVCodecContext) GetPMaskingAddr() *float32 {
 	return (*float32)(&avctx.p_masking)
 }
 
-// Custom: Get DarkMasking gets `AVCodecContext.dark_masking` value.
-func (avctx *AvCodecContext) GetDarkMasking() float32 {
+// Custom: GetDarkMasking gets `AVCodecContext.dark_masking` value.
+func (avctx *AVCodecContext) GetDarkMasking() float32 {
 	return (float32)(avctx.dark_masking)
 }
 
 // Custom: SetDarkMasking sets `AVCodecContext.dark_masking` value.
-func (avctx *AvCodecContext) SetDarkMasking(v float32) {
+func (avctx *AVCodecContext) SetDarkMasking(v float32) {
 	avctx.dark_masking = (C.float)(v)
 }
 
 // Custom: GetDarkMaskingAddr gets `AVCodecContext.dark_masking` address.
-func (avctx *AvCodecContext) GetDarkMaskingAddr() *float32 {
+func (avctx *AVCodecContext) GetDarkMaskingAddr() *float32 {
 	return (*float32)(&avctx.dark_masking)
 }
 
-// Custom: Get SliceCount gets `AVCodecContext.slice_count` value.
-func (avctx *AvCodecContext) GetSliceCount() int32 {
+// Custom: GetSliceCount gets `AVCodecContext.slice_count` value.
+func (avctx *AVCodecContext) GetSliceCount() int32 {
 	return (int32)(avctx.slice_count)
 }
 
 // Custom: SetSliceCount sets `AVCodecContext.slice_count` value.
-func (avctx *AvCodecContext) SetSliceCount(v int32) {
+func (avctx *AVCodecContext) SetSliceCount(v int32) {
 	avctx.slice_count = (C.int)(v)
 }
 
 // Custom: GetSliceCountAddr gets `AVCodecContext.slice_count` address.
-func (avctx *AvCodecContext) GetSliceCountAddr() *int32 {
+func (avctx *AVCodecContext) GetSliceCountAddr() *int32 {
 	return (*int32)(&avctx.slice_count)
 }
 
-// Custom: Get PredictionMethod gets `AVCodecContext.prediction_method` value.
-func (avctx *AvCodecContext) GetPredictionMethod() int32 {
+// Custom: GetPredictionMethod gets `AVCodecContext.prediction_method` value.
+func (avctx *AVCodecContext) GetPredictionMethod() int32 {
 	return (int32)(avctx.prediction_method)
 }
 
 // Custom: SetPredictionMethod sets `AVCodecContext.prediction_method` value.
-func (avctx *AvCodecContext) SetPredictionMethod(v int32) {
+func (avctx *AVCodecContext) SetPredictionMethod(v int32) {
 	avctx.prediction_method = (C.int)(v)
 }
 
 // Custom: GetPredictionMethodAddr gets `AVCodecContext.prediction_method` address.
-func (avctx *AvCodecContext) GetPredictionMethodAddr() *int32 {
+func (avctx *AVCodecContext) GetPredictionMethodAddr() *int32 {
 	return (*int32)(&avctx.prediction_method)
 }
 
@@ -720,93 +922,93 @@ const (
 	FF_PRED_MEDIAN = int32(C.FF_PRED_MEDIAN)
 )
 
-// Custom: Get SliceOffset gets `AVCodecContext.slice_offset` value.
-func (avctx *AvCodecContext) GetSliceOffset() *int32 {
+// Custom: GetSliceOffset gets `AVCodecContext.slice_offset` value.
+func (avctx *AVCodecContext) GetSliceOffset() *int32 {
 	return (*int32)(avctx.slice_offset)
 }
 
 // Custom: SetSliceOffset sets `AVCodecContext.slice_offset` value.
-func (avctx *AvCodecContext) SetSliceOffset(v *int32) {
+func (avctx *AVCodecContext) SetSliceOffset(v *int32) {
 	avctx.slice_offset = (*C.int)(v)
 }
 
 // Custom: GetSliceOffsetAddr gets `AVCodecContext.slice_offset` address.
-func (avctx *AvCodecContext) GetSliceOffsetAddr() **int32 {
+func (avctx *AVCodecContext) GetSliceOffsetAddr() **int32 {
 	return (**int32)(unsafe.Pointer(&avctx.slice_offset))
 }
 
-// Custom: Get SampleAspectRatio gets `AVCodecContext.sample_aspect_ratio` value.
-func (avctx *AvCodecContext) GetSampleAspectRatio() AvRational {
-	return (AvRational)(avctx.sample_aspect_ratio)
+// Custom: GetSampleAspectRatio gets `AVCodecContext.sample_aspect_ratio` value.
+func (avctx *AVCodecContext) GetSampleAspectRatio() AVRational {
+	return (AVRational)(avctx.sample_aspect_ratio)
 }
 
 // Custom: SetSampleAspectRatio sets `AVCodecContext.sample_aspect_ratio` value.
-func (avctx *AvCodecContext) SetSampleAspectRatio(v AvRational) {
-	avctx.sample_aspect_ratio = (C.AVRational)(v)
+func (avctx *AVCodecContext) SetSampleAspectRatio(v AVRational) {
+	avctx.sample_aspect_ratio = (C.struct_AVRational)(v)
 }
 
 // Custom: GetSampleAspectRatioAddr gets `AVCodecContext.sample_aspect_ratio` address.
-func (avctx *AvCodecContext) GetSampleAspectRatioAddr() *AvRational {
-	return (*AvRational)(&avctx.sample_aspect_ratio)
+func (avctx *AVCodecContext) GetSampleAspectRatioAddr() *AVRational {
+	return (*AVRational)(&avctx.sample_aspect_ratio)
 }
 
-// Custom: Get MeCmp gets `AVCodecContext.me_cmp` value.
-func (avctx *AvCodecContext) GetMeCmp() int32 {
+// Custom: GetMeCmp gets `AVCodecContext.me_cmp` value.
+func (avctx *AVCodecContext) GetMeCmp() int32 {
 	return (int32)(avctx.me_cmp)
 }
 
 // Custom: SetMeCmp sets `AVCodecContext.me_cmp` value.
-func (avctx *AvCodecContext) SetMeCmp(v int32) {
+func (avctx *AVCodecContext) SetMeCmp(v int32) {
 	avctx.me_cmp = (C.int)(v)
 }
 
 // Custom: GetMeCmpAddr gets `AVCodecContext.me_cmp` address.
-func (avctx *AvCodecContext) GetMeCmpAddr() *int32 {
+func (avctx *AVCodecContext) GetMeCmpAddr() *int32 {
 	return (*int32)(&avctx.me_cmp)
 }
 
-// Custom: Get MeSubCmp gets `AVCodecContext.me_sub_cmp` value.
-func (avctx *AvCodecContext) GetMeSubCmp() int32 {
+// Custom: GetMeSubCmp gets `AVCodecContext.me_sub_cmp` value.
+func (avctx *AVCodecContext) GetMeSubCmp() int32 {
 	return (int32)(avctx.me_sub_cmp)
 }
 
 // Custom: SetMeSubCmp sets `AVCodecContext.me_sub_cmp` value.
-func (avctx *AvCodecContext) SetMeSubCmp(v int32) {
+func (avctx *AVCodecContext) SetMeSubCmp(v int32) {
 	avctx.me_sub_cmp = (C.int)(v)
 }
 
 // Custom: GetMeSubCmpAddr gets `AVCodecContext.me_sub_cmp` address.
-func (avctx *AvCodecContext) GetMeSubCmpAddr() *int32 {
+func (avctx *AVCodecContext) GetMeSubCmpAddr() *int32 {
 	return (*int32)(&avctx.me_sub_cmp)
 }
 
-// Custom: Get MbCmp gets `AVCodecContext.mb_cmp` value.
-func (avctx *AvCodecContext) GetMbCmp() int32 {
+// Custom: GetMbCmp gets `AVCodecContext.mb_cmp` value.
+func (avctx *AVCodecContext) GetMbCmp() int32 {
 	return (int32)(avctx.mb_cmp)
 }
 
 // Custom: SetMbCmp sets `AVCodecContext.mb_cmp` value.
-func (avctx *AvCodecContext) SetMbCmp(v int32) {
+func (avctx *AVCodecContext) SetMbCmp(v int32) {
 	avctx.mb_cmp = (C.int)(v)
 }
 
 // Custom: GetMbCmpAddr gets `AVCodecContext.mb_cmp` address.
-func (avctx *AvCodecContext) GetMbCmpAddr() *int32 {
+func (avctx *AVCodecContext) GetMbCmpAddr() *int32 {
 	return (*int32)(&avctx.mb_cmp)
 }
 
-// Custom: Get IldctCmp gets `AVCodecContext.ildct_cmp` value.
-func (avctx *AvCodecContext) GetIldctCmp() int32 {
+// Custom: GetIldctCmp gets `AVCodecContext.ildct_cmp` value.
+func (avctx *AVCodecContext) GetIldctCmp() int32 {
 	return (int32)(avctx.ildct_cmp)
 }
 
 // Custom: SetIldctCmp sets `AVCodecContext.ildct_cmp` value.
-func (avctx *AvCodecContext) SetIldctCmp(v int32) {
+func (avctx *AVCodecContext) SetIldctCmp(v int32) {
 	avctx.ildct_cmp = (C.int)(v)
 }
 
 // Custom: GetIldctCmpAddr gets `AVCodecContext.ildct_cmp` address.
-func (avctx *AvCodecContext) GetIldctCmpAddr() *int32 {
+func (avctx *AVCodecContext) GetIldctCmpAddr() *int32 {
 	return (*int32)(&avctx.ildct_cmp)
 }
 
@@ -830,108 +1032,108 @@ const (
 	FF_CMP_CHROMA     = int32(C.FF_CMP_CHROMA)
 )
 
-// Custom: Get DiaSize gets `AVCodecContext.dia_size` value.
-func (avctx *AvCodecContext) GetDiaSize() int32 {
+// Custom: GetDiaSize gets `AVCodecContext.dia_size` value.
+func (avctx *AVCodecContext) GetDiaSize() int32 {
 	return (int32)(avctx.dia_size)
 }
 
 // Custom: SetDiaSize sets `AVCodecContext.dia_size` value.
-func (avctx *AvCodecContext) SetDiaSize(v int32) {
+func (avctx *AVCodecContext) SetDiaSize(v int32) {
 	avctx.dia_size = (C.int)(v)
 }
 
 // Custom: GetDiaSizeAddr gets `AVCodecContext.dia_size` address.
-func (avctx *AvCodecContext) GetDiaSizeAddr() *int32 {
+func (avctx *AVCodecContext) GetDiaSizeAddr() *int32 {
 	return (*int32)(&avctx.dia_size)
 }
 
-// Custom: Get LastPredictorCount gets `AVCodecContext.last_predictor_count` value.
-func (avctx *AvCodecContext) GetLastPredictorCount() int32 {
+// Custom: GetLastPredictorCount gets `AVCodecContext.last_predictor_count` value.
+func (avctx *AVCodecContext) GetLastPredictorCount() int32 {
 	return (int32)(avctx.last_predictor_count)
 }
 
 // Custom: SetLastPredictorCount sets `AVCodecContext.last_predictor_count` value.
-func (avctx *AvCodecContext) SetLastPredictorCount(v int32) {
+func (avctx *AVCodecContext) SetLastPredictorCount(v int32) {
 	avctx.last_predictor_count = (C.int)(v)
 }
 
 // Custom: GetLastPredictorCountAddr gets `AVCodecContext.last_predictor_count` address.
-func (avctx *AvCodecContext) GetLastPredictorCountAddr() *int32 {
+func (avctx *AVCodecContext) GetLastPredictorCountAddr() *int32 {
 	return (*int32)(&avctx.last_predictor_count)
 }
 
-// Custom: Get PreMe gets `AVCodecContext.pre_me` value.
-func (avctx *AvCodecContext) GetPreMe() int32 {
+// Custom: GetPreMe gets `AVCodecContext.pre_me` value.
+func (avctx *AVCodecContext) GetPreMe() int32 {
 	return (int32)(avctx.pre_me)
 }
 
 // Custom: SetPreMe sets `AVCodecContext.pre_me` value.
-func (avctx *AvCodecContext) SetPreMe(v int32) {
+func (avctx *AVCodecContext) SetPreMe(v int32) {
 	avctx.pre_me = (C.int)(v)
 }
 
 // Custom: GetPreMeAddr gets `AVCodecContext.pre_me` address.
-func (avctx *AvCodecContext) GetPreMeAddr() *int32 {
+func (avctx *AVCodecContext) GetPreMeAddr() *int32 {
 	return (*int32)(&avctx.pre_me)
 }
 
-// Custom: Get MePreCmp gets `AVCodecContext.me_pre_cmp` value.
-func (avctx *AvCodecContext) GetMePreCmp() int32 {
+// Custom: GetMePreCmp gets `AVCodecContext.me_pre_cmp` value.
+func (avctx *AVCodecContext) GetMePreCmp() int32 {
 	return (int32)(avctx.me_pre_cmp)
 }
 
 // Custom: SetMePreCmp sets `AVCodecContext.me_pre_cmp` value.
-func (avctx *AvCodecContext) SetMePreCmp(v int32) {
+func (avctx *AVCodecContext) SetMePreCmp(v int32) {
 	avctx.me_pre_cmp = (C.int)(v)
 }
 
 // Custom: GetMePreCmpAddr gets `AVCodecContext.me_pre_cmp` address.
-func (avctx *AvCodecContext) GetMePreCmpAddr() *int32 {
+func (avctx *AVCodecContext) GetMePreCmpAddr() *int32 {
 	return (*int32)(&avctx.me_pre_cmp)
 }
 
-// Custom: Get PreDiaSize gets `AVCodecContext.pre_dia_size` value.
-func (avctx *AvCodecContext) GetPreDiaSize() int32 {
+// Custom: GetPreDiaSize gets `AVCodecContext.pre_dia_size` value.
+func (avctx *AVCodecContext) GetPreDiaSize() int32 {
 	return (int32)(avctx.pre_dia_size)
 }
 
 // Custom: SetPreDiaSize sets `AVCodecContext.pre_dia_size` value.
-func (avctx *AvCodecContext) SetPreDiaSize(v int32) {
+func (avctx *AVCodecContext) SetPreDiaSize(v int32) {
 	avctx.pre_dia_size = (C.int)(v)
 }
 
 // Custom: GetPreDiaSizeAddr gets `AVCodecContext.pre_dia_size` address.
-func (avctx *AvCodecContext) GetPreDiaSizeAddr() *int32 {
+func (avctx *AVCodecContext) GetPreDiaSizeAddr() *int32 {
 	return (*int32)(&avctx.pre_dia_size)
 }
 
-// Custom: Get MeSubpelQuality gets `AVCodecContext.me_subpel_quality` value.
-func (avctx *AvCodecContext) GetMeSubpelQuality() int32 {
+// Custom: GetMeSubpelQuality gets `AVCodecContext.me_subpel_quality` value.
+func (avctx *AVCodecContext) GetMeSubpelQuality() int32 {
 	return (int32)(avctx.me_subpel_quality)
 }
 
 // Custom: SetMeSubpelQuality sets `AVCodecContext.me_subpel_quality` value.
-func (avctx *AvCodecContext) SetMeSubpelQuality(v int32) {
+func (avctx *AVCodecContext) SetMeSubpelQuality(v int32) {
 	avctx.me_subpel_quality = (C.int)(v)
 }
 
 // Custom: GetMeSubpelQualityAddr gets `AVCodecContext.me_subpel_quality` address.
-func (avctx *AvCodecContext) GetMeSubpelQualityAddr() *int32 {
+func (avctx *AVCodecContext) GetMeSubpelQualityAddr() *int32 {
 	return (*int32)(&avctx.me_subpel_quality)
 }
 
-// Custom: Get SliceFlags gets `AVCodecContext.slice_flags` value.
-func (avctx *AvCodecContext) GetSliceFlags() int32 {
+// Custom: GetSliceFlags gets `AVCodecContext.slice_flags` value.
+func (avctx *AVCodecContext) GetSliceFlags() int32 {
 	return (int32)(avctx.slice_flags)
 }
 
 // Custom: SetSliceFlags sets `AVCodecContext.slice_flags` value.
-func (avctx *AvCodecContext) SetSliceFlags(v int32) {
+func (avctx *AVCodecContext) SetSliceFlags(v int32) {
 	avctx.slice_flags = (C.int)(v)
 }
 
 // Custom: GetSliceFlagsAddr gets `AVCodecContext.slice_flags` address.
-func (avctx *AvCodecContext) GetSliceFlagsAddr() *int32 {
+func (avctx *AVCodecContext) GetSliceFlagsAddr() *int32 {
 	return (*int32)(&avctx.slice_flags)
 }
 
@@ -941,18 +1143,18 @@ const (
 	SLICE_FLAG_ALLOW_PLANE = int32(C.SLICE_FLAG_ALLOW_PLANE)
 )
 
-// Custom: Get MbDecision gets `AVCodecContext.mb_decision` value.
-func (avctx *AvCodecContext) GetMbDecision() int32 {
+// Custom: GetMbDecision gets `AVCodecContext.mb_decision` value.
+func (avctx *AVCodecContext) GetMbDecision() int32 {
 	return (int32)(avctx.mb_decision)
 }
 
 // Custom: SetMbDecision sets `AVCodecContext.mb_decision` value.
-func (avctx *AvCodecContext) SetMbDecision(v int32) {
+func (avctx *AVCodecContext) SetMbDecision(v int32) {
 	avctx.mb_decision = (C.int)(v)
 }
 
 // Custom: GetMbDecisionAddr gets `AVCodecContext.mb_decision` address.
-func (avctx *AvCodecContext) GetMbDecisionAddr() *int32 {
+func (avctx *AVCodecContext) GetMbDecisionAddr() *int32 {
 	return (*int32)(&avctx.mb_decision)
 }
 
@@ -962,723 +1164,731 @@ const (
 	FF_MB_DECISION_RD     = int32(C.FF_MB_DECISION_RD)
 )
 
-// Custom: Get IntraMatrix gets `AVCodecContext.intra_matrix` value.
-func (avctx *AvCodecContext) GetIntraMatrix() *uint16 {
+// Custom: GetIntraMatrix gets `AVCodecContext.intra_matrix` value.
+func (avctx *AVCodecContext) GetIntraMatrix() *uint16 {
 	return (*uint16)(avctx.intra_matrix)
 }
 
 // Custom: SetIntraMatrix sets `AVCodecContext.intra_matrix` value.
-func (avctx *AvCodecContext) SetIntraMatrix(v *uint16) {
+func (avctx *AVCodecContext) SetIntraMatrix(v *uint16) {
 	avctx.intra_matrix = (*C.uint16_t)(v)
 }
 
 // Custom: GetIntraMatrixAddr gets `AVCodecContext.intra_matrix` address.
-func (avctx *AvCodecContext) GetIntraMatrixAddr() **uint16 {
+func (avctx *AVCodecContext) GetIntraMatrixAddr() **uint16 {
 	return (**uint16)(unsafe.Pointer(&avctx.intra_matrix))
 }
 
-// Custom: Get InterMatrix gets `AVCodecContext.inter_matrix` value.
-func (avctx *AvCodecContext) GetInterMatrix() *uint16 {
+// Custom: GetInterMatrix gets `AVCodecContext.inter_matrix` value.
+func (avctx *AVCodecContext) GetInterMatrix() *uint16 {
 	return (*uint16)(avctx.inter_matrix)
 }
 
 // Custom: SetInterMatrix sets `AVCodecContext.inter_matrix` value.
-func (avctx *AvCodecContext) SetInterMatrix(v *uint16) {
+func (avctx *AVCodecContext) SetInterMatrix(v *uint16) {
 	avctx.inter_matrix = (*C.uint16_t)(v)
 }
 
 // Custom: GetInterMatrixAddr gets `AVCodecContext.inter_matrix` address.
-func (avctx *AvCodecContext) GetInterMatrixAddr() **uint16 {
+func (avctx *AVCodecContext) GetInterMatrixAddr() **uint16 {
 	return (**uint16)(unsafe.Pointer(&avctx.inter_matrix))
 }
 
-// Custom: Get ScenechangeThreshold gets `AVCodecContext.scenechange_threshold` value.
-func (avctx *AvCodecContext) GetScenechangeThreshold() int32 {
+// Custom: GetScenechangeThreshold gets `AVCodecContext.scenechange_threshold` value.
+func (avctx *AVCodecContext) GetScenechangeThreshold() int32 {
 	return (int32)(avctx.scenechange_threshold)
 }
 
 // Custom: SetScenechangeThreshold sets `AVCodecContext.scenechange_threshold` value.
-func (avctx *AvCodecContext) SetScenechangeThreshold(v int32) {
+func (avctx *AVCodecContext) SetScenechangeThreshold(v int32) {
 	avctx.scenechange_threshold = (C.int)(v)
 }
 
 // Custom: GetScenechangeThresholdAddr gets `AVCodecContext.scenechange_threshold` address.
-func (avctx *AvCodecContext) GetScenechangeThresholdAddr() *int32 {
+func (avctx *AVCodecContext) GetScenechangeThresholdAddr() *int32 {
 	return (*int32)(&avctx.scenechange_threshold)
 }
 
-// Custom: Get NoiseReduction gets `AVCodecContext.noise_reduction` value.
-func (avctx *AvCodecContext) GetNoiseReduction() int32 {
+// Custom: GetNoiseReduction gets `AVCodecContext.noise_reduction` value.
+func (avctx *AVCodecContext) GetNoiseReduction() int32 {
 	return (int32)(avctx.noise_reduction)
 }
 
 // Custom: SetNoiseReduction sets `AVCodecContext.noise_reduction` value.
-func (avctx *AvCodecContext) SetNoiseReduction(v int32) {
+func (avctx *AVCodecContext) SetNoiseReduction(v int32) {
 	avctx.noise_reduction = (C.int)(v)
 }
 
 // Custom: GetNoiseReductionAddr gets `AVCodecContext.noise_reduction` address.
-func (avctx *AvCodecContext) GetNoiseReductionAddr() *int32 {
+func (avctx *AVCodecContext) GetNoiseReductionAddr() *int32 {
 	return (*int32)(&avctx.noise_reduction)
 }
 
-// Custom: Get IntraDcPrecision gets `AVCodecContext.intra_dc_precision` value.
-func (avctx *AvCodecContext) GetIntraDcPrecision() int32 {
+// Custom: GetIntraDcPrecision gets `AVCodecContext.intra_dc_precision` value.
+func (avctx *AVCodecContext) GetIntraDcPrecision() int32 {
 	return (int32)(avctx.intra_dc_precision)
 }
 
 // Custom: SetIntraDcPrecision sets `AVCodecContext.intra_dc_precision` value.
-func (avctx *AvCodecContext) SetIntraDcPrecision(v int32) {
+func (avctx *AVCodecContext) SetIntraDcPrecision(v int32) {
 	avctx.intra_dc_precision = (C.int)(v)
 }
 
 // Custom: GetIntraDcPrecisionAddr gets `AVCodecContext.intra_dc_precision` address.
-func (avctx *AvCodecContext) GetIntraDcPrecisionAddr() *int32 {
+func (avctx *AVCodecContext) GetIntraDcPrecisionAddr() *int32 {
 	return (*int32)(&avctx.intra_dc_precision)
 }
 
-// Custom: Get SkipTop gets `AVCodecContext.skip_top` value.
-func (avctx *AvCodecContext) GetSkipTop() int32 {
+// Custom: GetSkipTop gets `AVCodecContext.skip_top` value.
+func (avctx *AVCodecContext) GetSkipTop() int32 {
 	return (int32)(avctx.skip_top)
 }
 
 // Custom: SetSkipTop sets `AVCodecContext.skip_top` value.
-func (avctx *AvCodecContext) SetSkipTop(v int32) {
+func (avctx *AVCodecContext) SetSkipTop(v int32) {
 	avctx.skip_top = (C.int)(v)
 }
 
 // Custom: GetSkipTopAddr gets `AVCodecContext.skip_top` address.
-func (avctx *AvCodecContext) GetSkipTopAddr() *int32 {
+func (avctx *AVCodecContext) GetSkipTopAddr() *int32 {
 	return (*int32)(&avctx.skip_top)
 }
 
-// Custom: Get SkipBottom gets `AVCodecContext.skip_bottom` value.
-func (avctx *AvCodecContext) GetSkipBottom() int32 {
+// Custom: GetSkipBottom gets `AVCodecContext.skip_bottom` value.
+func (avctx *AVCodecContext) GetSkipBottom() int32 {
 	return (int32)(avctx.skip_bottom)
 }
 
 // Custom: SetSkipBottom sets `AVCodecContext.skip_bottom` value.
-func (avctx *AvCodecContext) SetSkipBottom(v int32) {
+func (avctx *AVCodecContext) SetSkipBottom(v int32) {
 	avctx.skip_bottom = (C.int)(v)
 }
 
 // Custom: GetSkipBottomAddr gets `AVCodecContext.skip_bottom` address.
-func (avctx *AvCodecContext) GetSkipBottomAddr() *int32 {
+func (avctx *AVCodecContext) GetSkipBottomAddr() *int32 {
 	return (*int32)(&avctx.skip_bottom)
 }
 
-// Custom: Get MbLmin gets `AVCodecContext.mb_lmin` value.
-func (avctx *AvCodecContext) GetMbLmin() int32 {
+// Custom: GetMbLmin gets `AVCodecContext.mb_lmin` value.
+func (avctx *AVCodecContext) GetMbLmin() int32 {
 	return (int32)(avctx.mb_lmin)
 }
 
 // Custom: SetMbLmin sets `AVCodecContext.mb_lmin` value.
-func (avctx *AvCodecContext) SetMbLmin(v int32) {
+func (avctx *AVCodecContext) SetMbLmin(v int32) {
 	avctx.mb_lmin = (C.int)(v)
 }
 
 // Custom: GetMbLminAddr gets `AVCodecContext.mb_lmin` address.
-func (avctx *AvCodecContext) GetMbLminAddr() *int32 {
+func (avctx *AVCodecContext) GetMbLminAddr() *int32 {
 	return (*int32)(&avctx.mb_lmin)
 }
 
-// Custom: Get MbLmax gets `AVCodecContext.mb_lmax` value.
-func (avctx *AvCodecContext) GetMbLmax() int32 {
+// Custom: GetMbLmax gets `AVCodecContext.mb_lmax` value.
+func (avctx *AVCodecContext) GetMbLmax() int32 {
 	return (int32)(avctx.mb_lmax)
 }
 
 // Custom: SetMbLmax sets `AVCodecContext.mb_lmax` value.
-func (avctx *AvCodecContext) SetMbLmax(v int32) {
+func (avctx *AVCodecContext) SetMbLmax(v int32) {
 	avctx.mb_lmax = (C.int)(v)
 }
 
 // Custom: GetMbLmaxAddr gets `AVCodecContext.mb_lmax` address.
-func (avctx *AvCodecContext) GetMbLmaxAddr() *int32 {
+func (avctx *AVCodecContext) GetMbLmaxAddr() *int32 {
 	return (*int32)(&avctx.mb_lmax)
 }
 
-// Custom: Get MePenaltyCompensation gets `AVCodecContext.me_penalty_compensation` value.
-func (avctx *AvCodecContext) GetMePenaltyCompensation() int32 {
+// Custom: GetMePenaltyCompensation gets `AVCodecContext.me_penalty_compensation` value.
+func (avctx *AVCodecContext) GetMePenaltyCompensation() int32 {
 	return (int32)(avctx.me_penalty_compensation)
 }
 
 // Custom: SetMePenaltyCompensation sets `AVCodecContext.me_penalty_compensation` value.
-func (avctx *AvCodecContext) SetMePenaltyCompensation(v int32) {
+func (avctx *AVCodecContext) SetMePenaltyCompensation(v int32) {
 	avctx.me_penalty_compensation = (C.int)(v)
 }
 
 // Custom: GetMePenaltyCompensationAddr gets `AVCodecContext.me_penalty_compensation` address.
-func (avctx *AvCodecContext) GetMePenaltyCompensationAddr() *int32 {
+func (avctx *AVCodecContext) GetMePenaltyCompensationAddr() *int32 {
 	return (*int32)(&avctx.me_penalty_compensation)
 }
 
-// Custom: Get BidirRefine gets `AVCodecContext.bidir_refine` value.
-func (avctx *AvCodecContext) GetBidirRefine() int32 {
+// Custom: GetBidirRefine gets `AVCodecContext.bidir_refine` value.
+func (avctx *AVCodecContext) GetBidirRefine() int32 {
 	return (int32)(avctx.bidir_refine)
 }
 
 // Custom: SetBidirRefine sets `AVCodecContext.bidir_refine` value.
-func (avctx *AvCodecContext) SetBidirRefine(v int32) {
+func (avctx *AVCodecContext) SetBidirRefine(v int32) {
 	avctx.bidir_refine = (C.int)(v)
 }
 
 // Custom: GetBidirRefineAddr gets `AVCodecContext.bidir_refine` address.
-func (avctx *AvCodecContext) GetBidirRefineAddr() *int32 {
+func (avctx *AVCodecContext) GetBidirRefineAddr() *int32 {
 	return (*int32)(&avctx.bidir_refine)
 }
 
-// Custom: Get BrdScale gets `AVCodecContext.brd_scale` value.
-func (avctx *AvCodecContext) GetBrdScale() int32 {
+// Custom: GetBrdScale gets `AVCodecContext.brd_scale` value.
+func (avctx *AVCodecContext) GetBrdScale() int32 {
 	return (int32)(avctx.brd_scale)
 }
 
 // Custom: SetBrdScale sets `AVCodecContext.brd_scale` value.
-func (avctx *AvCodecContext) SetBrdScale(v int32) {
+func (avctx *AVCodecContext) SetBrdScale(v int32) {
 	avctx.brd_scale = (C.int)(v)
 }
 
 // Custom: GetBrdScaleAddr gets `AVCodecContext.brd_scale` address.
-func (avctx *AvCodecContext) GetBrdScaleAddr() *int32 {
+func (avctx *AVCodecContext) GetBrdScaleAddr() *int32 {
 	return (*int32)(&avctx.brd_scale)
 }
 
-// Custom: Get KeyintMin gets `AVCodecContext.keyint_min` value.
-func (avctx *AvCodecContext) GetKeyintMin() int32 {
+// Custom: GetKeyintMin gets `AVCodecContext.keyint_min` value.
+func (avctx *AVCodecContext) GetKeyintMin() int32 {
 	return (int32)(avctx.keyint_min)
 }
 
 // Custom: SetKeyintMin sets `AVCodecContext.keyint_min` value.
-func (avctx *AvCodecContext) SetKeyintMin(v int32) {
+func (avctx *AVCodecContext) SetKeyintMin(v int32) {
 	avctx.keyint_min = (C.int)(v)
 }
 
 // Custom: GetKeyintMinAddr gets `AVCodecContext.keyint_min` address.
-func (avctx *AvCodecContext) GetKeyintMinAddr() *int32 {
+func (avctx *AVCodecContext) GetKeyintMinAddr() *int32 {
 	return (*int32)(&avctx.keyint_min)
 }
 
-// Custom: Get Refs gets `AVCodecContext.refs` value.
-func (avctx *AvCodecContext) GetRefs() int32 {
+// Custom: GetRefs gets `AVCodecContext.refs` value.
+func (avctx *AVCodecContext) GetRefs() int32 {
 	return (int32)(avctx.refs)
 }
 
 // Custom: SetRefs sets `AVCodecContext.refs` value.
-func (avctx *AvCodecContext) SetRefs(v int32) {
+func (avctx *AVCodecContext) SetRefs(v int32) {
 	avctx.refs = (C.int)(v)
 }
 
 // Custom: GetRefsAddr gets `AVCodecContext.refs` address.
-func (avctx *AvCodecContext) GetRefsAddr() *int32 {
+func (avctx *AVCodecContext) GetRefsAddr() *int32 {
 	return (*int32)(&avctx.refs)
 }
 
-// Custom: Get Mv0Threshold gets `AVCodecContext.mv0_threshold` value.
-func (avctx *AvCodecContext) GetMv0Threshold() int32 {
+// Custom: GetMv0Threshold gets `AVCodecContext.mv0_threshold` value.
+func (avctx *AVCodecContext) GetMv0Threshold() int32 {
 	return (int32)(avctx.mv0_threshold)
 }
 
 // Custom: SetMv0Threshold sets `AVCodecContext.mv0_threshold` value.
-func (avctx *AvCodecContext) SetMv0Threshold(v int32) {
+func (avctx *AVCodecContext) SetMv0Threshold(v int32) {
 	avctx.mv0_threshold = (C.int)(v)
 }
 
 // Custom: GetMv0ThresholdAddr gets `AVCodecContext.mv0_threshold` address.
-func (avctx *AvCodecContext) GetMv0ThresholdAddr() *int32 {
+func (avctx *AVCodecContext) GetMv0ThresholdAddr() *int32 {
 	return (*int32)(&avctx.mv0_threshold)
 }
 
-// Custom: Get BSensitivity gets `AVCodecContext.b_sensitivity` value.
-func (avctx *AvCodecContext) GetBSensitivity() int32 {
+// Custom: GetBSensitivity gets `AVCodecContext.b_sensitivity` value.
+func (avctx *AVCodecContext) GetBSensitivity() int32 {
 	return (int32)(avctx.b_sensitivity)
 }
 
 // Custom: SetBSensitivity sets `AVCodecContext.b_sensitivity` value.
-func (avctx *AvCodecContext) SetBSensitivity(v int32) {
+func (avctx *AVCodecContext) SetBSensitivity(v int32) {
 	avctx.b_sensitivity = (C.int)(v)
 }
 
 // Custom: GetBSensitivityAddr gets `AVCodecContext.b_sensitivity` address.
-func (avctx *AvCodecContext) GetBSensitivityAddr() *int32 {
+func (avctx *AVCodecContext) GetBSensitivityAddr() *int32 {
 	return (*int32)(&avctx.b_sensitivity)
 }
 
-// Custom: Get ColorPrimaries gets `AVCodecContext.color_primaries` value.
-func (avctx *AvCodecContext) GetColorPrimaries() AvColorPrimaries {
-	return (AvColorPrimaries)(avctx.color_primaries)
+// Custom: GetColorPrimaries gets `AVCodecContext.color_primaries` value.
+func (avctx *AVCodecContext) GetColorPrimaries() AVColorPrimaries {
+	return (AVColorPrimaries)(avctx.color_primaries)
 }
 
 // Custom: SetColorPrimaries sets `AVCodecContext.color_primaries` value.
-func (avctx *AvCodecContext) SetColorPrimaries(v AvColorPrimaries) {
+func (avctx *AVCodecContext) SetColorPrimaries(v AVColorPrimaries) {
 	avctx.color_primaries = (C.enum_AVColorPrimaries)(v)
 }
 
 // Custom: GetColorPrimariesAddr gets `AVCodecContext.color_primaries` address.
-func (avctx *AvCodecContext) GetColorPrimariesAddr() *AvColorPrimaries {
-	return (*AvColorPrimaries)(unsafe.Pointer(&avctx.color_primaries))
+func (avctx *AVCodecContext) GetColorPrimariesAddr() *AVColorPrimaries {
+	return (*AVColorPrimaries)(unsafe.Pointer(&avctx.color_primaries))
 }
 
-// Custom: Get ColorTrc gets `AVCodecContext.color_trc` value.
-func (avctx *AvCodecContext) GetColorTrc() AvColorTransferCharacteristic {
-	return (AvColorTransferCharacteristic)(avctx.color_trc)
+// Custom: GetColorTrc gets `AVCodecContext.color_trc` value.
+func (avctx *AVCodecContext) GetColorTrc() AVColorTransferCharacteristic {
+	return (AVColorTransferCharacteristic)(avctx.color_trc)
 }
 
 // Custom: SetColorTrc sets `AVCodecContext.color_trc` value.
-func (avctx *AvCodecContext) SetColorTrc(v AvColorTransferCharacteristic) {
+func (avctx *AVCodecContext) SetColorTrc(v AVColorTransferCharacteristic) {
 	avctx.color_trc = (C.enum_AVColorTransferCharacteristic)(v)
 }
 
 // Custom: GetColorTrcAddr gets `AVCodecContext.color_trc` address.
-func (avctx *AvCodecContext) GetColorTrcAddr() *AvColorTransferCharacteristic {
-	return (*AvColorTransferCharacteristic)(unsafe.Pointer(&avctx.color_trc))
+func (avctx *AVCodecContext) GetColorTrcAddr() *AVColorTransferCharacteristic {
+	return (*AVColorTransferCharacteristic)(unsafe.Pointer(&avctx.color_trc))
 }
 
-// Custom: Get Colorspace gets `AVCodecContext.colorspace` value.
-func (avctx *AvCodecContext) GetColorspace() AvColorSpace {
-	return (AvColorSpace)(avctx.colorspace)
+// Custom: GetColorspace gets `AVCodecContext.colorspace` value.
+func (avctx *AVCodecContext) GetColorspace() AVColorSpace {
+	return (AVColorSpace)(avctx.colorspace)
 }
 
 // Custom: SetColorspace sets `AVCodecContext.colorspace` value.
-func (avctx *AvCodecContext) SetColorspace(v AvColorSpace) {
+func (avctx *AVCodecContext) SetColorspace(v AVColorSpace) {
 	avctx.colorspace = (C.enum_AVColorSpace)(v)
 }
 
 // Custom: GetColorspaceAddr gets `AVCodecContext.colorspace` address.
-func (avctx *AvCodecContext) GetColorspaceAddr() *AvColorSpace {
-	return (*AvColorSpace)(unsafe.Pointer(&avctx.colorspace))
+func (avctx *AVCodecContext) GetColorspaceAddr() *AVColorSpace {
+	return (*AVColorSpace)(unsafe.Pointer(&avctx.colorspace))
 }
 
-// Custom: Get ColorRange gets `AVCodecContext.color_range` value.
-func (avctx *AvCodecContext) GetColorRange() AvColorRange {
-	return (AvColorRange)(avctx.color_range)
+// Custom: GetColorRange gets `AVCodecContext.color_range` value.
+func (avctx *AVCodecContext) GetColorRange() AVColorRange {
+	return (AVColorRange)(avctx.color_range)
 }
 
 // Custom: SetColorRange sets `AVCodecContext.color_range` value.
-func (avctx *AvCodecContext) SetColorRange(v AvColorRange) {
+func (avctx *AVCodecContext) SetColorRange(v AVColorRange) {
 	avctx.color_range = (C.enum_AVColorRange)(v)
 }
 
 // Custom: GetColorRangeAddr gets `AVCodecContext.color_range` address.
-func (avctx *AvCodecContext) GetColorRangeAddr() *AvColorRange {
-	return (*AvColorRange)(unsafe.Pointer(&avctx.color_range))
+func (avctx *AVCodecContext) GetColorRangeAddr() *AVColorRange {
+	return (*AVColorRange)(unsafe.Pointer(&avctx.color_range))
 }
 
-// Custom: Get ChromaSampleLocation gets `AVCodecContext.chroma_sample_location` value.
-func (avctx *AvCodecContext) GetChromaSampleLocation() AvChromaLocation {
-	return (AvChromaLocation)(avctx.chroma_sample_location)
+// Custom: GetChromaSampleLocation gets `AVCodecContext.chroma_sample_location` value.
+func (avctx *AVCodecContext) GetChromaSampleLocation() AVChromaLocation {
+	return (AVChromaLocation)(avctx.chroma_sample_location)
 }
 
 // Custom: SetChromaSampleLocation sets `AVCodecContext.chroma_sample_location` value.
-func (avctx *AvCodecContext) SetChromaSampleLocation(v AvChromaLocation) {
+func (avctx *AVCodecContext) SetChromaSampleLocation(v AVChromaLocation) {
 	avctx.chroma_sample_location = (C.enum_AVChromaLocation)(v)
 }
 
 // Custom: GetChromaSampleLocationAddr gets `AVCodecContext.chroma_sample_location` address.
-func (avctx *AvCodecContext) GetChromaSampleLocationAddr() *AvChromaLocation {
-	return (*AvChromaLocation)(unsafe.Pointer(&avctx.chroma_sample_location))
+func (avctx *AVCodecContext) GetChromaSampleLocationAddr() *AVChromaLocation {
+	return (*AVChromaLocation)(unsafe.Pointer(&avctx.chroma_sample_location))
 }
 
-// Custom: Get Slices gets `AVCodecContext.slices` value.
-func (avctx *AvCodecContext) GetSlices() int32 {
+// Custom: GetSlices gets `AVCodecContext.slices` value.
+func (avctx *AVCodecContext) GetSlices() int32 {
 	return (int32)(avctx.slices)
 }
 
 // Custom: SetSlices sets `AVCodecContext.slices` value.
-func (avctx *AvCodecContext) SetSlices(v int32) {
+func (avctx *AVCodecContext) SetSlices(v int32) {
 	avctx.slices = (C.int)(v)
 }
 
 // Custom: GetSlicesAddr gets `AVCodecContext.slices` address.
-func (avctx *AvCodecContext) GetSlicesAddr() *int32 {
+func (avctx *AVCodecContext) GetSlicesAddr() *int32 {
 	return (*int32)(&avctx.slices)
 }
 
-// Custom: Get FieldOrder gets `AVCodecContext.field_order` value.
-func (avctx *AvCodecContext) GetFieldOrder() AvFieldOrder {
-	return (AvFieldOrder)(avctx.field_order)
+// Custom: GetFieldOrder gets `AVCodecContext.field_order` value.
+func (avctx *AVCodecContext) GetFieldOrder() AVFieldOrder {
+	return (AVFieldOrder)(avctx.field_order)
 }
 
 // Custom: SetFieldOrder sets `AVCodecContext.field_order` value.
-func (avctx *AvCodecContext) SetFieldOrder(v AvFieldOrder) {
+func (avctx *AVCodecContext) SetFieldOrder(v AVFieldOrder) {
 	avctx.field_order = (C.enum_AVFieldOrder)(v)
 }
 
 // Custom: GetFieldOrderAddr gets `AVCodecContext.field_order` address.
-func (avctx *AvCodecContext) GetFieldOrderAddr() *AvFieldOrder {
-	return (*AvFieldOrder)(unsafe.Pointer(&avctx.field_order))
+func (avctx *AVCodecContext) GetFieldOrderAddr() *AVFieldOrder {
+	return (*AVFieldOrder)(unsafe.Pointer(&avctx.field_order))
 }
 
-// Custom: Get SampleRate gets `AVCodecContext.sample_rate` value.
-func (avctx *AvCodecContext) GetSampleRate() int32 {
+// Custom: GetSampleRate gets `AVCodecContext.sample_rate` value.
+func (avctx *AVCodecContext) GetSampleRate() int32 {
 	return (int32)(avctx.sample_rate)
 }
 
 // Custom: SetSampleRate sets `AVCodecContext.sample_rate` value.
-func (avctx *AvCodecContext) SetSampleRate(v int32) {
+func (avctx *AVCodecContext) SetSampleRate(v int32) {
 	avctx.sample_rate = (C.int)(v)
 }
 
 // Custom: GetSampleRateAddr gets `AVCodecContext.sample_rate` address.
-func (avctx *AvCodecContext) GetSampleRateAddr() *int32 {
+func (avctx *AVCodecContext) GetSampleRateAddr() *int32 {
 	return (*int32)(&avctx.sample_rate)
 }
 
-// Custom: Get Channels gets `AVCodecContext.channels` value.
-func (avctx *AvCodecContext) GetChannels() int32 {
+// Custom: GetChannels gets `AVCodecContext.channels` value.
+func (avctx *AVCodecContext) GetChannels() int32 {
 	return (int32)(avctx.channels)
 }
 
 // Custom: SetChannels sets `AVCodecContext.channels` value.
-func (avctx *AvCodecContext) SetChannels(v int32) {
+func (avctx *AVCodecContext) SetChannels(v int32) {
 	avctx.channels = (C.int)(v)
 }
 
 // Custom: GetChannelsAddr gets `AVCodecContext.channels` address.
-func (avctx *AvCodecContext) GetChannelsAddr() *int32 {
+func (avctx *AVCodecContext) GetChannelsAddr() *int32 {
 	return (*int32)(&avctx.channels)
 }
 
-// Custom: Get SampleFmt gets `AVCodecContext.sample_fmt` value.
-func (avctx *AvCodecContext) GetSampleFmt() AvSampleFormat {
-	return (AvSampleFormat)(avctx.sample_fmt)
+// Custom: GetSampleFmt gets `AVCodecContext.sample_fmt` value.
+func (avctx *AVCodecContext) GetSampleFmt() AVSampleFormat {
+	return (AVSampleFormat)(avctx.sample_fmt)
 }
 
 // Custom: SetSampleFmt sets `AVCodecContext.sample_fmt` value.
-func (avctx *AvCodecContext) SetSampleFmt(v AvSampleFormat) {
+func (avctx *AVCodecContext) SetSampleFmt(v AVSampleFormat) {
 	avctx.sample_fmt = (C.enum_AVSampleFormat)(v)
 }
 
 // Custom: GetSampleFmtAddr gets `AVCodecContext.sample_fmt` address.
-func (avctx *AvCodecContext) GetSampleFmtAddr() *AvSampleFormat {
-	return (*AvSampleFormat)(&avctx.sample_fmt)
+func (avctx *AVCodecContext) GetSampleFmtAddr() *AVSampleFormat {
+	return (*AVSampleFormat)(&avctx.sample_fmt)
 }
 
-// Custom: Get FrameSize gets `AVCodecContext.frame_size` value.
-func (avctx *AvCodecContext) GetFrameSize() int32 {
+// Custom: GetFrameSize gets `AVCodecContext.frame_size` value.
+func (avctx *AVCodecContext) GetFrameSize() int32 {
 	return (int32)(avctx.frame_size)
 }
 
 // Custom: SetFrameSize sets `AVCodecContext.frame_size` value.
-func (avctx *AvCodecContext) SetFrameSize(v int32) {
+func (avctx *AVCodecContext) SetFrameSize(v int32) {
 	avctx.frame_size = (C.int)(v)
 }
 
 // Custom: GetFrameSizeAddr gets `AVCodecContext.frame_size` address.
-func (avctx *AvCodecContext) GetFrameSizeAddr() *int32 {
+func (avctx *AVCodecContext) GetFrameSizeAddr() *int32 {
 	return (*int32)(&avctx.frame_size)
 }
 
-// Custom: Get FrameNumber gets `AVCodecContext.frame_number` value.
-func (avctx *AvCodecContext) GetFrameNumber() int32 {
+// Custom: GetFrameNumber gets `AVCodecContext.frame_number` value.
+func (avctx *AVCodecContext) GetFrameNumber() int32 {
 	return (int32)(avctx.frame_number)
 }
 
 // Custom: SetFrameNumber sets `AVCodecContext.frame_number` value.
-func (avctx *AvCodecContext) SetFrameNumber(v int32) {
+func (avctx *AVCodecContext) SetFrameNumber(v int32) {
 	avctx.frame_number = (C.int)(v)
 }
 
 // Custom: GetFrameNumberAddr gets `AVCodecContext.frame_number` address.
-func (avctx *AvCodecContext) GetFrameNumberAddr() *int32 {
+func (avctx *AVCodecContext) GetFrameNumberAddr() *int32 {
 	return (*int32)(&avctx.frame_number)
 }
 
-// Custom: Get BlockAlign gets `AVCodecContext.block_align` value.
-func (avctx *AvCodecContext) GetBlockAlign() int32 {
+// Custom: GetBlockAlign gets `AVCodecContext.block_align` value.
+func (avctx *AVCodecContext) GetBlockAlign() int32 {
 	return (int32)(avctx.block_align)
 }
 
 // Custom: SetBlockAlign sets `AVCodecContext.block_align` value.
-func (avctx *AvCodecContext) SetBlockAlign(v int32) {
+func (avctx *AVCodecContext) SetBlockAlign(v int32) {
 	avctx.block_align = (C.int)(v)
 }
 
 // Custom: GetBlockAlignAddr gets `AVCodecContext.block_align` address.
-func (avctx *AvCodecContext) GetBlockAlignAddr() *int32 {
+func (avctx *AVCodecContext) GetBlockAlignAddr() *int32 {
 	return (*int32)(&avctx.block_align)
 }
 
-// Custom: Get Cutoff gets `AVCodecContext.cutoff` value.
-func (avctx *AvCodecContext) GetCutoff() int32 {
+// Custom: GetCutoff gets `AVCodecContext.cutoff` value.
+func (avctx *AVCodecContext) GetCutoff() int32 {
 	return (int32)(avctx.cutoff)
 }
 
 // Custom: SetCutoff sets `AVCodecContext.cutoff` value.
-func (avctx *AvCodecContext) SetCutoff(v int32) {
+func (avctx *AVCodecContext) SetCutoff(v int32) {
 	avctx.cutoff = (C.int)(v)
 }
 
 // Custom: GetCutoffAddr gets `AVCodecContext.cutoff` address.
-func (avctx *AvCodecContext) GetCutoffAddr() *int32 {
+func (avctx *AVCodecContext) GetCutoffAddr() *int32 {
 	return (*int32)(&avctx.cutoff)
 }
 
-// Custom: Get ChannelLayout gets `AVCodecContext.channel_layout` value.
-func (avctx *AvCodecContext) GetChannelLayout() uint64 {
+// Custom: GetChannelLayout gets `AVCodecContext.channel_layout` value.
+func (avctx *AVCodecContext) GetChannelLayout() uint64 {
 	return (uint64)(avctx.channel_layout)
 }
 
 // Custom: SetChannelLayout sets `AVCodecContext.channel_layout` value.
-func (avctx *AvCodecContext) SetChannelLayout(v uint64) {
+func (avctx *AVCodecContext) SetChannelLayout(v uint64) {
 	avctx.channel_layout = (C.uint64_t)(v)
 }
 
 // Custom: GetChannelLayoutAddr gets `AVCodecContext.channel_layout` address.
-func (avctx *AvCodecContext) GetChannelLayoutAddr() *uint64 {
+func (avctx *AVCodecContext) GetChannelLayoutAddr() *uint64 {
 	return (*uint64)(&avctx.channel_layout)
 }
 
-// Custom: Get RequestChannelLayout gets `AVCodecContext.request_channel_layout` value.
-func (avctx *AvCodecContext) GetRequestChannelLayout() uint64 {
+// Custom: GetRequestChannelLayout gets `AVCodecContext.request_channel_layout` value.
+func (avctx *AVCodecContext) GetRequestChannelLayout() uint64 {
 	return (uint64)(avctx.request_channel_layout)
 }
 
 // Custom: SetRequestChannelLayout sets `AVCodecContext.request_channel_layout` value.
-func (avctx *AvCodecContext) SetRequestChannelLayout(v uint64) {
+func (avctx *AVCodecContext) SetRequestChannelLayout(v uint64) {
 	avctx.request_channel_layout = (C.uint64_t)(v)
 }
 
 // Custom: GetRequestChannelLayoutAddr gets `AVCodecContext.request_channel_layout` address.
-func (avctx *AvCodecContext) GetRequestChannelLayoutAddr() *uint64 {
+func (avctx *AVCodecContext) GetRequestChannelLayoutAddr() *uint64 {
 	return (*uint64)(&avctx.request_channel_layout)
 }
 
-// Custom: Get AudioServiceType gets `AVCodecContext.audio_service_type` value.
-func (avctx *AvCodecContext) GetAudioServiceType() AvAudioServiceType {
-	return (AvAudioServiceType)(avctx.audio_service_type)
+// Custom: GetAudioServiceType gets `AVCodecContext.audio_service_type` value.
+func (avctx *AVCodecContext) GetAudioServiceType() AVAudioServiceType {
+	return (AVAudioServiceType)(avctx.audio_service_type)
 }
 
 // Custom: SetAudioServiceType sets `AVCodecContext.audio_service_type` value.
-func (avctx *AvCodecContext) SetAudioServiceType(v AvAudioServiceType) {
+func (avctx *AVCodecContext) SetAudioServiceType(v AVAudioServiceType) {
 	avctx.audio_service_type = (C.enum_AVAudioServiceType)(v)
 }
 
 // Custom: GetAudioServiceTypeAddr gets `AVCodecContext.audio_service_type` address.
-func (avctx *AvCodecContext) GetAudioServiceTypeAddr() *AvAudioServiceType {
-	return (*AvAudioServiceType)(unsafe.Pointer(&avctx.audio_service_type))
+func (avctx *AVCodecContext) GetAudioServiceTypeAddr() *AVAudioServiceType {
+	return (*AVAudioServiceType)(unsafe.Pointer(&avctx.audio_service_type))
 }
 
-// Custom: Get RequestSampleFmt gets `AVCodecContext.request_sample_fmt` value.
-func (avctx *AvCodecContext) GetRequestSampleFmt() AvSampleFormat {
-	return (AvSampleFormat)(avctx.request_sample_fmt)
+// Custom: GetRequestSampleFmt gets `AVCodecContext.request_sample_fmt` value.
+func (avctx *AVCodecContext) GetRequestSampleFmt() AVSampleFormat {
+	return (AVSampleFormat)(avctx.request_sample_fmt)
 }
 
 // Custom: SetRequestSampleFmt sets `AVCodecContext.request_sample_fmt` value.
-func (avctx *AvCodecContext) SetRequestSampleFmt(v AvSampleFormat) {
+func (avctx *AVCodecContext) SetRequestSampleFmt(v AVSampleFormat) {
 	avctx.request_sample_fmt = (C.enum_AVSampleFormat)(v)
 }
 
 // Custom: GetRequestSampleFmtAddr gets `AVCodecContext.request_sample_fmt` address.
-func (avctx *AvCodecContext) GetRequestSampleFmtAddr() *AvSampleFormat {
-	return (*AvSampleFormat)(&avctx.request_sample_fmt)
+func (avctx *AVCodecContext) GetRequestSampleFmtAddr() *AVSampleFormat {
+	return (*AVSampleFormat)(&avctx.request_sample_fmt)
 }
 
-// Custom: Get RefcountedFrames gets `AVCodecContext.refcounted_frames` value.
-func (avctx *AvCodecContext) GetRefcountedFrames() int32 {
+// typedef int (*avcodec_context_get_buffer2_func)(struct AVCodecContext *s, AVFrame *frame, int flags);
+type AVCodecContextGetBuffer2Func = C.avcodec_context_get_buffer2_func
+
+// Custom: SetGetBuffer2 sets `AVCodecContext.get_buffer2` value.
+func (avctx *AVCodecContext) SetGetBuffer2(v AVCodecContextGetBuffer2Func) {
+	avctx.get_buffer2 = (C.avcodec_context_get_buffer2_func)(v)
+}
+
+// Custom: GetRefcountedFrames gets `AVCodecContext.refcounted_frames` value.
+func (avctx *AVCodecContext) GetRefcountedFrames() int32 {
 	return (int32)(avctx.refcounted_frames)
 }
 
 // Custom: SetRefcountedFrames sets `AVCodecContext.refcounted_frames` value.
-func (avctx *AvCodecContext) SetRefcountedFrames(v int32) {
+func (avctx *AVCodecContext) SetRefcountedFrames(v int32) {
 	avctx.refcounted_frames = (C.int)(v)
 }
 
 // Custom: GetRefcountedFramesAddr gets `AVCodecContext.refcounted_frames` address.
-func (avctx *AvCodecContext) GetRefcountedFramesAddr() *int32 {
+func (avctx *AVCodecContext) GetRefcountedFramesAddr() *int32 {
 	return (*int32)(&avctx.refcounted_frames)
 }
 
-// Custom: Get Qcompress gets `AVCodecContext.qcompress` value.
-func (avctx *AvCodecContext) GetQcompress() float32 {
+// Custom: GetQcompress gets `AVCodecContext.qcompress` value.
+func (avctx *AVCodecContext) GetQcompress() float32 {
 	return (float32)(avctx.qcompress)
 }
 
 // Custom: SetQcompress sets `AVCodecContext.qcompress` value.
-func (avctx *AvCodecContext) SetQcompress(v float32) {
+func (avctx *AVCodecContext) SetQcompress(v float32) {
 	avctx.qcompress = (C.float)(v)
 }
 
 // Custom: GetQcompressAddr gets `AVCodecContext.qcompress` address.
-func (avctx *AvCodecContext) GetQcompressAddr() *float32 {
+func (avctx *AVCodecContext) GetQcompressAddr() *float32 {
 	return (*float32)(&avctx.qcompress)
 }
 
-// Custom: Get Qblur gets `AVCodecContext.qblur` value.
-func (avctx *AvCodecContext) GetQblur() float32 {
+// Custom: GetQblur gets `AVCodecContext.qblur` value.
+func (avctx *AVCodecContext) GetQblur() float32 {
 	return (float32)(avctx.qblur)
 }
 
 // Custom: SetQblur sets `AVCodecContext.qblur` value.
-func (avctx *AvCodecContext) SetQblur(v float32) {
+func (avctx *AVCodecContext) SetQblur(v float32) {
 	avctx.qblur = (C.float)(v)
 }
 
 // Custom: GetQblurAddr gets `AVCodecContext.qblur` address.
-func (avctx *AvCodecContext) GetQblurAddr() *float32 {
+func (avctx *AVCodecContext) GetQblurAddr() *float32 {
 	return (*float32)(&avctx.qblur)
 }
 
-// Custom: Get Qmin gets `AVCodecContext.qmin` value.
-func (avctx *AvCodecContext) GetQmin() int32 {
+// Custom: GetQmin gets `AVCodecContext.qmin` value.
+func (avctx *AVCodecContext) GetQmin() int32 {
 	return (int32)(avctx.qmin)
 }
 
 // Custom: SetQmin sets `AVCodecContext.qmin` value.
-func (avctx *AvCodecContext) SetQmin(v int32) {
+func (avctx *AVCodecContext) SetQmin(v int32) {
 	avctx.qmin = (C.int)(v)
 }
 
 // Custom: GetQminAddr gets `AVCodecContext.qmin` address.
-func (avctx *AvCodecContext) GetQminAddr() *int32 {
+func (avctx *AVCodecContext) GetQminAddr() *int32 {
 	return (*int32)(&avctx.qmin)
 }
 
-// Custom: Get Qmax gets `AVCodecContext.qmax` value.
-func (avctx *AvCodecContext) GetQmax() int32 {
+// Custom: GetQmax gets `AVCodecContext.qmax` value.
+func (avctx *AVCodecContext) GetQmax() int32 {
 	return (int32)(avctx.qmax)
 }
 
 // Custom: SetQmax sets `AVCodecContext.qmax` value.
-func (avctx *AvCodecContext) SetQmax(v int32) {
+func (avctx *AVCodecContext) SetQmax(v int32) {
 	avctx.qmax = (C.int)(v)
 }
 
 // Custom: GetQmaxAddr gets `AVCodecContext.qmax` address.
-func (avctx *AvCodecContext) GetQmaxAddr() *int32 {
+func (avctx *AVCodecContext) GetQmaxAddr() *int32 {
 	return (*int32)(&avctx.qmax)
 }
 
-// Custom: Get MaxQdiff gets `AVCodecContext.max_qdiff` value.
-func (avctx *AvCodecContext) GetMaxQdiff() int32 {
+// Custom: GetMaxQdiff gets `AVCodecContext.max_qdiff` value.
+func (avctx *AVCodecContext) GetMaxQdiff() int32 {
 	return (int32)(avctx.max_qdiff)
 }
 
 // Custom: SetMaxQdiff sets `AVCodecContext.max_qdiff` value.
-func (avctx *AvCodecContext) SetMaxQdiff(v int32) {
+func (avctx *AVCodecContext) SetMaxQdiff(v int32) {
 	avctx.max_qdiff = (C.int)(v)
 }
 
 // Custom: GetMaxQdiffAddr gets `AVCodecContext.max_qdiff` address.
-func (avctx *AvCodecContext) GetMaxQdiffAddr() *int32 {
+func (avctx *AVCodecContext) GetMaxQdiffAddr() *int32 {
 	return (*int32)(&avctx.max_qdiff)
 }
 
-// Custom: Get RcBufferSize gets `AVCodecContext.rc_buffer_size` value.
-func (avctx *AvCodecContext) GetRcBufferSize() int32 {
+// Custom: GetRcBufferSize gets `AVCodecContext.rc_buffer_size` value.
+func (avctx *AVCodecContext) GetRcBufferSize() int32 {
 	return (int32)(avctx.rc_buffer_size)
 }
 
 // Custom: SetRcBufferSize sets `AVCodecContext.rc_buffer_size` value.
-func (avctx *AvCodecContext) SetRcBufferSize(v int32) {
+func (avctx *AVCodecContext) SetRcBufferSize(v int32) {
 	avctx.rc_buffer_size = (C.int)(v)
 }
 
 // Custom: GetRcBufferSizeAddr gets `AVCodecContext.rc_buffer_size` address.
-func (avctx *AvCodecContext) GetRcBufferSizeAddr() *int32 {
+func (avctx *AVCodecContext) GetRcBufferSizeAddr() *int32 {
 	return (*int32)(&avctx.rc_buffer_size)
 }
 
-// Custom: Get RcOverrideCount gets `AVCodecContext.rc_override_count` value.
-func (avctx *AvCodecContext) GetRcOverrideCount() int32 {
+// Custom: GetRcOverrideCount gets `AVCodecContext.rc_override_count` value.
+func (avctx *AVCodecContext) GetRcOverrideCount() int32 {
 	return (int32)(avctx.rc_override_count)
 }
 
 // Custom: SetRcOverrideCount sets `AVCodecContext.rc_override_count` value.
-func (avctx *AvCodecContext) SetRcOverrideCount(v int32) {
+func (avctx *AVCodecContext) SetRcOverrideCount(v int32) {
 	avctx.rc_override_count = (C.int)(v)
 }
 
 // Custom: GetRcOverrideCountAddr gets `AVCodecContext.rc_override_count` address.
-func (avctx *AvCodecContext) GetRcOverrideCountAddr() *int32 {
+func (avctx *AVCodecContext) GetRcOverrideCountAddr() *int32 {
 	return (*int32)(&avctx.rc_override_count)
 }
 
-// Custom: Get RcOverride gets `AVCodecContext.rc_override` value.
-func (avctx *AvCodecContext) GetRcOverride() *RcOverride {
+// Custom: GetRcOverride gets `AVCodecContext.rc_override` value.
+func (avctx *AVCodecContext) GetRcOverride() *RcOverride {
 	return (*RcOverride)(avctx.rc_override)
 }
 
 // Custom: SetRcOverride sets `AVCodecContext.rc_override` value.
-func (avctx *AvCodecContext) SetRcOverride(v *RcOverride) {
+func (avctx *AVCodecContext) SetRcOverride(v *RcOverride) {
 	avctx.rc_override = (*C.RcOverride)(v)
 }
 
 // Custom: GetRcOverrideAddr gets `AVCodecContext.rc_override` address.
-func (avctx *AvCodecContext) GetRcOverrideAddr() **RcOverride {
+func (avctx *AVCodecContext) GetRcOverrideAddr() **RcOverride {
 	return (**RcOverride)(unsafe.Pointer(&avctx.rc_override))
 }
 
-// Custom: Get RcMaxRate gets `AVCodecContext.rc_max_rate` value.
-func (avctx *AvCodecContext) GetRcMaxRate() int64 {
+// Custom: GetRcMaxRate gets `AVCodecContext.rc_max_rate` value.
+func (avctx *AVCodecContext) GetRcMaxRate() int64 {
 	return (int64)(avctx.rc_max_rate)
 }
 
 // Custom: SetRcMaxRate sets `AVCodecContext.rc_max_rate` value.
-func (avctx *AvCodecContext) SetRcMaxRate(v int64) {
+func (avctx *AVCodecContext) SetRcMaxRate(v int64) {
 	avctx.rc_max_rate = (C.int64_t)(v)
 }
 
 // Custom: GetRcMaxRateAddr gets `AVCodecContext.rc_max_rate` address.
-func (avctx *AvCodecContext) GetRcMaxRateAddr() *int64 {
+func (avctx *AVCodecContext) GetRcMaxRateAddr() *int64 {
 	return (*int64)(&avctx.rc_max_rate)
 }
 
-// Custom: Get RcMinRate gets `AVCodecContext.rc_min_rate` value.
-func (avctx *AvCodecContext) GetRcMinRate() int64 {
+// Custom: GetRcMinRate gets `AVCodecContext.rc_min_rate` value.
+func (avctx *AVCodecContext) GetRcMinRate() int64 {
 	return (int64)(avctx.rc_min_rate)
 }
 
 // Custom: SetRcMinRate sets `AVCodecContext.rc_min_rate` value.
-func (avctx *AvCodecContext) SetRcMinRate(v int64) {
+func (avctx *AVCodecContext) SetRcMinRate(v int64) {
 	avctx.rc_min_rate = (C.int64_t)(v)
 }
 
 // Custom: GetRcMinRateAddr gets `AVCodecContext.rc_min_rate` address.
-func (avctx *AvCodecContext) GetRcMinRateAddr() *int64 {
+func (avctx *AVCodecContext) GetRcMinRateAddr() *int64 {
 	return (*int64)(&avctx.rc_min_rate)
 }
 
-// Custom: Get RcMaxAvailableVbvUse gets `AVCodecContext.rc_max_available_vbv_use` value.
-func (avctx *AvCodecContext) GetRcMaxAvailableVbvUse() float32 {
+// Custom: GetRcMaxAvailableVbvUse gets `AVCodecContext.rc_max_available_vbv_use` value.
+func (avctx *AVCodecContext) GetRcMaxAvailableVbvUse() float32 {
 	return (float32)(avctx.rc_max_available_vbv_use)
 }
 
 // Custom: SetRcMaxAvailableVbvUse sets `AVCodecContext.rc_max_available_vbv_use` value.
-func (avctx *AvCodecContext) SetRcMaxAvailableVbvUse(v float32) {
+func (avctx *AVCodecContext) SetRcMaxAvailableVbvUse(v float32) {
 	avctx.rc_max_available_vbv_use = (C.float)(v)
 }
 
 // Custom: GetRcMaxAvailableVbvUseAddr gets `AVCodecContext.rc_max_available_vbv_use` address.
-func (avctx *AvCodecContext) GetRcMaxAvailableVbvUseAddr() *float32 {
+func (avctx *AVCodecContext) GetRcMaxAvailableVbvUseAddr() *float32 {
 	return (*float32)(&avctx.rc_max_available_vbv_use)
 }
 
-// Custom: Get RcMinVbvOverflowUse gets `AVCodecContext.rc_min_vbv_overflow_use` value.
-func (avctx *AvCodecContext) GetRcMinVbvOverflowUse() float32 {
+// Custom: GetRcMinVbvOverflowUse gets `AVCodecContext.rc_min_vbv_overflow_use` value.
+func (avctx *AVCodecContext) GetRcMinVbvOverflowUse() float32 {
 	return (float32)(avctx.rc_min_vbv_overflow_use)
 }
 
 // Custom: SetRcMinVbvOverflowUse sets `AVCodecContext.rc_min_vbv_overflow_use` value.
-func (avctx *AvCodecContext) SetRcMinVbvOverflowUse(v float32) {
+func (avctx *AVCodecContext) SetRcMinVbvOverflowUse(v float32) {
 	avctx.rc_min_vbv_overflow_use = (C.float)(v)
 }
 
 // Custom: GetRcMinVbvOverflowUseAddr gets `AVCodecContext.rc_min_vbv_overflow_use` address.
-func (avctx *AvCodecContext) GetRcMinVbvOverflowUseAddr() *float32 {
+func (avctx *AVCodecContext) GetRcMinVbvOverflowUseAddr() *float32 {
 	return (*float32)(&avctx.rc_min_vbv_overflow_use)
 }
 
-// Custom: Get RcInitialBufferOccupancy gets `AVCodecContext.rc_initial_buffer_occupancy` value.
-func (avctx *AvCodecContext) GetRcInitialBufferOccupancy() int32 {
+// Custom: GetRcInitialBufferOccupancy gets `AVCodecContext.rc_initial_buffer_occupancy` value.
+func (avctx *AVCodecContext) GetRcInitialBufferOccupancy() int32 {
 	return (int32)(avctx.rc_initial_buffer_occupancy)
 }
 
 // Custom: SetRcInitialBufferOccupancy sets `AVCodecContext.rc_initial_buffer_occupancy` value.
-func (avctx *AvCodecContext) SetRcInitialBufferOccupancy(v int32) {
+func (avctx *AVCodecContext) SetRcInitialBufferOccupancy(v int32) {
 	avctx.rc_initial_buffer_occupancy = (C.int)(v)
 }
 
 // Custom: GetRcInitialBufferOccupancyAddr gets `AVCodecContext.rc_initial_buffer_occupancy` address.
-func (avctx *AvCodecContext) GetRcInitialBufferOccupancyAddr() *int32 {
+func (avctx *AVCodecContext) GetRcInitialBufferOccupancyAddr() *int32 {
 	return (*int32)(&avctx.rc_initial_buffer_occupancy)
 }
 
@@ -1689,328 +1899,328 @@ const (
 	FF_CODER_TYPE_RLE = int32(C.FF_CODER_TYPE_RLE)
 )
 
-// Custom: Get CoderType gets `AVCodecContext.coder_type` value.
-func (avctx *AvCodecContext) GetCoderType() int32 {
+// Custom: GetCoderType gets `AVCodecContext.coder_type` value.
+func (avctx *AVCodecContext) GetCoderType() int32 {
 	return (int32)(avctx.coder_type)
 }
 
 // Custom: SetCoderType sets `AVCodecContext.coder_type` value.
-func (avctx *AvCodecContext) SetCoderType(v int32) {
+func (avctx *AVCodecContext) SetCoderType(v int32) {
 	avctx.coder_type = (C.int)(v)
 }
 
 // Custom: GetCoderTypeAddr gets `AVCodecContext.coder_type` address.
-func (avctx *AvCodecContext) GetCoderTypeAddr() *int32 {
+func (avctx *AVCodecContext) GetCoderTypeAddr() *int32 {
 	return (*int32)(&avctx.coder_type)
 }
 
-// Custom: Get ContextModel gets `AVCodecContext.context_model` value.
-func (avctx *AvCodecContext) GetContextModel() int32 {
+// Custom: GetContextModel gets `AVCodecContext.context_model` value.
+func (avctx *AVCodecContext) GetContextModel() int32 {
 	return (int32)(avctx.context_model)
 }
 
 // Custom: SetContextModel sets `AVCodecContext.context_model` value.
-func (avctx *AvCodecContext) SetContextModel(v int32) {
+func (avctx *AVCodecContext) SetContextModel(v int32) {
 	avctx.context_model = (C.int)(v)
 }
 
 // Custom: GetContextModelAddr gets `AVCodecContext.context_model` address.
-func (avctx *AvCodecContext) GetContextModelAddr() *int32 {
+func (avctx *AVCodecContext) GetContextModelAddr() *int32 {
 	return (*int32)(&avctx.context_model)
 }
 
-// Custom: Get FrameSkipThreshold gets `AVCodecContext.frame_skip_threshold` value.
-func (avctx *AvCodecContext) GetFrameSkipThreshold() int32 {
+// Custom: GetFrameSkipThreshold gets `AVCodecContext.frame_skip_threshold` value.
+func (avctx *AVCodecContext) GetFrameSkipThreshold() int32 {
 	return (int32)(avctx.frame_skip_threshold)
 }
 
 // Custom: SetFrameSkipThreshold sets `AVCodecContext.frame_skip_threshold` value.
-func (avctx *AvCodecContext) SetFrameSkipThreshold(v int32) {
+func (avctx *AVCodecContext) SetFrameSkipThreshold(v int32) {
 	avctx.frame_skip_threshold = (C.int)(v)
 }
 
 // Custom: GetFrameSkipThresholdAddr gets `AVCodecContext.frame_skip_threshold` address.
-func (avctx *AvCodecContext) GetFrameSkipThresholdAddr() *int32 {
+func (avctx *AVCodecContext) GetFrameSkipThresholdAddr() *int32 {
 	return (*int32)(&avctx.frame_skip_threshold)
 }
 
-// Custom: Get FrameSkipFactor gets `AVCodecContext.frame_skip_factor` value.
-func (avctx *AvCodecContext) GetFrameSkipFactor() int32 {
+// Custom: GetFrameSkipFactor gets `AVCodecContext.frame_skip_factor` value.
+func (avctx *AVCodecContext) GetFrameSkipFactor() int32 {
 	return (int32)(avctx.frame_skip_factor)
 }
 
 // Custom: SetFrameSkipFactor sets `AVCodecContext.frame_skip_factor` value.
-func (avctx *AvCodecContext) SetFrameSkipFactor(v int32) {
+func (avctx *AVCodecContext) SetFrameSkipFactor(v int32) {
 	avctx.frame_skip_factor = (C.int)(v)
 }
 
 // Custom: GetFrameSkipFactorAddr gets `AVCodecContext.frame_skip_factor` address.
-func (avctx *AvCodecContext) GetFrameSkipFactorAddr() *int32 {
+func (avctx *AVCodecContext) GetFrameSkipFactorAddr() *int32 {
 	return (*int32)(&avctx.frame_skip_factor)
 }
 
-// Custom: Get FrameSkipExp gets `AVCodecContext.frame_skip_exp` value.
-func (avctx *AvCodecContext) GetFrameSkipExp() int32 {
+// Custom: GetFrameSkipExp gets `AVCodecContext.frame_skip_exp` value.
+func (avctx *AVCodecContext) GetFrameSkipExp() int32 {
 	return (int32)(avctx.frame_skip_exp)
 }
 
 // Custom: SetFrameSkipExp sets `AVCodecContext.frame_skip_exp` value.
-func (avctx *AvCodecContext) SetFrameSkipExp(v int32) {
+func (avctx *AVCodecContext) SetFrameSkipExp(v int32) {
 	avctx.frame_skip_exp = (C.int)(v)
 }
 
 // Custom: GetFrameSkipExpAddr gets `AVCodecContext.frame_skip_exp` address.
-func (avctx *AvCodecContext) GetFrameSkipExpAddr() *int32 {
+func (avctx *AVCodecContext) GetFrameSkipExpAddr() *int32 {
 	return (*int32)(&avctx.frame_skip_exp)
 }
 
-// Custom: Get FrameSkipCmp gets `AVCodecContext.frame_skip_cmp` value.
-func (avctx *AvCodecContext) GetFrameSkipCmp() int32 {
+// Custom: GetFrameSkipCmp gets `AVCodecContext.frame_skip_cmp` value.
+func (avctx *AVCodecContext) GetFrameSkipCmp() int32 {
 	return (int32)(avctx.frame_skip_cmp)
 }
 
 // Custom: SetFrameSkipCmp sets `AVCodecContext.frame_skip_cmp` value.
-func (avctx *AvCodecContext) SetFrameSkipCmp(v int32) {
+func (avctx *AVCodecContext) SetFrameSkipCmp(v int32) {
 	avctx.frame_skip_cmp = (C.int)(v)
 }
 
 // Custom: GetFrameSkipCmpAddr gets `AVCodecContext.frame_skip_cmp` address.
-func (avctx *AvCodecContext) GetFrameSkipCmpAddr() *int32 {
+func (avctx *AVCodecContext) GetFrameSkipCmpAddr() *int32 {
 	return (*int32)(&avctx.frame_skip_cmp)
 }
 
-// Custom: Get Trellis gets `AVCodecContext.trellis` value.
-func (avctx *AvCodecContext) GetTrellis() int32 {
+// Custom: GetTrellis gets `AVCodecContext.trellis` value.
+func (avctx *AVCodecContext) GetTrellis() int32 {
 	return (int32)(avctx.trellis)
 }
 
 // Custom: SetTrellis sets `AVCodecContext.trellis` value.
-func (avctx *AvCodecContext) SetTrellis(v int32) {
+func (avctx *AVCodecContext) SetTrellis(v int32) {
 	avctx.trellis = (C.int)(v)
 }
 
 // Custom: GetTrellisAddr gets `AVCodecContext.trellis` address.
-func (avctx *AvCodecContext) GetTrellisAddr() *int32 {
+func (avctx *AVCodecContext) GetTrellisAddr() *int32 {
 	return (*int32)(&avctx.trellis)
 }
 
-// Custom: Get MinPredictionOrder gets `AVCodecContext.min_prediction_order` value.
-func (avctx *AvCodecContext) GetMinPredictionOrder() int32 {
+// Custom: GetMinPredictionOrder gets `AVCodecContext.min_prediction_order` value.
+func (avctx *AVCodecContext) GetMinPredictionOrder() int32 {
 	return (int32)(avctx.min_prediction_order)
 }
 
 // Custom: SetMinPredictionOrder sets `AVCodecContext.min_prediction_order` value.
-func (avctx *AvCodecContext) SetMinPredictionOrder(v int32) {
+func (avctx *AVCodecContext) SetMinPredictionOrder(v int32) {
 	avctx.min_prediction_order = (C.int)(v)
 }
 
 // Custom: GetMinPredictionOrderAddr gets `AVCodecContext.min_prediction_order` address.
-func (avctx *AvCodecContext) GetMinPredictionOrderAddr() *int32 {
+func (avctx *AVCodecContext) GetMinPredictionOrderAddr() *int32 {
 	return (*int32)(&avctx.min_prediction_order)
 }
 
-// Custom: Get MaxPredictionOrder gets `AVCodecContext.max_prediction_order` value.
-func (avctx *AvCodecContext) GetMaxPredictionOrder() int32 {
+// Custom: GetMaxPredictionOrder gets `AVCodecContext.max_prediction_order` value.
+func (avctx *AVCodecContext) GetMaxPredictionOrder() int32 {
 	return (int32)(avctx.max_prediction_order)
 }
 
 // Custom: SetMaxPredictionOrder sets `AVCodecContext.max_prediction_order` value.
-func (avctx *AvCodecContext) SetMaxPredictionOrder(v int32) {
+func (avctx *AVCodecContext) SetMaxPredictionOrder(v int32) {
 	avctx.max_prediction_order = (C.int)(v)
 }
 
 // Custom: GetMaxPredictionOrderAddr gets `AVCodecContext.max_prediction_order` address.
-func (avctx *AvCodecContext) GetMaxPredictionOrderAddr() *int32 {
+func (avctx *AVCodecContext) GetMaxPredictionOrderAddr() *int32 {
 	return (*int32)(&avctx.max_prediction_order)
 }
 
-// Custom: Get TimecodeFrameStart gets `AVCodecContext.timecode_frame_start` value.
-func (avctx *AvCodecContext) GetTimecodeFrameStart() int64 {
+// Custom: GetTimecodeFrameStart gets `AVCodecContext.timecode_frame_start` value.
+func (avctx *AVCodecContext) GetTimecodeFrameStart() int64 {
 	return (int64)(avctx.timecode_frame_start)
 }
 
 // Custom: SetTimecodeFrameStart sets `AVCodecContext.timecode_frame_start` value.
-func (avctx *AvCodecContext) SetTimecodeFrameStart(v int64) {
+func (avctx *AVCodecContext) SetTimecodeFrameStart(v int64) {
 	avctx.timecode_frame_start = (C.int64_t)(v)
 }
 
 // Custom: GetTimecodeFrameStartAddr gets `AVCodecContext.timecode_frame_start` address.
-func (avctx *AvCodecContext) GetTimecodeFrameStartAddr() *int64 {
+func (avctx *AVCodecContext) GetTimecodeFrameStartAddr() *int64 {
 	return (*int64)(&avctx.timecode_frame_start)
 }
 
-// Custom: Get RtpPayloadSize gets `AVCodecContext.rtp_payload_size` value.
-func (avctx *AvCodecContext) GetRtpPayloadSize() int32 {
+// Custom: GetRtpPayloadSize gets `AVCodecContext.rtp_payload_size` value.
+func (avctx *AVCodecContext) GetRtpPayloadSize() int32 {
 	return (int32)(avctx.rtp_payload_size)
 }
 
 // Custom: SetRtpPayloadSize sets `AVCodecContext.rtp_payload_size` value.
-func (avctx *AvCodecContext) SetRtpPayloadSize(v int32) {
+func (avctx *AVCodecContext) SetRtpPayloadSize(v int32) {
 	avctx.rtp_payload_size = (C.int)(v)
 }
 
 // Custom: GetRtpPayloadSizeAddr gets `AVCodecContext.rtp_payload_size` address.
-func (avctx *AvCodecContext) GetRtpPayloadSizeAddr() *int32 {
+func (avctx *AVCodecContext) GetRtpPayloadSizeAddr() *int32 {
 	return (*int32)(&avctx.rtp_payload_size)
 }
 
-// Custom: Get MvBits gets `AVCodecContext.mv_bits` value.
-func (avctx *AvCodecContext) GetMvBits() int32 {
+// Custom: GetMvBits gets `AVCodecContext.mv_bits` value.
+func (avctx *AVCodecContext) GetMvBits() int32 {
 	return (int32)(avctx.mv_bits)
 }
 
 // Custom: SetMvBits sets `AVCodecContext.mv_bits` value.
-func (avctx *AvCodecContext) SetMvBits(v int32) {
+func (avctx *AVCodecContext) SetMvBits(v int32) {
 	avctx.mv_bits = (C.int)(v)
 }
 
 // Custom: GetMvBitsAddr gets `AVCodecContext.mv_bits` address.
-func (avctx *AvCodecContext) GetMvBitsAddr() *int32 {
+func (avctx *AVCodecContext) GetMvBitsAddr() *int32 {
 	return (*int32)(&avctx.mv_bits)
 }
 
-// Custom: Get HeaderBits gets `AVCodecContext.header_bits` value.
-func (avctx *AvCodecContext) GetHeaderBits() int32 {
+// Custom: GetHeaderBits gets `AVCodecContext.header_bits` value.
+func (avctx *AVCodecContext) GetHeaderBits() int32 {
 	return (int32)(avctx.header_bits)
 }
 
 // Custom: SetHeaderBits sets `AVCodecContext.header_bits` value.
-func (avctx *AvCodecContext) SetHeaderBits(v int32) {
+func (avctx *AVCodecContext) SetHeaderBits(v int32) {
 	avctx.header_bits = (C.int)(v)
 }
 
 // Custom: GetHeaderBitsAddr gets `AVCodecContext.header_bits` address.
-func (avctx *AvCodecContext) GetHeaderBitsAddr() *int32 {
+func (avctx *AVCodecContext) GetHeaderBitsAddr() *int32 {
 	return (*int32)(&avctx.header_bits)
 }
 
-// Custom: Get ITexBits gets `AVCodecContext.i_tex_bits` value.
-func (avctx *AvCodecContext) GetITexBits() int32 {
+// Custom: GetITexBits gets `AVCodecContext.i_tex_bits` value.
+func (avctx *AVCodecContext) GetITexBits() int32 {
 	return (int32)(avctx.i_tex_bits)
 }
 
 // Custom: SetITexBits sets `AVCodecContext.i_tex_bits` value.
-func (avctx *AvCodecContext) SetITexBits(v int32) {
+func (avctx *AVCodecContext) SetITexBits(v int32) {
 	avctx.i_tex_bits = (C.int)(v)
 }
 
 // Custom: GetITexBitsAddr gets `AVCodecContext.i_tex_bits` address.
-func (avctx *AvCodecContext) GetITexBitsAddr() *int32 {
+func (avctx *AVCodecContext) GetITexBitsAddr() *int32 {
 	return (*int32)(&avctx.i_tex_bits)
 }
 
-// Custom: Get PTexBits gets `AVCodecContext.p_tex_bits` value.
-func (avctx *AvCodecContext) GetPTexBits() int32 {
+// Custom: GetPTexBits gets `AVCodecContext.p_tex_bits` value.
+func (avctx *AVCodecContext) GetPTexBits() int32 {
 	return (int32)(avctx.p_tex_bits)
 }
 
 // Custom: SetPTexBits sets `AVCodecContext.p_tex_bits` value.
-func (avctx *AvCodecContext) SetPTexBits(v int32) {
+func (avctx *AVCodecContext) SetPTexBits(v int32) {
 	avctx.p_tex_bits = (C.int)(v)
 }
 
 // Custom: GetPTexBitsAddr gets `AVCodecContext.p_tex_bits` address.
-func (avctx *AvCodecContext) GetPTexBitsAddr() *int32 {
+func (avctx *AVCodecContext) GetPTexBitsAddr() *int32 {
 	return (*int32)(&avctx.p_tex_bits)
 }
 
-// Custom: Get ICount gets `AVCodecContext.i_count` value.
-func (avctx *AvCodecContext) GetICount() int32 {
+// Custom: GetICount gets `AVCodecContext.i_count` value.
+func (avctx *AVCodecContext) GetICount() int32 {
 	return (int32)(avctx.i_count)
 }
 
 // Custom: SetICount sets `AVCodecContext.i_count` value.
-func (avctx *AvCodecContext) SetICount(v int32) {
+func (avctx *AVCodecContext) SetICount(v int32) {
 	avctx.i_count = (C.int)(v)
 }
 
 // Custom: GetICountAddr gets `AVCodecContext.i_count` address.
-func (avctx *AvCodecContext) GetICountAddr() *int32 {
+func (avctx *AVCodecContext) GetICountAddr() *int32 {
 	return (*int32)(&avctx.i_count)
 }
 
-// Custom: Get PCount gets `AVCodecContext.p_count` value.
-func (avctx *AvCodecContext) GetPCount() int32 {
+// Custom: GetPCount gets `AVCodecContext.p_count` value.
+func (avctx *AVCodecContext) GetPCount() int32 {
 	return (int32)(avctx.p_count)
 }
 
 // Custom: SetPCount sets `AVCodecContext.p_count` value.
-func (avctx *AvCodecContext) SetPCount(v int32) {
+func (avctx *AVCodecContext) SetPCount(v int32) {
 	avctx.p_count = (C.int)(v)
 }
 
 // Custom: GetPCountAddr gets `AVCodecContext.p_count` address.
-func (avctx *AvCodecContext) GetPCountAddr() *int32 {
+func (avctx *AVCodecContext) GetPCountAddr() *int32 {
 	return (*int32)(&avctx.p_count)
 }
 
-// Custom: Get SkipCount gets `AVCodecContext.skip_count` value.
-func (avctx *AvCodecContext) GetSkipCount() int32 {
+// Custom: GetSkipCount gets `AVCodecContext.skip_count` value.
+func (avctx *AVCodecContext) GetSkipCount() int32 {
 	return (int32)(avctx.skip_count)
 }
 
 // Custom: SetSkipCount sets `AVCodecContext.skip_count` value.
-func (avctx *AvCodecContext) SetSkipCount(v int32) {
+func (avctx *AVCodecContext) SetSkipCount(v int32) {
 	avctx.skip_count = (C.int)(v)
 }
 
 // Custom: GetSkipCountAddr gets `AVCodecContext.skip_count` address.
-func (avctx *AvCodecContext) GetSkipCountAddr() *int32 {
+func (avctx *AVCodecContext) GetSkipCountAddr() *int32 {
 	return (*int32)(&avctx.skip_count)
 }
 
-// Custom: Get MiscBits gets `AVCodecContext.misc_bits` value.
-func (avctx *AvCodecContext) GetMiscBits() int32 {
+// Custom: GetMiscBits gets `AVCodecContext.misc_bits` value.
+func (avctx *AVCodecContext) GetMiscBits() int32 {
 	return (int32)(avctx.misc_bits)
 }
 
 // Custom: SetMiscBits sets `AVCodecContext.misc_bits` value.
-func (avctx *AvCodecContext) SetMiscBits(v int32) {
+func (avctx *AVCodecContext) SetMiscBits(v int32) {
 	avctx.misc_bits = (C.int)(v)
 }
 
 // Custom: GetMiscBitsAddr gets `AVCodecContext.misc_bits` address.
-func (avctx *AvCodecContext) GetMiscBitsAddr() *int32 {
+func (avctx *AVCodecContext) GetMiscBitsAddr() *int32 {
 	return (*int32)(&avctx.misc_bits)
 }
 
-// Custom: Get FrameBits gets `AVCodecContext.frame_bits` value.
-func (avctx *AvCodecContext) GetFrameBits() int32 {
+// Custom: GetFrameBits gets `AVCodecContext.frame_bits` value.
+func (avctx *AVCodecContext) GetFrameBits() int32 {
 	return (int32)(avctx.frame_bits)
 }
 
 // Custom: SetFrameBits sets `AVCodecContext.frame_bits` value.
-func (avctx *AvCodecContext) SetFrameBits(v int32) {
+func (avctx *AVCodecContext) SetFrameBits(v int32) {
 	avctx.frame_bits = (C.int)(v)
 }
 
 // Custom: GetFrameBitsAddr gets `AVCodecContext.frame_bits` address.
-func (avctx *AvCodecContext) GetFrameBitsAddr() *int32 {
+func (avctx *AVCodecContext) GetFrameBitsAddr() *int32 {
 	return (*int32)(&avctx.frame_bits)
 }
 
-// Custom: Get StatsOut gets `AVCodecContext.stats_out` value.
-func (avctx *AvCodecContext) GetStatsOut() string {
+// Custom: GetStatsOut gets `AVCodecContext.stats_out` value.
+func (avctx *AVCodecContext) GetStatsOut() string {
 	return C.GoString(avctx.stats_out)
 }
 
-// Custom: Get StatsIn gets `AVCodecContext.stats_in` value.
-func (avctx *AvCodecContext) GetStatsIn() string {
+// Custom: GetStatsIn gets `AVCodecContext.stats_in` value.
+func (avctx *AVCodecContext) GetStatsIn() string {
 	return C.GoString(avctx.stats_in)
 }
 
-// Custom: Get WorkaroundBugs gets `AVCodecContext.workaround_bugs` value.
-func (avctx *AvCodecContext) GetWorkaroundBugs() int32 {
+// Custom: GetWorkaroundBugs gets `AVCodecContext.workaround_bugs` value.
+func (avctx *AVCodecContext) GetWorkaroundBugs() int32 {
 	return (int32)(avctx.workaround_bugs)
 }
 
 // Custom: SetWorkaroundBugs sets `AVCodecContext.workaround_bugs` value.
-func (avctx *AvCodecContext) SetWorkaroundBugs(v int32) {
+func (avctx *AVCodecContext) SetWorkaroundBugs(v int32) {
 	avctx.workaround_bugs = (C.int)(v)
 }
 
 // Custom: GetWorkaroundBugsAddr gets `AVCodecContext.workaround_bugs` address.
-func (avctx *AvCodecContext) GetWorkaroundBugsAddr() *int32 {
+func (avctx *AVCodecContext) GetWorkaroundBugsAddr() *int32 {
 	return (*int32)(&avctx.workaround_bugs)
 }
 
@@ -2032,18 +2242,18 @@ const (
 	FF_BUG_IEDGE            = int32(C.FF_BUG_IEDGE)
 )
 
-// Custom: Get StrictStdCompliance gets `AVCodecContext.strict_std_compliance` value.
-func (avctx *AvCodecContext) GetStrictStdCompliance() int32 {
+// Custom: GetStrictStdCompliance gets `AVCodecContext.strict_std_compliance` value.
+func (avctx *AVCodecContext) GetStrictStdCompliance() int32 {
 	return (int32)(avctx.strict_std_compliance)
 }
 
 // Custom: SetStrictStdCompliance sets `AVCodecContext.strict_std_compliance` value.
-func (avctx *AvCodecContext) SetStrictStdCompliance(v int32) {
+func (avctx *AVCodecContext) SetStrictStdCompliance(v int32) {
 	avctx.strict_std_compliance = (C.int)(v)
 }
 
 // Custom: GetStrictStdComplianceAddr gets `AVCodecContext.strict_std_compliance` address.
-func (avctx *AvCodecContext) GetStrictStdComplianceAddr() *int32 {
+func (avctx *AVCodecContext) GetStrictStdComplianceAddr() *int32 {
 	return (*int32)(&avctx.strict_std_compliance)
 }
 
@@ -2055,18 +2265,18 @@ const (
 	FF_COMPLIANCE_EXPERIMENTAL = int32(C.FF_COMPLIANCE_EXPERIMENTAL)
 )
 
-// Custom: Get ErrorConcealment gets `AVCodecContext.error_concealment` value.
-func (avctx *AvCodecContext) GetErrorConcealment() int32 {
+// Custom: GetErrorConcealment gets `AVCodecContext.error_concealment` value.
+func (avctx *AVCodecContext) GetErrorConcealment() int32 {
 	return (int32)(avctx.error_concealment)
 }
 
 // Custom: SetErrorConcealment sets `AVCodecContext.error_concealment` value.
-func (avctx *AvCodecContext) SetErrorConcealment(v int32) {
+func (avctx *AVCodecContext) SetErrorConcealment(v int32) {
 	avctx.error_concealment = (C.int)(v)
 }
 
 // Custom: GetErrorConcealmentAddr gets `AVCodecContext.error_concealment` address.
-func (avctx *AvCodecContext) GetErrorConcealmentAddr() *int32 {
+func (avctx *AVCodecContext) GetErrorConcealmentAddr() *int32 {
 	return (*int32)(&avctx.error_concealment)
 }
 
@@ -2076,18 +2286,18 @@ const (
 	FF_EC_FAVOR_INTER = int32(C.FF_EC_FAVOR_INTER)
 )
 
-// Custom: Get Debug gets `AVCodecContext.debug` value.
-func (avctx *AvCodecContext) GetDebug() int32 {
+// Custom: GetDebug gets `AVCodecContext.debug` value.
+func (avctx *AVCodecContext) GetDebug() int32 {
 	return (int32)(avctx.debug)
 }
 
 // Custom: SetDebug sets `AVCodecContext.debug` value.
-func (avctx *AvCodecContext) SetDebug(v int32) {
+func (avctx *AVCodecContext) SetDebug(v int32) {
 	avctx.debug = (C.int)(v)
 }
 
 // Custom: GetDebugAddr gets `AVCodecContext.debug` address.
-func (avctx *AvCodecContext) GetDebugAddr() *int32 {
+func (avctx *AVCodecContext) GetDebugAddr() *int32 {
 	return (*int32)(&avctx.debug)
 }
 
@@ -2109,18 +2319,18 @@ const (
 	FF_DEBUG_NOMC      = int32(C.FF_DEBUG_NOMC)
 )
 
-// Custom: Get ErrRecognition gets `AVCodecContext.err_recognition` value.
-func (avctx *AvCodecContext) GetErrRecognition() int32 {
+// Custom: GetErrRecognition gets `AVCodecContext.err_recognition` value.
+func (avctx *AVCodecContext) GetErrRecognition() int32 {
 	return (int32)(avctx.err_recognition)
 }
 
 // Custom: SetErrRecognition sets `AVCodecContext.err_recognition` value.
-func (avctx *AvCodecContext) SetErrRecognition(v int32) {
+func (avctx *AVCodecContext) SetErrRecognition(v int32) {
 	avctx.err_recognition = (C.int)(v)
 }
 
 // Custom: GetErrRecognitionAddr gets `AVCodecContext.err_recognition` address.
-func (avctx *AvCodecContext) GetErrRecognitionAddr() *int32 {
+func (avctx *AVCodecContext) GetErrRecognitionAddr() *int32 {
 	return (*int32)(&avctx.err_recognition)
 }
 
@@ -2135,63 +2345,83 @@ const (
 	AV_EF_AGGRESSIVE = int32(C.AV_EF_AGGRESSIVE)
 )
 
-// Custom: Get ReorderedOpaque gets `AVCodecContext.reordered_opaque` value.
-func (avctx *AvCodecContext) GetReorderedOpaque() int64 {
+// Custom: GetReorderedOpaque gets `AVCodecContext.reordered_opaque` value.
+func (avctx *AVCodecContext) GetReorderedOpaque() int64 {
 	return (int64)(avctx.reordered_opaque)
 }
 
 // Custom: SetReorderedOpaque sets `AVCodecContext.reordered_opaque` value.
-func (avctx *AvCodecContext) SetReorderedOpaque(v int64) {
+func (avctx *AVCodecContext) SetReorderedOpaque(v int64) {
 	avctx.reordered_opaque = (C.int64_t)(v)
 }
 
 // Custom: GetReorderedOpaqueAddr gets `AVCodecContext.reordered_opaque` address.
-func (avctx *AvCodecContext) GetReorderedOpaqueAddr() *int64 {
+func (avctx *AVCodecContext) GetReorderedOpaqueAddr() *int64 {
 	return (*int64)(&avctx.reordered_opaque)
 }
 
-// Custom: Get Hwaccel gets `AVCodecContext.hwaccel` value.
-func (avctx *AvCodecContext) GetHwaccel() *AvHWAccel {
-	return (*AvHWAccel)(avctx.hwaccel)
+// Custom: GetHwaccel gets `AVCodecContext.hwaccel` value.
+func (avctx *AVCodecContext) GetHwaccel() *AVHWAccel {
+	return (*AVHWAccel)(avctx.hwaccel)
 }
 
 // Custom: SetHwaccel sets `AVCodecContext.hwaccel` value.
-func (avctx *AvCodecContext) SetHwaccel(v *AvHWAccel) {
+func (avctx *AVCodecContext) SetHwaccel(v *AVHWAccel) {
 	avctx.hwaccel = (*C.AVHWAccel)(v)
 }
 
 // Custom: GetHwaccelAddr gets `AVCodecContext.hwaccel` address.
-func (avctx *AvCodecContext) GetHwaccelAddr() **AvHWAccel {
-	return (**AvHWAccel)(unsafe.Pointer(&avctx.hwaccel))
+func (avctx *AVCodecContext) GetHwaccelAddr() **AVHWAccel {
+	return (**AVHWAccel)(unsafe.Pointer(&avctx.hwaccel))
 }
 
-// Custom: Get HwaccelContext gets `AVCodecContext.hwaccel_context` value.
-func (avctx *AvCodecContext) GetHwaccelContext() unsafe.Pointer {
+// Custom: GetHwaccelContext gets `AVCodecContext.hwaccel_context` value.
+func (avctx *AVCodecContext) GetHwaccelContext() unsafe.Pointer {
 	return (unsafe.Pointer)(avctx.hwaccel_context)
 }
 
 // Custom: SetHwaccelContext sets `AVCodecContext.hwaccel_context` value.
-func (avctx *AvCodecContext) SetHwaccelContext(v unsafe.Pointer) {
-	avctx.hwaccel_context = v
+func (avctx *AVCodecContext) SetHwaccelContext(v CVoidPointer) {
+	avctx.hwaccel_context = VoidPointer(v)
 }
 
 // Custom: GetHwaccelContextAddr gets `AVCodecContext.hwaccel_context` address.
-func (avctx *AvCodecContext) GetHwaccelContextAddr() unsafe.Pointer {
+func (avctx *AVCodecContext) GetHwaccelContextAddr() unsafe.Pointer {
 	return (unsafe.Pointer)(&avctx.hwaccel_context)
 }
 
-// Custom: Get DctAlgo gets `AVCodecContext.dct_algo` value.
-func (avctx *AvCodecContext) GetDctAlgo() int32 {
+// Custom: GetError gets `AVCodecContext.error` value.
+func (avctx *AVCodecContext) GetError() []uint64 {
+	return unsafe.Slice((*uint64)(&avctx.error[0]), AV_NUM_DATA_POINTERS)
+}
+
+// Custom: GetErrorIdx gets `AVCodecContext.error` value.
+func (avctx *AVCodecContext) GetErrorIdx(idx int) uint64 {
+	return (uint64)(avctx.error[idx])
+}
+
+// Custom: SetErrorIdx sets `AVCodecContext.error` value.
+func (avctx *AVCodecContext) SetErrorIdx(idx int, v uint64) {
+	avctx.error[idx] = (C.uint64_t)(v)
+}
+
+// Custom: GetErrorIdxAddr gets `AVCodecContext.error` address.
+func (avctx *AVCodecContext) GetErrorIdxAddr(idx int) *uint64 {
+	return (*uint64)(&avctx.error[idx])
+}
+
+// Custom: GetDctAlgo gets `AVCodecContext.dct_algo` value.
+func (avctx *AVCodecContext) GetDctAlgo() int32 {
 	return (int32)(avctx.dct_algo)
 }
 
 // Custom: SetDctAlgo sets `AVCodecContext.dct_algo` value.
-func (avctx *AvCodecContext) SetDctAlgo(v int32) {
+func (avctx *AVCodecContext) SetDctAlgo(v int32) {
 	avctx.dct_algo = (C.int)(v)
 }
 
 // Custom: GetDctAlgoAddr gets `AVCodecContext.dct_algo` address.
-func (avctx *AvCodecContext) GetDctAlgoAddr() *int32 {
+func (avctx *AVCodecContext) GetDctAlgoAddr() *int32 {
 	return (*int32)(&avctx.dct_algo)
 }
 
@@ -2204,18 +2434,18 @@ const (
 	FF_DCT_FAAN    = int32(C.FF_DCT_FAAN)
 )
 
-// Custom: Get IdctAlgo gets `AVCodecContext.idct_algo` value.
-func (avctx *AvCodecContext) GetIdctAlgo() int32 {
+// Custom: GetIdctAlgo gets `AVCodecContext.idct_algo` value.
+func (avctx *AVCodecContext) GetIdctAlgo() int32 {
 	return (int32)(avctx.idct_algo)
 }
 
 // Custom: SetIdctAlgo sets `AVCodecContext.idct_algo` value.
-func (avctx *AvCodecContext) SetIdctAlgo(v int32) {
+func (avctx *AVCodecContext) SetIdctAlgo(v int32) {
 	avctx.idct_algo = (C.int)(v)
 }
 
 // Custom: GetIdctAlgoAddr gets `AVCodecContext.idct_algo` address.
-func (avctx *AvCodecContext) GetIdctAlgoAddr() *int32 {
+func (avctx *AVCodecContext) GetIdctAlgoAddr() *int32 {
 	return (*int32)(&avctx.idct_algo)
 }
 
@@ -2236,93 +2466,93 @@ const (
 	FF_IDCT_SIMPLEAUTO    = int32(C.FF_IDCT_SIMPLEAUTO)
 )
 
-// Custom: Get BitsPerCodedSample gets `AVCodecContext.bits_per_coded_sample` value.
-func (avctx *AvCodecContext) GetBitsPerCodedSample() int32 {
+// Custom: GetBitsPerCodedSample gets `AVCodecContext.bits_per_coded_sample` value.
+func (avctx *AVCodecContext) GetBitsPerCodedSample() int32 {
 	return (int32)(avctx.bits_per_coded_sample)
 }
 
 // Custom: SetBitsPerCodedSample sets `AVCodecContext.bits_per_coded_sample` value.
-func (avctx *AvCodecContext) SetBitsPerCodedSample(v int32) {
+func (avctx *AVCodecContext) SetBitsPerCodedSample(v int32) {
 	avctx.bits_per_coded_sample = (C.int)(v)
 }
 
 // Custom: GetBitsPerCodedSampleAddr gets `AVCodecContext.bits_per_coded_sample` address.
-func (avctx *AvCodecContext) GetBitsPerCodedSampleAddr() *int32 {
+func (avctx *AVCodecContext) GetBitsPerCodedSampleAddr() *int32 {
 	return (*int32)(&avctx.bits_per_coded_sample)
 }
 
-// Custom: Get BitsPerRawSample gets `AVCodecContext.bits_per_raw_sample` value.
-func (avctx *AvCodecContext) GetBitsPerRawSample() int32 {
+// Custom: GetBitsPerRawSample gets `AVCodecContext.bits_per_raw_sample` value.
+func (avctx *AVCodecContext) GetBitsPerRawSample() int32 {
 	return (int32)(avctx.bits_per_raw_sample)
 }
 
 // Custom: SetBitsPerRawSample sets `AVCodecContext.bits_per_raw_sample` value.
-func (avctx *AvCodecContext) SetBitsPerRawSample(v int32) {
+func (avctx *AVCodecContext) SetBitsPerRawSample(v int32) {
 	avctx.bits_per_raw_sample = (C.int)(v)
 }
 
 // Custom: GetBitsPerRawSampleAddr gets `AVCodecContext.bits_per_raw_sample` address.
-func (avctx *AvCodecContext) GetBitsPerRawSampleAddr() *int32 {
+func (avctx *AVCodecContext) GetBitsPerRawSampleAddr() *int32 {
 	return (*int32)(&avctx.bits_per_raw_sample)
 }
 
-// Custom: Get Lowres gets `AVCodecContext.lowres` value.
-func (avctx *AvCodecContext) GetLowres() int32 {
+// Custom: GetLowres gets `AVCodecContext.lowres` value.
+func (avctx *AVCodecContext) GetLowres() int32 {
 	return (int32)(avctx.lowres)
 }
 
 // Custom: SetLowres sets `AVCodecContext.lowres` value.
-func (avctx *AvCodecContext) SetLowres(v int32) {
+func (avctx *AVCodecContext) SetLowres(v int32) {
 	avctx.lowres = (C.int)(v)
 }
 
 // Custom: GetLowresAddr gets `AVCodecContext.lowres` address.
-func (avctx *AvCodecContext) GetLowresAddr() *int32 {
+func (avctx *AVCodecContext) GetLowresAddr() *int32 {
 	return (*int32)(&avctx.lowres)
 }
 
-// Custom: Get CodedFrame gets `AVCodecContext.coded_frame` value.
-func (avctx *AvCodecContext) GetCodedFrame() *AvFrame {
-	return (*AvFrame)(avctx.coded_frame)
+// Custom: GetCodedFrame gets `AVCodecContext.coded_frame` value.
+func (avctx *AVCodecContext) GetCodedFrame() *AVFrame {
+	return (*AVFrame)(avctx.coded_frame)
 }
 
 // Custom: SetCodedFrame sets `AVCodecContext.coded_frame` value.
-func (avctx *AvCodecContext) SetCodedFrame(v *AvFrame) {
+func (avctx *AVCodecContext) SetCodedFrame(v *AVFrame) {
 	avctx.coded_frame = (*C.struct_AVFrame)(v)
 }
 
 // Custom: GetCodedFrameAddr gets `AVCodecContext.coded_frame` address.
-func (avctx *AvCodecContext) GetCodedFrameAddr() **AvFrame {
-	return (**AvFrame)(unsafe.Pointer(&avctx.coded_frame))
+func (avctx *AVCodecContext) GetCodedFrameAddr() **AVFrame {
+	return (**AVFrame)(unsafe.Pointer(&avctx.coded_frame))
 }
 
-// Custom: Get ThreadCount gets `AVCodecContext.thread_count` value.
-func (avctx *AvCodecContext) GetThreadCount() int32 {
+// Custom: GetThreadCount gets `AVCodecContext.thread_count` value.
+func (avctx *AVCodecContext) GetThreadCount() int32 {
 	return (int32)(avctx.thread_count)
 }
 
 // Custom: SetThreadCount sets `AVCodecContext.thread_count` value.
-func (avctx *AvCodecContext) SetThreadCount(v int32) {
+func (avctx *AVCodecContext) SetThreadCount(v int32) {
 	avctx.thread_count = (C.int)(v)
 }
 
 // Custom: GetThreadCountAddr gets `AVCodecContext.thread_count` address.
-func (avctx *AvCodecContext) GetThreadCountAddr() *int32 {
+func (avctx *AVCodecContext) GetThreadCountAddr() *int32 {
 	return (*int32)(&avctx.thread_count)
 }
 
-// Custom: Get ThreadType gets `AVCodecContext.thread_type` value.
-func (avctx *AvCodecContext) GetThreadType() int32 {
+// Custom: GetThreadType gets `AVCodecContext.thread_type` value.
+func (avctx *AVCodecContext) GetThreadType() int32 {
 	return (int32)(avctx.thread_type)
 }
 
 // Custom: SetThreadType sets `AVCodecContext.thread_type` value.
-func (avctx *AvCodecContext) SetThreadType(v int32) {
+func (avctx *AVCodecContext) SetThreadType(v int32) {
 	avctx.thread_type = (C.int)(v)
 }
 
 // Custom: GetThreadTypeAddr gets `AVCodecContext.thread_type` address.
-func (avctx *AvCodecContext) GetThreadTypeAddr() *int32 {
+func (avctx *AVCodecContext) GetThreadTypeAddr() *int32 {
 	return (*int32)(&avctx.thread_type)
 }
 
@@ -2331,63 +2561,63 @@ const (
 	FF_THREAD_SLICE = int32(C.FF_THREAD_SLICE)
 )
 
-// Custom: Get ActiveThreadType gets `AVCodecContext.active_thread_type` value.
-func (avctx *AvCodecContext) GetActiveThreadType() int32 {
+// Custom: GetActiveThreadType gets `AVCodecContext.active_thread_type` value.
+func (avctx *AVCodecContext) GetActiveThreadType() int32 {
 	return (int32)(avctx.active_thread_type)
 }
 
 // Custom: SetActiveThreadType sets `AVCodecContext.active_thread_type` value.
-func (avctx *AvCodecContext) SetActiveThreadType(v int32) {
+func (avctx *AVCodecContext) SetActiveThreadType(v int32) {
 	avctx.active_thread_type = (C.int)(v)
 }
 
 // Custom: GetActiveThreadTypeAddr gets `AVCodecContext.active_thread_type` address.
-func (avctx *AvCodecContext) GetActiveThreadTypeAddr() *int32 {
+func (avctx *AVCodecContext) GetActiveThreadTypeAddr() *int32 {
 	return (*int32)(&avctx.active_thread_type)
 }
 
-// Custom: Get ThreadSafeCallbacks gets `AVCodecContext.thread_safe_callbacks` value.
-func (avctx *AvCodecContext) GetThreadSafeCallbacks() int32 {
+// Custom: GetThreadSafeCallbacks gets `AVCodecContext.thread_safe_callbacks` value.
+func (avctx *AVCodecContext) GetThreadSafeCallbacks() int32 {
 	return (int32)(avctx.thread_safe_callbacks)
 }
 
 // Custom: SetThreadSafeCallbacks sets `AVCodecContext.thread_safe_callbacks` value.
-func (avctx *AvCodecContext) SetThreadSafeCallbacks(v int32) {
+func (avctx *AVCodecContext) SetThreadSafeCallbacks(v int32) {
 	avctx.thread_safe_callbacks = (C.int)(v)
 }
 
 // Custom: GetThreadSafeCallbacksAddr gets `AVCodecContext.thread_safe_callbacks` address.
-func (avctx *AvCodecContext) GetThreadSafeCallbacksAddr() *int32 {
+func (avctx *AVCodecContext) GetThreadSafeCallbacksAddr() *int32 {
 	return (*int32)(&avctx.thread_safe_callbacks)
 }
 
-// Custom: Get NsseWeight gets `AVCodecContext.nsse_weight` value.
-func (avctx *AvCodecContext) GetNsseWeight() int32 {
+// Custom: GetNsseWeight gets `AVCodecContext.nsse_weight` value.
+func (avctx *AVCodecContext) GetNsseWeight() int32 {
 	return (int32)(avctx.nsse_weight)
 }
 
 // Custom: SetNsseWeight sets `AVCodecContext.nsse_weight` value.
-func (avctx *AvCodecContext) SetNsseWeight(v int32) {
+func (avctx *AVCodecContext) SetNsseWeight(v int32) {
 	avctx.nsse_weight = (C.int)(v)
 }
 
 // Custom: GetNsseWeightAddr gets `AVCodecContext.nsse_weight` address.
-func (avctx *AvCodecContext) GetNsseWeightAddr() *int32 {
+func (avctx *AVCodecContext) GetNsseWeightAddr() *int32 {
 	return (*int32)(&avctx.nsse_weight)
 }
 
-// Custom: Get Profile gets `AVCodecContext.profile` value.
-func (avctx *AvCodecContext) GetProfile() int32 {
+// Custom: GetProfile gets `AVCodecContext.profile` value.
+func (avctx *AVCodecContext) GetProfile() int32 {
 	return (int32)(avctx.profile)
 }
 
 // Custom: SetProfile sets `AVCodecContext.profile` value.
-func (avctx *AvCodecContext) SetProfile(v int32) {
+func (avctx *AVCodecContext) SetProfile(v int32) {
 	avctx.profile = (C.int)(v)
 }
 
 // Custom: GetProfileAddr gets `AVCodecContext.profile` address.
-func (avctx *AvCodecContext) GetProfileAddr() *int32 {
+func (avctx *AVCodecContext) GetProfileAddr() *int32 {
 	return (*int32)(&avctx.profile)
 }
 
@@ -2513,278 +2743,278 @@ const (
 	FF_PROFILE_KLVA_ASYNC = int32(C.FF_PROFILE_KLVA_ASYNC)
 )
 
-// Custom: Get Level gets `AVCodecContext.level` value.
-func (avctx *AvCodecContext) GetLevel() int32 {
+// Custom: GetLevel gets `AVCodecContext.level` value.
+func (avctx *AVCodecContext) GetLevel() int32 {
 	return (int32)(avctx.level)
 }
 
 // Custom: SetLevel sets `AVCodecContext.level` value.
-func (avctx *AvCodecContext) SetLevel(v int32) {
+func (avctx *AVCodecContext) SetLevel(v int32) {
 	avctx.level = (C.int)(v)
 }
 
 // Custom: GetLevelAddr gets `AVCodecContext.level` address.
-func (avctx *AvCodecContext) GetLevelAddr() *int32 {
+func (avctx *AVCodecContext) GetLevelAddr() *int32 {
 	return (*int32)(&avctx.level)
 }
 
-// Custom: Get SkipLoopFilter gets `AVCodecContext.skip_loop_filter` value.
-func (avctx *AvCodecContext) GetSkipLoopFilter() AvDiscard {
-	return (AvDiscard)(avctx.skip_loop_filter)
+// Custom: GetSkipLoopFilter gets `AVCodecContext.skip_loop_filter` value.
+func (avctx *AVCodecContext) GetSkipLoopFilter() AVDiscard {
+	return (AVDiscard)(avctx.skip_loop_filter)
 }
 
 // Custom: SetSkipLoopFilter sets `AVCodecContext.skip_loop_filter` value.
-func (avctx *AvCodecContext) SetSkipLoopFilter(v AvDiscard) {
+func (avctx *AVCodecContext) SetSkipLoopFilter(v AVDiscard) {
 	avctx.skip_loop_filter = (C.enum_AVDiscard)(v)
 }
 
 // Custom: GetSkipLoopFilterAddr gets `AVCodecContext.skip_loop_filter` address.
-func (avctx *AvCodecContext) GetSkipLoopFilterAddr() *AvDiscard {
-	return (*AvDiscard)(&avctx.skip_loop_filter)
+func (avctx *AVCodecContext) GetSkipLoopFilterAddr() *AVDiscard {
+	return (*AVDiscard)(&avctx.skip_loop_filter)
 }
 
-// Custom: Get SkipIdct gets `AVCodecContext.skip_idct` value.
-func (avctx *AvCodecContext) GetSkipIdct() AvDiscard {
-	return (AvDiscard)(avctx.skip_idct)
+// Custom: GetSkipIdct gets `AVCodecContext.skip_idct` value.
+func (avctx *AVCodecContext) GetSkipIdct() AVDiscard {
+	return (AVDiscard)(avctx.skip_idct)
 }
 
 // Custom: SetSkipIdct sets `AVCodecContext.skip_idct` value.
-func (avctx *AvCodecContext) SetSkipIdct(v AvDiscard) {
+func (avctx *AVCodecContext) SetSkipIdct(v AVDiscard) {
 	avctx.skip_idct = (C.enum_AVDiscard)(v)
 }
 
 // Custom: GetSkipIdctAddr gets `AVCodecContext.skip_idct` address.
-func (avctx *AvCodecContext) GetSkipIdctAddr() *AvDiscard {
-	return (*AvDiscard)(&avctx.skip_idct)
+func (avctx *AVCodecContext) GetSkipIdctAddr() *AVDiscard {
+	return (*AVDiscard)(&avctx.skip_idct)
 }
 
-// Custom: Get SkipFrame gets `AVCodecContext.skip_frame` value.
-func (avctx *AvCodecContext) GetSkipFrame() AvDiscard {
-	return (AvDiscard)(avctx.skip_frame)
+// Custom: GetSkipFrame gets `AVCodecContext.skip_frame` value.
+func (avctx *AVCodecContext) GetSkipFrame() AVDiscard {
+	return (AVDiscard)(avctx.skip_frame)
 }
 
 // Custom: SetSkipFrame sets `AVCodecContext.skip_frame` value.
-func (avctx *AvCodecContext) SetSkipFrame(v AvDiscard) {
+func (avctx *AVCodecContext) SetSkipFrame(v AVDiscard) {
 	avctx.skip_frame = (C.enum_AVDiscard)(v)
 }
 
 // Custom: GetSkipFrameAddr gets `AVCodecContext.skip_frame` address.
-func (avctx *AvCodecContext) GetSkipFrameAddr() *AvDiscard {
-	return (*AvDiscard)(&avctx.skip_frame)
+func (avctx *AVCodecContext) GetSkipFrameAddr() *AVDiscard {
+	return (*AVDiscard)(&avctx.skip_frame)
 }
 
-// Custom: Get SubtitleHeader gets `AVCodecContext.subtitle_header` value.
-func (avctx *AvCodecContext) GetSubtitleHeader() *uint8 {
+// Custom: GetSubtitleHeader gets `AVCodecContext.subtitle_header` value.
+func (avctx *AVCodecContext) GetSubtitleHeader() *uint8 {
 	return (*uint8)(avctx.subtitle_header)
 }
 
 // Custom: SetSubtitleHeader sets `AVCodecContext.subtitle_header` value.
-func (avctx *AvCodecContext) SetSubtitleHeader(v *uint8) {
+func (avctx *AVCodecContext) SetSubtitleHeader(v *uint8) {
 	avctx.subtitle_header = (*C.uint8_t)(v)
 }
 
 // Custom: GetSubtitleHeaderAddr gets `AVCodecContext.subtitle_header` address.
-func (avctx *AvCodecContext) GetSubtitleHeaderAddr() **uint8 {
+func (avctx *AVCodecContext) GetSubtitleHeaderAddr() **uint8 {
 	return (**uint8)(unsafe.Pointer(&avctx.subtitle_header))
 }
 
-// Custom: Get SubtitleHeaderSize gets `AVCodecContext.subtitle_header_size` value.
-func (avctx *AvCodecContext) GetSubtitleHeaderSize() int32 {
+// Custom: GetSubtitleHeaderSize gets `AVCodecContext.subtitle_header_size` value.
+func (avctx *AVCodecContext) GetSubtitleHeaderSize() int32 {
 	return (int32)(avctx.subtitle_header_size)
 }
 
 // Custom: SetSubtitleHeaderSize sets `AVCodecContext.subtitle_header_size` value.
-func (avctx *AvCodecContext) SetSubtitleHeaderSize(v int32) {
+func (avctx *AVCodecContext) SetSubtitleHeaderSize(v int32) {
 	avctx.subtitle_header_size = (C.int)(v)
 }
 
 // Custom: GetSubtitleHeaderSizeAddr gets `AVCodecContext.subtitle_header_size` address.
-func (avctx *AvCodecContext) GetSubtitleHeaderSizeAddr() *int32 {
+func (avctx *AVCodecContext) GetSubtitleHeaderSizeAddr() *int32 {
 	return (*int32)(&avctx.subtitle_header_size)
 }
 
-// Custom: Get VbvDelay gets `AVCodecContext.vbv_delay` value.
-func (avctx *AvCodecContext) GetVbvDelay() uint64 {
+// Custom: GetVbvDelay gets `AVCodecContext.vbv_delay` value.
+func (avctx *AVCodecContext) GetVbvDelay() uint64 {
 	return (uint64)(avctx.vbv_delay)
 }
 
 // Custom: SetVbvDelay sets `AVCodecContext.vbv_delay` value.
-func (avctx *AvCodecContext) SetVbvDelay(v uint64) {
+func (avctx *AVCodecContext) SetVbvDelay(v uint64) {
 	avctx.vbv_delay = (C.uint64_t)(v)
 }
 
 // Custom: GetVbvDelayAddr gets `AVCodecContext.vbv_delay` address.
-func (avctx *AvCodecContext) GetVbvDelayAddr() *uint64 {
+func (avctx *AVCodecContext) GetVbvDelayAddr() *uint64 {
 	return (*uint64)(&avctx.vbv_delay)
 }
 
-// Custom: Get SideDataOnlyPackets gets `AVCodecContext.side_data_only_packets` value.
-func (avctx *AvCodecContext) GetSideDataOnlyPackets() int32 {
+// Custom: GetSideDataOnlyPackets gets `AVCodecContext.side_data_only_packets` value.
+func (avctx *AVCodecContext) GetSideDataOnlyPackets() int32 {
 	return (int32)(avctx.side_data_only_packets)
 }
 
 // Custom: SetSideDataOnlyPackets sets `AVCodecContext.side_data_only_packets` value.
-func (avctx *AvCodecContext) SetSideDataOnlyPackets(v int32) {
+func (avctx *AVCodecContext) SetSideDataOnlyPackets(v int32) {
 	avctx.side_data_only_packets = (C.int)(v)
 }
 
 // Custom: GetSideDataOnlyPacketsAddr gets `AVCodecContext.side_data_only_packets` address.
-func (avctx *AvCodecContext) GetSideDataOnlyPacketsAddr() *int32 {
+func (avctx *AVCodecContext) GetSideDataOnlyPacketsAddr() *int32 {
 	return (*int32)(&avctx.side_data_only_packets)
 }
 
-// Custom: Get InitialPadding gets `AVCodecContext.initial_padding` value.
-func (avctx *AvCodecContext) GetInitialPadding() int32 {
+// Custom: GetInitialPadding gets `AVCodecContext.initial_padding` value.
+func (avctx *AVCodecContext) GetInitialPadding() int32 {
 	return (int32)(avctx.initial_padding)
 }
 
 // Custom: SetInitialPadding sets `AVCodecContext.initial_padding` value.
-func (avctx *AvCodecContext) SetInitialPadding(v int32) {
+func (avctx *AVCodecContext) SetInitialPadding(v int32) {
 	avctx.initial_padding = (C.int)(v)
 }
 
 // Custom: GetInitialPaddingAddr gets `AVCodecContext.initial_padding` address.
-func (avctx *AvCodecContext) GetInitialPaddingAddr() *int32 {
+func (avctx *AVCodecContext) GetInitialPaddingAddr() *int32 {
 	return (*int32)(&avctx.initial_padding)
 }
 
-// Custom: Get Framerate gets `AVCodecContext.framerate` value.
-func (avctx *AvCodecContext) GetFramerate() AvRational {
-	return (AvRational)(avctx.framerate)
+// Custom: GetFramerate gets `AVCodecContext.framerate` value.
+func (avctx *AVCodecContext) GetFramerate() AVRational {
+	return (AVRational)(avctx.framerate)
 }
 
 // Custom: SetFramerate sets `AVCodecContext.framerate` value.
-func (avctx *AvCodecContext) SetFramerate(v AvRational) {
-	avctx.framerate = (C.AVRational)(v)
+func (avctx *AVCodecContext) SetFramerate(v AVRational) {
+	avctx.framerate = (C.struct_AVRational)(v)
 }
 
 // Custom: GetFramerateAddr gets `AVCodecContext.framerate` address.
-func (avctx *AvCodecContext) GetFramerateAddr() *AvRational {
-	return (*AvRational)(&avctx.framerate)
+func (avctx *AVCodecContext) GetFramerateAddr() *AVRational {
+	return (*AVRational)(&avctx.framerate)
 }
 
-// Custom: Get SwPixFmt gets `AVCodecContext.sw_pix_fmt` value.
-func (avctx *AvCodecContext) GetSwPixFmt() AvPixelFormat {
-	return (AvPixelFormat)(avctx.sw_pix_fmt)
+// Custom: GetSwPixFmt gets `AVCodecContext.sw_pix_fmt` value.
+func (avctx *AVCodecContext) GetSwPixFmt() AVPixelFormat {
+	return (AVPixelFormat)(avctx.sw_pix_fmt)
 }
 
 // Custom: SetSwPixFmt sets `AVCodecContext.sw_pix_fmt` value.
-func (avctx *AvCodecContext) SetSwPixFmt(v AvPixelFormat) {
+func (avctx *AVCodecContext) SetSwPixFmt(v AVPixelFormat) {
 	avctx.sw_pix_fmt = (C.enum_AVPixelFormat)(v)
 }
 
 // Custom: GetSwPixFmtAddr gets `AVCodecContext.sw_pix_fmt` address.
-func (avctx *AvCodecContext) GetSwPixFmtAddr() *AvPixelFormat {
-	return (*AvPixelFormat)(&avctx.sw_pix_fmt)
+func (avctx *AVCodecContext) GetSwPixFmtAddr() *AVPixelFormat {
+	return (*AVPixelFormat)(&avctx.sw_pix_fmt)
 }
 
-// Custom: Get PktTimebase gets `AVCodecContext.pkt_timebase` value.
-func (avctx *AvCodecContext) GetPktTimebase() AvRational {
-	return (AvRational)(avctx.pkt_timebase)
+// Custom: GetPktTimebase gets `AVCodecContext.pkt_timebase` value.
+func (avctx *AVCodecContext) GetPktTimebase() AVRational {
+	return (AVRational)(avctx.pkt_timebase)
 }
 
 // Custom: SetPktTimebase sets `AVCodecContext.pkt_timebase` value.
-func (avctx *AvCodecContext) SetPktTimebase(v AvRational) {
-	avctx.pkt_timebase = (C.AVRational)(v)
+func (avctx *AVCodecContext) SetPktTimebase(v AVRational) {
+	avctx.pkt_timebase = (C.struct_AVRational)(v)
 }
 
 // Custom: GetPktTimebaseAddr gets `AVCodecContext.pkt_timebase` address.
-func (avctx *AvCodecContext) GetPktTimebaseAddr() *AvRational {
-	return (*AvRational)(&avctx.pkt_timebase)
+func (avctx *AVCodecContext) GetPktTimebaseAddr() *AVRational {
+	return (*AVRational)(&avctx.pkt_timebase)
 }
 
-// Custom: Get CodecDescriptor gets `AVCodecContext.codec_descriptor` value.
-func (avctx *AvCodecContext) GetCodecDescriptor() *AvCodecDescriptor {
-	return (*AvCodecDescriptor)(avctx.codec_descriptor)
+// Custom: GetCodecDescriptor gets `AVCodecContext.codec_descriptor` value.
+func (avctx *AVCodecContext) GetCodecDescriptor() *AVCodecDescriptor {
+	return (*AVCodecDescriptor)(avctx.codec_descriptor)
 }
 
 // Custom: SetCodecDescriptor sets `AVCodecContext.codec_descriptor` value.
-func (avctx *AvCodecContext) SetCodecDescriptor(v *AvCodecDescriptor) {
+func (avctx *AVCodecContext) SetCodecDescriptor(v *AVCodecDescriptor) {
 	avctx.codec_descriptor = (*C.struct_AVCodecDescriptor)(v)
 }
 
 // Custom: GetCodecDescriptorAddr gets `AVCodecContext.codec_descriptor` address.
-func (avctx *AvCodecContext) GetCodecDescriptorAddr() **AvCodecDescriptor {
-	return (**AvCodecDescriptor)(unsafe.Pointer(&avctx.codec_descriptor))
+func (avctx *AVCodecContext) GetCodecDescriptorAddr() **AVCodecDescriptor {
+	return (**AVCodecDescriptor)(unsafe.Pointer(&avctx.codec_descriptor))
 }
 
-// Custom: Get PtsCorrectionNumFaultyPts gets `AVCodecContext.pts_correction_num_faulty_pts` value.
-func (avctx *AvCodecContext) GetPtsCorrectionNumFaultyPts() int64 {
+// Custom: GetPtsCorrectionNumFaultyPts gets `AVCodecContext.pts_correction_num_faulty_pts` value.
+func (avctx *AVCodecContext) GetPtsCorrectionNumFaultyPts() int64 {
 	return (int64)(avctx.pts_correction_num_faulty_pts)
 }
 
 // Custom: SetPtsCorrectionNumFaultyPts sets `AVCodecContext.pts_correction_num_faulty_pts` value.
-func (avctx *AvCodecContext) SetPtsCorrectionNumFaultyPts(v int64) {
+func (avctx *AVCodecContext) SetPtsCorrectionNumFaultyPts(v int64) {
 	avctx.pts_correction_num_faulty_pts = (C.int64_t)(v)
 }
 
 // Custom: GetPtsCorrectionNumFaultyPtsAddr gets `AVCodecContext.pts_correction_num_faulty_pts` address.
-func (avctx *AvCodecContext) GetPtsCorrectionNumFaultyPtsAddr() *int64 {
+func (avctx *AVCodecContext) GetPtsCorrectionNumFaultyPtsAddr() *int64 {
 	return (*int64)(&avctx.pts_correction_num_faulty_pts)
 }
 
-// Custom: Get PtsCorrectionNumFaultyDts gets `AVCodecContext.pts_correction_num_faulty_dts` value.
-func (avctx *AvCodecContext) GetPtsCorrectionNumFaultyDts() int64 {
+// Custom: GetPtsCorrectionNumFaultyDts gets `AVCodecContext.pts_correction_num_faulty_dts` value.
+func (avctx *AVCodecContext) GetPtsCorrectionNumFaultyDts() int64 {
 	return (int64)(avctx.pts_correction_num_faulty_dts)
 }
 
 // Custom: SetPtsCorrectionNumFaultyDts sets `AVCodecContext.pts_correction_num_faulty_dts` value.
-func (avctx *AvCodecContext) SetPtsCorrectionNumFaultyDts(v int64) {
+func (avctx *AVCodecContext) SetPtsCorrectionNumFaultyDts(v int64) {
 	avctx.pts_correction_num_faulty_dts = (C.int64_t)(v)
 }
 
 // Custom: GetPtsCorrectionNumFaultyDtsAddr gets `AVCodecContext.pts_correction_num_faulty_dts` address.
-func (avctx *AvCodecContext) GetPtsCorrectionNumFaultyDtsAddr() *int64 {
+func (avctx *AVCodecContext) GetPtsCorrectionNumFaultyDtsAddr() *int64 {
 	return (*int64)(&avctx.pts_correction_num_faulty_dts)
 }
 
-// Custom: Get PtsCorrectionLastPts gets `AVCodecContext.pts_correction_last_pts` value.
-func (avctx *AvCodecContext) GetPtsCorrectionLastPts() int64 {
+// Custom: GetPtsCorrectionLastPts gets `AVCodecContext.pts_correction_last_pts` value.
+func (avctx *AVCodecContext) GetPtsCorrectionLastPts() int64 {
 	return (int64)(avctx.pts_correction_last_pts)
 }
 
 // Custom: SetPtsCorrectionLastPts sets `AVCodecContext.pts_correction_last_pts` value.
-func (avctx *AvCodecContext) SetPtsCorrectionLastPts(v int64) {
+func (avctx *AVCodecContext) SetPtsCorrectionLastPts(v int64) {
 	avctx.pts_correction_last_pts = (C.int64_t)(v)
 }
 
 // Custom: GetPtsCorrectionLastPtsAddr gets `AVCodecContext.pts_correction_last_pts` address.
-func (avctx *AvCodecContext) GetPtsCorrectionLastPtsAddr() *int64 {
+func (avctx *AVCodecContext) GetPtsCorrectionLastPtsAddr() *int64 {
 	return (*int64)(&avctx.pts_correction_last_pts)
 }
 
-// Custom: Get PtsCorrectionLastDts gets `AVCodecContext.pts_correction_last_dts` value.
-func (avctx *AvCodecContext) GetPtsCorrectionLastDts() int64 {
+// Custom: GetPtsCorrectionLastDts gets `AVCodecContext.pts_correction_last_dts` value.
+func (avctx *AVCodecContext) GetPtsCorrectionLastDts() int64 {
 	return (int64)(avctx.pts_correction_last_dts)
 }
 
 // Custom: SetPtsCorrectionLastDts sets `AVCodecContext.pts_correction_last_dts` value.
-func (avctx *AvCodecContext) SetPtsCorrectionLastDts(v int64) {
+func (avctx *AVCodecContext) SetPtsCorrectionLastDts(v int64) {
 	avctx.pts_correction_last_dts = (C.int64_t)(v)
 }
 
 // Custom: GetPtsCorrectionLastDtsAddr gets `AVCodecContext.pts_correction_last_dts` address.
-func (avctx *AvCodecContext) GetPtsCorrectionLastDtsAddr() *int64 {
+func (avctx *AVCodecContext) GetPtsCorrectionLastDtsAddr() *int64 {
 	return (*int64)(&avctx.pts_correction_last_dts)
 }
 
-// Custom: Get SubCharenc gets `AVCodecContext.sub_charenc` value.
-func (avctx *AvCodecContext) GetSubCharenc() string {
+// Custom: GetSubCharenc gets `AVCodecContext.sub_charenc` value.
+func (avctx *AVCodecContext) GetSubCharenc() string {
 	return C.GoString(avctx.sub_charenc)
 }
 
-// Custom: Get SubCharencMode gets `AVCodecContext.sub_charenc_mode` value.
-func (avctx *AvCodecContext) GetSubCharencMode() int32 {
+// Custom: GetSubCharencMode gets `AVCodecContext.sub_charenc_mode` value.
+func (avctx *AVCodecContext) GetSubCharencMode() int32 {
 	return (int32)(avctx.sub_charenc_mode)
 }
 
 // Custom: SetSubCharencMode sets `AVCodecContext.sub_charenc_mode` value.
-func (avctx *AvCodecContext) SetSubCharencMode(v int32) {
+func (avctx *AVCodecContext) SetSubCharencMode(v int32) {
 	avctx.sub_charenc_mode = (C.int)(v)
 }
 
 // Custom: GetSubCharencModeAddr gets `AVCodecContext.sub_charenc_mode` address.
-func (avctx *AvCodecContext) GetSubCharencModeAddr() *int32 {
+func (avctx *AVCodecContext) GetSubCharencModeAddr() *int32 {
 	return (*int32)(&avctx.sub_charenc_mode)
 }
 
@@ -2795,48 +3025,48 @@ const (
 	FF_SUB_CHARENC_MODE_IGNORE      = int32(C.FF_SUB_CHARENC_MODE_IGNORE)
 )
 
-// Custom: Get SkipAlpha gets `AVCodecContext.skip_alpha` value.
-func (avctx *AvCodecContext) GetSkipAlpha() int32 {
+// Custom: GetSkipAlpha gets `AVCodecContext.skip_alpha` value.
+func (avctx *AVCodecContext) GetSkipAlpha() int32 {
 	return (int32)(avctx.skip_alpha)
 }
 
 // Custom: SetSkipAlpha sets `AVCodecContext.skip_alpha` value.
-func (avctx *AvCodecContext) SetSkipAlpha(v int32) {
+func (avctx *AVCodecContext) SetSkipAlpha(v int32) {
 	avctx.skip_alpha = (C.int)(v)
 }
 
 // Custom: GetSkipAlphaAddr gets `AVCodecContext.skip_alpha` address.
-func (avctx *AvCodecContext) GetSkipAlphaAddr() *int32 {
+func (avctx *AVCodecContext) GetSkipAlphaAddr() *int32 {
 	return (*int32)(&avctx.skip_alpha)
 }
 
-// Custom: Get SeekPreroll gets `AVCodecContext.seek_preroll` value.
-func (avctx *AvCodecContext) GetSeekPreroll() int32 {
+// Custom: GetSeekPreroll gets `AVCodecContext.seek_preroll` value.
+func (avctx *AVCodecContext) GetSeekPreroll() int32 {
 	return (int32)(avctx.seek_preroll)
 }
 
 // Custom: SetSeekPreroll sets `AVCodecContext.seek_preroll` value.
-func (avctx *AvCodecContext) SetSeekPreroll(v int32) {
+func (avctx *AVCodecContext) SetSeekPreroll(v int32) {
 	avctx.seek_preroll = (C.int)(v)
 }
 
 // Custom: GetSeekPrerollAddr gets `AVCodecContext.seek_preroll` address.
-func (avctx *AvCodecContext) GetSeekPrerollAddr() *int32 {
+func (avctx *AVCodecContext) GetSeekPrerollAddr() *int32 {
 	return (*int32)(&avctx.seek_preroll)
 }
 
-// Custom: Get DebugMv gets `AVCodecContext.debug_mv` value.
-func (avctx *AvCodecContext) GetDebugMv() int32 {
+// Custom: GetDebugMv gets `AVCodecContext.debug_mv` value.
+func (avctx *AVCodecContext) GetDebugMv() int32 {
 	return (int32)(avctx.debug_mv)
 }
 
 // Custom: SetDebugMv sets `AVCodecContext.debug_mv` value.
-func (avctx *AvCodecContext) SetDebugMv(v int32) {
+func (avctx *AVCodecContext) SetDebugMv(v int32) {
 	avctx.debug_mv = (C.int)(v)
 }
 
 // Custom: GetDebugMvAddr gets `AVCodecContext.debug_mv` address.
-func (avctx *AvCodecContext) GetDebugMvAddr() *int32 {
+func (avctx *AVCodecContext) GetDebugMvAddr() *int32 {
 	return (*int32)(&avctx.debug_mv)
 }
 
@@ -2846,113 +3076,113 @@ const (
 	FF_DEBUG_VIS_MV_B_BACK = int32(C.FF_DEBUG_VIS_MV_B_BACK)
 )
 
-// Custom: Get ChromaIntraMatrix gets `AVCodecContext.chroma_intra_matrix` value.
-func (avctx *AvCodecContext) GetChromaIntraMatrix() *uint16 {
+// Custom: GetChromaIntraMatrix gets `AVCodecContext.chroma_intra_matrix` value.
+func (avctx *AVCodecContext) GetChromaIntraMatrix() *uint16 {
 	return (*uint16)(avctx.chroma_intra_matrix)
 }
 
 // Custom: SetChromaIntraMatrix sets `AVCodecContext.chroma_intra_matrix` value.
-func (avctx *AvCodecContext) SetChromaIntraMatrix(v *uint16) {
+func (avctx *AVCodecContext) SetChromaIntraMatrix(v *uint16) {
 	avctx.chroma_intra_matrix = (*C.uint16_t)(v)
 }
 
 // Custom: GetChromaIntraMatrixAddr gets `AVCodecContext.chroma_intra_matrix` address.
-func (avctx *AvCodecContext) GetChromaIntraMatrixAddr() **uint16 {
+func (avctx *AVCodecContext) GetChromaIntraMatrixAddr() **uint16 {
 	return (**uint16)(unsafe.Pointer(&avctx.chroma_intra_matrix))
 }
 
-// Custom: Get DumpSeparator gets `AVCodecContext.dump_separator` value.
-func (avctx *AvCodecContext) GetDumpSeparator() *uint8 {
+// Custom: GetDumpSeparator gets `AVCodecContext.dump_separator` value.
+func (avctx *AVCodecContext) GetDumpSeparator() *uint8 {
 	return (*uint8)(avctx.dump_separator)
 }
 
 // Custom: SetDumpSeparator sets `AVCodecContext.dump_separator` value.
-func (avctx *AvCodecContext) SetDumpSeparator(v *uint8) {
+func (avctx *AVCodecContext) SetDumpSeparator(v *uint8) {
 	avctx.dump_separator = (*C.uint8_t)(v)
 }
 
 // Custom: GetDumpSeparatorAddr gets `AVCodecContext.dump_separator` address.
-func (avctx *AvCodecContext) GetDumpSeparatorAddr() **uint8 {
+func (avctx *AVCodecContext) GetDumpSeparatorAddr() **uint8 {
 	return (**uint8)(unsafe.Pointer(&avctx.dump_separator))
 }
 
-// Custom: Get CodecWhitelist gets `AVCodecContext.codec_whitelist` value.
-func (avctx *AvCodecContext) GetCodecWhitelist() string {
+// Custom: GetCodecWhitelist gets `AVCodecContext.codec_whitelist` value.
+func (avctx *AVCodecContext) GetCodecWhitelist() string {
 	return C.GoString(avctx.codec_whitelist)
 }
 
-// Custom: Get Properties gets `AVCodecContext.properties` value.
-func (avctx *AvCodecContext) GetProperties() uint32 {
+// Custom: GetProperties gets `AVCodecContext.properties` value.
+func (avctx *AVCodecContext) GetProperties() uint32 {
 	return (uint32)(avctx.properties)
 }
 
 // Custom: SetProperties sets `AVCodecContext.properties` value.
-func (avctx *AvCodecContext) SetProperties(v uint32) {
+func (avctx *AVCodecContext) SetProperties(v uint32) {
 	avctx.properties = (C.uint)(v)
 }
 
 // Custom: GetPropertiesAddr gets `AVCodecContext.properties` address.
-func (avctx *AvCodecContext) GetPropertiesAddr() *uint32 {
+func (avctx *AVCodecContext) GetPropertiesAddr() *uint32 {
 	return (*uint32)(&avctx.properties)
 }
 
-// Custom: Get CodedSideData gets `AVCodecContext.coded_side_data` value.
-func (avctx *AvCodecContext) GetCodedSideData() *AvPacketSideData {
-	return (*AvPacketSideData)(avctx.coded_side_data)
+// Custom: GetCodedSideData gets `AVCodecContext.coded_side_data` value.
+func (avctx *AVCodecContext) GetCodedSideData() *AVPacketSideData {
+	return (*AVPacketSideData)(avctx.coded_side_data)
 }
 
 // Custom: SetCodedSideData sets `AVCodecContext.coded_side_data` value.
-func (avctx *AvCodecContext) SetCodedSideData(v *AvPacketSideData) {
+func (avctx *AVCodecContext) SetCodedSideData(v *AVPacketSideData) {
 	avctx.coded_side_data = (*C.AVPacketSideData)(v)
 }
 
 // Custom: GetCodedSideDataAddr gets `AVCodecContext.coded_side_data` address.
-func (avctx *AvCodecContext) GetCodedSideDataAddr() **AvPacketSideData {
-	return (**AvPacketSideData)(unsafe.Pointer(&avctx.coded_side_data))
+func (avctx *AVCodecContext) GetCodedSideDataAddr() **AVPacketSideData {
+	return (**AVPacketSideData)(unsafe.Pointer(&avctx.coded_side_data))
 }
 
-// Custom: Get NbCodedSideData gets `AVCodecContext.nb_coded_side_data` value.
-func (avctx *AvCodecContext) GetNbCodedSideData() int32 {
+// Custom: GetNbCodedSideData gets `AVCodecContext.nb_coded_side_data` value.
+func (avctx *AVCodecContext) GetNbCodedSideData() int32 {
 	return (int32)(avctx.nb_coded_side_data)
 }
 
 // Custom: SetNbCodedSideData sets `AVCodecContext.nb_coded_side_data` value.
-func (avctx *AvCodecContext) SetNbCodedSideData(v int32) {
+func (avctx *AVCodecContext) SetNbCodedSideData(v int32) {
 	avctx.nb_coded_side_data = (C.int)(v)
 }
 
 // Custom: GetNbCodedSideDataAddr gets `AVCodecContext.nb_coded_side_data` address.
-func (avctx *AvCodecContext) GetNbCodedSideDataAddr() *int32 {
+func (avctx *AVCodecContext) GetNbCodedSideDataAddr() *int32 {
 	return (*int32)(&avctx.nb_coded_side_data)
 }
 
-// Custom: Get HwFramesCtx gets `AVCodecContext.hw_frames_ctx` value.
-func (avctx *AvCodecContext) GetHwFramesCtx() *AvBufferRef {
-	return (*AvBufferRef)(avctx.hw_frames_ctx)
+// Custom: GetHwFramesCtx gets `AVCodecContext.hw_frames_ctx` value.
+func (avctx *AVCodecContext) GetHwFramesCtx() *AVBufferRef {
+	return (*AVBufferRef)(avctx.hw_frames_ctx)
 }
 
 // Custom: SetHwFramesCtx sets `AVCodecContext.hw_frames_ctx` value.
-func (avctx *AvCodecContext) SetHwFramesCtx(v *AvBufferRef) {
+func (avctx *AVCodecContext) SetHwFramesCtx(v *AVBufferRef) {
 	avctx.hw_frames_ctx = (*C.AVBufferRef)(v)
 }
 
 // Custom: GetHwFramesCtxAddr gets `AVCodecContext.hw_frames_ctx` address.
-func (avctx *AvCodecContext) GetHwFramesCtxAddr() **AvBufferRef {
-	return (**AvBufferRef)(unsafe.Pointer(&avctx.hw_frames_ctx))
+func (avctx *AVCodecContext) GetHwFramesCtxAddr() **AVBufferRef {
+	return (**AVBufferRef)(unsafe.Pointer(&avctx.hw_frames_ctx))
 }
 
-// Custom: Get SubTextFormat gets `AVCodecContext.sub_text_format` value.
-func (avctx *AvCodecContext) GetSubTextFormat() int32 {
+// Custom: GetSubTextFormat gets `AVCodecContext.sub_text_format` value.
+func (avctx *AVCodecContext) GetSubTextFormat() int32 {
 	return (int32)(avctx.sub_text_format)
 }
 
 // Custom: SetSubTextFormat sets `AVCodecContext.sub_text_format` value.
-func (avctx *AvCodecContext) SetSubTextFormat(v int32) {
+func (avctx *AVCodecContext) SetSubTextFormat(v int32) {
 	avctx.sub_text_format = (C.int)(v)
 }
 
 // Custom: GetSubTextFormatAddr gets `AVCodecContext.sub_text_format` address.
-func (avctx *AvCodecContext) GetSubTextFormatAddr() *int32 {
+func (avctx *AVCodecContext) GetSubTextFormatAddr() *int32 {
 	return (*int32)(&avctx.sub_text_format)
 }
 
@@ -2961,201 +3191,275 @@ const (
 	FF_SUB_TEXT_FMT_ASS_WITH_TIMINGS = int32(C.FF_SUB_TEXT_FMT_ASS_WITH_TIMINGS)
 )
 
-// Custom: Get TrailingPadding gets `AVCodecContext.trailing_padding` value.
-func (avctx *AvCodecContext) GetTrailingPadding() int32 {
+// Custom: GetTrailingPadding gets `AVCodecContext.trailing_padding` value.
+func (avctx *AVCodecContext) GetTrailingPadding() int32 {
 	return (int32)(avctx.trailing_padding)
 }
 
 // Custom: SetTrailingPadding sets `AVCodecContext.trailing_padding` value.
-func (avctx *AvCodecContext) SetTrailingPadding(v int32) {
+func (avctx *AVCodecContext) SetTrailingPadding(v int32) {
 	avctx.trailing_padding = (C.int)(v)
 }
 
 // Custom: GetTrailingPaddingAddr gets `AVCodecContext.trailing_padding` address.
-func (avctx *AvCodecContext) GetTrailingPaddingAddr() *int32 {
+func (avctx *AVCodecContext) GetTrailingPaddingAddr() *int32 {
 	return (*int32)(&avctx.trailing_padding)
 }
 
-// Custom: Get MaxPixels gets `AVCodecContext.max_pixels` value.
-func (avctx *AvCodecContext) GetMaxPixels() int64 {
+// Custom: GetMaxPixels gets `AVCodecContext.max_pixels` value.
+func (avctx *AVCodecContext) GetMaxPixels() int64 {
 	return (int64)(avctx.max_pixels)
 }
 
 // Custom: SetMaxPixels sets `AVCodecContext.max_pixels` value.
-func (avctx *AvCodecContext) SetMaxPixels(v int64) {
+func (avctx *AVCodecContext) SetMaxPixels(v int64) {
 	avctx.max_pixels = (C.int64_t)(v)
 }
 
 // Custom: GetMaxPixelsAddr gets `AVCodecContext.max_pixels` address.
-func (avctx *AvCodecContext) GetMaxPixelsAddr() *int64 {
+func (avctx *AVCodecContext) GetMaxPixelsAddr() *int64 {
 	return (*int64)(&avctx.max_pixels)
 }
 
-// Custom: Get HwDeviceCtx gets `AVCodecContext.hw_device_ctx` value.
-func (avctx *AvCodecContext) GetHwDeviceCtx() *AvBufferRef {
-	return (*AvBufferRef)(avctx.hw_device_ctx)
+// Custom: GetHwDeviceCtx gets `AVCodecContext.hw_device_ctx` value.
+func (avctx *AVCodecContext) GetHwDeviceCtx() *AVBufferRef {
+	return (*AVBufferRef)(avctx.hw_device_ctx)
 }
 
 // Custom: SetHwDeviceCtx sets `AVCodecContext.hw_device_ctx` value.
-func (avctx *AvCodecContext) SetHwDeviceCtx(v *AvBufferRef) {
+func (avctx *AVCodecContext) SetHwDeviceCtx(v *AVBufferRef) {
 	avctx.hw_device_ctx = (*C.AVBufferRef)(v)
 }
 
 // Custom: GetHwDeviceCtxAddr gets `AVCodecContext.hw_device_ctx` address.
-func (avctx *AvCodecContext) GetHwDeviceCtxAddr() **AvBufferRef {
-	return (**AvBufferRef)(unsafe.Pointer(&avctx.hw_device_ctx))
+func (avctx *AVCodecContext) GetHwDeviceCtxAddr() **AVBufferRef {
+	return (**AVBufferRef)(unsafe.Pointer(&avctx.hw_device_ctx))
 }
 
-// Custom: Get HwaccelFlags gets `AVCodecContext.hwaccel_flags` value.
-func (avctx *AvCodecContext) GetHwaccelFlags() int32 {
+// Custom: GetHwaccelFlags gets `AVCodecContext.hwaccel_flags` value.
+func (avctx *AVCodecContext) GetHwaccelFlags() int32 {
 	return (int32)(avctx.hwaccel_flags)
 }
 
 // Custom: SetHwaccelFlags sets `AVCodecContext.hwaccel_flags` value.
-func (avctx *AvCodecContext) SetHwaccelFlags(v int32) {
+func (avctx *AVCodecContext) SetHwaccelFlags(v int32) {
 	avctx.hwaccel_flags = (C.int)(v)
 }
 
 // Custom: GetHwaccelFlagsAddr gets `AVCodecContext.hwaccel_flags` address.
-func (avctx *AvCodecContext) GetHwaccelFlagsAddr() *int32 {
+func (avctx *AVCodecContext) GetHwaccelFlagsAddr() *int32 {
 	return (*int32)(&avctx.hwaccel_flags)
 }
 
-// Custom: Get ApplyCropping gets `AVCodecContext.apply_cropping` value.
-func (avctx *AvCodecContext) GetApplyCropping() int32 {
+// Custom: GetApplyCropping gets `AVCodecContext.apply_cropping` value.
+func (avctx *AVCodecContext) GetApplyCropping() int32 {
 	return (int32)(avctx.apply_cropping)
 }
 
 // Custom: SetApplyCropping sets `AVCodecContext.apply_cropping` value.
-func (avctx *AvCodecContext) SetApplyCropping(v int32) {
+func (avctx *AVCodecContext) SetApplyCropping(v int32) {
 	avctx.apply_cropping = (C.int)(v)
 }
 
 // Custom: GetApplyCroppingAddr gets `AVCodecContext.apply_cropping` address.
-func (avctx *AvCodecContext) GetApplyCroppingAddr() *int32 {
+func (avctx *AVCodecContext) GetApplyCroppingAddr() *int32 {
 	return (*int32)(&avctx.apply_cropping)
 }
 
-// Custom: Get ExtraHwFrames gets `AVCodecContext.extra_hw_frames` value.
-func (avctx *AvCodecContext) GetExtraHwFrames() int32 {
+// Custom: GetExtraHwFrames gets `AVCodecContext.extra_hw_frames` value.
+func (avctx *AVCodecContext) GetExtraHwFrames() int32 {
 	return (int32)(avctx.extra_hw_frames)
 }
 
 // Custom: SetExtraHwFrames sets `AVCodecContext.extra_hw_frames` value.
-func (avctx *AvCodecContext) SetExtraHwFrames(v int32) {
+func (avctx *AVCodecContext) SetExtraHwFrames(v int32) {
 	avctx.extra_hw_frames = (C.int)(v)
 }
 
 // Custom: GetExtraHwFramesAddr gets `AVCodecContext.extra_hw_frames` address.
-func (avctx *AvCodecContext) GetExtraHwFramesAddr() *int32 {
+func (avctx *AVCodecContext) GetExtraHwFramesAddr() *int32 {
 	return (*int32)(&avctx.extra_hw_frames)
 }
 
-// Custom: Get DiscardDamagedPercentage gets `AVCodecContext.discard_damaged_percentage` value.
-func (avctx *AvCodecContext) GetDiscardDamagedPercentage() int32 {
+// Custom: GetDiscardDamagedPercentage gets `AVCodecContext.discard_damaged_percentage` value.
+func (avctx *AVCodecContext) GetDiscardDamagedPercentage() int32 {
 	return (int32)(avctx.discard_damaged_percentage)
 }
 
 // Custom: SetDiscardDamagedPercentage sets `AVCodecContext.discard_damaged_percentage` value.
-func (avctx *AvCodecContext) SetDiscardDamagedPercentage(v int32) {
+func (avctx *AVCodecContext) SetDiscardDamagedPercentage(v int32) {
 	avctx.discard_damaged_percentage = (C.int)(v)
 }
 
 // Custom: GetDiscardDamagedPercentageAddr gets `AVCodecContext.discard_damaged_percentage` address.
-func (avctx *AvCodecContext) GetDiscardDamagedPercentageAddr() *int32 {
+func (avctx *AVCodecContext) GetDiscardDamagedPercentageAddr() *int32 {
 	return (*int32)(&avctx.discard_damaged_percentage)
 }
 
-// Custom: Get MaxSamples gets `AVCodecContext.max_samples` value.
-func (avctx *AvCodecContext) GetMaxSamples() int64 {
+// Custom: GetMaxSamples gets `AVCodecContext.max_samples` value.
+func (avctx *AVCodecContext) GetMaxSamples() int64 {
 	return (int64)(avctx.max_samples)
 }
 
 // Custom: SetMaxSamples sets `AVCodecContext.max_samples` value.
-func (avctx *AvCodecContext) SetMaxSamples(v int64) {
+func (avctx *AVCodecContext) SetMaxSamples(v int64) {
 	avctx.max_samples = (C.int64_t)(v)
 }
 
 // Custom: GetMaxSamplesAddr gets `AVCodecContext.max_samples` address.
-func (avctx *AvCodecContext) GetMaxSamplesAddr() *int64 {
+func (avctx *AVCodecContext) GetMaxSamplesAddr() *int64 {
 	return (*int64)(&avctx.max_samples)
 }
 
-// Custom: Get ExportSideData gets `AVCodecContext.export_side_data` value.
-func (avctx *AvCodecContext) GetExportSideData() int32 {
+// Custom: GetExportSideData gets `AVCodecContext.export_side_data` value.
+func (avctx *AVCodecContext) GetExportSideData() int32 {
 	return (int32)(avctx.export_side_data)
 }
 
 // Custom: SetExportSideData sets `AVCodecContext.export_side_data` value.
-func (avctx *AvCodecContext) SetExportSideData(v int32) {
+func (avctx *AVCodecContext) SetExportSideData(v int32) {
 	avctx.export_side_data = (C.int)(v)
 }
 
 // Custom: GetExportSideDataAddr gets `AVCodecContext.export_side_data` address.
-func (avctx *AvCodecContext) GetExportSideDataAddr() *int32 {
+func (avctx *AVCodecContext) GetExportSideDataAddr() *int32 {
 	return (*int32)(&avctx.export_side_data)
 }
 
-// Deprecated: No use
-func AvCodecGetPktTimebase(avctx *AvCodecContext) AvRational {
-	return AvRational(C.av_codec_get_pkt_timebase((*C.struct_AVCodecContext)(avctx)))
+// typedef int (*avcodec_context_get_encode_buffer_func)(struct AVCodecContext *s,
+// AvPacket *pkt, int flags);
+type AVCodecContextGetEncodeBufferFunc = C.avcodec_context_get_encode_buffer_func
+
+// Custom: SetGetEncodeBuffer sets `AVCodecContext.get_encode_buffer` value.
+func (avctx *AVCodecContext) SetGetEncodeBuffer(v AVCodecContextGetEncodeBufferFunc) {
+	avctx.get_encode_buffer = (C.avcodec_context_get_encode_buffer_func)(v)
 }
 
 // Deprecated: No use
-func AvCodecSetPktTimebase(avctx *AvCodecContext, r AvRational) {
+func AvCodecGetPktTimebase(avctx *AVCodecContext) AVRational {
+	return AVRational(C.av_codec_get_pkt_timebase((*C.struct_AVCodecContext)(avctx)))
+}
+
+// Deprecated: No use
+func AvCodecSetPktTimebase(avctx *AVCodecContext, r AVRational) {
 	C.av_codec_set_pkt_timebase((*C.struct_AVCodecContext)(avctx), (C.struct_AVRational)(r))
 }
 
 // Deprecated: No use
-func AvCodecGetCodecDescriptor(avctx *AvCodecContext) *AvCodecDescriptor {
-	return (*AvCodecDescriptor)(C.av_codec_get_codec_descriptor((*C.struct_AVCodecContext)(avctx)))
+func AvCodecGetCodecDescriptor(avctx *AVCodecContext) *AVCodecDescriptor {
+	return (*AVCodecDescriptor)(C.av_codec_get_codec_descriptor((*C.struct_AVCodecContext)(avctx)))
 }
 
 // Deprecated: No use
-func AvCodecSetCodecDescriptor(avctx *AvCodecContext, d *AvCodecDescriptor) {
+func AvCodecSetCodecDescriptor(avctx *AVCodecContext, d *AVCodecDescriptor) {
 	C.av_codec_set_codec_descriptor((*C.struct_AVCodecContext)(avctx), (*C.struct_AVCodecDescriptor)(d))
 }
 
 // Deprecated: No use
-func AvCodecGetLowres(avctx *AvCodecContext) int32 {
+func AvCodecGetLowres(avctx *AVCodecContext) int32 {
 	return (int32)(C.av_codec_get_lowres((*C.struct_AVCodecContext)(avctx)))
 }
 
 // Deprecated: No use
-func AvCodecSetLowres(avctx *AvCodecContext, i int32) {
+func AvCodecSetLowres(avctx *AVCodecContext, i int32) {
 	C.av_codec_set_lowres((*C.struct_AVCodecContext)(avctx), C.int(i))
 }
 
 // Deprecated: No use
-func AvCodecGetSeekPreroll(avctx *AvCodecContext) int32 {
+func AvCodecGetSeekPreroll(avctx *AVCodecContext) int32 {
 	return (int32)(C.av_codec_get_seek_preroll((*C.struct_AVCodecContext)(avctx)))
 }
 
 // Deprecated: No use
-func AvCodecSetSeekPreroll(avctx *AvCodecContext, i int32) {
+func AvCodecSetSeekPreroll(avctx *AVCodecContext, i int32) {
 	C.av_codec_set_seek_preroll((*C.struct_AVCodecContext)(avctx), C.int(i))
 }
 
 // Deprecated: No use
-func AvCodecGetChromaIntraMatrix(avctx *AvCodecContext) *uint16 {
+func AvCodecGetChromaIntraMatrix(avctx *AVCodecContext) *uint16 {
 	return (*uint16)(C.av_codec_get_chroma_intra_matrix((*C.struct_AVCodecContext)(avctx)))
 }
 
 // Deprecated: No use
-func AvCodecSetChromaIntraMatrix(avctx *AvCodecContext, t *uint16) {
+func AvCodecSetChromaIntraMatrix(avctx *AVCodecContext, t *uint16) {
 	C.av_codec_set_chroma_intra_matrix((*C.struct_AVCodecContext)(avctx), (*C.uint16_t)(t))
 }
 
 // Deprecated: No use
-func AvCodecGetMaxLowres(c *AvCodec) int32 {
+func AvCodecGetMaxLowres(c *AVCodec) int32 {
 	return (int32)(C.av_codec_get_max_lowres((*C.struct_AVCodec)(c)))
 }
 
 // MpegEncContext
 type MpegEncContext C.struct_MpegEncContext
 
-// AvHWAccel
-type AvHWAccel C.struct_AVHWAccel
+// AVHWAccel
+type AVHWAccel C.struct_AVHWAccel
+
+// Custom: GetName gets `AVHWAccel.name` value.
+func (hwa *AVHWAccel) GetName() string {
+	return C.GoString(hwa.name)
+}
+
+// Custom: GetType gets `AVHWAccel.type` value.
+func (hwa *AVHWAccel) GetType() AVMediaType {
+	return (AVMediaType)(hwa._type)
+}
+
+// Custom: SetType sets `AVHWAccel.type` value.
+func (hwa *AVHWAccel) SetType(v AVMediaType) {
+	hwa._type = (C.enum_AVMediaType)(v)
+}
+
+// Custom: GetTypeAddr gets `AVHWAccel.type` address.
+func (hwa *AVHWAccel) GetTypeAddr() *AVMediaType {
+	return (*AVMediaType)(&hwa._type)
+}
+
+// Custom: GetId gets `AVHWAccel.id` value.
+func (hwa *AVHWAccel) GetId() AVCodecID {
+	return (AVCodecID)(hwa.id)
+}
+
+// Custom: SetId sets `AVHWAccel.id` value.
+func (hwa *AVHWAccel) SetId(v AVCodecID) {
+	hwa.id = (C.enum_AVCodecID)(v)
+}
+
+// Custom: GetIdAddr gets `AVHWAccel.id` address.
+func (hwa *AVHWAccel) GetIdAddr() *AVCodecID {
+	return (*AVCodecID)(&hwa.id)
+}
+
+// Custom: GetPixFmt gets `AVHWAccel.pix_fmt` value.
+func (hwa *AVHWAccel) GetPixFmt() AVPixelFormat {
+	return (AVPixelFormat)(hwa.pix_fmt)
+}
+
+// Custom: SetPixFmt sets `AVHWAccel.pix_fmt` value.
+func (hwa *AVHWAccel) SetPixFmt(v AVPixelFormat) {
+	hwa.pix_fmt = (C.enum_AVPixelFormat)(v)
+}
+
+// Custom: GetPixFmtAddr gets `AVHWAccel.pix_fmt` address.
+func (hwa *AVHWAccel) GetPixFmtAddr() *AVPixelFormat {
+	return (*AVPixelFormat)(&hwa.pix_fmt)
+}
+
+// Custom: GetCapabilities gets `AVHWAccel.capabilities` value.
+func (hwa *AVHWAccel) GetCapabilities() int32 {
+	return (int32)(hwa.capabilities)
+}
+
+// Custom: SetCapabilities sets `AVHWAccel.capabilities` value.
+func (hwa *AVHWAccel) SetCapabilities(v int32) {
+	hwa.capabilities = (C.int)(v)
+}
+
+// Custom: GetCapabilitiesAddr gets `AVHWAccel.capabilities` address.
+func (hwa *AVHWAccel) GetCapabilitiesAddr() *int32 {
+	return (*int32)(&hwa.capabilities)
+}
 
 const (
 	AV_HWACCEL_CODEC_CAP_EXPERIMENTAL      = int(C.AV_HWACCEL_CODEC_CAP_EXPERIMENTAL)
@@ -3164,32 +3468,343 @@ const (
 	AV_HWACCEL_FLAG_ALLOW_PROFILE_MISMATCH = int(C.AV_HWACCEL_FLAG_ALLOW_PROFILE_MISMATCH)
 )
 
-// AvPicture
-type AvPicture C.struct_AVPicture
+// AVPicture
+type AVPicture C.struct_AVPicture
 
-// AvSubtitleType
-type AvSubtitleType = C.enum_AVSubtitleType
+// Custom: GetData gets `AVPicture.data` value.
+func (pct *AVPicture) GetData(idx int) []*uint8 {
+	return unsafe.Slice((**uint8)(unsafe.Pointer(&pct.data[0])), AV_NUM_DATA_POINTERS)
+}
+
+// Custom: GetDataIdx gets `AVPicture.data` index value.
+func (pct *AVPicture) GetDataIdx(idx int) *uint8 {
+	return (*uint8)(pct.data[idx])
+}
+
+// Custom: SetDataIdx sets `AVPicture.data` index value.
+func (pct *AVPicture) SetDataIdx(idx int, v *uint8) {
+	pct.data[idx] = (*C.uint8_t)(v)
+}
+
+// Custom: GetDataIdxAddr gets `AVPicture.data` index address.
+func (pct *AVPicture) GetDataIdxAddr(idx int) **uint8 {
+	return (**uint8)(unsafe.Pointer(&pct.data[idx]))
+}
+
+// Custom: GetLinesize gets `AVPicture.linesize` value.
+func (pct *AVPicture) GetLinesize() []int32 {
+	return unsafe.Slice((*int32)(&pct.linesize[0]), AV_NUM_DATA_POINTERS)
+}
+
+// Custom: GetLinesizeIdx gets `AVPicture.linesize` index value.
+func (pct *AVPicture) GetLinesizeIdx(idx int) int32 {
+	return (int32)(pct.linesize[idx])
+}
+
+// Custom: SetLinesizeIdx sets `AVPicture.linesize` index value.
+func (pct *AVPicture) SetLinesizeIdx(idx int, v int32) {
+	pct.linesize[idx] = (C.int)(v)
+}
+
+// Custom: GetLinesizeIdxAddr gets `AVPicture.linesize` index address.
+func (pct *AVPicture) GetLinesizeIdxAddr(idx int) *int32 {
+	return (*int32)(&pct.linesize[idx])
+}
+
+// AVSubtitleType
+type AVSubtitleType = C.enum_AVSubtitleType
 
 const (
-	SUBTITLE_NONE   = AvSubtitleType(C.SUBTITLE_NONE)
-	SUBTITLE_BITMAP = AvSubtitleType(C.SUBTITLE_BITMAP)
-	SUBTITLE_TEXT   = AvSubtitleType(C.SUBTITLE_TEXT)
-	SUBTITLE_ASS    = AvSubtitleType(C.SUBTITLE_ASS)
+	SUBTITLE_NONE   = AVSubtitleType(C.SUBTITLE_NONE)
+	SUBTITLE_BITMAP = AVSubtitleType(C.SUBTITLE_BITMAP)
+	SUBTITLE_TEXT   = AVSubtitleType(C.SUBTITLE_TEXT)
+	SUBTITLE_ASS    = AVSubtitleType(C.SUBTITLE_ASS)
 )
 
 const AV_SUBTITLE_FLAG_FORCED = C.AV_SUBTITLE_FLAG_FORCED
 
-// AvSubtitleRect
-type AvSubtitleRect C.struct_AVSubtitleRect
+// AVSubtitleRect
+type AVSubtitleRect C.struct_AVSubtitleRect
 
-// AvSubtitle
-type AvSubtitle C.struct_AVSubtitle
+// Custom: GetX gets `AVSubtitleRect.x` value.
+func (sbtr *AVSubtitleRect) GetX() int32 {
+	return (int32)(sbtr.x)
+}
+
+// Custom: SetX sets `AVSubtitleRect.x` value.
+func (sbtr *AVSubtitleRect) SetX(v int32) {
+	sbtr.x = (C.int)(v)
+}
+
+// Custom: GetXAddr gets `AVSubtitleRect.x` address.
+func (sbtr *AVSubtitleRect) GetXAddr() *int32 {
+	return (*int32)(&sbtr.x)
+}
+
+// Custom: GetY gets `AVSubtitleRect.y` value.
+func (sbtr *AVSubtitleRect) GetY() int32 {
+	return (int32)(sbtr.y)
+}
+
+// Custom: SetY sets `AVSubtitleRect.y` value.
+func (sbtr *AVSubtitleRect) SetY(v int32) {
+	sbtr.y = (C.int)(v)
+}
+
+// Custom: GetYAddr gets `AVSubtitleRect.y` address.
+func (sbtr *AVSubtitleRect) GetYAddr() *int32 {
+	return (*int32)(&sbtr.y)
+}
+
+// Custom: GetW gets `AVSubtitleRect.w` value.
+func (sbtr *AVSubtitleRect) GetW() int32 {
+	return (int32)(sbtr.w)
+}
+
+// Custom: SetW sets `AVSubtitleRect.w` value.
+func (sbtr *AVSubtitleRect) SetW(v int32) {
+	sbtr.w = (C.int)(v)
+}
+
+// Custom: GetWAddr gets `AVSubtitleRect.w` address.
+func (sbtr *AVSubtitleRect) GetWAddr() *int32 {
+	return (*int32)(&sbtr.w)
+}
+
+// Custom: GetH gets `AVSubtitleRect.h` value.
+func (sbtr *AVSubtitleRect) GetH() int32 {
+	return (int32)(sbtr.h)
+}
+
+// Custom: SetH sets `AVSubtitleRect.h` value.
+func (sbtr *AVSubtitleRect) SetH(v int32) {
+	sbtr.h = (C.int)(v)
+}
+
+// Custom: GetHAddr gets `AVSubtitleRect.h` address.
+func (sbtr *AVSubtitleRect) GetHAddr() *int32 {
+	return (*int32)(&sbtr.h)
+}
+
+// Custom: GetNbColors gets `AVSubtitleRect.nb_colors` value.
+func (sbtr *AVSubtitleRect) GetNbColors() int32 {
+	return (int32)(sbtr.nb_colors)
+}
+
+// Custom: SetNbColors sets `AVSubtitleRect.nb_colors` value.
+func (sbtr *AVSubtitleRect) SetNbColors(v int32) {
+	sbtr.nb_colors = (C.int)(v)
+}
+
+// Custom: GetNbColorsAddr gets `AVSubtitleRect.nb_colors` address.
+func (sbtr *AVSubtitleRect) GetNbColorsAddr() *int32 {
+	return (*int32)(&sbtr.nb_colors)
+}
+
+// Custom: GetPict gets `AVSubtitleRect.pict` value.
+func (sbtr *AVSubtitleRect) GetPict() AVPicture {
+	return (AVPicture)(sbtr.pict)
+}
+
+// Custom: SetPict sets `AVSubtitleRect.pict` value.
+func (sbtr *AVSubtitleRect) SetPict(v AVPicture) {
+	sbtr.pict = (C.struct_AVPicture)(v)
+}
+
+// Custom: GetPictAddr gets `AVSubtitleRect.pict` address.
+func (sbtr *AVSubtitleRect) GetPictAddr() *AVPicture {
+	return (*AVPicture)(&sbtr.pict)
+}
+
+// Custom: GetData gets `AVSubtitleRect.data` value.
+func (sbtr *AVSubtitleRect) GetData() []*uint8 {
+	return unsafe.Slice((**uint8)(unsafe.Pointer(&sbtr.data[0])), 4)
+}
+
+// Custom: GetDataIdx gets `AVSubtitleRect.data` index value.
+func (sbtr *AVSubtitleRect) GetDataIdx(idx int) *uint8 {
+	return (*uint8)(sbtr.data[idx])
+}
+
+// Custom: SetDataIdx sets `AVSubtitleRect.data` index value.
+func (sbtr *AVSubtitleRect) SetDataIdx(idx int, v *uint8) {
+	sbtr.data[idx] = (*C.uint8_t)(v)
+}
+
+// Custom: GetDataIdxAddr gets `AVSubtitleRect.data` index address.
+func (sbtr *AVSubtitleRect) GetDataIdxAddr(idx int) **uint8 {
+	return (**uint8)(unsafe.Pointer(&sbtr.data[idx]))
+}
+
+// Custom: GetLinesize gets `AVSubtitleRect.linesize` value.
+func (sbtr *AVSubtitleRect) GetLinesize() []int32 {
+	return unsafe.Slice((*int32)(&sbtr.linesize[0]), 4)
+}
+
+// Custom: GetLinesizeIdx gets `AVSubtitleRect.linesize` index value.
+func (sbtr *AVSubtitleRect) GetLinesizeIdx(idx int) int32 {
+	return (int32)(sbtr.linesize[idx])
+}
+
+// Custom: SetLinesizeIdx sets `AVSubtitleRect.linesize` index value.
+func (sbtr *AVSubtitleRect) SetLinesizeIdx(idx int, v int32) {
+	sbtr.linesize[idx] = (C.int)(v)
+}
+
+// Custom: GetLinesizeIdxAddr gets `AVSubtitleRect.linesize` index address.
+func (sbtr *AVSubtitleRect) GetLinesizeIdxAddr(idx int) *int32 {
+	return (*int32)(&sbtr.linesize[idx])
+}
+
+// Custom: GetType gets `AVSubtitleRect._type` value.
+func (sbtr *AVSubtitleRect) GetType() AVSubtitleType {
+	return (AVSubtitleType)(sbtr._type)
+}
+
+// Custom: SetType sets `AVSubtitleRect._type` value.
+func (sbtr *AVSubtitleRect) SetType(v AVSubtitleType) {
+	sbtr._type = (C.enum_AVSubtitleType)(v)
+}
+
+// Custom: GetTypeAddr gets `AVSubtitleRect._type` address.
+func (sbtr *AVSubtitleRect) GetTypeAddr() *AVSubtitleType {
+	return (*AVSubtitleType)(&sbtr._type)
+}
+
+// Custom: GetText gets `AVSubtitleRect.text` value.
+func (sbtr *AVSubtitleRect) GetText() string {
+	return C.GoString(sbtr.text)
+}
+
+// Custom: GetAss gets `AVSubtitleRect.ass` value.
+func (sbtr *AVSubtitleRect) GetAss() string {
+	return C.GoString(sbtr.ass)
+}
+
+// Custom: GetFlags gets `AVSubtitleRect.flags` value.
+func (sbtr *AVSubtitleRect) GetFlags() int32 {
+	return (int32)(sbtr.flags)
+}
+
+// Custom: SetFlags sets `AVSubtitleRect.flags` value.
+func (sbtr *AVSubtitleRect) SetFlags(v int32) {
+	sbtr.flags = (C.int)(v)
+}
+
+// Custom: GetFlagsAddr gets `AVSubtitleRect.flags` address.
+func (sbtr *AVSubtitleRect) GetFlagsAddr() *int32 {
+	return (*int32)(&sbtr.flags)
+}
+
+// AVSubtitle
+type AVSubtitle C.struct_AVSubtitle
+
+// Custom: GetFormat gets `AVSubtitle.format` value.
+func (sbt *AVSubtitle) GetFormat() uint16 {
+	return (uint16)(sbt.format)
+}
+
+// Custom: SetFormat sets `AVSubtitle.format` value.
+func (sbt *AVSubtitle) SetFormat(v uint16) {
+	sbt.format = (C.uint16_t)(v)
+}
+
+// Custom: GetFormatAddr gets `AVSubtitle.format` address.
+func (sbt *AVSubtitle) GetFormatAddr() *uint16 {
+	return (*uint16)(&sbt.format)
+}
+
+// Custom: GetStartDisplayTime gets `AVSubtitle.start_display_time` value.
+func (sbt *AVSubtitle) GetStartDisplayTime() uint32 {
+	return (uint32)(sbt.start_display_time)
+}
+
+// Custom: SetStartDisplayTime sets `AVSubtitle.start_display_time` value.
+func (sbt *AVSubtitle) SetStartDisplayTime(v uint32) {
+	sbt.start_display_time = (C.uint32_t)(v)
+}
+
+// Custom: GetStartDisplayTimeAddr gets `AVSubtitle.start_display_time` address.
+func (sbt *AVSubtitle) GetStartDisplayTimeAddr() *uint32 {
+	return (*uint32)(&sbt.start_display_time)
+}
+
+// Custom: GetEndDisplayTime gets `AVSubtitle.end_display_time` value.
+func (sbt *AVSubtitle) GetEndDisplayTime() uint32 {
+	return (uint32)(sbt.end_display_time)
+}
+
+// Custom: SetEndDisplayTime sets `AVSubtitle.end_display_time` value.
+func (sbt *AVSubtitle) SetEndDisplayTime(v uint32) {
+	sbt.end_display_time = (C.uint32_t)(v)
+}
+
+// Custom: GetEndDisplayTimeAddr gets `AVSubtitle.end_display_time` address.
+func (sbt *AVSubtitle) GetEndDisplayTimeAddr() *uint32 {
+	return (*uint32)(&sbt.end_display_time)
+}
+
+// Custom: GetNumRects gets `AVSubtitle.num_rects` value.
+func (sbt *AVSubtitle) GetNumRects() uint32 {
+	return (uint32)(sbt.num_rects)
+}
+
+// Custom: SetNumRects sets `AVSubtitle.num_rects` value.
+func (sbt *AVSubtitle) SetNumRects(v uint32) {
+	sbt.num_rects = (C.uint)(v)
+}
+
+// Custom: GetNumRectsAddr gets `AVSubtitle.num_rects` address.
+func (sbt *AVSubtitle) GetNumRectsAddr() *uint32 {
+	return (*uint32)(&sbt.num_rects)
+}
+
+// Custom: GetRects gets `AVSubtitle.rects` value.
+func (sbt *AVSubtitle) GetRects() []*AVSubtitleRect {
+	if sbt.rects == nil {
+		return nil
+	}
+	return unsafe.Slice((**AVSubtitleRect)(unsafe.Pointer(sbt.rects)), sbt.num_rects)
+}
+
+// Custom: SetRects sets `AVSubtitle.rects` value.
+func (sbt *AVSubtitle) SetRects(v **AVSubtitleRect) {
+	sbt.rects = (**C.struct_AVSubtitleRect)(unsafe.Pointer(v))
+}
+
+// Custom: GetRectsAddr gets `AVSubtitle.rects` address.
+func (sbt *AVSubtitle) GetRectsAddr() ***AVSubtitleRect {
+	return (***AVSubtitleRect)(unsafe.Pointer(&sbt.rects))
+}
+
+// Custom: GetRectsIdx gets `AVSubtitle.rects` index value.
+func (sbt *AVSubtitle) GetRectsIdx(idx int) *AVSubtitleRect {
+	if idx >= int(sbt.num_rects) {
+		return nil
+	}
+	return PointerOffset((*AVSubtitleRect)(*sbt.rects), idx)
+}
+
+// Custom: GetPts gets `AVSubtitle.pts` value.
+func (sbt *AVSubtitle) GetPts() int64 {
+	return (int64)(sbt.pts)
+}
+
+// Custom: SetPts sets `AVSubtitle.pts` value.
+func (sbt *AVSubtitle) SetPts(v int64) {
+	sbt.pts = (C.int64_t)(v)
+}
+
+// Custom: GetPtsAddr gets `AVSubtitle.pts` address.
+func (sbt *AVSubtitle) GetPtsAddr() *int64 {
+	return (*int64)(&sbt.pts)
+}
 
 // If c is NULL, returns the first registered codec,
 // if c is non-NULL, returns the next registered codec after c,
 // or NULL if c is the last one.
-func AvCodecNext(c *AvCodec) *AvCodec {
-	return (*AvCodec)(C.av_codec_next((*C.struct_AVCodec)(c)))
+func AvCodecNext(c *AVCodec) *AVCodec {
+	return (*AVCodec)(C.av_codec_next((*C.struct_AVCodec)(c)))
 }
 
 // AvCodecVersion returns the LIBAVCODEC_VERSION_INT constant.
@@ -3203,7 +3818,7 @@ func AvCodecConfiguration() string {
 }
 
 // Deprecated: Calling this function is unnecessary.
-func AvCodecRegister(c *AvCodec) {
+func AvCodecRegister(c *AVCodec) {
 	C.avcodec_register((*C.struct_AVCodec)(c))
 }
 
@@ -3213,41 +3828,41 @@ func AvCodecRegisterAll() {
 }
 
 // AvCodecAllocContext3 allocates an AVCodecContext and set its fields to default values.
-// The resulting struct should be freed with AvCodecFreeContext().
-func AvCodecAllocContext3(c *AvCodec) *AvCodecContext {
-	return (*AvCodecContext)(C.avcodec_alloc_context3((*C.struct_AVCodec)(c)))
+// The resulting struct should be freed with AVCodecFreeContext().
+func AvCodecAllocContext3(c *AVCodec) *AVCodecContext {
+	return (*AVCodecContext)(C.avcodec_alloc_context3((*C.struct_AVCodec)(c)))
 }
 
 // AvCodecFreeContext frees the codec context and everything associated with it
 // and write NULL to the provided pointer.
-func AvCodecFreeContext(avctx **AvCodecContext) {
+func AvCodecFreeContext(avctx **AVCodecContext) {
 	C.avcodec_free_context((**C.struct_AVCodecContext)(unsafe.Pointer(avctx)))
 }
 
 // Deprecated: No use
-func AvCodecGetContextDefaults3(avctx *AvCodecContext, c *AvCodec) int32 {
+func AvCodecGetContextDefaults3(avctx *AVCodecContext, c *AVCodec) int32 {
 	return (int32)(C.avcodec_get_context_defaults3((*C.struct_AVCodecContext)(avctx),
 		(*C.struct_AVCodec)(c)))
 }
 
-// AvCodecGetClass gets the AvClass for AvCodecContext.
-func AvCodecGetClass() *AvClass {
-	return (*AvClass)(C.avcodec_get_class())
+// AvCodecGetClass gets the AVClass for AVCodecContext.
+func AvCodecGetClass() *AVClass {
+	return (*AVClass)(C.avcodec_get_class())
 }
 
 // Deprecated: No use
-func AvCodecGetFrameClass() *AvClass {
-	return (*AvClass)(C.avcodec_get_frame_class())
+func AvCodecGetFrameClass() *AVClass {
+	return (*AVClass)(C.avcodec_get_frame_class())
 }
 
-// AvCodecGetSubtitleRectClass gets the AvClass for AvSubtitleRect.
-func AvCodecGetSubtitleRectClass() *AvClass {
-	return (*AvClass)(C.avcodec_get_subtitle_rect_class())
+// AvCodecGetSubtitleRectClass gets the AVClass for AVSubtitleRect.
+func AvCodecGetSubtitleRectClass() *AVClass {
+	return (*AVClass)(C.avcodec_get_subtitle_rect_class())
 }
 
 // Deprecated: Use an intermediate AVCodecParameters instance and the
-// AvCodecParametersFromContext() / AvCodecParametersToContext() functions.
-func AvCodecCopyContext(dest, src *AvCodecContext) int32 {
+// AvCodecParametersFromContext() / AVCodecParametersToContext() functions.
+func AvCodecCopyContext(dest, src *AVCodecContext) int32 {
 	return (int32)(C.avcodec_copy_context((*C.struct_AVCodecContext)(dest),
 		(*C.struct_AVCodecContext)(src)))
 }
@@ -3255,7 +3870,7 @@ func AvCodecCopyContext(dest, src *AvCodecContext) int32 {
 // AvCodecParametersFromContext fills the parameters struct based on the values from the supplied codec
 // context. Any allocated fields in par are freed and replaced with duplicates
 // of the corresponding fields in codec.
-func AvCodecParametersFromContext(par *AvCodecParameters, avctx *AvCodecContext) int32 {
+func AvCodecParametersFromContext(par *AVCodecParameters, avctx *AVCodecContext) int32 {
 	return (int32)(C.avcodec_parameters_from_context((*C.struct_AVCodecParameters)(par),
 		(*C.struct_AVCodecContext)(avctx)))
 }
@@ -3264,156 +3879,725 @@ func AvCodecParametersFromContext(par *AvCodecParameters, avctx *AvCodecContext)
 // parameters. Any allocated fields in codec that have a corresponding field in
 // par are freed and replaced with duplicates of the corresponding field in par.
 // Fields in codec that do not have a counterpart in par are not touched.
-func AvCodecParametersToContext(avctx *AvCodecContext, par *AvCodecParameters) int32 {
+func AvCodecParametersToContext(avctx *AVCodecContext, par *AVCodecParameters) int32 {
 	return (int32)(C.avcodec_parameters_to_context((*C.struct_AVCodecContext)(avctx),
 		(*C.struct_AVCodecParameters)(par)))
 }
 
 // AvCodecContext initializes the context to use the given codec.
-func AvCodecOpen2(avctx *AvCodecContext, c *AvCodec, d **AvDictionary) int32 {
+func AvCodecOpen2(avctx *AVCodecContext, c *AVCodec, d **AVDictionary) int32 {
 	return (int32)(C.avcodec_open2((*C.struct_AVCodecContext)(avctx),
 		(*C.struct_AVCodec)(c), (**C.struct_AVDictionary)(unsafe.Pointer(d))))
 }
 
 // AvCodecClose closes a given context and free all the data associated with it (but not the context itself).
-func AvCodecClose(avctx *AvCodecContext) int32 {
+func AvCodecClose(avctx *AVCodecContext) int32 {
 	return (int32)(C.avcodec_close((*C.struct_AVCodecContext)(avctx)))
 }
 
 // AvSubtitleFree frees all allocated data in the given subtitle struct.
-func AvSubtitleFree(s *AvSubtitle) {
+func AvSubtitleFree(s *AVSubtitle) {
 	C.avsubtitle_free((*C.struct_AVSubtitle)(s))
 }
 
 // The default callback for AVCodecContext.get_buffer2().
-func AvCodecDefaultGetBuffer2(avctx *AvCodecContext, frame *AvFrame, flags int32) int32 {
+func AvCodecDefaultGetBuffer2(avctx *AVCodecContext, frame *AVFrame, flags int32) int32 {
 	return (int32)(C.avcodec_default_get_buffer2((*C.struct_AVCodecContext)(avctx),
 		(*C.struct_AVFrame)(frame), C.int(flags)))
 }
 
 // The default callback for AVCodecContext.get_encode_buffer().
-func AvCodecDefaultGetEncodeBuffer(avctx *AvCodecContext, pkt *AvPacket, flags int32) int32 {
+func AvCodecDefaultGetEncodeBuffer(avctx *AVCodecContext, pkt *AVPacket, flags int32) int32 {
 	return (int32)(C.avcodec_default_get_encode_buffer((*C.struct_AVCodecContext)(avctx),
 		(*C.struct_AVPacket)(pkt), C.int(flags)))
 }
 
 // AvCodecAlignDimensions modifies width and height values so that they will result in a memory
 // buffer that is acceptable for the codec if you do not use any horizontal padding.
-func AvCodecAlignDimensions(avctx *AvCodecContext, width, height *int32) {
+func AvCodecAlignDimensions(avctx *AVCodecContext, width, height *int32) {
 	C.avcodec_align_dimensions((*C.struct_AVCodecContext)(avctx), (*C.int)(width), (*C.int)(height))
 }
 
 // AvCodecAlignDimensions2 modifies width and height values so that they will result in a memory
 // buffer that is acceptable for the codec if you also ensure that all
 // line sizes are a multiple of the respective linesize_align[i].
-func AvCodecAlignDimensions2(avctx *AvCodecContext, width, height *int32,
+func AvCodecAlignDimensions2(avctx *AVCodecContext, width, height *int32,
 	linesizeAlign [AV_NUM_DATA_POINTERS]int32) {
 	C.avcodec_align_dimensions2((*C.struct_AVCodecContext)(avctx),
 		(*C.int)(width), (*C.int)(height), (*C.int)(unsafe.Pointer(&linesizeAlign[0])))
 }
 
-// AvCodecEnumToChromaPos converts AvChromaLocation to swscale x/y chroma position.
-func AvCodecEnumToChromaPos(xpos, ypos *int32, pos AvChromaLocation) int32 {
+// AvCodecEnumToChromaPos converts AVChromaLocation to swscale x/y chroma position.
+func AvCodecEnumToChromaPos(xpos, ypos *int32, pos AVChromaLocation) int32 {
 	return (int32)(C.avcodec_enum_to_chroma_pos((*C.int)(xpos), (*C.int)(ypos), (C.enum_AVChromaLocation)(pos)))
 }
 
-// AvCodecChromaPosToEnum converts swscale x/y chroma position to AvChromaLocation.
-func AvCodecChromaPosToEnum(xpos, ypos int32) AvChromaLocation {
-	return (AvChromaLocation)(C.avcodec_chroma_pos_to_enum(C.int(xpos), C.int(ypos)))
+// AvCodecChromaPosToEnum converts swscale x/y chroma position to AVChromaLocation.
+func AvCodecChromaPosToEnum(xpos, ypos int32) AVChromaLocation {
+	return (AVChromaLocation)(C.avcodec_chroma_pos_to_enum(C.int(xpos), C.int(ypos)))
 }
 
-// Deprecated: Use AvCodecSendPacket() and AvCodecReceiveFrame().
-func AvCodecDecodeAudio4(avctx *AvCodecContext, frame *AvFrame, gotFramePtr *int32, avpkt *AvPacket) int32 {
+// Deprecated: Use AVCodecSendPacket() and AVCodecReceiveFrame().
+func AvCodecDecodeAudio4(avctx *AVCodecContext, frame *AVFrame, gotFramePtr *int32, avpkt *AVPacket) int32 {
 	return (int32)(C.avcodec_decode_audio4((*C.struct_AVCodecContext)(avctx),
 		(*C.struct_AVFrame)(frame), (*C.int)(gotFramePtr), (*C.struct_AVPacket)(avpkt)))
 }
 
-// Deprecated: Use AvCodecSendPacket() and AvCodecReceiveFrame().
-func AvCodecDecodeVideo2(avctx *AvCodecContext, picture *AvFrame, gotPicturePtr *int32, avpkt *AvPacket) int32 {
+// Deprecated: Use AVCodecSendPacket() and AVCodecReceiveFrame().
+func AvCodecDecodeVideo2(avctx *AVCodecContext, picture *AVFrame, gotPicturePtr *int32, avpkt *AVPacket) int32 {
 	return (int32)(C.avcodec_decode_video2((*C.struct_AVCodecContext)(avctx),
 		(*C.struct_AVFrame)(picture), (*C.int)(gotPicturePtr), (*C.struct_AVPacket)(avpkt)))
 }
 
 // AvCodecDecodeSubtitle2 decodes a subtitle message.
-func AvCodecDecodeSubtitle2(avctx *AvCodecContext, sub *AvSubtitle, gotSubPtr *int32, avpkt *AvPacket) int32 {
+func AvCodecDecodeSubtitle2(avctx *AVCodecContext, sub *AVSubtitle, gotSubPtr *int32, avpkt *AVPacket) int32 {
 	return (int32)(C.avcodec_decode_subtitle2((*C.struct_AVCodecContext)(avctx),
 		(*C.struct_AVSubtitle)(sub), (*C.int)(gotSubPtr), (*C.struct_AVPacket)(avpkt)))
 }
 
 // AvCodecSendPacket supplies raw packet data as input to a decoder.
-func AvCodecSendPacket(avctx *AvCodecContext, avpkt *AvPacket) int32 {
+func AvCodecSendPacket(avctx *AVCodecContext, avpkt *AVPacket) int32 {
 	return (int32)(C.avcodec_send_packet((*C.struct_AVCodecContext)(avctx),
 		(*C.struct_AVPacket)(avpkt)))
 }
 
 // AvCodecReceiveFrame returns decoded output data from a decoder.
-func AvCodecReceiveFrame(avctx *AvCodecContext, frame *AvFrame) int32 {
+func AvCodecReceiveFrame(avctx *AVCodecContext, frame *AVFrame) int32 {
 	return (int32)(C.avcodec_receive_frame((*C.struct_AVCodecContext)(avctx),
 		(*C.struct_AVFrame)(frame)))
 }
 
-// AvCodecSendFrame supplies a raw video or audio frame to the encoder. Use AvCodecReceivePacket()
+// AvCodecSendFrame supplies a raw video or audio frame to the encoder. Use AVCodecReceivePacket()
 // to retrieve buffered output packets.
-func AvCodecSendFrame(avctx *AvCodecContext, frame *AvFrame) int32 {
+func AvCodecSendFrame(avctx *AVCodecContext, frame *AVFrame) int32 {
 	return (int32)(C.avcodec_send_frame((*C.struct_AVCodecContext)(avctx),
 		(*C.struct_AVFrame)(frame)))
 }
 
 // AvCodecReceivePacket reads encoded data from the encoder.
-func AvCodecReceivePacket(avctx *AvCodecContext, avpkt *AvPacket) int32 {
+func AvCodecReceivePacket(avctx *AVCodecContext, avpkt *AVPacket) int32 {
 	return (int32)(C.avcodec_receive_packet((*C.struct_AVCodecContext)(avctx),
 		(*C.struct_AVPacket)(avpkt)))
 }
 
 // AvCodecGetHwFramesParameters create and return a AVHWFramesContext with values adequate for hardware
 // decoding.
-func AvCodecGetHwFramesParameters(avctx *AvCodecContext, deviceRef *AvBufferRef,
-	hwPixFmt AvPixelFormat,
-	outFramesRef **AvBufferRef) int32 {
+func AvCodecGetHwFramesParameters(avctx *AVCodecContext, deviceRef *AVBufferRef,
+	hwPixFmt AVPixelFormat,
+	outFramesRef **AVBufferRef) int32 {
 	return (int32)(C.avcodec_get_hw_frames_parameters((*C.struct_AVCodecContext)(avctx),
 		(*C.AVBufferRef)(deviceRef),
 		(C.enum_AVPixelFormat)(hwPixFmt),
 		(**C.AVBufferRef)(unsafe.Pointer(outFramesRef))))
 }
 
-// AvPictureStructure
-type AvPictureStructure = C.enum_AVPictureStructure
+// AVPictureStructure
+type AVPictureStructure = C.enum_AVPictureStructure
 
 const (
-	AV_PICTURE_STRUCTURE_UNKNOWN      = AvPictureStructure(C.AV_PICTURE_STRUCTURE_UNKNOWN)
-	AV_PICTURE_STRUCTURE_TOP_FIELD    = AvPictureStructure(C.AV_PICTURE_STRUCTURE_TOP_FIELD)
-	AV_PICTURE_STRUCTURE_BOTTOM_FIELD = AvPictureStructure(C.AV_PICTURE_STRUCTURE_BOTTOM_FIELD)
-	AV_PICTURE_STRUCTURE_FRAME        = AvPictureStructure(C.AV_PICTURE_STRUCTURE_FRAME)
+	AV_PICTURE_STRUCTURE_UNKNOWN      = AVPictureStructure(C.AV_PICTURE_STRUCTURE_UNKNOWN)
+	AV_PICTURE_STRUCTURE_TOP_FIELD    = AVPictureStructure(C.AV_PICTURE_STRUCTURE_TOP_FIELD)
+	AV_PICTURE_STRUCTURE_BOTTOM_FIELD = AVPictureStructure(C.AV_PICTURE_STRUCTURE_BOTTOM_FIELD)
+	AV_PICTURE_STRUCTURE_FRAME        = AVPictureStructure(C.AV_PICTURE_STRUCTURE_FRAME)
 )
 
-// AvCodecParserContext
-type AvCodecParserContext C.struct_AVCodecParserContext
+// AVCodecParserContext
+type AVCodecParserContext C.struct_AVCodecParserContext
 
-// AvCodecParser
-type AvCodecParser C.struct_AVCodecParser
+// Custom: GetPrivData gets `AVCodecParserContext.priv_data` value.
+func (cpc *AVCodecParserContext) GetPrivData() unsafe.Pointer {
+	return cpc.priv_data
+}
+
+// Custom: SetPrivData sets `AVCodecParserContext.priv_data` value.
+func (cpc *AVCodecParserContext) SetPrivData(v CVoidPointer) {
+	cpc.priv_data = VoidPointer(v)
+}
+
+// Custom: GetPrivDataAddr gets `AVCodecParserContext.priv_data` address.
+func (cpc *AVCodecParserContext) GetPrivDataAddr() *unsafe.Pointer {
+	return (*unsafe.Pointer)(&cpc.priv_data)
+}
+
+// Custom: GetParser gets `AVCodecParserContext.parser` value.
+func (cpc *AVCodecParserContext) GetParser() *AVCodecParser {
+	return (*AVCodecParser)(cpc.parser)
+}
+
+// Custom: SetParser sets `AVCodecParserContext.parser` value.
+func (cpc *AVCodecParserContext) SetParser(v *AVCodecParser) {
+	cpc.parser = (*C.struct_AVCodecParser)(v)
+}
+
+// Custom: GetParserAddr gets `AVCodecParserContext.parser` address.
+func (cpc *AVCodecParserContext) GetParserAddr() **AVCodecParser {
+	return (**AVCodecParser)(unsafe.Pointer(&cpc.parser))
+}
+
+// Custom: GetFrameOffset gets `AVCodecParserContext.frame_offset` value.
+func (cpc *AVCodecParserContext) GetFrameOffset() int64 {
+	return (int64)(cpc.frame_offset)
+}
+
+// Custom: SetFrameOffset sets `AVCodecParserContext.frame_offset` value.
+func (cpc *AVCodecParserContext) SetFrameOffset(v int64) {
+	cpc.frame_offset = (C.int64_t)(v)
+}
+
+// Custom: GetFrameOffsetAddr gets `AVCodecParserContext.frame_offset` address.
+func (cpc *AVCodecParserContext) GetFrameOffsetAddr() *int64 {
+	return (*int64)(&cpc.frame_offset)
+}
+
+// Custom: GetCurOffset gets `AVCodecParserContext.cur_offset` value.
+func (cpc *AVCodecParserContext) GetCurOffset() int64 {
+	return (int64)(cpc.cur_offset)
+}
+
+// Custom: SetCurOffset sets `AVCodecParserContext.cur_offset` value.
+func (cpc *AVCodecParserContext) SetCurOffset(v int64) {
+	cpc.cur_offset = (C.int64_t)(v)
+}
+
+// Custom: GetCurOffsetAddr gets `AVCodecParserContext.cur_offset` address.
+func (cpc *AVCodecParserContext) GetCurOffsetAddr() *int64 {
+	return (*int64)(&cpc.cur_offset)
+}
+
+// Custom: GetNextFrameOffset gets `AVCodecParserContext.next_frame_offset` value.
+func (cpc *AVCodecParserContext) GetNextFrameOffset() int64 {
+	return (int64)(cpc.next_frame_offset)
+}
+
+// Custom: SetNextFrameOffset sets `AVCodecParserContext.next_frame_offset` value.
+func (cpc *AVCodecParserContext) SetNextFrameOffset(v int64) {
+	cpc.next_frame_offset = (C.int64_t)(v)
+}
+
+// Custom: GetNextFrameOffsetAddr gets `AVCodecParserContext.next_frame_offset` address.
+func (cpc *AVCodecParserContext) GetNextFrameOffsetAddr() *int64 {
+	return (*int64)(&cpc.next_frame_offset)
+}
+
+// Custom: GetPictType gets `AVCodecParserContext.pict_type` value.
+func (cpc *AVCodecParserContext) GetPictType() int32 {
+	return (int32)(cpc.pict_type)
+}
+
+// Custom: SetPictType sets `AVCodecParserContext.pict_type` value.
+func (cpc *AVCodecParserContext) SetPictType(v int32) {
+	cpc.pict_type = (C.int)(v)
+}
+
+// Custom: GetPictTypeAddr gets `AVCodecParserContext.pict_type` address.
+func (cpc *AVCodecParserContext) GetPictTypeAddr() *int32 {
+	return (*int32)(&cpc.pict_type)
+}
+
+// Custom: GetPts gets `AVCodecParserContext.pts` value.
+func (cpc *AVCodecParserContext) GetPts() int64 {
+	return (int64)(cpc.pts)
+}
+
+// Custom: SetPts sets `AVCodecParserContext.pts` value.
+func (cpc *AVCodecParserContext) SetPts(v int64) {
+	cpc.pts = (C.int64_t)(v)
+}
+
+// Custom: GetPtsAddr gets `AVCodecParserContext.pts` address.
+func (cpc *AVCodecParserContext) GetPtsAddr() *int64 {
+	return (*int64)(&cpc.pts)
+}
+
+// Custom: GetDts gets `AVCodecParserContext.dts` value.
+func (cpc *AVCodecParserContext) GetDts() int64 {
+	return (int64)(cpc.dts)
+}
+
+// Custom: SetDts sets `AVCodecParserContext.dts` value.
+func (cpc *AVCodecParserContext) SetDts(v int64) {
+	cpc.dts = (C.int64_t)(v)
+}
+
+// Custom: GetDtsAddr gets `AVCodecParserContext.dts` address.
+func (cpc *AVCodecParserContext) GetDtsAddr() *int64 {
+	return (*int64)(&cpc.dts)
+}
+
+// Custom: GetLastPts gets `AVCodecParserContext.last_pts` value.
+func (cpc *AVCodecParserContext) GetLastPts() int64 {
+	return (int64)(cpc.last_pts)
+}
+
+// Custom: SetLastPts sets `AVCodecParserContext.last_pts` value.
+func (cpc *AVCodecParserContext) SetLastPts(v int64) {
+	cpc.last_pts = (C.int64_t)(v)
+}
+
+// Custom: GetLastPtsAddr gets `AVCodecParserContext.last_pts` address.
+func (cpc *AVCodecParserContext) GetLastPtsAddr() *int64 {
+	return (*int64)(&cpc.last_pts)
+}
+
+// Custom: GetLastDts gets `AVCodecParserContext.last_dts` value.
+func (cpc *AVCodecParserContext) GetLastDts() int64 {
+	return (int64)(cpc.last_dts)
+}
+
+// Custom: SetLastDts sets `AVCodecParserContext.last_dts` value.
+func (cpc *AVCodecParserContext) SetLastDts(v int64) {
+	cpc.last_dts = (C.int64_t)(v)
+}
+
+// Custom: GetLastDtsAddr gets `AVCodecParserContext.last_dts` address.
+func (cpc *AVCodecParserContext) GetLastDtsAddr() *int64 {
+	return (*int64)(&cpc.last_dts)
+}
+
+// Custom: GetFetchTimestamp gets `AVCodecParserContext.fetch_timestamp` value.
+func (cpc *AVCodecParserContext) GetFetchTimestamp() int32 {
+	return (int32)(cpc.fetch_timestamp)
+}
+
+// Custom: SetFetchTimestamp sets `AVCodecParserContext.fetch_timestamp` value.
+func (cpc *AVCodecParserContext) SetFetchTimestamp(v int32) {
+	cpc.fetch_timestamp = (C.int)(v)
+}
+
+// Custom: GetFetchTimestampAddr gets `AVCodecParserContext.fetch_timestamp` address.
+func (cpc *AVCodecParserContext) GetFetchTimestampAddr() *int32 {
+	return (*int32)(&cpc.fetch_timestamp)
+}
+
+const (
+	AV_PARSER_PTS_NB = C.AV_PARSER_PTS_NB
+)
+
+// Custom: GetCurFrameStartIndex gets `AVCodecParserContext.cur_frame_start_index` value.
+func (cpc *AVCodecParserContext) GetCurFrameStartIndex() int32 {
+	return (int32)(cpc.cur_frame_start_index)
+}
+
+// Custom: SetCurFrameStartIndex sets `AVCodecParserContext.cur_frame_start_index` value.
+func (cpc *AVCodecParserContext) SetCurFrameStartIndex(v int32) {
+	cpc.cur_frame_start_index = (C.int)(v)
+}
+
+// Custom: GetCurFrameStartIndexAddr gets `AVCodecParserContext.cur_frame_start_index` address.
+func (cpc *AVCodecParserContext) GetCurFrameStartIndexAddr() *int32 {
+	return (*int32)(&cpc.cur_frame_start_index)
+}
+
+// Custom: GetCurFrameOffset gets `AVCodecParserContext.cur_frame_offset` value.
+func (cpc *AVCodecParserContext) GetCurFrameOffset(idx int) []int64 {
+	return unsafe.Slice((*int64)(&cpc.cur_frame_offset[0]), AV_PARSER_PTS_NB)
+}
+
+// Custom: GetCurFrameOffsetIdx gets `AVCodecParserContext.cur_frame_offset` index value.
+func (cpc *AVCodecParserContext) GetCurFrameOffsetIdx(idx int) int64 {
+	return (int64)(cpc.cur_frame_offset[idx])
+}
+
+// Custom: SetCurFrameOffsetIdx sets `AVCodecParserContext.cur_frame_offset` index value.
+func (cpc *AVCodecParserContext) SetCurFrameOffsetIdx(idx int, v int64) {
+	cpc.cur_frame_offset[idx] = (C.int64_t)(v)
+}
+
+// Custom: GetCurFrameOffsetIdxAddr gets `AVCodecParserContext.cur_frame_offset` index address.
+func (cpc *AVCodecParserContext) GetCurFrameOffsetIdxAddr(idx int) *int64 {
+	return (*int64)(&cpc.cur_frame_offset[idx])
+}
+
+// Custom: GetCurFramePts gets `AVCodecParserContext.cur_frame_pts` value.
+func (cpc *AVCodecParserContext) GetCurFramePts() []int64 {
+	return unsafe.Slice((*int64)(&cpc.cur_frame_pts[0]), AV_PARSER_PTS_NB)
+}
+
+// Custom: GetCurFramePtsIdx gets `AVCodecParserContext.cur_frame_pts` index value.
+func (cpc *AVCodecParserContext) GetCurFramePtsIdx(idx int) int64 {
+	return (int64)(cpc.cur_frame_pts[idx])
+}
+
+// Custom: SetCurFramePtsIdx sets `AVCodecParserContext.cur_frame_pts` index value.
+func (cpc *AVCodecParserContext) SetCurFramePtsIdx(idx int, v int64) {
+	cpc.cur_frame_pts[idx] = (C.int64_t)(v)
+}
+
+// Custom: GetCurFramePtsIdxAddr gets `AVCodecParserContext.cur_frame_pts` index address.
+func (cpc *AVCodecParserContext) GetCurFramePtsIdxAddr(idx int) *int64 {
+	return (*int64)(&cpc.cur_frame_pts[idx])
+}
+
+// Custom: GetCurFrameDts gets `AVCodecParserContext.cur_frame_dts` value.
+func (cpc *AVCodecParserContext) GetCurFrameDts() []int64 {
+	return unsafe.Slice((*int64)(&cpc.cur_frame_dts[0]), AV_PARSER_PTS_NB)
+}
+
+// Custom: GetCurFrameDtsIdx gets `AVCodecParserContext.cur_frame_dts` index value.
+func (cpc *AVCodecParserContext) GetCurFrameDtsIdx(idx int) int64 {
+	return (int64)(cpc.cur_frame_dts[idx])
+}
+
+// Custom: SetCurFrameDtsIdx sets `AVCodecParserContext.cur_frame_dts` index value.
+func (cpc *AVCodecParserContext) SetCurFrameDtsIdx(idx int, v int64) {
+	cpc.cur_frame_dts[idx] = (C.int64_t)(v)
+}
+
+// Custom: GetCurFrameDtsIdxAddr gets `AVCodecParserContext.cur_frame_dts` index address.
+func (cpc *AVCodecParserContext) GetCurFrameDtsIdxAddr(idx int) *int64 {
+	return (*int64)(&cpc.cur_frame_dts[idx])
+}
+
+// Custom: GetOffset gets `AVCodecParserContext.offset` value.
+func (cpc *AVCodecParserContext) GetOffset() int64 {
+	return (int64)(cpc.offset)
+}
+
+// Custom: SetOffset sets `AVCodecParserContext.offset` value.
+func (cpc *AVCodecParserContext) SetOffset(v int64) {
+	cpc.offset = (C.int64_t)(v)
+}
+
+// Custom: GetOffsetAddr gets `AVCodecParserContext.offset` address.
+func (cpc *AVCodecParserContext) GetOffsetAddr() *int64 {
+	return (*int64)(&cpc.offset)
+}
+
+// Custom: GetCurFrameEnd gets `AVCodecParserContext.cur_frame_end` value.
+func (cpc *AVCodecParserContext) GetCurFrameEnd() []int64 {
+	return unsafe.Slice((*int64)(&cpc.cur_frame_end[0]), AV_PARSER_PTS_NB)
+}
+
+// Custom: GetCurFrameEndIdx gets `AVCodecParserContext.cur_frame_end` index value.
+func (cpc *AVCodecParserContext) GetCurFrameEndIdx(idx int) int64 {
+	return (int64)(cpc.cur_frame_end[idx])
+}
+
+// Custom: SetCurFrameEndIdx sets `AVCodecParserContext.cur_frame_end` index value.
+func (cpc *AVCodecParserContext) SetCurFrameEndIdx(idx int, v int64) {
+	cpc.cur_frame_end[idx] = (C.int64_t)(v)
+}
+
+// Custom: GetCurFrameEndIdxAddr gets `AVCodecParserContext.cur_frame_end` index address.
+func (cpc *AVCodecParserContext) GetCurFrameEndIdxAddr(idx int) *int64 {
+	return (*int64)(&cpc.cur_frame_end[idx])
+}
+
+// Custom: GetKeyFrame gets `AVCodecParserContext.key_frame` value.
+func (cpc *AVCodecParserContext) GetKeyFrame() int32 {
+	return (int32)(cpc.key_frame)
+}
+
+// Custom: SetKeyFrame sets `AVCodecParserContext.key_frame` value.
+func (cpc *AVCodecParserContext) SetKeyFrame(v int32) {
+	cpc.key_frame = (C.int)(v)
+}
+
+// Custom: GetKeyFrameAddr gets `AVCodecParserContext.key_frame` address.
+func (cpc *AVCodecParserContext) GetKeyFrameAddr() *int32 {
+	return (*int32)(&cpc.key_frame)
+}
+
+// Custom: GetConvergenceDuration gets `AVCodecParserContext.convergence_duration` value.
+func (cpc *AVCodecParserContext) GetConvergenceDuration() int64 {
+	return (int64)(cpc.convergence_duration)
+}
+
+// Custom: SetConvergenceDuration sets `AVCodecParserContext.convergence_duration` value.
+func (cpc *AVCodecParserContext) SetConvergenceDuration(v int64) {
+	cpc.convergence_duration = (C.int64_t)(v)
+}
+
+// Custom: GetConvergenceDurationAddr gets `AVCodecParserContext.convergence_duration` address.
+func (cpc *AVCodecParserContext) GetConvergenceDurationAddr() *int64 {
+	return (*int64)(&cpc.convergence_duration)
+}
+
+// Custom: GetDtsSyncPoint gets `AVCodecParserContext.dts_sync_point` value.
+func (cpc *AVCodecParserContext) GetDtsSyncPoint() int32 {
+	return (int32)(cpc.dts_sync_point)
+}
+
+// Custom: SetDtsSyncPoint sets `AVCodecParserContext.dts_sync_point` value.
+func (cpc *AVCodecParserContext) SetDtsSyncPoint(v int32) {
+	cpc.dts_sync_point = (C.int)(v)
+}
+
+// Custom: GetDtsSyncPointAddr gets `AVCodecParserContext.dts_sync_point` address.
+func (cpc *AVCodecParserContext) GetDtsSyncPointAddr() *int32 {
+	return (*int32)(&cpc.dts_sync_point)
+}
+
+// Custom: GetDtsRefDtsDelta gets `AVCodecParserContext.dts_ref_dts_delta` value.
+func (cpc *AVCodecParserContext) GetDtsRefDtsDelta() int32 {
+	return (int32)(cpc.dts_ref_dts_delta)
+}
+
+// Custom: SetDtsRefDtsDelta sets `AVCodecParserContext.dts_ref_dts_delta` value.
+func (cpc *AVCodecParserContext) SetDtsRefDtsDelta(v int32) {
+	cpc.dts_ref_dts_delta = (C.int)(v)
+}
+
+// Custom: GetDtsRefDtsDeltaAddr gets `AVCodecParserContext.dts_ref_dts_delta` address.
+func (cpc *AVCodecParserContext) GetDtsRefDtsDeltaAddr() *int32 {
+	return (*int32)(&cpc.dts_ref_dts_delta)
+}
+
+// Custom: GetPtsDtsDelta gets `AVCodecParserContext.pts_dts_delta` value.
+func (cpc *AVCodecParserContext) GetPtsDtsDelta() int32 {
+	return (int32)(cpc.pts_dts_delta)
+}
+
+// Custom: SetPtsDtsDelta sets `AVCodecParserContext.pts_dts_delta` value.
+func (cpc *AVCodecParserContext) SetPtsDtsDelta(v int32) {
+	cpc.pts_dts_delta = (C.int)(v)
+}
+
+// Custom: GetPtsDtsDeltaAddr gets `AVCodecParserContext.pts_dts_delta` address.
+func (cpc *AVCodecParserContext) GetPtsDtsDeltaAddr() *int32 {
+	return (*int32)(&cpc.pts_dts_delta)
+}
+
+// Custom: GetCurFramePosIdx gets `AVCodecParserContext.cur_frame_pos` value.
+func (cpc *AVCodecParserContext) GetCurFramePosIdx(idx int) int64 {
+	return (int64)(cpc.cur_frame_pos[idx])
+}
+
+// Custom: SetCurFramePosIdx sets `AVCodecParserContext.cur_frame_pos` value.
+func (cpc *AVCodecParserContext) SetCurFramePosIdx(idx int, v int64) {
+	cpc.cur_frame_pos[idx] = (C.int64_t)(v)
+}
+
+// Custom: GetCurFramePosIdxAddr gets `AVCodecParserContext.cur_frame_pos` address.
+func (cpc *AVCodecParserContext) GetCurFramePosIdxAddr(idx int) *int64 {
+	return (*int64)(&cpc.cur_frame_pos[idx])
+}
+
+// Custom: GetPos gets `AVCodecParserContext.pos` value.
+func (cpc *AVCodecParserContext) GetPos() int64 {
+	return (int64)(cpc.pos)
+}
+
+// Custom: SetPos sets `AVCodecParserContext.pos` value.
+func (cpc *AVCodecParserContext) SetPos(v int64) {
+	cpc.pos = (C.int64_t)(v)
+}
+
+// Custom: GetPosAddr gets `AVCodecParserContext.pos` address.
+func (cpc *AVCodecParserContext) GetPosAddr() *int64 {
+	return (*int64)(&cpc.pos)
+}
+
+// Custom: GetLastPos gets `AVCodecParserContext.last_pos` value.
+func (cpc *AVCodecParserContext) GetLastPos() int64 {
+	return (int64)(cpc.last_pos)
+}
+
+// Custom: SetLastPos sets `AVCodecParserContext.last_pos` value.
+func (cpc *AVCodecParserContext) SetLastPos(v int64) {
+	cpc.last_pos = (C.int64_t)(v)
+}
+
+// Custom: GetLastPosAddr gets `AVCodecParserContext.last_pos` address.
+func (cpc *AVCodecParserContext) GetLastPosAddr() *int64 {
+	return (*int64)(&cpc.last_pos)
+}
+
+// Custom: GetDuration gets `AVCodecParserContext.duration` value.
+func (cpc *AVCodecParserContext) GetDuration() int32 {
+	return (int32)(cpc.duration)
+}
+
+// Custom: SetDuration sets `AVCodecParserContext.duration` value.
+func (cpc *AVCodecParserContext) SetDuration(v int32) {
+	cpc.duration = (C.int)(v)
+}
+
+// Custom: GetDurationAddr gets `AVCodecParserContext.duration` address.
+func (cpc *AVCodecParserContext) GetDurationAddr() *int32 {
+	return (*int32)(&cpc.duration)
+}
+
+// Custom: GetFieldOrder gets `AVCodecParserContext.field_order` value.
+func (cpc *AVCodecParserContext) GetFieldOrder() AVFieldOrder {
+	return (AVFieldOrder)(cpc.field_order)
+}
+
+// Custom: SetFieldOrder sets `AVCodecParserContext.field_order` value.
+func (cpc *AVCodecParserContext) SetFieldOrder(v AVFieldOrder) {
+	cpc.field_order = (C.enum_AVFieldOrder)(v)
+}
+
+// Custom: GetFieldOrderAddr gets `AVCodecParserContext.field_order` address.
+func (cpc *AVCodecParserContext) GetFieldOrderAddr() *AVFieldOrder {
+	return (*AVFieldOrder)(&cpc.field_order)
+}
+
+// Custom: GetPictureStructure gets `AVCodecParserContext.picture_structure` value.
+func (cpc *AVCodecParserContext) GetPictureStructure() AVPictureStructure {
+	return (AVPictureStructure)(cpc.picture_structure)
+}
+
+// Custom: SetPictureStructure sets `AVCodecParserContext.picture_structure` value.
+func (cpc *AVCodecParserContext) SetPictureStructure(v AVPictureStructure) {
+	cpc.picture_structure = (C.enum_AVPictureStructure)(v)
+}
+
+// Custom: GetPictureStructureAddr gets `AVCodecParserContext.picture_structure` address.
+func (cpc *AVCodecParserContext) GetPictureStructureAddr() *AVPictureStructure {
+	return (*AVPictureStructure)(&cpc.picture_structure)
+}
+
+// Custom: GetOutputPictureNumber gets `AVCodecParserContext.output_picture_number` value.
+func (cpc *AVCodecParserContext) GetOutputPictureNumber() int32 {
+	return (int32)(cpc.output_picture_number)
+}
+
+// Custom: SetOutputPictureNumber sets `AVCodecParserContext.output_picture_number` value.
+func (cpc *AVCodecParserContext) SetOutputPictureNumber(v int32) {
+	cpc.output_picture_number = (C.int)(v)
+}
+
+// Custom: GetOutputPictureNumberAddr gets `AVCodecParserContext.output_picture_number` address.
+func (cpc *AVCodecParserContext) GetOutputPictureNumberAddr() *int32 {
+	return (*int32)(&cpc.output_picture_number)
+}
+
+// Custom: GetWidth gets `AVCodecParserContext.width` value.
+func (cpc *AVCodecParserContext) GetWidth() int32 {
+	return (int32)(cpc.width)
+}
+
+// Custom: SetWidth sets `AVCodecParserContext.width` value.
+func (cpc *AVCodecParserContext) SetWidth(v int32) {
+	cpc.width = (C.int)(v)
+}
+
+// Custom: GetWidthAddr gets `AVCodecParserContext.width` address.
+func (cpc *AVCodecParserContext) GetWidthAddr() *int32 {
+	return (*int32)(&cpc.width)
+}
+
+// Custom: GetHeight gets `AVCodecParserContext.height` value.
+func (cpc *AVCodecParserContext) GetHeight() int32 {
+	return (int32)(cpc.height)
+}
+
+// Custom: SetHeight sets `AVCodecParserContext.height` value.
+func (cpc *AVCodecParserContext) SetHeight(v int32) {
+	cpc.height = (C.int)(v)
+}
+
+// Custom: GetHeightAddr gets `AVCodecParserContext.height` address.
+func (cpc *AVCodecParserContext) GetHeightAddr() *int32 {
+	return (*int32)(&cpc.height)
+}
+
+// Custom: GetCodedWidth gets `AVCodecParserContext.coded_width` value.
+func (cpc *AVCodecParserContext) GetCodedWidth() int32 {
+	return (int32)(cpc.coded_width)
+}
+
+// Custom: SetCodedWidth sets `AVCodecParserContext.coded_width` value.
+func (cpc *AVCodecParserContext) SetCodedWidth(v int32) {
+	cpc.coded_width = (C.int)(v)
+}
+
+// Custom: GetCodedWidthAddr gets `AVCodecParserContext.coded_width` address.
+func (cpc *AVCodecParserContext) GetCodedWidthAddr() *int32 {
+	return (*int32)(&cpc.coded_width)
+}
+
+// Custom: GetCodedHeight gets `AVCodecParserContext.coded_height` value.
+func (cpc *AVCodecParserContext) GetCodedHeight() int32 {
+	return (int32)(cpc.coded_height)
+}
+
+// Custom: SetCodedHeight sets `AVCodecParserContext.coded_height` value.
+func (cpc *AVCodecParserContext) SetCodedHeight(v int32) {
+	cpc.coded_height = (C.int)(v)
+}
+
+// Custom: GetCodedHeightAddr gets `AVCodecParserContext.coded_height` address.
+func (cpc *AVCodecParserContext) GetCodedHeightAddr() *int32 {
+	return (*int32)(&cpc.coded_height)
+}
+
+// Custom: GetFormat gets `AVCodecParserContext.format` value.
+func (cpc *AVCodecParserContext) GetFormat() int32 {
+	return (int32)(cpc.format)
+}
+
+// Custom: SetFormat sets `AVCodecParserContext.format` value.
+func (cpc *AVCodecParserContext) SetFormat(v int32) {
+	cpc.format = (C.int)(v)
+}
+
+// Custom: GetFormatAddr gets `AVCodecParserContext.format` address.
+func (cpc *AVCodecParserContext) GetFormatAddr() *int32 {
+	return (*int32)(&cpc.format)
+}
+
+// AVCodecParser
+type AVCodecParser C.struct_AVCodecParser
+
+// Custom: GetCodecIds gets `AVCodecParser.codec_ids` value.
+func (cp *AVCodecParser) GetCodecIds() []int32 {
+	return unsafe.Slice((*int32)(&cp.codec_ids[0]), 5)
+}
+
+// Custom: GetCodecIdsIdx gets `AVCodecParser.codec_ids` index value.
+func (cp *AVCodecParser) GetCodecIdsIdx(idx int) int32 {
+	return (int32)(cp.codec_ids[idx])
+}
+
+// Custom: SetCodecIdsIdx sets `AVCodecParser.codec_ids` index value.
+func (cp *AVCodecParser) SetCodecIdsIdx(idx int, v int32) {
+	cp.codec_ids[idx] = (C.int)(v)
+}
+
+// Custom: GetCodecIdsIdxAddr gets `AVCodecParser.codec_ids` index address.
+func (cp *AVCodecParser) GetCodecIdsIdxAddr(idx int) *int32 {
+	return (*int32)(&cp.codec_ids[idx])
+}
+
+// Custom: GetPrivDataSize gets `AVCodecParser.priv_data_size` value.
+func (cp *AVCodecParser) GetPrivDataSize() int32 {
+	return (int32)(cp.priv_data_size)
+}
+
+// Custom: SetPrivDataSize sets `AVCodecParser.priv_data_size` value.
+func (cp *AVCodecParser) SetPrivDataSize(v int32) {
+	cp.priv_data_size = (C.int)(v)
+}
+
+// Custom: GetPrivDataSizeAddr gets `AVCodecParser.priv_data_size` address.
+func (cp *AVCodecParser) GetPrivDataSizeAddr() *int32 {
+	return (*int32)(&cp.priv_data_size)
+}
 
 // AvParserIterate iterates over all registered codec parsers.
-func AvParserIterate(p *unsafe.Pointer) *AvCodecParser {
-	return (*AvCodecParser)(C.av_parser_iterate(p))
+func AvParserIterate(p CVoidPointerPointer) *AVCodecParser {
+	return (*AVCodecParser)(C.av_parser_iterate(VoidPointerPointer(p)))
 }
 
 // Deprecated: No use
-func AvParserNext(c *AvCodecParser) *AvCodecParser {
-	return (*AvCodecParser)(C.av_parser_next((*C.struct_AVCodecParser)(c)))
+func AvParserNext(c *AVCodecParser) *AVCodecParser {
+	return (*AVCodecParser)(C.av_parser_next((*C.struct_AVCodecParser)(c)))
 }
 
 // Deprecated: No use
-func AvRegisterCodecParser(parser *AvCodecParser) {
+func AvRegisterCodecParser(parser *AVCodecParser) {
 	C.av_register_codec_parser((*C.struct_AVCodecParser)(parser))
 }
 
 // AvParserInit
-func AvParserInit(codecID AvCodecID) *AvCodecParserContext {
-	return (*AvCodecParserContext)(C.av_parser_init((C.int)(codecID)))
+func AvParserInit(codecID AVCodecID) *AVCodecParserContext {
+	return (*AVCodecParserContext)(C.av_parser_init((C.int)(codecID)))
 }
 
 // Parse a packet.
-func AvParserParse2(s *AvCodecParserContext, avctx *AvCodecContext,
+func AvParserParse2(s *AVCodecParserContext, avctx *AVCodecContext,
 	outbuf **uint8, poutbufSize *int32,
 	buf *uint8, bufSize int32,
 	pts, dts, pos int64) int32 {
@@ -3425,7 +4609,7 @@ func AvParserParse2(s *AvCodecParserContext, avctx *AvCodecContext,
 }
 
 // Deprecated: Use DumpExtradata, RemoveExtra or ExtractExtradata bitstream filters instead.
-func AvParserChange(s *AvCodecParserContext, avctx *AvCodecContext,
+func AvParserChange(s *AVCodecParserContext, avctx *AVCodecContext,
 	outbuf **uint8, poutbufSize *int32,
 	buf *uint8, bufSize int32, keyframe int32) int32 {
 	return (int32)(C.av_parser_change((*C.AVCodecParserContext)(s),
@@ -3435,74 +4619,74 @@ func AvParserChange(s *AvCodecParserContext, avctx *AvCodecContext,
 }
 
 // AvParserClose
-func AvParserClose(s *AvCodecParserContext) {
+func AvParserClose(s *AVCodecParserContext) {
 	C.av_parser_close((*C.AVCodecParserContext)(s))
 }
 
-// Deprecated: Use AvCodecSendFrame()/AvCodecReceivePacket() instead.
-func AvCodecEncodeAudio2(avctx *AvCodecContext,
-	avpkt *AvPacket, frame *AvFrame, gotPacketPtr *int32) int32 {
+// Deprecated: Use AVCodecSendFrame()/AVCodecReceivePacket() instead.
+func AvCodecEncodeAudio2(avctx *AVCodecContext,
+	avpkt *AVPacket, frame *AVFrame, gotPacketPtr *int32) int32 {
 	return (int32)(C.avcodec_encode_audio2((*C.struct_AVCodecContext)(avctx),
 		(*C.struct_AVPacket)(avpkt), (*C.struct_AVFrame)(frame), (*C.int)(gotPacketPtr)))
 }
 
-// Deprecated: Use AvCodecSendFrame()/AvCodecReceivePacket() instead.
-func AvCodecEncodeVideo2(avctx *AvCodecContext,
-	avpkt *AvPacket, frame *AvFrame, gotPacketPtr *int32) int32 {
+// Deprecated: Use AVCodecSendFrame()/AVCodecReceivePacket() instead.
+func AvCodecEncodeVideo2(avctx *AVCodecContext,
+	avpkt *AVPacket, frame *AVFrame, gotPacketPtr *int32) int32 {
 	return (int32)(C.avcodec_encode_video2((*C.struct_AVCodecContext)(avctx),
 		(*C.struct_AVPacket)(avpkt), (*C.struct_AVFrame)(frame), (*C.int)(gotPacketPtr)))
 }
 
 // AvCodecEncodeSubtitle
-func AvCodecEncodeSubtitle(avctx *AvCodecContext,
-	buf *uint8, bufSize int32, sub *AvSubtitle) int32 {
+func AvCodecEncodeSubtitle(avctx *AVCodecContext,
+	buf *uint8, bufSize int32, sub *AVSubtitle) int32 {
 	return (int32)(C.avcodec_encode_subtitle((*C.struct_AVCodecContext)(avctx),
 		(*C.uint8_t)(buf), (C.int)(bufSize), (*C.struct_AVSubtitle)(sub)))
 }
 
 // Deprecated: No use
-func AvPictureAlloc(picture *AvPicture, pixFmt AvPixelFormat, width, height int32) int32 {
+func AvPictureAlloc(picture *AVPicture, pixFmt AVPixelFormat, width, height int32) int32 {
 	return (int32)(C.avpicture_alloc((*C.struct_AVPicture)(picture),
 		(C.enum_AVPixelFormat)(pixFmt), (C.int)(width), (C.int)(height)))
 }
 
 // Deprecated: No use
-func AvPictureFree(picture *AvPicture) {
+func AvPictureFree(picture *AVPicture) {
 	C.avpicture_free((*C.struct_AVPicture)(picture))
 }
 
 // Deprecated: Use AvImageFillArrays() instead.
-func AvPictureFill(picture *AvPicture, ptr *uint8, pixFmt AvPixelFormat, width, height int32) int32 {
+func AvPictureFill(picture *AVPicture, ptr *uint8, pixFmt AVPixelFormat, width, height int32) int32 {
 	return (int32)(C.avpicture_fill((*C.struct_AVPicture)(picture),
 		(*C.uint8_t)(ptr), (C.enum_AVPixelFormat)(pixFmt), (C.int)(width), (C.int)(height)))
 }
 
 // Deprecated: Use AvImageCopyToBuffer() instead.
-func AvPictureLayout(src *AvPicture, pixFmt AvPixelFormat, width, height int32, dest *uint8, destSize int32) int32 {
+func AvPictureLayout(src *AVPicture, pixFmt AVPixelFormat, width, height int32, dest *uint8, destSize int32) int32 {
 	return (int32)(C.avpicture_layout((*C.struct_AVPicture)(src),
 		(C.enum_AVPixelFormat)(pixFmt), (C.int)(width), (C.int)(height),
 		(*C.uchar)(dest), (C.int)(destSize)))
 }
 
 // Deprecated: Use AvImageGetBufferSize() instead.
-func AvPictureGetSize(pixFmt AvPixelFormat, width, height int32) int32 {
+func AvPictureGetSize(pixFmt AVPixelFormat, width, height int32) int32 {
 	return (int32)(C.avpicture_get_size((C.enum_AVPixelFormat)(pixFmt), (C.int)(width), (C.int)(height)))
 }
 
 // Deprecated: Use AvImageCopy() instead.
-func AvPictureCopy(dst, src *AvPicture, pixFmt AvPixelFormat, width, height int32) {
+func AvPictureCopy(dst, src *AVPicture, pixFmt AVPixelFormat, width, height int32) {
 	C.av_picture_copy((*C.struct_AVPicture)(dst), (*C.struct_AVPicture)(src),
 		(C.enum_AVPixelFormat)(pixFmt), (C.int)(width), (C.int)(height))
 }
 
 // Deprecated: No use
-func AvPictureCrop(dst, src *AvPicture, pixFmt AvPixelFormat, topBand, leftBand int32) int32 {
+func AvPictureCrop(dst, src *AVPicture, pixFmt AVPixelFormat, topBand, leftBand int32) int32 {
 	return (int32)(C.av_picture_crop((*C.struct_AVPicture)(dst), (*C.struct_AVPicture)(src),
 		(C.enum_AVPixelFormat)(pixFmt), (C.int)(topBand), (C.int)(leftBand)))
 }
 
 // Deprecated: No use
-func AvPicturePad(dst, src *AvPicture, width, height int32, pixFmt AvPixelFormat,
+func AvPicturePad(dst, src *AVPicture, width, height int32, pixFmt AVPixelFormat,
 	padTop, padBottom, padLeft, padRight int32, color *int32) int32 {
 	return (int32)(C.av_picture_pad((*C.struct_AVPicture)(dst), (*C.struct_AVPicture)(src),
 		(C.int)(width), (C.int)(height), (C.enum_AVPixelFormat)(pixFmt),
@@ -3511,52 +4695,52 @@ func AvPicturePad(dst, src *AvPicture, width, height int32, pixFmt AvPixelFormat
 }
 
 // Deprecated: Use AvPixFmtGetChromaSubSample() instead.
-func AvCodecGetChromaSubSample(pixFmt AvPixelFormat, hShift, vShift *int32) {
+func AvCodecGetChromaSubSample(pixFmt AVPixelFormat, hShift, vShift *int32) {
 	C.avcodec_get_chroma_sub_sample((C.enum_AVPixelFormat)(pixFmt),
 		(*C.int)(hShift), (*C.int)(vShift))
 }
 
 // AvCodecPixFmtToCodecTag returns a value representing the fourCC code associated to the
 // pixel format pix_fmt, or 0 if no associated fourCC code can be found.
-func AvCodecPixFmtToCodecTag(pixFmt AvPixelFormat) uint {
+func AvCodecPixFmtToCodecTag(pixFmt AVPixelFormat) uint {
 	return (uint)(C.avcodec_pix_fmt_to_codec_tag((C.enum_AVPixelFormat)(pixFmt)))
 }
 
 // AvCodecFindBestPixFmtOfList finds the best pixel format
 // to convert to given a certain source pixel format.
-func AvCodecFindBestPixFmtOfList(pixFmtList *AvPixelFormat,
-	srcPixFmt AvPixelFormat, hasAlpha int32, lossPtr *int32) AvPixelFormat {
-	return (AvPixelFormat)(C.avcodec_find_best_pix_fmt_of_list(
+func AvCodecFindBestPixFmtOfList(pixFmtList *AVPixelFormat,
+	srcPixFmt AVPixelFormat, hasAlpha int32, lossPtr *int32) AVPixelFormat {
+	return (AVPixelFormat)(C.avcodec_find_best_pix_fmt_of_list(
 		(*C.enum_AVPixelFormat)(pixFmtList),
 		(C.enum_AVPixelFormat)(srcPixFmt), (C.int)(hasAlpha),
 		(*C.int)(lossPtr)))
 }
 
 // Deprecated: Use AvGetPixFmtLoss() instead.
-func AvCodecGetPixFmtLoss(dstPixFmt, srcPixFmt AvPixelFormat, hasAlpha int32) int32 {
+func AvCodecGetPixFmtLoss(dstPixFmt, srcPixFmt AVPixelFormat, hasAlpha int32) int32 {
 	return (int32)(C.avcodec_get_pix_fmt_loss((C.enum_AVPixelFormat)(dstPixFmt),
 		(C.enum_AVPixelFormat)(srcPixFmt), (C.int)(hasAlpha)))
 }
 
 // Deprecated: Use AvFindBestPixFmtOf2() instead.
-func AvCodecFindBestPixFmtOf2(dstPixFmt1, dstPixFmt2, srcPixFmt AvPixelFormat,
-	hasAlpha int32, lossPtr *int32) AvPixelFormat {
-	return (AvPixelFormat)(C.avcodec_find_best_pix_fmt_of_2(
+func AvCodecFindBestPixFmtOf2(dstPixFmt1, dstPixFmt2, srcPixFmt AVPixelFormat,
+	hasAlpha int32, lossPtr *int32) AVPixelFormat {
+	return (AVPixelFormat)(C.avcodec_find_best_pix_fmt_of_2(
 		(C.enum_AVPixelFormat)(dstPixFmt1), (C.enum_AVPixelFormat)(dstPixFmt2),
 		(C.enum_AVPixelFormat)(srcPixFmt), (C.int)(hasAlpha), (*C.int)(lossPtr)))
 }
 
 // Deprecated: No use
-func AvCodecFindBestPixFmt2(dstPixFmt1, dstPixFmt2, srcPixFmt AvPixelFormat,
-	hasAlpha int32, lossPtr *int32) AvPixelFormat {
-	return (AvPixelFormat)(C.avcodec_find_best_pix_fmt2(
+func AvCodecFindBestPixFmt2(dstPixFmt1, dstPixFmt2, srcPixFmt AVPixelFormat,
+	hasAlpha int32, lossPtr *int32) AVPixelFormat {
+	return (AVPixelFormat)(C.avcodec_find_best_pix_fmt2(
 		(C.enum_AVPixelFormat)(dstPixFmt1), (C.enum_AVPixelFormat)(dstPixFmt2),
 		(C.enum_AVPixelFormat)(srcPixFmt), (C.int)(hasAlpha), (*C.int)(lossPtr)))
 }
 
 // AvCodecDefaultGetFormat
-func AvCodecDefaultGetFormat(avctx *AvCodecContext, fmt *AvPixelFormat) AvPixelFormat {
-	return (AvPixelFormat)(C.avcodec_default_get_format((*C.struct_AVCodecContext)(avctx),
+func AvCodecDefaultGetFormat(avctx *AVCodecContext, fmt *AVPixelFormat) AVPixelFormat {
+	return (AVPixelFormat)(C.avcodec_default_get_format((*C.struct_AVCodecContext)(avctx),
 		(*C.enum_AVPixelFormat)(fmt)))
 }
 
@@ -3567,41 +4751,41 @@ func AvGetCodecTagString(buf *int8, bufSize uint, codecTag uint32) int32 {
 }
 
 // AvCodecString
-func AvCodecString(buf *int8, bufSize int32, enc *AvCodecContext, encode int32) {
+func AvCodecString(buf *int8, bufSize int32, enc *AVCodecContext, encode int32) {
 	C.avcodec_string((*C.char)(buf), (C.int)(bufSize),
 		(*C.struct_AVCodecContext)(enc), (C.int)(encode))
 }
 
 // AvGetProfileName returns a name for the specified profile, if available.
-func AvGetProfileName(c *AvCodec, profile int32) string {
+func AvGetProfileName(c *AVCodec, profile int32) string {
 	return C.GoString(C.av_get_profile_name((*C.struct_AVCodec)(c), (C.int)(profile)))
 }
 
 // AvCodecProfileName returns a name for the specified profile, if available.
-func AvCodecProfileName(codecID AvCodecID, profile int32) string {
+func AvCodecProfileName(codecID AVCodecID, profile int32) string {
 	return C.GoString(C.avcodec_profile_name((C.enum_AVCodecID)(codecID), (C.int)(profile)))
 }
 
-// typedef int (*avcodec_excute_func)(AvCodecContext *c2, void *arg2)
-type AvcodecExcuteFunc C.avcodec_excute_func
+// typedef int (*avcodec_context_excute_func)(AVCodecContext *c2, void *arg2)
+type AVCodecContextExcuteFunc = C.avcodec_context_excute_func
 
 // AvCodecDefaultExecute
-func AvCodecDefaultExecute(avctx *AvCodecContext, f AvcodecExcuteFunc, arg unsafe.Pointer,
+func AvCodecDefaultExecute(avctx *AVCodecContext, f AVCodecContextExcuteFunc, arg CVoidPointer,
 	ret *int32, count, size int32) int32 {
 	return (int32)(C.avcodec_default_execute((*C.struct_AVCodecContext)(avctx),
-		(C.avcodec_excute_func)(f), arg, (*C.int)(ret), (C.int)(count), (C.int)(size)))
+		(C.avcodec_context_excute_func)(f), VoidPointer(arg), (*C.int)(ret), (C.int)(count), (C.int)(size)))
 }
 
-// AvcodecDefaultExecute2
-func AvcodecDefaultExecute2(avctx *AvCodecContext, f AvcodecExcuteFunc, arg unsafe.Pointer,
+// AvCodecDefaultExecute2
+func AvCodecDefaultExecute2(avctx *AVCodecContext, f AVCodecContextExcuteFunc, arg CVoidPointer,
 	ret *int32, count int32) int32 {
 	return (int32)(C.avcodec_default_execute2((*C.struct_AVCodecContext)(avctx),
-		(C.avcodec_excute_func)(f), arg, (*C.int)(ret), (C.int)(count)))
+		(C.avcodec_context_excute_func)(f), VoidPointer(arg), (*C.int)(ret), (C.int)(count)))
 }
 
 // AvCodecFillAudioFrame fills AVFrame audio data and linesize pointers.
-func AvCodecFillAudioFrame(frame *AvFrame, nbChannels int32,
-	sampleFmt AvSampleFormat, buf *uint8,
+func AvCodecFillAudioFrame(frame *AVFrame, nbChannels int32,
+	sampleFmt AVSampleFormat, buf *uint8,
 	bufSize int32, align int32) int32 {
 	return (int32)(C.avcodec_fill_audio_frame((*C.struct_AVFrame)(frame),
 		(C.int)(nbChannels), (C.enum_AVSampleFormat)(sampleFmt),
@@ -3610,51 +4794,77 @@ func AvCodecFillAudioFrame(frame *AvFrame, nbChannels int32,
 
 // AvCodecFlushBuffers resets the internal codec state / flush internal buffers. Should be called
 // e.g. when seeking or when switching to a different stream.
-func AvCodecFlushBuffers(avctx *AvCodecContext) {
+func AvCodecFlushBuffers(avctx *AVCodecContext) {
 	C.avcodec_flush_buffers((*C.struct_AVCodecContext)(avctx))
 }
 
 // AvGetBitsPerSample returns codec bits per sample.
-func AvGetBitsPerSample(codecID AvCodecID) int32 {
+func AvGetBitsPerSample(codecID AVCodecID) int32 {
 	return (int32)(C.av_get_bits_per_sample((C.enum_AVCodecID)(codecID)))
 }
 
 // AvGetPcmCodec returns the PCM codec associated with a sample format.
-func AvGetPcmCodec(fmt AvSampleFormat, be int32) AvCodecID {
-	return (AvCodecID)(C.av_get_pcm_codec((C.enum_AVSampleFormat)(fmt), (C.int)(be)))
+func AvGetPcmCodec(fmt AVSampleFormat, be int32) AVCodecID {
+	return (AVCodecID)(C.av_get_pcm_codec((C.enum_AVSampleFormat)(fmt), (C.int)(be)))
 }
 
 // AvGetExactBitsPerSample returns codec bits per sample.
-func AvGetExactBitsPerSample(codecID AvCodecID) int32 {
+func AvGetExactBitsPerSample(codecID AVCodecID) int32 {
 	return (int32)(C.av_get_exact_bits_per_sample((C.enum_AVCodecID)(codecID)))
 }
 
 // AvGetAudioFrameDuration returns audio frame duration.
-func AvGetAudioFrameDuration(avctx *AvCodecContext, frameBytes int32) int32 {
+func AvGetAudioFrameDuration(avctx *AVCodecContext, frameBytes int32) int32 {
 	return (int32)(C.av_get_audio_frame_duration((*C.struct_AVCodecContext)(avctx), (C.int)(frameBytes)))
 }
 
 // AvGetAudioFrameDuration2 returns audio frame duration.
-func AvGetAudioFrameDuration2(par *AvCodecParameters, frameBytes int32) int32 {
+func AvGetAudioFrameDuration2(par *AVCodecParameters, frameBytes int32) int32 {
 	return (int32)(C.av_get_audio_frame_duration2((*C.struct_AVCodecParameters)(par), (C.int)(frameBytes)))
 }
 
-type AvBitStreamFilterContext C.struct_AVBitStreamFilterContext
+// AVBitStreamFilterContext
+type AVBitStreamFilterContext C.struct_AVBitStreamFilterContext
 
-// Deprecated: Use AvBSFContext instead.
-func AvRegisterBitstreamFilter(bsf *AvBitStreamFilter) {
+// Custom: GetPrivData gets `AVBitStreamFilterContext.priv_data` value.
+func (obsfc *AVBitStreamFilterContext) GetPrivData() unsafe.Pointer {
+	return obsfc.priv_data
+}
+
+// Custom: GetFilter gets `AVBitStreamFilterContext.filter` value.
+func (obsfc *AVBitStreamFilterContext) GetFilter() *AVBitStreamFilter {
+	return (*AVBitStreamFilter)(obsfc.filter)
+}
+
+// Custom: GetParser gets `AVBitStreamFilterContext.parser` value.
+func (obsfc *AVBitStreamFilterContext) GetParser() *AVCodecParserContext {
+	return (*AVCodecParserContext)(obsfc.parser)
+}
+
+// Custom: GetNext gets `AVBitStreamFilterContext.next` value.
+func (obsfc *AVBitStreamFilterContext) GetNext() *AVBitStreamFilterContext {
+	return (*AVBitStreamFilterContext)(obsfc.next)
+}
+
+// Custom: GetArgs gets `AVBitStreamFilterContext.args` value.
+func (obsfc *AVBitStreamFilterContext) GetArgs() string {
+	return C.GoString(obsfc.args)
+}
+
+// Deprecated: Use AVBSFContext instead.
+func AvRegisterBitstreamFilter(bsf *AVBitStreamFilter) {
 	C.av_register_bitstream_filter((*C.struct_AVBitStreamFilter)(bsf))
 }
 
-// Deprecated: Use AvBSFContext instead.
-func AvBitstreamFilterInit(name string) *AvBitStreamFilterContext {
+// Deprecated: Use AVBSFContext instead.
+func AvBitstreamFilterInit(name string) *AVBitStreamFilterContext {
 	namePtr, nameFunc := StringCasting(name)
 	defer nameFunc()
-	return (*AvBitStreamFilterContext)(C.av_bitstream_filter_init((*C.char)(namePtr)))
+	return (*AVBitStreamFilterContext)(C.av_bitstream_filter_init((*C.char)(namePtr)))
 }
 
-// Deprecated: Use AvBSFContext instead.
-func AvBitstreamFilterFilter(bsfc *AvBitStreamFilterContext, avctx *AvCodecContext, args string,
+// Deprecated: Use AVBSFContext instead.
+func AvBitstreamFilterFilter(bsfc *AVBitStreamFilterContext, avctx *AVCodecContext, args string,
 	outbuf **uint8, poutbufSize *int32,
 	buf *uint8, bufSize int32, keyframe int32) int32 {
 	argsPtr, nameFunc := StringCasting(args)
@@ -3665,29 +4875,29 @@ func AvBitstreamFilterFilter(bsfc *AvBitStreamFilterContext, avctx *AvCodecConte
 		(*C.uint8_t)(buf), (C.int)(bufSize), (C.int)(keyframe)))
 }
 
-// Deprecated: Use AvBSFContext instead.
-func AvBitstreamFilterClose(bsfc *AvBitStreamFilterContext) {
+// Deprecated: Use AVBSFContext instead.
+func AvBitstreamFilterClose(bsfc *AVBitStreamFilterContext) {
 	C.av_bitstream_filter_close((*C.struct_AVBitStreamFilterContext)(bsfc))
 }
 
-// Deprecated: Use AvBSFContext instead.
-func AvBitstreamFilterNext(f *AvBitStreamFilter) *AvBitStreamFilter {
-	return (*AvBitStreamFilter)(C.av_bitstream_filter_next((*C.struct_AVBitStreamFilter)(f)))
+// Deprecated: Use AVBSFContext instead.
+func AvBitstreamFilterNext(f *AVBitStreamFilter) *AVBitStreamFilter {
+	return (*AVBitStreamFilter)(C.av_bitstream_filter_next((*C.struct_AVBitStreamFilter)(f)))
 }
 
 // Deprecated: No use
-func AvBsfNext(opaque *unsafe.Pointer) *AvBitStreamFilter {
-	return (*AvBitStreamFilter)(C.av_bsf_next(opaque))
+func AvBsfNext(opaque CVoidPointerPointer) *AVBitStreamFilter {
+	return (*AVBitStreamFilter)(C.av_bsf_next(VoidPointerPointer(opaque)))
 }
 
 // AvFastPaddedMalloc
-func AvFastPaddedMalloc(ptr unsafe.Pointer, size *uint32, minSize uint) {
-	C.av_fast_padded_malloc(ptr, (*C.uint)(size), (C.size_t)(minSize))
+func AvFastPaddedMalloc(ptr CVoidPointer, size *uint32, minSize uint) {
+	C.av_fast_padded_malloc(VoidPointer(ptr), (*C.uint)(size), (C.size_t)(minSize))
 }
 
 // AvFastPaddedMallocz
-func AvFastPaddedMallocz(ptr unsafe.Pointer, size *uint32, minSize uint) {
-	C.av_fast_padded_mallocz(ptr, (*C.uint)(size), (C.size_t)(minSize))
+func AvFastPaddedMallocz(ptr CVoidPointer, size *uint32, minSize uint) {
+	C.av_fast_padded_mallocz(VoidPointer(ptr), (*C.uint)(size), (C.size_t)(minSize))
 }
 
 // AvXiphlacing encodes extradata length to a buffer. Used by xiph codecs.
@@ -3696,41 +4906,41 @@ func AvXiphlacing(s *uint8, v int32) int32 {
 }
 
 // Deprecated: No use
-func AvRegisterHwaccel(hwaccel *AvHWAccel) {
+func AvRegisterHwaccel(hwaccel *AVHWAccel) {
 	C.av_register_hwaccel((*C.struct_AVHWAccel)(hwaccel))
 }
 
 // Deprecated: No use
-func AvHwaccelNext(hwaccel *AvHWAccel) *AvHWAccel {
-	return (*AvHWAccel)(C.av_hwaccel_next((*C.struct_AVHWAccel)(hwaccel)))
+func AvHwaccelNext(hwaccel *AVHWAccel) *AVHWAccel {
+	return (*AVHWAccel)(C.av_hwaccel_next((*C.struct_AVHWAccel)(hwaccel)))
 }
 
-// AvLockOp
-type AvLockOp = C.enum_AVLockOp
+// AVLockOp
+type AVLockOp = C.enum_AVLockOp
 
 const (
-	AV_LOCK_CREATE  = AvLockOp(C.AV_LOCK_CREATE)
-	AV_LOCK_OBTAIN  = AvLockOp(C.AV_LOCK_OBTAIN)
-	AV_LOCK_RELEASE = AvLockOp(C.AV_LOCK_RELEASE)
-	AV_LOCK_DESTROY = AvLockOp(C.AV_LOCK_DESTROY)
+	AV_LOCK_CREATE  = AVLockOp(C.AV_LOCK_CREATE)
+	AV_LOCK_OBTAIN  = AVLockOp(C.AV_LOCK_OBTAIN)
+	AV_LOCK_RELEASE = AVLockOp(C.AV_LOCK_RELEASE)
+	AV_LOCK_DESTROY = AVLockOp(C.AV_LOCK_DESTROY)
 )
 
-// typedef int (*av_lockmgr_cb)(void **mutex, enum AvLockOp op)
-type AvLockmgrCb C.av_lockmgr_cb
+// typedef int (*av_lockmgr_cb)(void **mutex, enum AVLockOp op)
+type AVLockmgrCb C.av_lockmgr_cb
 
 // AvLockmgrRegister
-func AvLockmgrRegister(cb AvLockmgrCb) int32 {
+func AvLockmgrRegister(cb AVLockmgrCb) int32 {
 	return (int32)(C.av_lockmgr_register((C.av_lockmgr_cb)(cb)))
 }
 
 // A positive value if s is open,
 // 0 otherwise.
-func AvCodecIsOpen(avctx *AvCodecContext) int32 {
+func AvCodecIsOpen(avctx *AVCodecContext) int32 {
 	return (int32)(C.avcodec_is_open((*C.struct_AVCodecContext)(avctx)))
 }
 
 // AvCpbPropertiesAlloc allocates a CPB properties structure and initialize its fields to default
 // values.
-func AvCpbPropertiesAlloc(size *uint) *AvCPBProperties {
-	return (*AvCPBProperties)(C.av_cpb_properties_alloc((*C.size_t)(unsafe.Pointer(size))))
+func AvCpbPropertiesAlloc(size *uint) *AVCPBProperties {
+	return (*AVCPBProperties)(C.av_cpb_properties_alloc((*C.size_t)(unsafe.Pointer(size))))
 }

@@ -19,22 +19,22 @@ const (
 	FRAME_SIZE           = 1024
 )
 
-func initFilterGraph() (graph *ffmpeg.AvFilterGraph, src *ffmpeg.AvFilterContext, sink *ffmpeg.AvFilterContext, ret int32) {
-	var filterGraph *ffmpeg.AvFilterGraph
-	var abufferCtx *ffmpeg.AvFilterContext
-	var abuffer *ffmpeg.AvFilter
-	var volumeCtx *ffmpeg.AvFilterContext
-	var volume *ffmpeg.AvFilter
-	var aformatCtx *ffmpeg.AvFilterContext
-	var aformat *ffmpeg.AvFilter
-	var abuffersinkCtx *ffmpeg.AvFilterContext
-	var abuffersink *ffmpeg.AvFilter
-	var optionsDict *ffmpeg.AvDictionary
+func initFilterGraph() (graph *ffmpeg.AVFilterGraph, src *ffmpeg.AVFilterContext, sink *ffmpeg.AVFilterContext, ret int32) {
+	var filterGraph *ffmpeg.AVFilterGraph
+	var abufferCtx *ffmpeg.AVFilterContext
+	var abuffer *ffmpeg.AVFilter
+	var volumeCtx *ffmpeg.AVFilterContext
+	var volume *ffmpeg.AVFilter
+	var aformatCtx *ffmpeg.AVFilterContext
+	var aformat *ffmpeg.AVFilter
+	var abuffersinkCtx *ffmpeg.AVFilterContext
+	var abuffersink *ffmpeg.AVFilter
+	var optionsDict *ffmpeg.AVDictionary
 
 	// Create a new filtergraph, which will contain all the filters.
 	if filterGraph = ffmpeg.AvFilterGraphAlloc(); filterGraph == nil {
 		fmt.Fprintf(os.Stderr, "Unable to create filter graph.\n")
-		return nil, nil, nil, ffmpeg.AVERROR(int32(syscall.ENOMEM))
+		return nil, nil, nil, ffmpeg.AVERROR(syscall.ENOMEM)
 	}
 
 	// Create the abuffer filter;
@@ -46,16 +46,16 @@ func initFilterGraph() (graph *ffmpeg.AvFilterGraph, src *ffmpeg.AvFilterContext
 
 	if abufferCtx = ffmpeg.AvFilterGraphAllocFilter(filterGraph, abuffer, "src"); abufferCtx == nil {
 		fmt.Fprintf(os.Stderr, "Could not allocate the abuffer instance.\n")
-		return nil, nil, nil, ffmpeg.AVERROR(int32(syscall.ENOMEM))
+		return nil, nil, nil, ffmpeg.AVERROR(syscall.ENOMEM)
 	}
 
-	ffmpeg.AvOptSet(unsafe.Pointer(abufferCtx), "channel_layout",
+	ffmpeg.AvOptSet(abufferCtx, "channel_layout",
 		ffmpeg.AvGetChannelLayoutString(0, INPUT_CHANNEL_LAYOUT), ffmpeg.AV_OPT_SEARCH_CHILDREN)
-	ffmpeg.AvOptSet(unsafe.Pointer(abufferCtx), "sample_fmt",
+	ffmpeg.AvOptSet(abufferCtx, "sample_fmt",
 		ffmpeg.AvGetSampleFmtName(INPUT_FORMAT), ffmpeg.AV_OPT_SEARCH_CHILDREN)
-	ffmpeg.AvOptSetQ(unsafe.Pointer(abufferCtx), "time_base",
+	ffmpeg.AvOptSetQ(abufferCtx, "time_base",
 		ffmpeg.AvMakeQ(1, INPUT_SAMPLERATE), ffmpeg.AV_OPT_SEARCH_CHILDREN)
-	ffmpeg.AvOptSetInt(unsafe.Pointer(abufferCtx), "sample_rate",
+	ffmpeg.AvOptSetInt(abufferCtx, "sample_rate",
 		INPUT_SAMPLERATE, ffmpeg.AV_OPT_SEARCH_CHILDREN)
 
 	// Now initialize the filter; we pass NULL options, since we have already set all the options above.
@@ -72,7 +72,7 @@ func initFilterGraph() (graph *ffmpeg.AvFilterGraph, src *ffmpeg.AvFilterContext
 
 	if volumeCtx = ffmpeg.AvFilterGraphAllocFilter(filterGraph, volume, "volume"); volumeCtx == nil {
 		fmt.Fprintf(os.Stderr, "Could not allocate the volume instance.\n")
-		return nil, nil, nil, ffmpeg.AVERROR(int32(syscall.ENOMEM))
+		return nil, nil, nil, ffmpeg.AVERROR(syscall.ENOMEM)
 	}
 
 	// A different way of passing the options is as key/value pairs in a
@@ -94,7 +94,7 @@ func initFilterGraph() (graph *ffmpeg.AvFilterGraph, src *ffmpeg.AvFilterContext
 
 	if aformatCtx = ffmpeg.AvFilterGraphAllocFilter(filterGraph, aformat, "aformat"); aformatCtx == nil {
 		fmt.Fprintf(os.Stderr, "Could not allocate the aformat instance.\n")
-		return nil, nil, nil, ffmpeg.AVERROR(int32(syscall.ENOMEM))
+		return nil, nil, nil, ffmpeg.AVERROR(syscall.ENOMEM)
 	}
 
 	// A third way of passing the options is in a string of the form
@@ -115,7 +115,7 @@ func initFilterGraph() (graph *ffmpeg.AvFilterGraph, src *ffmpeg.AvFilterContext
 
 	if abuffersinkCtx = ffmpeg.AvFilterGraphAllocFilter(filterGraph, abuffersink, "sink"); abuffersinkCtx == nil {
 		fmt.Fprintf(os.Stderr, "Could not allocate the abuffersink instance.\n")
-		return nil, nil, nil, ffmpeg.AVERROR(int32(syscall.ENOMEM))
+		return nil, nil, nil, ffmpeg.AVERROR(syscall.ENOMEM)
 	}
 
 	// This filter takes no options.
@@ -126,12 +126,12 @@ func initFilterGraph() (graph *ffmpeg.AvFilterGraph, src *ffmpeg.AvFilterContext
 
 	// Connect the filters;
 	// in this simple case the filters just form a linear chain.
-	ret = ffmpeg.AvFilterLink2(abufferCtx, 0, volumeCtx, 0)
+	ret = ffmpeg.AvFilterLink(abufferCtx, 0, volumeCtx, 0)
 	if ret >= 0 {
-		ret = ffmpeg.AvFilterLink2(volumeCtx, 0, aformatCtx, 0)
+		ret = ffmpeg.AvFilterLink(volumeCtx, 0, aformatCtx, 0)
 	}
 	if ret >= 0 {
-		ret = ffmpeg.AvFilterLink2(aformatCtx, 0, abuffersinkCtx, 0)
+		ret = ffmpeg.AvFilterLink(aformatCtx, 0, abuffersinkCtx, 0)
 	}
 	if ret < 0 {
 		fmt.Fprintf(os.Stderr, "Error connecting filters\n")
@@ -149,7 +149,7 @@ func initFilterGraph() (graph *ffmpeg.AvFilterGraph, src *ffmpeg.AvFilterContext
 
 // Do something useful with the filtered data: this simple
 // example just prints the MD5 checksum of each plane to stdout.
-func processOutput(md5 *ffmpeg.AvMD5, frame *ffmpeg.AvFrame) int32 {
+func processOutput(md5 *ffmpeg.AVMD5, frame *ffmpeg.AVFrame) int32 {
 	planar := ffmpeg.AvSampleFmtIsPlanar(frame.GetFormat())
 	channels := ffmpeg.AvGetChannelLayoutNbChannels(frame.GetChannelLayout())
 	planes := channels
@@ -181,7 +181,7 @@ func processOutput(md5 *ffmpeg.AvMD5, frame *ffmpeg.AvFrame) int32 {
 
 // Construct a frame of audio data to be filtered;
 // this simple example just synthesizes a sine wave.
-func getInput(frame *ffmpeg.AvFrame, frameNum int32) int32 {
+func getInput(frame *ffmpeg.AVFrame, frameNum int32) int32 {
 	// Set up the frame properties and allocate the buffer for the data.
 	frame.SetSampleRate(INPUT_SAMPLERATE)
 	frame.SetFormat(INPUT_FORMAT)
@@ -208,10 +208,10 @@ func getInput(frame *ffmpeg.AvFrame, frameNum int32) int32 {
 }
 
 func main() {
-	var md5 *ffmpeg.AvMD5
-	var graph *ffmpeg.AvFilterGraph
-	var src, sink *ffmpeg.AvFilterContext
-	var frame *ffmpeg.AvFrame
+	var md5 *ffmpeg.AVMD5
+	var graph *ffmpeg.AVFilterGraph
+	var src, sink *ffmpeg.AVFilterContext
+	var frame *ffmpeg.AVFrame
 	var ret int32
 
 	if len(os.Args) < 2 {
@@ -272,7 +272,7 @@ func main() {
 			ffmpeg.AvFrameUnref(frame)
 		}
 
-		if ret == ffmpeg.AVERROR(int32(syscall.EAGAIN)) {
+		if ret == ffmpeg.AVERROR(syscall.EAGAIN) {
 			// Need to feed more frames in.
 			continue
 		} else if ret == ffmpeg.AVERROR_EOF {
@@ -287,7 +287,7 @@ func main() {
 
 	ffmpeg.AvFilterGraphFree(&graph)
 	ffmpeg.AvFrameFree(&frame)
-	ffmpeg.AvFreep(unsafe.Pointer(&md5))
+	ffmpeg.AvFreep(&md5)
 	return
 
 fail:

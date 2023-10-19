@@ -17,12 +17,12 @@ func pgmSave(buf *uint8, wrap, xsize, ysize int32, filename string) {
 	f, _ := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0755)
 	fmt.Fprintf(f, "P5\n%d %d\n%d\n", xsize, ysize, 255)
 	for i := int32(0); i < ysize; i++ {
-		f.Write(ffmpeg.SliceWithOffset(buf, i+wrap, xsize))
+		f.Write(ffmpeg.ByteSliceWithOffset(buf, i+wrap, xsize))
 	}
 	f.Close()
 }
 
-func decode(decCtx *ffmpeg.AvCodecContext, frame *ffmpeg.AvFrame, pkt *ffmpeg.AvPacket, filename string) {
+func decode(decCtx *ffmpeg.AVCodecContext, frame *ffmpeg.AVFrame, pkt *ffmpeg.AVPacket, filename string) {
 	ret := ffmpeg.AvCodecSendPacket(decCtx, pkt)
 	if ret < 0 {
 		fmt.Fprintf(os.Stderr, "Error sending a packet for decoding\n")
@@ -31,7 +31,7 @@ func decode(decCtx *ffmpeg.AvCodecContext, frame *ffmpeg.AvFrame, pkt *ffmpeg.Av
 
 	for ret >= 0 {
 		ret = ffmpeg.AvCodecReceiveFrame(decCtx, frame)
-		if ret == ffmpeg.AVERROR(int32(syscall.EAGAIN)) || ret == ffmpeg.AVERROR_EOF {
+		if ret == ffmpeg.AVERROR(syscall.EAGAIN) || ret == ffmpeg.AVERROR_EOF {
 			return
 		} else if ret < 0 {
 			fmt.Fprintf(os.Stderr, "Error during decoding\n")

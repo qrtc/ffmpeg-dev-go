@@ -11,7 +11,7 @@ import (
 )
 
 // check that a given sample format is supported by the encoder
-func checkSampleFmt(codec *ffmpeg.AvCodec, sampleFmt ffmpeg.AvSampleFormat) int32 {
+func checkSampleFmt(codec *ffmpeg.AVCodec, sampleFmt ffmpeg.AVSampleFormat) int32 {
 	for _, f := range codec.GetSampleFmts() {
 		if f == sampleFmt {
 			return 1
@@ -20,7 +20,7 @@ func checkSampleFmt(codec *ffmpeg.AvCodec, sampleFmt ffmpeg.AvSampleFormat) int3
 	return 0
 }
 
-func selectSampleRate(codec *ffmpeg.AvCodec) int32 {
+func selectSampleRate(codec *ffmpeg.AVCodec) int32 {
 	var bestSamplerate int32
 	ss := codec.GetSupportedSamplerates()
 	if len(ss) == 0 {
@@ -35,7 +35,7 @@ func selectSampleRate(codec *ffmpeg.AvCodec) int32 {
 }
 
 // select layout with the highest channel count
-func selectChannelLayout(codec *ffmpeg.AvCodec) uint64 {
+func selectChannelLayout(codec *ffmpeg.AVCodec) uint64 {
 	var bestChLayout uint64
 	var bestNbChannels int32
 	ls := codec.GetChannelLayouts()
@@ -55,7 +55,7 @@ func selectChannelLayout(codec *ffmpeg.AvCodec) uint64 {
 	return bestChLayout
 }
 
-func encode(ctx *ffmpeg.AvCodecContext, frame *ffmpeg.AvFrame, pkt *ffmpeg.AvPacket, output *os.File) {
+func encode(ctx *ffmpeg.AVCodecContext, frame *ffmpeg.AVFrame, pkt *ffmpeg.AVPacket, output *os.File) {
 	// send the frame for encoding
 	ret := ffmpeg.AvCodecSendFrame(ctx, frame)
 	if ret < 0 {
@@ -66,14 +66,14 @@ func encode(ctx *ffmpeg.AvCodecContext, frame *ffmpeg.AvFrame, pkt *ffmpeg.AvPac
 	// read all the available output packets (in general there may be any number of them
 	for ret >= 0 {
 		ret = ffmpeg.AvCodecReceivePacket(ctx, pkt)
-		if ret == ffmpeg.AVERROR(int32(syscall.EAGAIN)) || ret == ffmpeg.AVERROR_EOF {
+		if ret == ffmpeg.AVERROR(syscall.EAGAIN) || ret == ffmpeg.AVERROR_EOF {
 			return
 		} else if ret < 0 {
 			fmt.Fprintf(os.Stderr, "Error encoding audio frame\n")
 			os.Exit(1)
 		}
 
-		output.Write(ffmpeg.Slice(pkt.GetData(), pkt.GetSize()))
+		output.Write(ffmpeg.ByteSlice(pkt.GetData(), pkt.GetSize()))
 		ffmpeg.AvPacketUnref(pkt)
 	}
 
