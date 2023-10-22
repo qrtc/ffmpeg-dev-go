@@ -120,20 +120,20 @@ func main() {
 		}
 
 		// prepare a dummy image
-		data0 := unsafe.Slice(frame.GetDataIdx(0), avctx.GetHeight()*frame.GetLinesizeIdx(0)+avctx.GetWidth())
-		data1 := unsafe.Slice(frame.GetDataIdx(1), (avctx.GetHeight()/2)*frame.GetLinesizeIdx(1)+(avctx.GetWidth()/2))
-		data2 := unsafe.Slice(frame.GetDataIdx(2), (avctx.GetHeight()/2)*frame.GetLinesizeIdx(2)+(avctx.GetWidth()/2))
+		data0 := unsafe.Slice(frame.GetData()[0], avctx.GetHeight()*frame.GetLinesize()[0])
+		data1 := unsafe.Slice(frame.GetData()[1], (avctx.GetHeight()/2)*frame.GetLinesize()[1])
+		data2 := unsafe.Slice(frame.GetData()[2], (avctx.GetHeight()/2)*frame.GetLinesize()[2])
 		// Y
 		for y := 0; y < int(avctx.GetHeight()); y++ {
 			for x := 0; x < int(avctx.GetWidth()); x++ {
-				data0[y*int(frame.GetLinesizeIdx(0))+x] = uint8(x + y + i*3)
+				data0[y*int(frame.GetLinesize()[0])+x] = uint8(x + y + i*3)
 			}
 		}
 		// Cb and Cr
 		for y := 0; y < int(avctx.GetHeight()/2); y++ {
 			for x := 0; x < int(avctx.GetWidth()/2); x++ {
-				data1[y*int(frame.GetLinesizeIdx(1))+x] = uint8(128 + y + i*2)
-				data2[y*int(frame.GetLinesizeIdx(2))+x] = uint8(64 + x + i*5)
+				data1[y*int(frame.GetLinesize()[1])+x] = uint8(128 + y + i*2)
+				data2[y*int(frame.GetLinesize()[2])+x] = uint8(64 + x + i*5)
 			}
 		}
 

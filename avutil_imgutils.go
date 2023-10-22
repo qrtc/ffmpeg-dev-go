@@ -38,7 +38,7 @@ func AvImageFillLinesizes(linesizes []int32, pixFmt AVPixelFormat, width int32) 
 }
 
 // AvImageFillPlaneSizes fills plane sizes for an image with pixel format pix_fmt and height height.
-func AvImageFillPlaneSizes(size []uint, pixFmt AVPixelFormat, height int32, linesizes []int) int32 {
+func AvImageFillPlaneSizes(size []uintptr, pixFmt AVPixelFormat, height int32, linesizes []int) int32 {
 	if len(size) < 4 {
 		panic("size len < 4")
 	}

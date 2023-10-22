@@ -64,13 +64,13 @@ const (
 // In case of failure the global variable errno is set to indicate the
 // error. Even in case of failure AvStrerror() will print a generic
 // error message indicating the errnum provided to errbuf.
-func AvStrerror(errnum int32, errbuf *int8, errbufSize uint) int32 {
+func AvStrerror(errnum int32, errbuf *int8, errbufSize uintptr) int32 {
 	return (int32)(C.av_strerror((C.int)(errnum), (*C.char)(errbuf), (C.size_t)(errbufSize)))
 }
 
 // AvMakeErrorString fills the provided buffer with a string containing an error string
 // corresponding to the AVERROR code errnum.
-func AvMakeErrorString(errbuf *int8, errbufSize uint, errnum int32) *int8 {
+func AvMakeErrorString(errbuf *int8, errbufSize uintptr, errnum int32) *int8 {
 	return (*int8)(C.av_make_error_string((*C.char)(errbuf), (C.size_t)(errbufSize), (C.int)(errnum)))
 }
 

@@ -232,24 +232,16 @@ func (frame *AVFrame) GetData() []*uint8 {
 	return unsafe.Slice((**uint8)(unsafe.Pointer(&frame.data[0])), AV_NUM_DATA_POINTERS)
 }
 
+// Custom: SetData sets `AVFrame.data` value.
+func (frame *AVFrame) SetData(v []*uint8) {
+	for i := 0; i < FFMIN(len(v), AV_NUM_DATA_POINTERS); i++ {
+		frame.data[i] = (*C.uint8_t)(v[i])
+	}
+}
+
 // Custom: GetDataAddr gets `AVFrame.data` address.
 func (frame *AVFrame) GetDataAddr() ***uint8 {
 	return (***uint8)(unsafe.Pointer(&frame.data))
-}
-
-// Custom: GetDataIdx gets `AVFrame.data` index value.
-func (frame *AVFrame) GetDataIdx(idx int) *uint8 {
-	return (*uint8)(frame.data[idx])
-}
-
-// Custom: SetDataIdx sets `AVFrame.data` index value.
-func (frame *AVFrame) SetDataIdx(idx int, v *uint8) {
-	frame.data[idx] = (*C.uint8_t)(v)
-}
-
-// Custom: GetDataIdxAddr gets `AVFrame.data` index address.
-func (frame *AVFrame) GetDataIdxAddr(idx int) **uint8 {
-	return (**uint8)(unsafe.Pointer(&frame.data[idx]))
 }
 
 // Custom: GetLinesize gets `AVFrame.linesize` value.
@@ -257,24 +249,16 @@ func (frame *AVFrame) GetLinesize() []int32 {
 	return unsafe.Slice((*int32)(&frame.linesize[0]), AV_NUM_DATA_POINTERS)
 }
 
+// Custom: SetLinesize sets `AVFrame.linesize` value.
+func (frame *AVFrame) SetLinesize(v []int32) {
+	for i := 0; i < FFMIN(len(v), AV_NUM_DATA_POINTERS); i++ {
+		frame.linesize[i] = (C.int)(v[i])
+	}
+}
+
 // Custom: GetLinesizeAddr gets `AVFrame.linesize` address.
 func (frame *AVFrame) GetLinesizeAddr() **int32 {
 	return (**int32)(unsafe.Pointer(&frame.linesize))
-}
-
-// Custom: GetLinesizeIdx gets `AVFrame.linesize` index value.
-func (frame *AVFrame) GetLinesizeIdx(idx int) int32 {
-	return (int32)(frame.linesize[idx])
-}
-
-// Custom: SetLinesizeIdx sets `AVFrame.linesize` index value.
-func (frame *AVFrame) SetLinesizeIdx(idx int, v int32) {
-	frame.linesize[idx] = (C.int)(v)
-}
-
-// Custom: GetLinesizeIdxAddr gets `AVFrame.linesize` index address.
-func (frame *AVFrame) GetLinesizeIdxAddr(idx int) *int32 {
-	return (*int32)(&frame.linesize[idx])
 }
 
 // Custom: GetExtendedData gets `AVFrame.extended_data` value.
@@ -297,7 +281,7 @@ func (frame *AVFrame) GetExtendedDataIdx(idx int) *uint8 {
 	if frame.extended_data == nil {
 		return nil
 	}
-	return PointerOffset((*uint8)(*frame.extended_data), idx)
+	return (*uint8)(*PointerOffset(frame.extended_data, idx))
 }
 
 // Custom: GetWidth gets `AVFrame.width` value.
@@ -495,24 +479,16 @@ func (frame *AVFrame) GetQualityAddr() *int32 {
 	return (*int32)(&frame.quality)
 }
 
-// Custom: GetIdxError gets `AVFrame.error` index value.
-func (frame *AVFrame) GetErrorIdx(idx int) uint64 {
-	return (uint64)(frame.error[idx])
-}
-
-// Custom: SetIdxError sets `AVFrame.error` index value.
-func (frame *AVFrame) SetErrorIdx(idx int, v uint64) {
-	frame.error[idx] = (C.uint64_t)(v)
-}
-
-// Custom: GetErrorIdxAddr gets `AVFrame.error` index address.
-func (frame *AVFrame) GetErrorIdxAddr(idx int) *uint64 {
-	return (*uint64)(&frame.error[idx])
-}
-
 // Custom: GetError gets `AVFrame.error` value.
 func (frame *AVFrame) GetError() []uint64 {
 	return unsafe.Slice((*uint64)(&frame.error[0]), AV_NUM_DATA_POINTERS)
+}
+
+// Custom: SetError sets `AVFrame.error` value.
+func (frame *AVFrame) SetError(v []uint64) {
+	for i := 0; i < FFMIN(len(v), AV_NUM_DATA_POINTERS); i++ {
+		frame.error[i] = (C.uint64_t)(v[i])
+	}
 }
 
 // Custom: GetErrorAddr gets `AVFrame.error` address.
@@ -625,30 +601,16 @@ func (frame *AVFrame) GetChannelLayoutAddr() *uint64 {
 	return (*uint64)(&frame.channel_layout)
 }
 
-// Custom: GetBufIdx gets `AVFrame.buf` value.
+// Custom: GetBuf gets `AVFrame.buf` value.
 func (frame *AVFrame) GetBuf() []*AVBufferRef {
 	return unsafe.Slice((**AVBufferRef)(unsafe.Pointer(&frame.buf[0])), AV_NUM_DATA_POINTERS)
 }
 
-// Custom: GetBufIdx gets `AVFrame.buf` value.
-func (frame *AVFrame) GetBufIdx(idx int) *AVBufferRef {
-	return (*AVBufferRef)(frame.buf[idx])
-}
-
-// Custom: SetBufIdx sets `AVFrame.buf` value.
-func (frame *AVFrame) SetBufIdx(idx int, v *AVBufferRef) {
-	if idx > AV_NUM_DATA_POINTERS {
-		return
+// Custom: SetBuf sets `AVFrame.buf` value.
+func (frame *AVFrame) SetBuf(v []*AVBufferRef) {
+	for i := 0; i < FFMIN(len(v), AV_NUM_DATA_POINTERS); i++ {
+		frame.buf[i] = (*C.struct_AVBufferRef)(v[i])
 	}
-	frame.buf[idx] = (*C.struct_AVBufferRef)(v)
-}
-
-// Custom: GetBufIdxAddr gets `AVFrame.buf` address.
-func (frame *AVFrame) GetBufIdxAddr(idx int) **AVBufferRef {
-	if idx > AV_NUM_DATA_POINTERS {
-		return nil
-	}
-	return (**AVBufferRef)(unsafe.Pointer(&frame.buf[idx]))
 }
 
 // Custom: GetBufAddr gets `AVFrame.buf` address.
@@ -673,14 +635,6 @@ func (frame *AVFrame) SetExtendedBuf(v **AVBufferRef) {
 // Custom: GetExtendedBufAddr gets `AVFrame.extended_buf` address.
 func (frame *AVFrame) GetExtendedBufAddr() ***AVBufferRef {
 	return (***AVBufferRef)(unsafe.Pointer(&frame.extended_buf))
-}
-
-// Custom: GetExtendedBufIdx gets `AVFrame.extended_buf` index value.
-func (frame *AVFrame) GetExtendedBufIdx(idx int) *AVBufferRef {
-	if idx >= int(frame.nb_extended_buf) {
-		return nil
-	}
-	return PointerOffset((*AVBufferRef)(*frame.extended_buf), idx)
 }
 
 // Custom: GetNbExtendedBuf gets `AVFrame.nb_extended_buf` value.
@@ -714,14 +668,6 @@ func (frame *AVFrame) SetSideData(v **AVFrameSideData) {
 // Custom: GetSideDataAddr gets `AVFrame.side_data` address.
 func (frame *AVFrame) GetSideDataAddr() ***AVFrameSideData {
 	return (***AVFrameSideData)(unsafe.Pointer(&frame.side_data))
-}
-
-// Custom: GetSideDataIdx gets `AVFrame.side_data` index value.
-func (frame *AVFrame) GetSideDataIdx(idx int) *AVFrameSideData {
-	if idx >= int(frame.nb_side_data) {
-		return nil
-	}
-	return PointerOffset((*AVFrameSideData)(*frame.side_data), idx)
 }
 
 // Custom: GetNbSideData gets `AVFrame.nb_side_data` value.
@@ -1037,63 +983,63 @@ func (frame *AVFrame) GetOpaqueRefAddr() **AVBufferRef {
 }
 
 // Custom: GetCropTop gets `AVFrame.crop_top` value.
-func (frame *AVFrame) GetCropTop() uint {
-	return (uint)(frame.crop_top)
+func (frame *AVFrame) GetCropTop() uintptr {
+	return (uintptr)(frame.crop_top)
 }
 
 // Custom: SetCropTop sets `AVFrame.crop_top` value.
-func (frame *AVFrame) SetCropTop(v uint) {
+func (frame *AVFrame) SetCropTop(v uintptr) {
 	frame.crop_top = (C.size_t)(v)
 }
 
 // Custom: GetCropTopAddr gets `AVFrame.crop_top` address.
-func (frame *AVFrame) GetCropTopAddr() *uint {
-	return (*uint)(unsafe.Pointer(&frame.crop_top))
+func (frame *AVFrame) GetCropTopAddr() *uintptr {
+	return (*uintptr)(unsafe.Pointer(&frame.crop_top))
 }
 
 // Custom: GetCropBottom gets `AVFrame.crop_bottom` value.
-func (frame *AVFrame) GetCropBottom() uint {
-	return (uint)(frame.crop_bottom)
+func (frame *AVFrame) GetCropBottom() uintptr {
+	return (uintptr)(frame.crop_bottom)
 }
 
 // Custom: SetCropBottom sets `AVFrame.crop_bottom` value.
-func (frame *AVFrame) SetCropBottom(v uint) {
+func (frame *AVFrame) SetCropBottom(v uintptr) {
 	frame.crop_bottom = (C.size_t)(v)
 }
 
 // Custom: GetCropBottomAddr gets `AVFrame.crop_bottom` address.
-func (frame *AVFrame) GetCropBottomAddr() *uint {
-	return (*uint)(unsafe.Pointer(&frame.crop_bottom))
+func (frame *AVFrame) GetCropBottomAddr() *uintptr {
+	return (*uintptr)(unsafe.Pointer(&frame.crop_bottom))
 }
 
 // Custom: GetCropLeft gets `AVFrame.crop_left` value.
-func (frame *AVFrame) GetCropLeft() uint {
-	return (uint)(frame.crop_left)
+func (frame *AVFrame) GetCropLeft() uintptr {
+	return (uintptr)(frame.crop_left)
 }
 
 // Custom: SetCropLeft sets `AVFrame.crop_left` value.
-func (frame *AVFrame) SetCropLeft(v uint) {
+func (frame *AVFrame) SetCropLeft(v uintptr) {
 	frame.crop_left = (C.size_t)(v)
 }
 
 // Custom: GetCropLeftAddr gets `AVFrame.crop_left` address.
-func (frame *AVFrame) GetCropLeftAddr() *uint {
-	return (*uint)(unsafe.Pointer(&frame.crop_left))
+func (frame *AVFrame) GetCropLeftAddr() *uintptr {
+	return (*uintptr)(unsafe.Pointer(&frame.crop_left))
 }
 
 // Custom: GetCropRight gets `AVFrame.crop_right` value.
-func (frame *AVFrame) GetCropRight() uint {
-	return (uint)(frame.crop_right)
+func (frame *AVFrame) GetCropRight() uintptr {
+	return (uintptr)(frame.crop_right)
 }
 
 // Custom: SetCropRight sets `AVFrame.crop_right` value.
-func (frame *AVFrame) SetCropRight(v uint) {
+func (frame *AVFrame) SetCropRight(v uintptr) {
 	frame.crop_right = (C.size_t)(v)
 }
 
 // Custom: GetCropRightAddr gets `AVFrame.crop_right` address.
-func (frame *AVFrame) GetCropRightAddr() *uint {
-	return (*uint)(unsafe.Pointer(&frame.crop_right))
+func (frame *AVFrame) GetCropRightAddr() *uintptr {
+	return (*uintptr)(unsafe.Pointer(&frame.crop_right))
 }
 
 // Custom: GetPrivateRef gets `AVFrame.private_ref` value.

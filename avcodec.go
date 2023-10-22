@@ -20,7 +20,9 @@ typedef int (*avcodec_context_get_encode_buffer_func)(struct AVCodecContext *s,
 typedef int (*av_lockmgr_cb)(void **mutex, enum AVLockOp op);
 */
 import "C"
-import "unsafe"
+import (
+	"unsafe"
+)
 
 const (
 	// Required number of additionally allocated bytes at the end of the input bitstream for decoding.
@@ -157,6 +159,18 @@ func (psn *AVPanScan) GetHeightAddr() *int32 {
 // Custom: GetPosition gets `AVPanScan.position` value.
 func (psn *AVPanScan) GetPosition() []int16 {
 	return unsafe.Slice((*int16)(&psn.position[0][0]), 3*2)
+}
+
+// Custom: SetPosition sets `AVPanScan.position` value.
+func (psn *AVPanScan) SetPosition(v []int16) {
+	for i := 0; i < FFMIN(len(v), 3*2); i++ {
+		psn.position[i/2][i%2] = (C.int16_t)(v[i])
+	}
+}
+
+// Custom: GetPositionAddr gets `AVPanScan.position` address.
+func (psn *AVPanScan) GetPositionAddr() **int16 {
+	return (**int16)(unsafe.Pointer(&psn.position))
 }
 
 // Custom: GetPositionIdx gets `AVPanScan.position` index value.
@@ -2395,19 +2409,16 @@ func (avctx *AVCodecContext) GetError() []uint64 {
 	return unsafe.Slice((*uint64)(&avctx.error[0]), AV_NUM_DATA_POINTERS)
 }
 
-// Custom: GetErrorIdx gets `AVCodecContext.error` value.
-func (avctx *AVCodecContext) GetErrorIdx(idx int) uint64 {
-	return (uint64)(avctx.error[idx])
+// Custom: SetError sets `AVCodecContext.error` value.
+func (avctx *AVCodecContext) SetError(v []uint64) {
+	for i := 0; i < FFMIN(len(v), AV_NUM_DATA_POINTERS); i++ {
+		avctx.error[i] = (C.uint64_t)(v[i])
+	}
 }
 
-// Custom: SetErrorIdx sets `AVCodecContext.error` value.
-func (avctx *AVCodecContext) SetErrorIdx(idx int, v uint64) {
-	avctx.error[idx] = (C.uint64_t)(v)
-}
-
-// Custom: GetErrorIdxAddr gets `AVCodecContext.error` address.
-func (avctx *AVCodecContext) GetErrorIdxAddr(idx int) *uint64 {
-	return (*uint64)(&avctx.error[idx])
+// Custom: GetErrorAddr gets `AVCodecContext.error` address.
+func (avctx *AVCodecContext) GetErrorAddr() **uint64 {
+	return (**uint64)(unsafe.Pointer(&avctx.error))
 }
 
 // Custom: GetDctAlgo gets `AVCodecContext.dct_algo` value.
@@ -3472,23 +3483,20 @@ const (
 type AVPicture C.struct_AVPicture
 
 // Custom: GetData gets `AVPicture.data` value.
-func (pct *AVPicture) GetData(idx int) []*uint8 {
+func (pct *AVPicture) GetData() []*uint8 {
 	return unsafe.Slice((**uint8)(unsafe.Pointer(&pct.data[0])), AV_NUM_DATA_POINTERS)
 }
 
-// Custom: GetDataIdx gets `AVPicture.data` index value.
-func (pct *AVPicture) GetDataIdx(idx int) *uint8 {
-	return (*uint8)(pct.data[idx])
+// Custom: SetData sets `AVPicture.data` value.
+func (pct *AVPicture) SetData(v []*uint8) {
+	for i := 0; i < FFMIN(len(v), AV_NUM_DATA_POINTERS); i++ {
+		pct.data[i] = (*C.uint8_t)(v[i])
+	}
 }
 
-// Custom: SetDataIdx sets `AVPicture.data` index value.
-func (pct *AVPicture) SetDataIdx(idx int, v *uint8) {
-	pct.data[idx] = (*C.uint8_t)(v)
-}
-
-// Custom: GetDataIdxAddr gets `AVPicture.data` index address.
-func (pct *AVPicture) GetDataIdxAddr(idx int) **uint8 {
-	return (**uint8)(unsafe.Pointer(&pct.data[idx]))
+// Custom: GetDataAddr gets `AVPicture.data` address.
+func (pct *AVPicture) GetDataAddr() ***uint8 {
+	return (***uint8)(unsafe.Pointer(&pct.data))
 }
 
 // Custom: GetLinesize gets `AVPicture.linesize` value.
@@ -3496,19 +3504,16 @@ func (pct *AVPicture) GetLinesize() []int32 {
 	return unsafe.Slice((*int32)(&pct.linesize[0]), AV_NUM_DATA_POINTERS)
 }
 
-// Custom: GetLinesizeIdx gets `AVPicture.linesize` index value.
-func (pct *AVPicture) GetLinesizeIdx(idx int) int32 {
-	return (int32)(pct.linesize[idx])
+// Custom: SetLinesize sets `AVPicture.linesize` value.
+func (pct *AVPicture) SetLinesize(v []int32) {
+	for i := 0; i < FFMIN(len(v), AV_NUM_DATA_POINTERS); i++ {
+		pct.linesize[i] = (C.int)(v[i])
+	}
 }
 
-// Custom: SetLinesizeIdx sets `AVPicture.linesize` index value.
-func (pct *AVPicture) SetLinesizeIdx(idx int, v int32) {
-	pct.linesize[idx] = (C.int)(v)
-}
-
-// Custom: GetLinesizeIdxAddr gets `AVPicture.linesize` index address.
-func (pct *AVPicture) GetLinesizeIdxAddr(idx int) *int32 {
-	return (*int32)(&pct.linesize[idx])
+// Custom: GetLinesizeAddr gets `AVPicture.linesize` address.
+func (pct *AVPicture) GetLinesizeAddr() **int32 {
+	return (**int32)(unsafe.Pointer(&pct.linesize))
 }
 
 // AVSubtitleType
@@ -3621,19 +3626,16 @@ func (sbtr *AVSubtitleRect) GetData() []*uint8 {
 	return unsafe.Slice((**uint8)(unsafe.Pointer(&sbtr.data[0])), 4)
 }
 
-// Custom: GetDataIdx gets `AVSubtitleRect.data` index value.
-func (sbtr *AVSubtitleRect) GetDataIdx(idx int) *uint8 {
-	return (*uint8)(sbtr.data[idx])
+// Custom: SetData sets `AVSubtitleRect.data` value.
+func (sbtr *AVSubtitleRect) SetData(v []*uint8) {
+	for i := 0; i < FFMIN(len(v), 4); i++ {
+		sbtr.data[i] = (*C.uint8_t)(v[i])
+	}
 }
 
-// Custom: SetDataIdx sets `AVSubtitleRect.data` index value.
-func (sbtr *AVSubtitleRect) SetDataIdx(idx int, v *uint8) {
-	sbtr.data[idx] = (*C.uint8_t)(v)
-}
-
-// Custom: GetDataIdxAddr gets `AVSubtitleRect.data` index address.
-func (sbtr *AVSubtitleRect) GetDataIdxAddr(idx int) **uint8 {
-	return (**uint8)(unsafe.Pointer(&sbtr.data[idx]))
+// Custom: GetDataAddr gets `AVSubtitleRect.data` address.
+func (sbtr *AVSubtitleRect) GetDataAddr() ***uint8 {
+	return (***uint8)(unsafe.Pointer(&sbtr.data))
 }
 
 // Custom: GetLinesize gets `AVSubtitleRect.linesize` value.
@@ -3641,19 +3643,16 @@ func (sbtr *AVSubtitleRect) GetLinesize() []int32 {
 	return unsafe.Slice((*int32)(&sbtr.linesize[0]), 4)
 }
 
-// Custom: GetLinesizeIdx gets `AVSubtitleRect.linesize` index value.
-func (sbtr *AVSubtitleRect) GetLinesizeIdx(idx int) int32 {
-	return (int32)(sbtr.linesize[idx])
+// Custom: SetLinesize sets `AVSubtitleRect.linesize` value.
+func (sbtr *AVSubtitleRect) SetLinesize(v []int32) {
+	for i := 0; i < FFMIN(len(v), 4); i++ {
+		sbtr.linesize[i] = (C.int)(v[i])
+	}
 }
 
-// Custom: SetLinesizeIdx sets `AVSubtitleRect.linesize` index value.
-func (sbtr *AVSubtitleRect) SetLinesizeIdx(idx int, v int32) {
-	sbtr.linesize[idx] = (C.int)(v)
-}
-
-// Custom: GetLinesizeIdxAddr gets `AVSubtitleRect.linesize` index address.
-func (sbtr *AVSubtitleRect) GetLinesizeIdxAddr(idx int) *int32 {
-	return (*int32)(&sbtr.linesize[idx])
+// Custom: GetLinesize gets `AVSubtitleRect.linesize` address.
+func (sbtr *AVSubtitleRect) GetLinesizeAddr() **int32 {
+	return (**int32)(unsafe.Pointer(&sbtr.linesize))
 }
 
 // Custom: GetType gets `AVSubtitleRect._type` value.
@@ -3775,14 +3774,6 @@ func (sbt *AVSubtitle) SetRects(v **AVSubtitleRect) {
 // Custom: GetRectsAddr gets `AVSubtitle.rects` address.
 func (sbt *AVSubtitle) GetRectsAddr() ***AVSubtitleRect {
 	return (***AVSubtitleRect)(unsafe.Pointer(&sbt.rects))
-}
-
-// Custom: GetRectsIdx gets `AVSubtitle.rects` index value.
-func (sbt *AVSubtitle) GetRectsIdx(idx int) *AVSubtitleRect {
-	if idx >= int(sbt.num_rects) {
-		return nil
-	}
-	return PointerOffset((*AVSubtitleRect)(*sbt.rects), idx)
 }
 
 // Custom: GetPts gets `AVSubtitle.pts` value.
@@ -4189,23 +4180,20 @@ func (cpc *AVCodecParserContext) GetCurFrameStartIndexAddr() *int32 {
 }
 
 // Custom: GetCurFrameOffset gets `AVCodecParserContext.cur_frame_offset` value.
-func (cpc *AVCodecParserContext) GetCurFrameOffset(idx int) []int64 {
+func (cpc *AVCodecParserContext) GetCurFrameOffset() []int64 {
 	return unsafe.Slice((*int64)(&cpc.cur_frame_offset[0]), AV_PARSER_PTS_NB)
 }
 
-// Custom: GetCurFrameOffsetIdx gets `AVCodecParserContext.cur_frame_offset` index value.
-func (cpc *AVCodecParserContext) GetCurFrameOffsetIdx(idx int) int64 {
-	return (int64)(cpc.cur_frame_offset[idx])
+// Custom: SetCurFrameOffset sets `AVCodecParserContext.cur_frame_offset` value.
+func (cpc *AVCodecParserContext) SetCurFrameOffset(v []int64) {
+	for i := 0; i < FFMIN(len(v), AV_PARSER_PTS_NB); i++ {
+		cpc.cur_frame_offset[i] = (C.int64_t)(v[i])
+	}
 }
 
-// Custom: SetCurFrameOffsetIdx sets `AVCodecParserContext.cur_frame_offset` index value.
-func (cpc *AVCodecParserContext) SetCurFrameOffsetIdx(idx int, v int64) {
-	cpc.cur_frame_offset[idx] = (C.int64_t)(v)
-}
-
-// Custom: GetCurFrameOffsetIdxAddr gets `AVCodecParserContext.cur_frame_offset` index address.
-func (cpc *AVCodecParserContext) GetCurFrameOffsetIdxAddr(idx int) *int64 {
-	return (*int64)(&cpc.cur_frame_offset[idx])
+// Custom: GetCurFrameOffsetAddr gets `AVCodecParserContext.cur_frame_offset` address.
+func (cpc *AVCodecParserContext) GetCurFrameOffsetAddr() **int64 {
+	return (**int64)(unsafe.Pointer(&cpc.cur_frame_offset))
 }
 
 // Custom: GetCurFramePts gets `AVCodecParserContext.cur_frame_pts` value.
@@ -4213,19 +4201,16 @@ func (cpc *AVCodecParserContext) GetCurFramePts() []int64 {
 	return unsafe.Slice((*int64)(&cpc.cur_frame_pts[0]), AV_PARSER_PTS_NB)
 }
 
-// Custom: GetCurFramePtsIdx gets `AVCodecParserContext.cur_frame_pts` index value.
-func (cpc *AVCodecParserContext) GetCurFramePtsIdx(idx int) int64 {
-	return (int64)(cpc.cur_frame_pts[idx])
+// Custom: SetCurFramePts sets `AVCodecParserContext.cur_frame_pts` value.
+func (cpc *AVCodecParserContext) SetCurFramePts(v []int64) {
+	for i := 0; i < FFMIN(len(v), AV_PARSER_PTS_NB); i++ {
+		cpc.cur_frame_pts[i] = (C.int64_t)(v[i])
+	}
 }
 
-// Custom: SetCurFramePtsIdx sets `AVCodecParserContext.cur_frame_pts` index value.
-func (cpc *AVCodecParserContext) SetCurFramePtsIdx(idx int, v int64) {
-	cpc.cur_frame_pts[idx] = (C.int64_t)(v)
-}
-
-// Custom: GetCurFramePtsIdxAddr gets `AVCodecParserContext.cur_frame_pts` index address.
-func (cpc *AVCodecParserContext) GetCurFramePtsIdxAddr(idx int) *int64 {
-	return (*int64)(&cpc.cur_frame_pts[idx])
+// Custom: GetCurFramePtsAddr gets `AVCodecParserContext.cur_frame_pts` address.
+func (cpc *AVCodecParserContext) GetCurFramePtsAddr() **int64 {
+	return (**int64)(unsafe.Pointer(&cpc.cur_frame_pts))
 }
 
 // Custom: GetCurFrameDts gets `AVCodecParserContext.cur_frame_dts` value.
@@ -4233,19 +4218,16 @@ func (cpc *AVCodecParserContext) GetCurFrameDts() []int64 {
 	return unsafe.Slice((*int64)(&cpc.cur_frame_dts[0]), AV_PARSER_PTS_NB)
 }
 
-// Custom: GetCurFrameDtsIdx gets `AVCodecParserContext.cur_frame_dts` index value.
-func (cpc *AVCodecParserContext) GetCurFrameDtsIdx(idx int) int64 {
-	return (int64)(cpc.cur_frame_dts[idx])
+// Custom: SetCurFrameDts sets `AVCodecParserContext.cur_frame_dts` value.
+func (cpc *AVCodecParserContext) SetCurFrameDts(v []int64) {
+	for i := 0; i < FFMIN(len(v), AV_PARSER_PTS_NB); i++ {
+		cpc.cur_frame_dts[i] = (C.int64_t)(v[i])
+	}
 }
 
-// Custom: SetCurFrameDtsIdx sets `AVCodecParserContext.cur_frame_dts` index value.
-func (cpc *AVCodecParserContext) SetCurFrameDtsIdx(idx int, v int64) {
-	cpc.cur_frame_dts[idx] = (C.int64_t)(v)
-}
-
-// Custom: GetCurFrameDtsIdxAddr gets `AVCodecParserContext.cur_frame_dts` index address.
-func (cpc *AVCodecParserContext) GetCurFrameDtsIdxAddr(idx int) *int64 {
-	return (*int64)(&cpc.cur_frame_dts[idx])
+// Custom: GetCurFrameDtsAddr gets `AVCodecParserContext.cur_frame_dts` address.
+func (cpc *AVCodecParserContext) GetCurFrameDtsAddr() **int64 {
+	return (**int64)(unsafe.Pointer(&cpc.cur_frame_dts))
 }
 
 // Custom: GetOffset gets `AVCodecParserContext.offset` value.
@@ -4268,19 +4250,16 @@ func (cpc *AVCodecParserContext) GetCurFrameEnd() []int64 {
 	return unsafe.Slice((*int64)(&cpc.cur_frame_end[0]), AV_PARSER_PTS_NB)
 }
 
-// Custom: GetCurFrameEndIdx gets `AVCodecParserContext.cur_frame_end` index value.
-func (cpc *AVCodecParserContext) GetCurFrameEndIdx(idx int) int64 {
-	return (int64)(cpc.cur_frame_end[idx])
+// Custom: SetCurFrameEnd sets `AVCodecParserContext.cur_frame_end` value.
+func (cpc *AVCodecParserContext) SetCurFrameEnd(v []int64) {
+	for i := 0; i < FFMIN(len(v), AV_PARSER_PTS_NB); i++ {
+		cpc.cur_frame_end[i] = (C.int64_t)(v[i])
+	}
 }
 
-// Custom: SetCurFrameEndIdx sets `AVCodecParserContext.cur_frame_end` index value.
-func (cpc *AVCodecParserContext) SetCurFrameEndIdx(idx int, v int64) {
-	cpc.cur_frame_end[idx] = (C.int64_t)(v)
-}
-
-// Custom: GetCurFrameEndIdxAddr gets `AVCodecParserContext.cur_frame_end` index address.
-func (cpc *AVCodecParserContext) GetCurFrameEndIdxAddr(idx int) *int64 {
-	return (*int64)(&cpc.cur_frame_end[idx])
+// Custom: GetCurFrameEndAddr gets `AVCodecParserContext.cur_frame_end` address.
+func (cpc *AVCodecParserContext) GetCurFrameEndAddr() **int64 {
+	return (**int64)(unsafe.Pointer(&cpc.cur_frame_end))
 }
 
 // Custom: GetKeyFrame gets `AVCodecParserContext.key_frame` value.
@@ -4358,19 +4337,21 @@ func (cpc *AVCodecParserContext) GetPtsDtsDeltaAddr() *int32 {
 	return (*int32)(&cpc.pts_dts_delta)
 }
 
-// Custom: GetCurFramePosIdx gets `AVCodecParserContext.cur_frame_pos` value.
-func (cpc *AVCodecParserContext) GetCurFramePosIdx(idx int) int64 {
-	return (int64)(cpc.cur_frame_pos[idx])
+// Custom: GetCurFramePos gets `AVCodecParserContext.cur_frame_pos` value.
+func (cpc *AVCodecParserContext) GetCurFramePos() []int64 {
+	return unsafe.Slice((*int64)(&cpc.cur_frame_pos[0]), AV_PARSER_PTS_NB)
 }
 
-// Custom: SetCurFramePosIdx sets `AVCodecParserContext.cur_frame_pos` value.
-func (cpc *AVCodecParserContext) SetCurFramePosIdx(idx int, v int64) {
-	cpc.cur_frame_pos[idx] = (C.int64_t)(v)
+// Custom: SetCurFramePos sets `AVCodecParserContext.cur_frame_pos` value.
+func (cpc *AVCodecParserContext) SetCurFramePos(v []int64) {
+	for i := 0; i < FFMIN(len(v), AV_PARSER_PTS_NB); i++ {
+		cpc.cur_frame_pos[i] = (C.int64_t)(v[i])
+	}
 }
 
-// Custom: GetCurFramePosIdxAddr gets `AVCodecParserContext.cur_frame_pos` address.
-func (cpc *AVCodecParserContext) GetCurFramePosIdxAddr(idx int) *int64 {
-	return (*int64)(&cpc.cur_frame_pos[idx])
+// Custom: GetCurFramePosAddr gets `AVCodecParserContext.cur_frame_pos` address.
+func (cpc *AVCodecParserContext) GetCurFramePosAddr() **int64 {
+	return (**int64)(unsafe.Pointer(&cpc.cur_frame_pos))
 }
 
 // Custom: GetPos gets `AVCodecParserContext.pos` value.
@@ -4546,19 +4527,16 @@ func (cp *AVCodecParser) GetCodecIds() []int32 {
 	return unsafe.Slice((*int32)(&cp.codec_ids[0]), 5)
 }
 
-// Custom: GetCodecIdsIdx gets `AVCodecParser.codec_ids` index value.
-func (cp *AVCodecParser) GetCodecIdsIdx(idx int) int32 {
-	return (int32)(cp.codec_ids[idx])
+// Custom: SetCodecIds sets `AVCodecParser.codec_ids` value.
+func (cp *AVCodecParser) SetCodecIds(v []int32) {
+	for i := 0; i < FFMIN(len(v), 5); i++ {
+		cp.codec_ids[i] = (C.int)(v[i])
+	}
 }
 
-// Custom: SetCodecIdsIdx sets `AVCodecParser.codec_ids` index value.
-func (cp *AVCodecParser) SetCodecIdsIdx(idx int, v int32) {
-	cp.codec_ids[idx] = (C.int)(v)
-}
-
-// Custom: GetCodecIdsIdxAddr gets `AVCodecParser.codec_ids` index address.
-func (cp *AVCodecParser) GetCodecIdsIdxAddr(idx int) *int32 {
-	return (*int32)(&cp.codec_ids[idx])
+// Custom: GetCodecIdsAddr gets `AVCodecParser.codec_ids` address.
+func (cp *AVCodecParser) GetCodecIdsAddr() *int32 {
+	return (*int32)(unsafe.Pointer(&cp.codec_ids))
 }
 
 // Custom: GetPrivDataSize gets `AVCodecParser.priv_data_size` value.
@@ -4745,7 +4723,7 @@ func AvCodecDefaultGetFormat(avctx *AVCodecContext, fmt *AVPixelFormat) AVPixelF
 }
 
 // Deprecated: Use  AvFourccMakeString() or AvFourcc2str() instead.
-func AvGetCodecTagString(buf *int8, bufSize uint, codecTag uint32) int32 {
+func AvGetCodecTagString(buf *int8, bufSize uintptr, codecTag uint32) int32 {
 	return (int32)(C.av_get_codec_tag_string((*C.char)(buf),
 		(C.size_t)(bufSize), (C.uint)(codecTag)))
 }
@@ -4891,12 +4869,12 @@ func AvBsfNext(opaque CVoidPointerPointer) *AVBitStreamFilter {
 }
 
 // AvFastPaddedMalloc
-func AvFastPaddedMalloc(ptr CVoidPointer, size *uint32, minSize uint) {
+func AvFastPaddedMalloc(ptr CVoidPointer, size *uint32, minSize uintptr) {
 	C.av_fast_padded_malloc(VoidPointer(ptr), (*C.uint)(size), (C.size_t)(minSize))
 }
 
 // AvFastPaddedMallocz
-func AvFastPaddedMallocz(ptr CVoidPointer, size *uint32, minSize uint) {
+func AvFastPaddedMallocz(ptr CVoidPointer, size *uint32, minSize uintptr) {
 	C.av_fast_padded_mallocz(VoidPointer(ptr), (*C.uint)(size), (C.size_t)(minSize))
 }
 
@@ -4941,6 +4919,6 @@ func AvCodecIsOpen(avctx *AVCodecContext) int32 {
 
 // AvCpbPropertiesAlloc allocates a CPB properties structure and initialize its fields to default
 // values.
-func AvCpbPropertiesAlloc(size *uint) *AVCPBProperties {
+func AvCpbPropertiesAlloc(size *uintptr) *AVCPBProperties {
 	return (*AVCPBProperties)(C.av_cpb_properties_alloc((*C.size_t)(unsafe.Pointer(size))))
 }

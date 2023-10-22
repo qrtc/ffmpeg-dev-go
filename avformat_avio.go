@@ -60,7 +60,7 @@ func (icb *AVIOInterruptCB) GetOpaqueAddr() *unsafe.Pointer {
 }
 
 // AVIODirEntryType
-type AVIODirEntryType = C.enum_AVIODirEntryType
+type AVIODirEntryType = int32 // C.enum_AVIODirEntryType
 
 const (
 	AVIO_ENTRY_UNKNOWN          = AVIODirEntryType(C.AVIO_ENTRY_UNKNOWN)
@@ -1041,10 +1041,8 @@ func AvIOSeekTime(s *AVIOContext, streamIndex int32, timestamp int64, flags int3
 		(C.int)(streamIndex), (C.int64_t)(timestamp), (C.int)(flags)))
 }
 
-type AVBPrint C.struct_AVBPrint
-
 // AvIOReadToBprint reads contents of h into print buffer, up to max_size bytes, or up to EOF.
-func AvIOReadToBprint(s *AVIOContext, pb *AVBPrint, maxSize uint) int32 {
+func AvIOReadToBprint(s *AVIOContext, pb *AVBPrint, maxSize uintptr) int32 {
 	return (int32)(C.avio_read_to_bprint((*C.struct_AVIOContext)(s),
 		(*C.struct_AVBPrint)(pb), (C.size_t)(maxSize)))
 }

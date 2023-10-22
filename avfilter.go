@@ -207,14 +207,6 @@ func (fltc *AVFilterContext) GetInputsAddr() ***AVFilterLink {
 	return (***AVFilterLink)(unsafe.Pointer(&fltc.inputs))
 }
 
-// Custom: GetInputsIdx gets `AVFilterContext.inputs` index value.
-func (fltc *AVFilterContext) GetInputsIdx(idx int) *AVFilterLink {
-	if idx >= int(fltc.nb_inputs) {
-		return nil
-	}
-	return PointerOffset((*AVFilterLink)(*fltc.inputs), idx)
-}
-
 // Custom: GetNbInputs gets `AVFilterContext.nb_inputs` value.
 func (fltc *AVFilterContext) GetNbInputs() uint32 {
 	return (uint32)(fltc.nb_inputs)
@@ -261,14 +253,6 @@ func (fltc *AVFilterContext) SetOutputs(v **AVFilterLink) {
 // Custom: GetOutputsAddr gets `AVFilterContext.outputs` address.
 func (fltc *AVFilterContext) GetOutputsAddr() ***AVFilterLink {
 	return (***AVFilterLink)(unsafe.Pointer(&fltc.outputs))
-}
-
-// Custom: GetOutputsIdx gets `AVFilterContext.outputs` index value.
-func (fltc *AVFilterContext) GetOutputsIdx(idx int) *AVFilterLink {
-	if idx >= int(fltc.nb_outputs) {
-		return nil
-	}
-	return PointerOffset((*AVFilterLink)(*fltc.outputs), idx)
 }
 
 // Custom: GetNbOutputs gets `AVFilterContext.nb_outputs` value.
@@ -855,14 +839,6 @@ func (fltg *AVFilterGraph) SetFilters(v **AVFilterContext) {
 // Custom: GetFiltersAddr gets `AVFilterGraph.filters` address.
 func (fltg *AVFilterGraph) GetFiltersAddr() ***AVFilterContext {
 	return (***AVFilterContext)(unsafe.Pointer(&fltg.filters))
-}
-
-// Custom: GetFiltersIdx gets `AVFilterGraph.filters` index value.
-func (fltg *AVFilterGraph) GetFiltersIdx(idx int) *AVFilterContext {
-	if idx >= int(fltg.nb_filters) {
-		return nil
-	}
-	return PointerOffset((*AVFilterContext)(*fltg.filters), idx)
 }
 
 // Custom: GetNbFilters gets `AVFilterGraph.nb_filters` value.

@@ -1,5 +1,9 @@
 package main
 
+// filter-audio 0.05
+// plane 0: 0x3A1E227C0C1A0DA59EAA91C35653125C
+// plane 0: 0xA7922B09261B407E49C545A68B671572
+
 import (
 	"fmt"
 	"math"

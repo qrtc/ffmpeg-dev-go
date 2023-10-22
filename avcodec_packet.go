@@ -385,7 +385,7 @@ func AvPacketNewSideData(pkt *AVPacket, _type AVPacketSideDataType, size int32) 
 }
 
 // AvPacketAddSideData wraps an existing array as a packet side data.
-func AvPacketAddSideData(pkt *AVPacket, _type AVPacketSideDataType, data *uint8, size uint) int32 {
+func AvPacketAddSideData(pkt *AVPacket, _type AVPacketSideDataType, data *uint8, size uintptr) int32 {
 	return (int32)(C.av_packet_add_side_data((*C.struct_AVPacket)(pkt),
 		(C.enum_AVPacketSideDataType)(_type), (*C.uint8_t)(data), (C.size_t)(size)))
 }

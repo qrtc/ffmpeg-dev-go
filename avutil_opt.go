@@ -281,14 +281,6 @@ func (optrs *AVOptionRanges) GetRange() []*AVOptionRange {
 		optrs.nb_components*optrs.nb_ranges)
 }
 
-// Custom: GetRangeIdx gets `AVOptionRanges.range` index value.
-func (optrs *AVOptionRanges) GetRangeIdx(idx int) *AVOptionRange {
-	if idx >= int(optrs.nb_components*optrs.nb_ranges) {
-		return nil
-	}
-	return PointerOffset((*AVOptionRange)(*optrs._range), idx)
-}
-
 // Custom: GetNbRanges gets `AVOptionRanges.nb_ranges` value.
 func (optrs *AVOptionRanges) GetNbRanges() int32 {
 	return (int32)(optrs.nb_ranges)

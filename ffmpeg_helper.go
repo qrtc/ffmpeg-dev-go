@@ -21,10 +21,12 @@ type HelperUnsingedInteger interface {
 	~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64 | ~uintptr
 }
 
+const NIL = "\\'nil'\\"
+
 // StringCasting casts go string to c world char* with free function
-// Note: if input is a empty string will return a nil pointer.
+// Note: if input is a NIL string will return a nil pointer.
 func StringCasting(str string) (allocPtr *C.char, freeFunc func()) {
-	if len(str) == 0 {
+	if str == NIL {
 		return nil, func() {}
 	}
 	allocPtr = C.CString(str)

@@ -152,23 +152,20 @@ func (pfd *AVPixFmtDescriptor) GetFlagsAddr() *uint64 {
 }
 
 // Custom: GetComp gets `AVPixFmtDescriptor.comp` value.
-func (pfd *AVPixFmtDescriptor) GetComp(idx int) []AVComponentDescriptor {
-	return unsafe.Slice((*AVComponentDescriptor)(&pfd.comp[0]), idx)
+func (pfd *AVPixFmtDescriptor) GetComp() []AVComponentDescriptor {
+	return unsafe.Slice((*AVComponentDescriptor)(&pfd.comp[0]), 4)
 }
 
-// Custom: GetCompIdx gets `AVPixFmtDescriptor.comp` index value.
-func (pfd *AVPixFmtDescriptor) GetCompIdx(idx int) AVComponentDescriptor {
-	return (AVComponentDescriptor)(pfd.comp[idx])
+// Custom: SetComp sets `AVPixFmtDescriptor.comp` value.
+func (pfd *AVPixFmtDescriptor) SetComp(v []AVComponentDescriptor) {
+	for i := 0; i < FFMIN(len(v), 4); i++ {
+		pfd.comp[i] = (C.struct_AVComponentDescriptor)(v[i])
+	}
 }
 
-// Custom: SetCompIdx sets `AVPixFmtDescriptor.comp` index value.
-func (pfd *AVPixFmtDescriptor) SetCompIdx(idx int, v AVComponentDescriptor) {
-	pfd.comp[idx] = (C.struct_AVComponentDescriptor)(v)
-}
-
-// Custom: GetCompIdxAddr gets `AVPixFmtDescriptor.comp` index address.
-func (pfd *AVPixFmtDescriptor) GetCompIdxAddr(idx int) *AVComponentDescriptor {
-	return (*AVComponentDescriptor)(&pfd.comp[idx])
+// Custom: GetCompAddr gets `AVPixFmtDescriptor.comp` address.
+func (pfd *AVPixFmtDescriptor) GetCompAddr() **AVComponentDescriptor {
+	return (**AVComponentDescriptor)(unsafe.Pointer(&pfd.comp))
 }
 
 // Custom: GetAlias gets `AVPixFmtDescriptor.alias` value.

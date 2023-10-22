@@ -146,14 +146,14 @@ const (
 
 // AvDeviceAppToDevControlMessage sends control message from application to device.
 func AvDeviceAppToDevControlMessage(s *AVFormatContext,
-	_type AVAppToDevMessageType, data CVoidPointer, dataSize uint) int32 {
+	_type AVAppToDevMessageType, data CVoidPointer, dataSize uintptr) int32 {
 	return (int32)(C.avdevice_app_to_dev_control_message((*C.struct_AVFormatContext)(s),
 		(C.enum_AVAppToDevMessageType)(_type), VoidPointer(data), (C.size_t)(dataSize)))
 }
 
 // AvDeviceDevToAppControlMessage sends control message from device to application.
 func AvDeviceDevToAppControlMessage(s *AVFormatContext,
-	_type AVDevToAppMessageType, data CVoidPointer, dataSize uint) int32 {
+	_type AVDevToAppMessageType, data CVoidPointer, dataSize uintptr) int32 {
 	return (int32)(C.avdevice_dev_to_app_control_message((*C.struct_AVFormatContext)(s),
 		(C.enum_AVDevToAppMessageType)(_type), VoidPointer(data), (C.size_t)(dataSize)))
 }
@@ -391,14 +391,6 @@ func (dcl *AVDeviceInfoList) GetDevices() []*AVDeviceInfo {
 		return nil
 	}
 	return unsafe.Slice((**AVDeviceInfo)(unsafe.Pointer(dcl.devices)), dcl.nb_devices)
-}
-
-// Custom: GetDevicesIndex gets `AVDeviceInfoList.devices` index value.
-func (dcl *AVDeviceInfoList) GetDevicesIdx(idx int) *AVDeviceInfo {
-	if idx >= int(dcl.nb_devices) {
-		return nil
-	}
-	return PointerOffset((*AVDeviceInfo)(*dcl.devices), idx)
 }
 
 // Custom: GetNbDevices gets `AVDeviceInfoList.nb_devices` value.

@@ -100,7 +100,7 @@ func openOutputFile(filename string, inputCodecContext *ffmpeg.AVCodecContext) (
 	outputFormatContext.SetPb(outputIOContext)
 
 	// Guess the desired container format based on the file extension.
-	outputFormatContext.SetOformat(ffmpeg.AvGuessFormat("", filename, ""))
+	outputFormatContext.SetOformat(ffmpeg.AvGuessFormat(ffmpeg.NIL, filename, ffmpeg.NIL))
 	if outputFormatContext.GetOformat() == nil {
 		fmt.Fprintf(os.Stderr, "Could not find output file format\n")
 		goto cleanup

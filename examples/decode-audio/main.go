@@ -34,7 +34,7 @@ func getFormatFromSampleFmt(sampleFmt ffmpeg.AVSampleFormat) (string, int32) {
 
 	fmt.Fprintf(os.Stderr, "sample format %s is not supported as output format\n",
 		ffmpeg.AvGetSampleFmtName(sampleFmt))
-	return "", -1
+	return ffmpeg.NIL, -1
 }
 
 func decode(decCtx *ffmpeg.AVCodecContext, pkt *ffmpeg.AVPacket, frame *ffmpeg.AVFrame, outfile *os.File) {
@@ -62,7 +62,7 @@ func decode(decCtx *ffmpeg.AVCodecContext, pkt *ffmpeg.AVPacket, frame *ffmpeg.A
 		}
 		for i := int32(0); i < frame.GetNbSamples(); i++ {
 			for ch := 0; ch < int(decCtx.GetChannels()); ch++ {
-				outfile.Write(ffmpeg.ByteSliceWithOffset(frame.GetDataIdx(ch), dataSize*i, dataSize))
+				outfile.Write(ffmpeg.ByteSliceWithOffset(frame.GetData()[ch], dataSize*i, dataSize))
 			}
 		}
 	}

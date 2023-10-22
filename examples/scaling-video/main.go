@@ -11,7 +11,7 @@ import (
 
 func fillYuvImage(data [4]*uint8, linesize [4]int32, width, height, frameIndex int32) {
 	// Y
-	data0 := unsafe.Slice(data[0], height*linesize[0]+width)
+	data0 := unsafe.Slice(data[0], height*linesize[0])
 	for y := int32(0); y < height; y++ {
 		for x := int32(0); x < width; x++ {
 			data0[y*linesize[0]+x] = (uint8)(x + y + frameIndex*3)

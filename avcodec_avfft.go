@@ -6,10 +6,20 @@ package ffmpeg
 import "C"
 
 // FFTSample
-type FFTSample C.FFTSample
+type FFTSample = C.FFTSample
 
 // FFTComplex
 type FFTComplex C.struct_FFTComplex
+
+// Custom: GetRe gets `FFTComplex.re` value.
+func (fc *FFTComplex) GetRe() FFTSample {
+	return (FFTSample)(fc.re)
+}
+
+// Custom: GetIm gets `FFTComplex.im` value.
+func (fc *FFTComplex) GetIm() FFTSample {
+	return (FFTSample)(fc.im)
+}
 
 // FFTContext
 type FFTContext C.struct_FFTContext

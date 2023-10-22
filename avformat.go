@@ -1089,14 +1089,6 @@ func (s *AVFormatContext) GetStreamsAddr() ***AVStream {
 	return (***AVStream)(unsafe.Pointer(&s.streams))
 }
 
-// Custom: GetStreamsIdx gets `AVFormatContext.streams` index value.
-func (s *AVFormatContext) GetStreamsIdx(idx int) *AVStream {
-	if idx >= int(s.nb_streams) {
-		return nil
-	}
-	return PointerOffset((*AVStream)(*s.streams), idx)
-}
-
 // Custom: GetFilename gets `AVFormatContext.filename` value.
 func (s *AVFormatContext) GetFilename() string {
 	return C.GoString((*C.char)(&s.filename[0]))
@@ -1299,14 +1291,6 @@ func (s *AVFormatContext) GetProgramsAddr() ***AVProgram {
 	return (***AVProgram)(unsafe.Pointer(&s.programs))
 }
 
-// Custom: GetProgramsIdx gets `AVFormatContext.programs` index value.
-func (s *AVFormatContext) GetProgramsIdx(idx int) *AVProgram {
-	if idx >= int(s.nb_programs) {
-		return nil
-	}
-	return PointerOffset((*AVProgram)(*s.programs), idx)
-}
-
 // Custom: GetVideoCodecId gets `AVFormatContext.video_codec_id` value.
 func (s *AVFormatContext) GetVideoCodecId() AVCodecID {
 	return (AVCodecID)(s.video_codec_id)
@@ -1413,14 +1397,6 @@ func (s *AVFormatContext) SetChapters(v **AVChapter) {
 // Custom: GetChaptersAddr gets `AVFormatContext.chapters` address.
 func (s *AVFormatContext) GetChaptersAddr() ***AVChapter {
 	return (***AVChapter)(&s.chapters)
-}
-
-// Custom: GetChaptersIdx gets `AVFormatContext.chapters` index value.
-func (s *AVFormatContext) GetChaptersIdx(idx int) *AVChapter {
-	if idx >= int(s.nb_chapters) {
-		return nil
-	}
-	return PointerOffset((*AVChapter)(*s.chapters), idx)
 }
 
 // Custom: GetMetadata gets `AVFormatContext.metadata` value.
@@ -2208,7 +2184,7 @@ func AvFormatNewStream(s *AVFormatContext, c *AVCodec) *AVStream {
 }
 
 // AvStreamAddSideData wraps an existing array as stream side data.
-func AvStreamAddSideData(st *AVStream, _type AVPacketSideDataType, data *uint8, size uint) int32 {
+func AvStreamAddSideData(st *AVStream, _type AVPacketSideDataType, data *uint8, size uintptr) int32 {
 	return (int32)(C.av_stream_add_side_data((*C.struct_AVStream)(st),
 		(C.enum_AVPacketSideDataType)(_type), (*C.uint8_t)(data), (C.size_t)(size)))
 }

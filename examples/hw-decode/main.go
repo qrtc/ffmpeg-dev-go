@@ -22,7 +22,7 @@ int get_hw_format(struct AVCodecContext *ctx, const int *pix_fmts)
 {
 	const int *p;
 
-	fprintf(stderr, "get_hw_format called.\n");
+	fprintf(stderr, "get_hw_format ballback has been invoked.\n");
 	for (p = pix_fmts; *p != -1; p++) {
 		if (*p == hw_pix_fmt)
 			return *p;
@@ -44,20 +44,20 @@ import (
 )
 
 var (
-	hwDeviceCtx *ffmpeg.AVBufferRef
-	outputFile  *os.File
+// Note: Gobal variable as argument pass to C world may be cause panic.
+// `runtime error: cgo argument has Go pointer to unpinned Go pointer`
 )
 
-func hwDecoderInit(ctx *ffmpeg.AVCodecContext, hwType ffmpeg.AVHWDeviceType) (ret int32) {
-	if ret := ffmpeg.AvHWDeviceCtxCreate(&hwDeviceCtx, hwType, "", nil, 0); ret < 0 {
+func hwDecoderInit(ctx *ffmpeg.AVCodecContext, hwType ffmpeg.AVHWDeviceType) (hwDeviceCtx *ffmpeg.AVBufferRef, ret int32) {
+	if ret := ffmpeg.AvHWDeviceCtxCreate(&hwDeviceCtx, hwType, ffmpeg.NIL, nil, 0); ret < 0 {
 		fmt.Fprintf(os.Stderr, "Failed to create specified HW device.\n")
-		return ret
+		return nil, ret
 	}
 	ctx.SetHwDeviceCtx(ffmpeg.AvBufferRef(hwDeviceCtx))
-	return ret
+	return hwDeviceCtx, ret
 }
 
-func decodeWrite(avctx *ffmpeg.AVCodecContext, packet *ffmpeg.AVPacket) (ret int32) {
+func decodeWrite(avctx *ffmpeg.AVCodecContext, packet *ffmpeg.AVPacket, outputFile *os.File) (ret int32) {
 	var frame, swFrame, tmpFrame *ffmpeg.AVFrame
 	var buffer *uint8
 	var size int32
@@ -129,6 +129,8 @@ func decodeWrite(avctx *ffmpeg.AVCodecContext, packet *ffmpeg.AVPacket) (ret int
 }
 
 func main() {
+	var outputFile *os.File
+	var hwDeviceCtx *ffmpeg.AVBufferRef
 	var inputCtx *ffmpeg.AVFormatContext
 	var videoStream, ret int32
 	var video *ffmpeg.AVStream
@@ -182,7 +184,6 @@ func main() {
 		}
 		if (config.GetMethods()&ffmpeg.AV_CODEC_HW_CONFIG_METHOD_HW_DEVICE_CTX) != 0 &&
 			config.GetDeviceType() == hwType {
-			fmt.Fprintf(os.Stdout, "Support set_hw_pix_fmt. \n")
 			C.set_hw_pix_fmt((C.int)(config.GetPixFmt()))
 			break
 		}
@@ -192,14 +193,14 @@ func main() {
 		os.Exit(int(ffmpeg.AVERROR(syscall.ENOMEM)))
 	}
 
-	video = inputCtx.GetStreamsIdx(int(videoStream))
+	video = inputCtx.GetStreams()[videoStream]
 	if ret = ffmpeg.AvCodecParametersToContext(decoderCtx, video.GetCodecpar()); ret < 0 {
 		os.Exit(1)
 	}
 
 	decoderCtx.SetGetFormat((ffmpeg.AVCodecContextGetFormatFunc)(C.get_hw_format))
 
-	if ret = hwDecoderInit(decoderCtx, hwType); ret < 0 {
+	if hwDeviceCtx, ret = hwDecoderInit(decoderCtx, hwType); ret < 0 {
 		os.Exit(1)
 	}
 
@@ -217,7 +218,7 @@ func main() {
 			break
 		}
 		if videoStream == packet.GetStreamIndex() {
-			ret = decodeWrite(decoderCtx, &packet)
+			ret = decodeWrite(decoderCtx, &packet, outputFile)
 		}
 
 		ffmpeg.AvPacketUnref(&packet)
@@ -226,7 +227,7 @@ func main() {
 	// flush the decoder
 	packet.SetData(nil)
 	packet.SetSize(0)
-	ret = decodeWrite(decoderCtx, &packet)
+	ret = decodeWrite(decoderCtx, &packet, outputFile)
 	ffmpeg.AvPacketUnref(&packet)
 
 	if outputFile != nil {
