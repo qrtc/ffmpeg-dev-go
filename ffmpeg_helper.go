@@ -23,51 +23,55 @@ type HelperUnsingedInteger interface {
 
 const NIL = "\\'nil'\\"
 
-// StringCasting casts go string to c world char* with free function
+// StringCasting casts go string to c world char* with free function.
 // Note: if input is a NIL string will return a nil pointer.
-func StringCasting(str string) (allocPtr *C.char, freeFunc func()) {
-	if str == NIL {
+func StringCasting(s string) (allocPtr *C.char, freeFunc func()) {
+	if s == NIL {
 		return nil, func() {}
 	}
-	allocPtr = C.CString(str)
+	allocPtr = C.CString(s)
 	freeFunc = func() { C.free(unsafe.Pointer(allocPtr)) }
 	return allocPtr, freeFunc
 }
 
-// SliceWithOffset returns a []byte slice from a porinter with offset and size.
-func ByteSliceWithOffset[X any, Y, Z HelperInteger](data *X, offset Y, size Z) []byte {
-	return unsafe.Slice((*byte)(unsafe.Add(unsafe.Pointer(uintptr(unsafe.Pointer(data))), offset)), size)
-}
-
-// Slice returns a []byte slice from a porinter with size.
-func ByteSlice[U any, V HelperInteger](data *U, size V) []byte {
-	return ByteSliceWithOffset(data, 0, size)
-}
-
-// PointerOffset offset the pointer point.
-func PointerOffset[U any, V HelperInteger](ptr *U, offset V) *U {
-	if ptr == nil {
-		return nil
+// StringSliceCasting casts go string slice to c world char* slice with free function.
+func StringSliceCasting(ss []string) (allocPtrs []*C.char, freeFunc func()) {
+	var freeFns []func()
+	for _, s := range ss {
+		ptr, fn := StringCasting(s)
+		allocPtrs = append(allocPtrs, ptr)
+		freeFns = append(freeFns, fn)
 	}
-	return (*U)(unsafe.Pointer(uintptr(unsafe.Pointer(ptr)) +
-		uintptr(unsafe.Sizeof(*ptr))*(uintptr(offset))))
+	return allocPtrs, func() {
+		for _, fn := range freeFns {
+			fn()
+		}
+	}
 }
 
-// TruncSlice return a slice from a sign-terminated array.
-func TruncSlice[T any](ptr *T, fn func(T) bool) []T {
+// SliceSlice returns a slice of slice from a pointer to pointer.
+func SliceSlice[T any, X, Y HelperInteger](data **T, x X, y Y) (v [][]T) {
+	for i := 0; i < int(x); i++ {
+		v = append(v, unsafe.Slice(*PointerOffset(data, i), y))
+	}
+	return v
+}
+
+// SliceTrunc return a slice from a sign-terminated array.
+func SliceTrunc[T any](ptr *T, truncFunc func(T) bool) []T {
 	if ptr == nil {
 		return nil
 	}
 	for i := 0; ; i++ {
-		if fn(*(*T)(unsafe.Pointer(uintptr(unsafe.Pointer(ptr)) +
+		if truncFunc(*(*T)(unsafe.Pointer(uintptr(unsafe.Pointer(ptr)) +
 			uintptr(unsafe.Sizeof(*ptr))*uintptr(i)))) {
 			return unsafe.Slice(ptr, i)
 		}
 	}
 }
 
-// TruncStringSlice returns a string slice from a NULL-terminated *C.char array.
-func TruncStringSlice(ptr **C.char) (v []string) {
+// SliceTruncString returns a string slice from a NULL-terminated *C.char array.
+func SliceTruncString(ptr **C.char) (v []string) {
 	if ptr == nil {
 		return nil
 	}
@@ -77,6 +81,15 @@ func TruncStringSlice(ptr **C.char) (v []string) {
 			uintptr(unsafe.Sizeof(*ptr))))
 	}
 	return v
+}
+
+// PointerOffset offset the pointer point.
+func PointerOffset[U any, V HelperInteger](ptr *U, offset V) *U {
+	if ptr == nil {
+		return nil
+	}
+	return (*U)(unsafe.Pointer(uintptr(unsafe.Pointer(ptr)) +
+		uintptr(unsafe.Sizeof(*ptr))*(uintptr(offset))))
 }
 
 // CVoidPointer represents a (void*) type pointer in the C world.

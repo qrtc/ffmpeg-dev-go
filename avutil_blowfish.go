@@ -30,35 +30,25 @@ func (bf *AVBlowfish) GetPAddr() **uint32 {
 }
 
 // Custom: GetS gets `AVBlowfish.s` value.
-func (bf *AVBlowfish) GetS() []uint32 {
-	return unsafe.Slice((*uint32)(&bf.s[0][0]), 4*256)
+func (bf *AVBlowfish) GetS() (v [][]uint32) {
+	for i := 0; i < 4; i++ {
+		v = append(v, unsafe.Slice((*uint32)(&bf.s[i][0]), 256))
+	}
+	return v
 }
 
 // Custom: SetS sets `AVBlowfish.s` value.
-func (bf *AVBlowfish) SetS(v []uint32) {
-	for i := 0; i < FFMIN(len(v), 4*256); i++ {
-		bf.s[i/256][i%256] = (C.uint32_t)(v[i])
+func (bf *AVBlowfish) SetS(v [][]uint32) {
+	for i := 0; i < FFMIN(len(v), 4); i++ {
+		for j := 0; j < FFMIN(len(v[i]), 256); j++ {
+			bf.s[i][j] = (C.uint32_t)(v[i][j])
+		}
 	}
 }
 
 // Custom: GetSAddr gets `AVBlowfish.s` address.
 func (bf *AVBlowfish) GetSAddr() **uint32 {
 	return (**uint32)(unsafe.Pointer(&bf.s))
-}
-
-// Custom: GetSIdx gets `AVBlowfish.s` index value.
-func (bf *AVBlowfish) GetSIdx(x, y int) uint32 {
-	return (uint32)(bf.s[x][y])
-}
-
-// Custom: SetSIdx sets `AVBlowfish.s` index value.
-func (bf *AVBlowfish) SetSIdx(x, y int, v uint32) {
-	bf.s[x][y] = (C.uint32_t)(v)
-}
-
-// Custom: GetSIdxAddr gets `AVBlowfish.s` index address.
-func (bf *AVBlowfish) GetSIdxAddr(x, y int) *uint32 {
-	return (*uint32)(&bf.s[x][y])
 }
 
 // AvBlowfishAlloc allocates an AVBlowfish context.

@@ -157,35 +157,25 @@ func (psn *AVPanScan) GetHeightAddr() *int32 {
 }
 
 // Custom: GetPosition gets `AVPanScan.position` value.
-func (psn *AVPanScan) GetPosition() []int16 {
-	return unsafe.Slice((*int16)(&psn.position[0][0]), 3*2)
+func (psn *AVPanScan) GetPosition() (v [][]int16) {
+	for i := 0; i < 3; i++ {
+		v = append(v, unsafe.Slice((*int16)(&psn.position[i][0]), 2))
+	}
+	return v
 }
 
 // Custom: SetPosition sets `AVPanScan.position` value.
-func (psn *AVPanScan) SetPosition(v []int16) {
-	for i := 0; i < FFMIN(len(v), 3*2); i++ {
-		psn.position[i/2][i%2] = (C.int16_t)(v[i])
+func (psn *AVPanScan) SetPosition(v [][]int16) {
+	for i := 0; i < FFMIN(len(v), 3); i++ {
+		for j := 0; j < FFMIN(len(v[i]), 2); j++ {
+			psn.position[i][j] = (C.int16_t)(v[i][j])
+		}
 	}
 }
 
 // Custom: GetPositionAddr gets `AVPanScan.position` address.
 func (psn *AVPanScan) GetPositionAddr() **int16 {
 	return (**int16)(unsafe.Pointer(&psn.position))
-}
-
-// Custom: GetPositionIdx gets `AVPanScan.position` index value.
-func (psn *AVPanScan) GetPositionIdx(x, y int) int16 {
-	return (int16)(psn.position[x][y])
-}
-
-// Custom: SetPositionIdx sets `AVPanScan.position` index value.
-func (psn *AVPanScan) SetPositionIdx(x, y int, v int16) {
-	psn.position[x][y] = (C.int16_t)(v)
-}
-
-// Custom: GetPositionIdxAddr gets `AVPanScan.position` index address.
-func (psn *AVPanScan) GetPositionIdxAddr(x, y int) *int16 {
-	return (*int16)(&psn.position[x][y])
 }
 
 // This structure describes the bitrate properties of an encoded bitstream. It
@@ -341,17 +331,17 @@ func (avctx *AVCodecContext) GetLogLevelOffsetAddr() *int32 {
 	return (*int32)(&avctx.log_level_offset)
 }
 
-// Custom: GetCodecType gets `AVCodecContext.codec_type` value.
+// Custom: GetCodecType gets `AVCodecContext.codectype` value.
 func (avctx *AVCodecContext) GetCodecType() AVMediaType {
 	return (AVMediaType)(avctx.codec_type)
 }
 
-// Custom: SetCodecType sets `AVCodecContext.codec_type` value.
+// Custom: SetCodecType sets `AVCodecContext.codectype` value.
 func (avctx *AVCodecContext) SetCodecType(v AVMediaType) {
 	avctx.codec_type = (C.enum_AVMediaType)(v)
 }
 
-// Custom: GetCodecTypeAddr gets `AVCodecContext.codec_type` address.
+// Custom: GetCodecTypeAddr gets `AVCodecContext.codectype` address.
 func (avctx *AVCodecContext) GetCodecTypeAddr() *AVMediaType {
 	return (*AVMediaType)(&avctx.codec_type)
 }
@@ -1463,17 +1453,17 @@ func (avctx *AVCodecContext) GetColorspaceAddr() *AVColorSpace {
 	return (*AVColorSpace)(unsafe.Pointer(&avctx.colorspace))
 }
 
-// Custom: GetColorRange gets `AVCodecContext.color_range` value.
+// Custom: GetColorRange gets `AVCodecContext.colorrange` value.
 func (avctx *AVCodecContext) GetColorRange() AVColorRange {
 	return (AVColorRange)(avctx.color_range)
 }
 
-// Custom: SetColorRange sets `AVCodecContext.color_range` value.
+// Custom: SetColorRange sets `AVCodecContext.colorrange` value.
 func (avctx *AVCodecContext) SetColorRange(v AVColorRange) {
 	avctx.color_range = (C.enum_AVColorRange)(v)
 }
 
-// Custom: GetColorRangeAddr gets `AVCodecContext.color_range` address.
+// Custom: GetColorRangeAddr gets `AVCodecContext.colorrange` address.
 func (avctx *AVCodecContext) GetColorRangeAddr() *AVColorRange {
 	return (*AVColorRange)(unsafe.Pointer(&avctx.color_range))
 }
@@ -1658,17 +1648,17 @@ func (avctx *AVCodecContext) GetRequestChannelLayoutAddr() *uint64 {
 	return (*uint64)(&avctx.request_channel_layout)
 }
 
-// Custom: GetAudioServiceType gets `AVCodecContext.audio_service_type` value.
+// Custom: GetAudioServiceType gets `AVCodecContext.audio_servicetype` value.
 func (avctx *AVCodecContext) GetAudioServiceType() AVAudioServiceType {
 	return (AVAudioServiceType)(avctx.audio_service_type)
 }
 
-// Custom: SetAudioServiceType sets `AVCodecContext.audio_service_type` value.
+// Custom: SetAudioServiceType sets `AVCodecContext.audio_servicetype` value.
 func (avctx *AVCodecContext) SetAudioServiceType(v AVAudioServiceType) {
 	avctx.audio_service_type = (C.enum_AVAudioServiceType)(v)
 }
 
-// Custom: GetAudioServiceTypeAddr gets `AVCodecContext.audio_service_type` address.
+// Custom: GetAudioServiceTypeAddr gets `AVCodecContext.audio_servicetype` address.
 func (avctx *AVCodecContext) GetAudioServiceTypeAddr() *AVAudioServiceType {
 	return (*AVAudioServiceType)(unsafe.Pointer(&avctx.audio_service_type))
 }
@@ -1913,17 +1903,17 @@ const (
 	FF_CODER_TYPE_RLE = int32(C.FF_CODER_TYPE_RLE)
 )
 
-// Custom: GetCoderType gets `AVCodecContext.coder_type` value.
+// Custom: GetCoderType gets `AVCodecContext.codertype` value.
 func (avctx *AVCodecContext) GetCoderType() int32 {
 	return (int32)(avctx.coder_type)
 }
 
-// Custom: SetCoderType sets `AVCodecContext.coder_type` value.
+// Custom: SetCoderType sets `AVCodecContext.codertype` value.
 func (avctx *AVCodecContext) SetCoderType(v int32) {
 	avctx.coder_type = (C.int)(v)
 }
 
-// Custom: GetCoderTypeAddr gets `AVCodecContext.coder_type` address.
+// Custom: GetCoderTypeAddr gets `AVCodecContext.codertype` address.
 func (avctx *AVCodecContext) GetCoderTypeAddr() *int32 {
 	return (*int32)(&avctx.coder_type)
 }
@@ -2552,17 +2542,17 @@ func (avctx *AVCodecContext) GetThreadCountAddr() *int32 {
 	return (*int32)(&avctx.thread_count)
 }
 
-// Custom: GetThreadType gets `AVCodecContext.thread_type` value.
+// Custom: GetThreadType gets `AVCodecContext.threadtype` value.
 func (avctx *AVCodecContext) GetThreadType() int32 {
 	return (int32)(avctx.thread_type)
 }
 
-// Custom: SetThreadType sets `AVCodecContext.thread_type` value.
+// Custom: SetThreadType sets `AVCodecContext.threadtype` value.
 func (avctx *AVCodecContext) SetThreadType(v int32) {
 	avctx.thread_type = (C.int)(v)
 }
 
-// Custom: GetThreadTypeAddr gets `AVCodecContext.thread_type` address.
+// Custom: GetThreadTypeAddr gets `AVCodecContext.threadtype` address.
 func (avctx *AVCodecContext) GetThreadTypeAddr() *int32 {
 	return (*int32)(&avctx.thread_type)
 }
@@ -2572,17 +2562,17 @@ const (
 	FF_THREAD_SLICE = int32(C.FF_THREAD_SLICE)
 )
 
-// Custom: GetActiveThreadType gets `AVCodecContext.active_thread_type` value.
+// Custom: GetActiveThreadType gets `AVCodecContext.active_threadtype` value.
 func (avctx *AVCodecContext) GetActiveThreadType() int32 {
 	return (int32)(avctx.active_thread_type)
 }
 
-// Custom: SetActiveThreadType sets `AVCodecContext.active_thread_type` value.
+// Custom: SetActiveThreadType sets `AVCodecContext.active_threadtype` value.
 func (avctx *AVCodecContext) SetActiveThreadType(v int32) {
 	avctx.active_thread_type = (C.int)(v)
 }
 
-// Custom: GetActiveThreadTypeAddr gets `AVCodecContext.active_thread_type` address.
+// Custom: GetActiveThreadTypeAddr gets `AVCodecContext.active_threadtype` address.
 func (avctx *AVCodecContext) GetActiveThreadTypeAddr() *int32 {
 	return (*int32)(&avctx.active_thread_type)
 }
@@ -3655,17 +3645,17 @@ func (sbtr *AVSubtitleRect) GetLinesizeAddr() **int32 {
 	return (**int32)(unsafe.Pointer(&sbtr.linesize))
 }
 
-// Custom: GetType gets `AVSubtitleRect._type` value.
+// Custom: GetType gets `AVSubtitleRect.type` value.
 func (sbtr *AVSubtitleRect) GetType() AVSubtitleType {
 	return (AVSubtitleType)(sbtr._type)
 }
 
-// Custom: SetType sets `AVSubtitleRect._type` value.
+// Custom: SetType sets `AVSubtitleRect.type` value.
 func (sbtr *AVSubtitleRect) SetType(v AVSubtitleType) {
 	sbtr._type = (C.enum_AVSubtitleType)(v)
 }
 
-// Custom: GetTypeAddr gets `AVSubtitleRect._type` address.
+// Custom: GetTypeAddr gets `AVSubtitleRect.type` address.
 func (sbtr *AVSubtitleRect) GetTypeAddr() *AVSubtitleType {
 	return (*AVSubtitleType)(&sbtr._type)
 }
@@ -4070,17 +4060,17 @@ func (cpc *AVCodecParserContext) GetNextFrameOffsetAddr() *int64 {
 	return (*int64)(&cpc.next_frame_offset)
 }
 
-// Custom: GetPictType gets `AVCodecParserContext.pict_type` value.
+// Custom: GetPictType gets `AVCodecParserContext.picttype` value.
 func (cpc *AVCodecParserContext) GetPictType() int32 {
 	return (int32)(cpc.pict_type)
 }
 
-// Custom: SetPictType sets `AVCodecParserContext.pict_type` value.
+// Custom: SetPictType sets `AVCodecParserContext.picttype` value.
 func (cpc *AVCodecParserContext) SetPictType(v int32) {
 	cpc.pict_type = (C.int)(v)
 }
 
-// Custom: GetPictTypeAddr gets `AVCodecParserContext.pict_type` address.
+// Custom: GetPictTypeAddr gets `AVCodecParserContext.picttype` address.
 func (cpc *AVCodecParserContext) GetPictTypeAddr() *int32 {
 	return (*int32)(&cpc.pict_type)
 }

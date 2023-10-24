@@ -142,7 +142,7 @@ func (bsf *AVBitStreamFilter) GetName() string {
 
 // Custom: GetCodecIds gets `AVBitStreamFilter.codec_ids` value.
 func (bsf *AVBitStreamFilter) GetCodecIds() []AVCodecID {
-	return TruncSlice((*AVCodecID)(bsf.codec_ids), func(ac AVCodecID) bool {
+	return SliceTrunc((*AVCodecID)(bsf.codec_ids), func(ac AVCodecID) bool {
 		return ac == AV_CODEC_ID_NONE
 	})
 }

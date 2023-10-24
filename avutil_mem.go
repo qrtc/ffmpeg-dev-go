@@ -119,7 +119,7 @@ func AvDynarray2Add[T HelperInteger](tabPtr CVoidPointerPointer, nbPtr *int32,
 }
 
 // AvSizeMult multiplies two `size_t` values checking for overflow.
-func AvSizeMult[T HelperInteger](a, b T, r *uint) int32 {
+func AvSizeMult[T HelperInteger](a, b T, r *uintptr) int32 {
 	return (int32)(C.av_size_mult((C.size_t)(a), (C.size_t)(b), (*C.size_t)(unsafe.Pointer(r))))
 }
 

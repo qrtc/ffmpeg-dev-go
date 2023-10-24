@@ -337,17 +337,17 @@ func (dsh *AVDiracSeqHeader) GetPixFmtAddr() *AVPixelFormat {
 	return (*AVPixelFormat)(&dsh.pix_fmt)
 }
 
-// Custom: GetColorRange gets `AVDiracSeqHeader.color_range` value.
+// Custom: GetColorRange gets `AVDiracSeqHeader.colorrange` value.
 func (dsh *AVDiracSeqHeader) GetColorRange() AVColorRange {
 	return (AVColorRange)(dsh.color_range)
 }
 
-// Custom: SetColorRange sets `AVDiracSeqHeader.color_range` value.
+// Custom: SetColorRange sets `AVDiracSeqHeader.colorrange` value.
 func (dsh *AVDiracSeqHeader) SetColorRange(v AVColorRange) {
 	dsh.color_range = (C.enum_AVColorRange)(v)
 }
 
-// Custom: GetColorRangeAddr gets `AVDiracSeqHeader.color_range` address.
+// Custom: GetColorRangeAddr gets `AVDiracSeqHeader.colorrange` address.
 func (dsh *AVDiracSeqHeader) GetColorRangeAddr() *AVColorRange {
 	return (*AVColorRange)(&dsh.color_range)
 }

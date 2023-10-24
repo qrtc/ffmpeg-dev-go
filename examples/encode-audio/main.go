@@ -73,10 +73,9 @@ func encode(ctx *ffmpeg.AVCodecContext, frame *ffmpeg.AVFrame, pkt *ffmpeg.AVPac
 			os.Exit(1)
 		}
 
-		output.Write(ffmpeg.ByteSlice(pkt.GetData(), pkt.GetSize()))
+		output.Write(unsafe.Slice(pkt.GetData(), pkt.GetSize()))
 		ffmpeg.AvPacketUnref(pkt)
 	}
-
 }
 
 func main() {

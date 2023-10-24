@@ -276,14 +276,6 @@ func (frame *AVFrame) GetExtendedDataAddr() ***uint8 {
 	return (***uint8)(unsafe.Pointer(&frame.extended_data))
 }
 
-// Custom: GetExtendedDataIdx gets `AVFrame.extended_data` index value.
-func (frame *AVFrame) GetExtendedDataIdx(idx int) *uint8 {
-	if frame.extended_data == nil {
-		return nil
-	}
-	return (*uint8)(*PointerOffset(frame.extended_data, idx))
-}
-
 // Custom: GetWidth gets `AVFrame.width` value.
 func (frame *AVFrame) GetWidth() int32 {
 	return (int32)(frame.width)
@@ -359,17 +351,17 @@ func (frame *AVFrame) GetKeyFrameAddr() *int32 {
 	return (*int32)(&frame.key_frame)
 }
 
-// Custom: GetPictType gets `AVFrame.pict_type` value.
+// Custom: GetPictType gets `AVFrame.picttype` value.
 func (frame *AVFrame) GetPictType() AVPictureType {
 	return (AVPictureType)(frame.pict_type)
 }
 
-// Custom: SetPictType sets `AVFrame.pict_type` value.
+// Custom: SetPictType sets `AVFrame.picttype` value.
 func (frame *AVFrame) SetPictType(v AVPictureType) {
 	frame.pict_type = (C.enum_AVPictureType)(v)
 }
 
-// Custom: GetPictTypeAddr gets `AVFrame.pict_type` address.
+// Custom: GetPictTypeAddr gets `AVFrame.picttype` address.
 func (frame *AVFrame) GetPictTypeAddr() *AVPictureType {
 	return (*AVPictureType)(unsafe.Pointer(&frame.pict_type))
 }
@@ -705,17 +697,17 @@ func (frame *AVFrame) GetFlagsAddr() *int32 {
 	return (*int32)(&frame.flags)
 }
 
-// Custom: GetColorRange gets `AVFrame.color_range` value.
+// Custom: GetColorRange gets `AVFrame.colorrange` value.
 func (frame *AVFrame) GetColorRange() AVColorRange {
 	return (AVColorRange)(frame.color_range)
 }
 
-// Custom: SetColorRange sets `AVFrame.color_range` value.
+// Custom: SetColorRange sets `AVFrame.colorrange` value.
 func (frame *AVFrame) SetColorRange(v AVColorRange) {
 	frame.color_range = (C.enum_AVColorRange)(v)
 }
 
-// Custom: GetColorRangeAddr gets `AVFrame.color_range` address.
+// Custom: GetColorRangeAddr gets `AVFrame.colorrange` address.
 func (frame *AVFrame) GetColorRangeAddr() *AVColorRange {
 	return (*AVColorRange)(unsafe.Pointer(&frame.color_range))
 }
@@ -922,17 +914,17 @@ func (frame *AVFrame) GetQstrideAddr() *int32 {
 	return (*int32)(&frame.qstride)
 }
 
-// Custom: GetQscaleType gets `AVFrame.qscale_type` value.
+// Custom: GetQscaleType gets `AVFrame.qscaletype` value.
 func (frame *AVFrame) GetQscaleType() int32 {
 	return (int32)(frame.qscale_type)
 }
 
-// Custom: SetQscaleType sets `AVFrame.qscale_type` value.
+// Custom: SetQscaleType sets `AVFrame.qscaletype` value.
 func (frame *AVFrame) SetQscaleType(v int32) {
 	frame.qscale_type = (C.int)(v)
 }
 
-// Custom: GetQscaleTypeAddr gets `AVFrame.qscale_type` address.
+// Custom: GetQscaleTypeAddr gets `AVFrame.qscaletype` address.
 func (frame *AVFrame) GetQscaleTypeAddr() *int32 {
 	return (*int32)(&frame.qscale_type)
 }

@@ -21,7 +21,7 @@ type AVBufferSinkParams C.struct_AVBufferSinkParams
 
 // Custom: GetPixelFmts gets `AVBufferSinkParams.pixel_fmts` value.
 func (bsp *AVBufferSinkParams) GetPixelFmts() []AVPixelFormat {
-	return TruncSlice((*AVPixelFormat)(bsp.pixel_fmts), func(pf AVPixelFormat) bool {
+	return SliceTrunc((*AVPixelFormat)(bsp.pixel_fmts), func(pf AVPixelFormat) bool {
 		return pf == AV_PIX_FMT_NONE
 	})
 }
@@ -36,21 +36,21 @@ type AVABufferSinkParams C.struct_AVABufferSinkParams
 
 // Custom: GetSampleFmts gets `AVABufferSinkParams.sample_fmts` value.
 func (absp *AVABufferSinkParams) GetSampleFmts() []AVSampleFormat {
-	return TruncSlice((*AVSampleFormat)(absp.sample_fmts), func(sf AVSampleFormat) bool {
+	return SliceTrunc((*AVSampleFormat)(absp.sample_fmts), func(sf AVSampleFormat) bool {
 		return sf == AV_SAMPLE_FMT_NONE
 	})
 }
 
 // Custom: GetChannelLayouts gets `AVABufferSinkParams.channel_layouts` value.
 func (absp *AVABufferSinkParams) GetChannelLayouts() []int64 {
-	return TruncSlice((*int64)(absp.channel_layouts), func(i int64) bool {
+	return SliceTrunc((*int64)(absp.channel_layouts), func(i int64) bool {
 		return i == -1
 	})
 }
 
 // Custom: GetChannelCounts gets `AVABufferSinkParams.channel_counts` value.
 func (absp *AVABufferSinkParams) GetChannelCounts() []int32 {
-	return TruncSlice((*int32)(absp.channel_counts), func(i int32) bool {
+	return SliceTrunc((*int32)(absp.channel_counts), func(i int32) bool {
 		return i == -1
 	})
 }
@@ -62,7 +62,7 @@ func (absp *AVABufferSinkParams) GetAllChannelCounts() int32 {
 
 // Custom: GetSampleRates gets `AVABufferSinkParams.sample_rates` value.
 func (absp *AVABufferSinkParams) GetSampleRates() []int32 {
-	return TruncSlice((*int32)(absp.sample_rates), func(i int32) bool {
+	return SliceTrunc((*int32)(absp.sample_rates), func(i int32) bool {
 		return i == -1
 	})
 }

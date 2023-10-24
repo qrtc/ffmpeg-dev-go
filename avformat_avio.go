@@ -595,17 +595,17 @@ func (ctx *AVIOContext) GetIgnoreBoundaryPointAddr() *int32 {
 	return (*int32)(&ctx.ignore_boundary_point)
 }
 
-// Custom: GetCurrentType gets `AVIOContext.current_type` value.
+// Custom: GetCurrentType gets `AVIOContext.currenttype` value.
 func (ctx *AVIOContext) GetCurrentType() AVIODataMarkerType {
 	return (AVIODataMarkerType)(ctx.current_type)
 }
 
-// Custom: SetCurrentType sets `AVIOContext.current_type` value.
+// Custom: SetCurrentType sets `AVIOContext.currenttype` value.
 func (ctx *AVIOContext) SetCurrentType(v AVIODataMarkerType) {
 	ctx.current_type = (C.enum_AVIODataMarkerType)(v)
 }
 
-// Custom: GetCurrentTypeAddr gets `AVIOContext.current_type` address.
+// Custom: GetCurrentTypeAddr gets `AVIOContext.currenttype` address.
 func (ctx *AVIOContext) GetCurrentTypeAddr() *AVIODataMarkerType {
 	return (*AVIODataMarkerType)(&ctx.current_type)
 }

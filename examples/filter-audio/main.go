@@ -12,7 +12,7 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/qrtc/ffmpeg-dev-go"
+	ffmpeg "github.com/qrtc/ffmpeg-dev-go"
 )
 
 const (
@@ -166,11 +166,12 @@ func processOutput(md5 *ffmpeg.AVMD5, frame *ffmpeg.AVFrame) int32 {
 		planeSize *= channels
 	}
 
+	data := ffmpeg.SliceSlice(frame.GetExtendedData(), planes, planeSize)
 	for i := 0; i < int(planes); i++ {
 		var checksum [16]uint8
 
 		ffmpeg.AvMd5Init(md5)
-		ffmpeg.AvMd5Sum(&checksum[0], frame.GetExtendedDataIdx(i), planeSize)
+		ffmpeg.AvMd5Sum(&checksum[0], &data[i][0], planeSize)
 
 		fmt.Fprintf(os.Stdout, "plane %d: 0x", i)
 		for j := 0; j < len(checksum); j++ {
@@ -198,13 +199,10 @@ func getInput(frame *ffmpeg.AVFrame, frameNum int32) int32 {
 	}
 
 	// Fill the data for each channel.
+	data := ffmpeg.SliceSlice((**float32)(unsafe.Pointer(frame.GetExtendedData())), 5, frame.GetNbSamples())
 	for i := 0; i < 5; i++ {
-		dataLen := int(frame.GetNbSamples())
-		data := (*float32)(unsafe.Pointer(frame.GetExtendedDataIdx(i)))
-		dataSlice := unsafe.Slice(data, dataLen)
-
-		for j := 0; j < dataLen; j++ {
-			dataSlice[j] = (float32)(math.Sin(2 * math.Pi * (float64)(int(frameNum)+j) * (float64)(i+1) / FRAME_SIZE))
+		for j := 0; j < int(frame.GetNbSamples()); j++ {
+			data[i][j] = (float32)(math.Sin(2 * math.Pi * (float64)(int(frameNum)+j) * (float64)(i+1) / FRAME_SIZE))
 		}
 	}
 

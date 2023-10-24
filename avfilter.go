@@ -300,17 +300,17 @@ func (fltc *AVFilterContext) GetGraphAddr() **AVFilterGraph {
 	return (**AVFilterGraph)(unsafe.Pointer(&fltc.graph))
 }
 
-// Custom: GetThreadType gets `AVFilterContext.thread_type` value.
+// Custom: GetThreadType gets `AVFilterContext.threadtype` value.
 func (fltc *AVFilterContext) GetThreadType() int32 {
 	return (int32)(fltc.thread_type)
 }
 
-// Custom: SetThreadType sets `AVFilterContext.thread_type` value.
+// Custom: SetThreadType sets `AVFilterContext.threadtype` value.
 func (fltc *AVFilterContext) SetThreadType(v int32) {
 	fltc.thread_type = (C.int)(v)
 }
 
-// Custom: GetThreadTypeAddr gets `AVFilterContext.thread_type` address.
+// Custom: GetThreadTypeAddr gets `AVFilterContext.threadtype` address.
 func (fltc *AVFilterContext) GetThreadTypeAddr() *int32 {
 	return (*int32)(&fltc.thread_type)
 }
@@ -866,17 +866,17 @@ func (fltg *AVFilterGraph) GetResampleLavrOpts() string {
 	return C.GoString(fltg.resample_lavr_opts)
 }
 
-// Custom: GetThreadType gets `AVFilterGraph.thread_type` value.
+// Custom: GetThreadType gets `AVFilterGraph.threadtype` value.
 func (fltg *AVFilterGraph) GetThreadType() int32 {
 	return (int32)(fltg.thread_type)
 }
 
-// Custom: SetThreadType sets `AVFilterGraph.thread_type` value.
+// Custom: SetThreadType sets `AVFilterGraph.threadtype` value.
 func (fltg *AVFilterGraph) SetThreadType(v int32) {
 	fltg.thread_type = (C.int)(v)
 }
 
-// Custom: GetThreadTypeAddr gets `AVFilterGraph.thread_type` address.
+// Custom: GetThreadTypeAddr gets `AVFilterGraph.threadtype` address.
 func (fltg *AVFilterGraph) GetThreadTypeAddr() *int32 {
 	return (*int32)(&fltg.thread_type)
 }

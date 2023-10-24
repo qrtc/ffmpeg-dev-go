@@ -79,7 +79,7 @@ func (pd *AVProbeData) GetBufSizeAddr() *int32 {
 	return (*int32)(&pd.buf_size)
 }
 
-// Custom: GetMimeType gets `AVProbeData.mime_type` value.
+// Custom: GetMimeType gets `AVProbeData.mimetype` value.
 func (pd *AVProbeData) GetMimeType() string {
 	return C.GoString(pd.mime_type)
 }
@@ -125,7 +125,7 @@ func (ofmt *AVOutputFormat) GetLongName() string {
 	return C.GoString(ofmt.long_name)
 }
 
-// Custom: GetMimeType gets `AVOutputFormat.mime_type` value.
+// Custom: GetMimeType gets `AVOutputFormat.mimetype` value.
 func (ofmt *AVOutputFormat) GetMimeType() string {
 	return C.GoString(ofmt.mime_type)
 }
@@ -258,7 +258,7 @@ func (ifmt *AVInputFormat) GetPrivClassAddr() **AVClass {
 	return (**AVClass)(unsafe.Pointer(&ifmt.priv_class))
 }
 
-// Custom: GetMimeType gets `AVInputFormat.mime_type` value.
+// Custom: GetMimeType gets `AVInputFormat.mimetype` value.
 func (ifmt *AVInputFormat) GetMimeType() string {
 	return C.GoString(ifmt.mime_type)
 }

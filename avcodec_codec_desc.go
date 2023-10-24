@@ -35,12 +35,12 @@ func (hwc *AVCodecDescriptor) GetProps() int32 {
 
 // Custom: GetMimeTypes gets `AVCodecDescriptor.mime_types` value.
 func (hwc *AVCodecDescriptor) GetMimeTypes() (v []string) {
-	return TruncStringSlice(hwc.mime_types)
+	return SliceTruncString(hwc.mime_types)
 }
 
 // Custom: GetProfiles gets `AVCodecDescriptor.profiles` value.
 func (hwc *AVCodecDescriptor) GetProfiles() []AVProfile {
-	return TruncSlice((*AVProfile)(hwc.profiles), func(ap AVProfile) bool {
+	return SliceTrunc((*AVProfile)(hwc.profiles), func(ap AVProfile) bool {
 		return ap.GetProfile() == FF_PROFILE_UNKNOWN
 	})
 }

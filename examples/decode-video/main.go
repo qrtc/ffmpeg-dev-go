@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 	"syscall"
+	"unsafe"
 
 	ffmpeg "github.com/qrtc/ffmpeg-dev-go"
 )
@@ -16,8 +17,9 @@ const (
 func pgmSave(buf *uint8, wrap, xsize, ysize int32, filename string) {
 	f, _ := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0755)
 	fmt.Fprintf(f, "P5\n%d %d\n%d\n", xsize, ysize, 255)
+	bufSlice := unsafe.Slice(buf, xsize*ysize)
 	for i := int32(0); i < ysize; i++ {
-		f.Write(ffmpeg.ByteSliceWithOffset(buf, i+wrap, xsize))
+		f.Write(bufSlice[i+wrap : i+wrap+xsize])
 	}
 	f.Close()
 }

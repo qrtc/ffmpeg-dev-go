@@ -21,17 +21,17 @@ const (
 // AVCodecParameters
 type AVCodecParameters C.struct_AVCodecParameters
 
-// Custom: GetCodecType gets `AVCodecParameters.codec_type` value.
+// Custom: GetCodecType gets `AVCodecParameters.codectype` value.
 func (par *AVCodecParameters) GetCodecType() AVMediaType {
 	return (AVMediaType)(par.codec_type)
 }
 
-// Custom: SetCodecType sets `AVCodecParameters.codec_type` value.
+// Custom: SetCodecType sets `AVCodecParameters.codectype` value.
 func (par *AVCodecParameters) SetCodecType(v AVMediaType) {
 	par.codec_type = (C.enum_AVMediaType)(v)
 }
 
-// Custom: GetCodecTypeAddr gets `AVCodecParameters.codec_type` address.
+// Custom: GetCodecTypeAddr gets `AVCodecParameters.codectype` address.
 func (par *AVCodecParameters) GetCodecTypeAddr() *AVMediaType {
 	return (*AVMediaType)(unsafe.Pointer(&par.codec_type))
 }
@@ -246,17 +246,17 @@ func (par *AVCodecParameters) GetFieldOrderAddr() *AVFieldOrder {
 	return (*AVFieldOrder)(unsafe.Pointer(&par.field_order))
 }
 
-// Custom: GetColorRange gets `AVCodecParameters.color_range` value.
+// Custom: GetColorRange gets `AVCodecParameters.colorrange` value.
 func (par *AVCodecParameters) GetColorRange() AVColorRange {
 	return (AVColorRange)(par.color_range)
 }
 
-// Custom: SetColorRange sets `AVCodecParameters.color_range` value.
+// Custom: SetColorRange sets `AVCodecParameters.colorrange` value.
 func (par *AVCodecParameters) SetColorRange(v AVColorRange) {
 	par.color_range = (C.enum_AVColorRange)(v)
 }
 
-// Custom: GetColorRangeAddr gets `AVCodecParameters.color_range` address.
+// Custom: GetColorRangeAddr gets `AVCodecParameters.colorrange` address.
 func (par *AVCodecParameters) GetColorRangeAddr() *AVColorRange {
 	return (*AVColorRange)(unsafe.Pointer(&par.color_range))
 }

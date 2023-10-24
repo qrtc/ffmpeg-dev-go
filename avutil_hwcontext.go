@@ -410,7 +410,7 @@ type AVHWFramesConstraints C.struct_AVHWFramesConstraints
 
 // Custom: GetValidHwFormats gets `AVHWFramesConstraints.valid_hw_formats` value.
 func (fcs *AVHWFramesConstraints) GetValidHwFormats() []AVPixelFormat {
-	return TruncSlice((*AVPixelFormat)(fcs.valid_hw_formats), func(pf AVPixelFormat) bool {
+	return SliceTrunc((*AVPixelFormat)(fcs.valid_hw_formats), func(pf AVPixelFormat) bool {
 		return pf == AV_PIX_FMT_NONE
 	})
 }
@@ -427,7 +427,7 @@ func (fcs *AVHWFramesConstraints) GetValidHwFormatsAddr() **AVPixelFormat {
 
 // Custom: GetValidSwFormats gets `AVHWFramesConstraints.valid_sw_formats` value.
 func (fcs *AVHWFramesConstraints) GetValidSwFormats() []AVPixelFormat {
-	return TruncSlice((*AVPixelFormat)(fcs.valid_sw_formats), func(pf AVPixelFormat) bool {
+	return SliceTrunc((*AVPixelFormat)(fcs.valid_sw_formats), func(pf AVPixelFormat) bool {
 		return pf == AV_PIX_FMT_NONE
 	})
 }
