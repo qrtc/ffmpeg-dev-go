@@ -8,37 +8,37 @@ import "C"
 // AVCodecDescriptor
 type AVCodecDescriptor C.struct_AVCodecDescriptor
 
-// Custom: GetId gets `AVCodecDescriptor.id` value.
+// GetId gets `AVCodecDescriptor.id` value.
 func (hwc *AVCodecDescriptor) GetId() AVCodecID {
 	return (AVCodecID)(hwc.id)
 }
 
-// Custom: GetType gets `AVCodecDescriptor.type` value.
+// GetType gets `AVCodecDescriptor.type` value.
 func (hwc *AVCodecDescriptor) GetType() AVMediaType {
 	return (AVMediaType)(hwc._type)
 }
 
-// Custom: GetName gets `AVCodecDescriptor.name` value.
+// GetName gets `AVCodecDescriptor.name` value.
 func (hwc *AVCodecDescriptor) GetName() string {
 	return C.GoString(hwc.name)
 }
 
-// Custom: GetLongName gets `AVCodecDescriptor.long_name` value.
+// GetLongName gets `AVCodecDescriptor.long_name` value.
 func (hwc *AVCodecDescriptor) GetLongName() string {
 	return C.GoString(hwc.long_name)
 }
 
-// Custom: GetProps gets `AVCodecDescriptor.props` value.
+// GetProps gets `AVCodecDescriptor.props` value.
 func (hwc *AVCodecDescriptor) GetProps() int32 {
 	return (int32)(hwc.props)
 }
 
-// Custom: GetMimeTypes gets `AVCodecDescriptor.mime_types` value.
+// GetMimeTypes gets `AVCodecDescriptor.mime_types` value.
 func (hwc *AVCodecDescriptor) GetMimeTypes() (v []string) {
 	return SliceTruncString(hwc.mime_types)
 }
 
-// Custom: GetProfiles gets `AVCodecDescriptor.profiles` value.
+// GetProfiles gets `AVCodecDescriptor.profiles` value.
 func (hwc *AVCodecDescriptor) GetProfiles() []AVProfile {
 	return SliceTrunc((*AVProfile)(hwc.profiles), func(ap AVProfile) bool {
 		return ap.GetProfile() == FF_PROFILE_UNKNOWN

@@ -29,32 +29,32 @@ type AVIOInterruptCB C.struct_AVIOInterruptCB
 // AVIOInterruptCallbackFunc
 type AVIOInterruptCallbackFunc = C.avio_interrupt_callback_func
 
-// Custom: GetCallback gets `AVIOInterruptCB.callback` value.
+// GetCallback gets `AVIOInterruptCB.callback` value.
 func (icb *AVIOInterruptCB) GetCallback() AVIOInterruptCallbackFunc {
 	return (AVIOInterruptCallbackFunc)(icb.callback)
 }
 
-// Custom: SetCallback sets `AVIOInterruptCB.callback` value.
+// SetCallback sets `AVIOInterruptCB.callback` value.
 func (icb *AVIOInterruptCB) SetCallback(v AVIOInterruptCallbackFunc) {
 	icb.callback = (C.avio_interrupt_callback_func)(v)
 }
 
-// Custom: GetCallbackAddr gets `AVIOInterruptCB.callback` address.
+// GetCallbackAddr gets `AVIOInterruptCB.callback` address.
 func (icb *AVIOInterruptCB) GetCallbackAddr() *AVIOInterruptCallbackFunc {
 	return (*AVIOInterruptCallbackFunc)(&icb.callback)
 }
 
-// Custom: GetOpaque gets `AVIOInterruptCB.opaque` value.
+// GetOpaque gets `AVIOInterruptCB.opaque` value.
 func (icb *AVIOInterruptCB) GetOpaque() unsafe.Pointer {
 	return icb.opaque
 }
 
-// Custom: SetOpaque sets `AVIOInterruptCB.opaque` value.
+// SetOpaque sets `AVIOInterruptCB.opaque` value.
 func (icb *AVIOInterruptCB) SetOpaque(v CVoidPointer) {
 	icb.opaque = VoidPointer(v)
 }
 
-// Custom: GetOpaqueAddr gets `AVIOInterruptCB.opaque` address.
+// GetOpaqueAddr gets `AVIOInterruptCB.opaque` address.
 func (icb *AVIOInterruptCB) GetOpaqueAddr() *unsafe.Pointer {
 	return &icb.opaque
 }
@@ -79,142 +79,142 @@ const (
 // AVIODirEntry
 type AVIODirEntry C.struct_AVIODirEntry
 
-// Custom: GetName gets `AVIODirEntry.name` value.
+// GetName gets `AVIODirEntry.name` value.
 func (de *AVIODirEntry) GetName() string {
 	return C.GoString(de.name)
 }
 
-// Custom: GetType gets `AVIODirEntry.type` value.
+// GetType gets `AVIODirEntry.type` value.
 func (de *AVIODirEntry) GetType() int32 {
 	return (int32)(de._type)
 }
 
-// Custom: SetType sets `AVIODirEntry.type` value.
+// SetType sets `AVIODirEntry.type` value.
 func (de *AVIODirEntry) SetType(v int32) {
 	de._type = (C.int)(v)
 }
 
-// Custom: GetTypeAddr gets `AVIODirEntry.type` address.
+// GetTypeAddr gets `AVIODirEntry.type` address.
 func (de *AVIODirEntry) GetTypeAddr() *int32 {
 	return (*int32)(&de._type)
 }
 
-// Custom: GetUtf8 gets `AVIODirEntry.utf8` value.
+// GetUtf8 gets `AVIODirEntry.utf8` value.
 func (de *AVIODirEntry) GetUtf8() int32 {
 	return (int32)(de.utf8)
 }
 
-// Custom: SetUtf8 sets `AVIODirEntry.utf8` value.
+// SetUtf8 sets `AVIODirEntry.utf8` value.
 func (de *AVIODirEntry) SetUtf8(v int32) {
 	de.utf8 = (C.int)(v)
 }
 
-// Custom: GetUtf8Addr gets `AVIODirEntry.utf8` address.
+// GetUtf8Addr gets `AVIODirEntry.utf8` address.
 func (de *AVIODirEntry) GetUtf8Addr() *int32 {
 	return (*int32)(&de.utf8)
 }
 
-// Custom: GetSize gets `AVIODirEntry.size` value.
+// GetSize gets `AVIODirEntry.size` value.
 func (de *AVIODirEntry) GetSize() int64 {
 	return (int64)(de.size)
 }
 
-// Custom: SetSize sets `AVIODirEntry.size` value.
+// SetSize sets `AVIODirEntry.size` value.
 func (de *AVIODirEntry) SetSize(v int64) {
 	de.size = (C.int64_t)(v)
 }
 
-// Custom: GetSizeAddr gets `AVIODirEntry.size` address.
+// GetSizeAddr gets `AVIODirEntry.size` address.
 func (de *AVIODirEntry) GetSizeAddr() *int64 {
 	return (*int64)(&de.size)
 }
 
-// Custom: GetModificationTimestamp gets `AVIODirEntry.modification_timestamp` value.
+// GetModificationTimestamp gets `AVIODirEntry.modification_timestamp` value.
 func (de *AVIODirEntry) GetModificationTimestamp() int64 {
 	return (int64)(de.modification_timestamp)
 }
 
-// Custom: SetModificationTimestamp sets `AVIODirEntry.modification_timestamp` value.
+// SetModificationTimestamp sets `AVIODirEntry.modification_timestamp` value.
 func (de *AVIODirEntry) SetModificationTimestamp(v int64) {
 	de.modification_timestamp = (C.int64_t)(v)
 }
 
-// Custom: GetModificationTimestampAddr gets `AVIODirEntry.modification_timestamp` address.
+// GetModificationTimestampAddr gets `AVIODirEntry.modification_timestamp` address.
 func (de *AVIODirEntry) GetModificationTimestampAddr() *int64 {
 	return (*int64)(&de.modification_timestamp)
 }
 
-// Custom: GetAccessTimestamp gets `AVIODirEntry.access_timestamp` value.
+// GetAccessTimestamp gets `AVIODirEntry.access_timestamp` value.
 func (de *AVIODirEntry) GetAccessTimestamp() int64 {
 	return (int64)(de.access_timestamp)
 }
 
-// Custom: SetAccessTimestamp sets `AVIODirEntry.access_timestamp` value.
+// SetAccessTimestamp sets `AVIODirEntry.access_timestamp` value.
 func (de *AVIODirEntry) SetAccessTimestamp(v int64) {
 	de.access_timestamp = (C.int64_t)(v)
 }
 
-// Custom: GetAccessTimestampAddr gets `AVIODirEntry.access_timestamp` address.
+// GetAccessTimestampAddr gets `AVIODirEntry.access_timestamp` address.
 func (de *AVIODirEntry) GetAccessTimestampAddr() *int64 {
 	return (*int64)(&de.access_timestamp)
 }
 
-// Custom: GetStatusChangeTimestamp gets `AVIODirEntry.status_change_timestamp` value.
+// GetStatusChangeTimestamp gets `AVIODirEntry.status_change_timestamp` value.
 func (de *AVIODirEntry) GetStatusChangeTimestamp() int64 {
 	return (int64)(de.status_change_timestamp)
 }
 
-// Custom: SetStatusChangeTimestamp sets `AVIODirEntry.status_change_timestamp` value.
+// SetStatusChangeTimestamp sets `AVIODirEntry.status_change_timestamp` value.
 func (de *AVIODirEntry) SetStatusChangeTimestamp(v int64) {
 	de.status_change_timestamp = (C.int64_t)(v)
 }
 
-// Custom: GetStatusChangeTimestampAddr gets `AVIODirEntry.status_change_timestamp` address.
+// GetStatusChangeTimestampAddr gets `AVIODirEntry.status_change_timestamp` address.
 func (de *AVIODirEntry) GetStatusChangeTimestampAddr() *int64 {
 	return (*int64)(&de.status_change_timestamp)
 }
 
-// Custom: GetUserId gets `AVIODirEntry.user_id` value.
+// GetUserId gets `AVIODirEntry.user_id` value.
 func (de *AVIODirEntry) GetUserId() int64 {
 	return (int64)(de.user_id)
 }
 
-// Custom: SetUserId sets `AVIODirEntry.user_id` value.
+// SetUserId sets `AVIODirEntry.user_id` value.
 func (de *AVIODirEntry) SetUserId(v int64) {
 	de.user_id = (C.int64_t)(v)
 }
 
-// Custom: GetUserIdAddr gets `AVIODirEntry.user_id` address.
+// GetUserIdAddr gets `AVIODirEntry.user_id` address.
 func (de *AVIODirEntry) GetUserIdAddr() *int64 {
 	return (*int64)(&de.user_id)
 }
 
-// Custom: GetGroupId gets `AVIODirEntry.group_id` value.
+// GetGroupId gets `AVIODirEntry.group_id` value.
 func (de *AVIODirEntry) GetGroupId() int64 {
 	return (int64)(de.group_id)
 }
 
-// Custom: SetGroupId sets `AVIODirEntry.group_id` value.
+// SetGroupId sets `AVIODirEntry.group_id` value.
 func (de *AVIODirEntry) SetGroupId(v int64) {
 	de.group_id = (C.int64_t)(v)
 }
 
-// Custom: GetGroupIdAddr gets `AVIODirEntry.group_id` address.
+// GetGroupIdAddr gets `AVIODirEntry.group_id` address.
 func (de *AVIODirEntry) GetGroupIdAddr() *int64 {
 	return (*int64)(&de.group_id)
 }
 
-// Custom: GetFilemode gets `AVIODirEntry.filemode` value.
+// GetFilemode gets `AVIODirEntry.filemode` value.
 func (de *AVIODirEntry) GetFilemode() int64 {
 	return (int64)(de.filemode)
 }
 
-// Custom: SetFilemode sets `AVIODirEntry.filemode` value.
+// SetFilemode sets `AVIODirEntry.filemode` value.
 func (de *AVIODirEntry) SetFilemode(v int64) {
 	de.filemode = (C.int64_t)(v)
 }
 
-// Custom: GetFilemodeAddr gets `AVIODirEntry.filemode` address.
+// GetFilemodeAddr gets `AVIODirEntry.filemode` address.
 func (de *AVIODirEntry) GetFilemodeAddr() *int64 {
 	return (*int64)(&de.filemode)
 }
@@ -225,17 +225,17 @@ type AVIODirContext C.struct_AVIODirContext
 // URLContext
 type URLContext C.struct_URLContext
 
-// Custom: GetURLContext gets `AVIODirContext.url_context` value.
+// GetURLContext gets `AVIODirContext.url_context` value.
 func (dc *AVIODirContext) GetURLContext() *URLContext {
 	return (*URLContext)(dc.url_context)
 }
 
-// Custom: SetURLContext sets `AVIODirContext.url_context` value.
+// SetURLContext sets `AVIODirContext.url_context` value.
 func (dc *AVIODirContext) SetURLContext(v *URLContext) {
 	dc.url_context = (*C.struct_URLContext)(v)
 }
 
-// Custom: GetURLContextAddr gets `AVIODirContext.url_context` address.
+// GetURLContextAddr gets `AVIODirContext.url_context` address.
 func (dc *AVIODirContext) GetURLContextAddr() **URLContext {
 	return (**URLContext)(unsafe.Pointer(&dc.url_context))
 }
@@ -255,417 +255,417 @@ const (
 // AVIOContext
 type AVIOContext C.struct_AVIOContext
 
-// Custom: GetAvClass gets `AVIOContext.av_class` value.
+// GetAvClass gets `AVIOContext.av_class` value.
 func (ctx *AVIOContext) GetAvClass() *AVClass {
 	return (*AVClass)(ctx.av_class)
 }
 
-// Custom: SetAvClass sets `AVIOContext.av_class` value.
+// SetAvClass sets `AVIOContext.av_class` value.
 func (ctx *AVIOContext) SetAvClass(v *AVClass) {
 	ctx.av_class = (*C.struct_AVClass)(v)
 }
 
-// Custom: GetAvClassAddr gets `AVIOContext.av_class` address.
+// GetAvClassAddr gets `AVIOContext.av_class` address.
 func (ctx *AVIOContext) GetAvClassAddr() **AVClass {
 	return (**AVClass)(unsafe.Pointer(&ctx.av_class))
 }
 
-// Custom: GetBuffer gets `AVIOContext.buffer` value.
+// GetBuffer gets `AVIOContext.buffer` value.
 func (ctx *AVIOContext) GetBuffer() *uint8 {
 	return (*uint8)(ctx.buffer)
 }
 
-// Custom: SetBuffer sets `AVIOContext.buffer` value.
+// SetBuffer sets `AVIOContext.buffer` value.
 func (ctx *AVIOContext) SetBuffer(v *uint8) {
 	ctx.buffer = (*C.uint8_t)(v)
 }
 
-// Custom: GetBufferAddr gets `AVIOContext.buffer` address.
+// GetBufferAddr gets `AVIOContext.buffer` address.
 func (ctx *AVIOContext) GetBufferAddr() **uint8 {
 	return (**uint8)(unsafe.Pointer(&ctx.buffer))
 }
 
-// Custom: GetBufferSize gets `AVIOContext.buffer_size` value.
+// GetBufferSize gets `AVIOContext.buffer_size` value.
 func (ctx *AVIOContext) GetBufferSize() int32 {
 	return (int32)(ctx.buffer_size)
 }
 
-// Custom: SetBufferSize sets `AVIOContext.buffer_size` value.
+// SetBufferSize sets `AVIOContext.buffer_size` value.
 func (ctx *AVIOContext) SetBufferSize(v int32) {
 	ctx.buffer_size = (C.int)(v)
 }
 
-// Custom: GetBufferSizeAddr gets `AVIOContext.buffer_size` address.
+// GetBufferSizeAddr gets `AVIOContext.buffer_size` address.
 func (ctx *AVIOContext) GetBufferSizeAddr() *int32 {
 	return (*int32)(&ctx.buffer_size)
 }
 
-// Custom: GetBufPtr gets `AVIOContext.buf_ptr` value.
+// GetBufPtr gets `AVIOContext.buf_ptr` value.
 func (ctx *AVIOContext) GetBufPtr() *uint8 {
 	return (*uint8)(ctx.buf_ptr)
 }
 
-// Custom: SetBufPtr sets `AVIOContext.buf_ptr` value.
+// SetBufPtr sets `AVIOContext.buf_ptr` value.
 func (ctx *AVIOContext) SetBufPtr(v *uint8) {
 	ctx.buf_ptr = (*C.uint8_t)(v)
 }
 
-// Custom: GetBufPtrAddr gets `AVIOContext.buf_ptr` address.
+// GetBufPtrAddr gets `AVIOContext.buf_ptr` address.
 func (ctx *AVIOContext) GetBufPtrAddr() **uint8 {
 	return (**uint8)(unsafe.Pointer(&ctx.buf_ptr))
 }
 
-// Custom: GetBufEnd gets `AVIOContext.buf_end` value.
+// GetBufEnd gets `AVIOContext.buf_end` value.
 func (ctx *AVIOContext) GetBufEnd() *uint8 {
 	return (*uint8)(ctx.buf_end)
 }
 
-// Custom: SetBufEnd sets `AVIOContext.buf_end` value.
+// SetBufEnd sets `AVIOContext.buf_end` value.
 func (ctx *AVIOContext) SetBufEnd(v *uint8) {
 	ctx.buf_end = (*C.uint8_t)(v)
 }
 
-// Custom: GetBufEndAddr gets `AVIOContext.buf_end` address.
+// GetBufEndAddr gets `AVIOContext.buf_end` address.
 func (ctx *AVIOContext) GetBufEndAddr() **uint8 {
 	return (**uint8)(unsafe.Pointer(&ctx.buf_end))
 }
 
-// Custom: GetOpaque gets `AVIOContext.opaque` value.
+// GetOpaque gets `AVIOContext.opaque` value.
 func (ctx *AVIOContext) GetOpaque() unsafe.Pointer {
 	return ctx.opaque
 }
 
-// Custom: SetOpaque sets `AVIOContext.opaque` value.
+// SetOpaque sets `AVIOContext.opaque` value.
 func (ctx *AVIOContext) SetOpaque(v CVoidPointer) {
 	ctx.opaque = VoidPointer(v)
 }
 
-// Custom: GetOpaqueAddr gets `AVIOContext.opaque` address.
+// GetOpaqueAddr gets `AVIOContext.opaque` address.
 func (ctx *AVIOContext) GetOpaqueAddr() *unsafe.Pointer {
 	return (*unsafe.Pointer)(&ctx.opaque)
 }
 
-// Custom: GetPos gets `AVIOContext.pos` value.
+// GetPos gets `AVIOContext.pos` value.
 func (ctx *AVIOContext) GetPos() int64 {
 	return (int64)(ctx.pos)
 }
 
-// Custom: SetPos sets `AVIOContext.pos` value.
+// SetPos sets `AVIOContext.pos` value.
 func (ctx *AVIOContext) SetPos(v int64) {
 	ctx.pos = (C.int64_t)(v)
 }
 
-// Custom: GetPosAddr gets `AVIOContext.pos` address.
+// GetPosAddr gets `AVIOContext.pos` address.
 func (ctx *AVIOContext) GetPosAddr() *int64 {
 	return (*int64)(&ctx.pos)
 }
 
-// Custom: GetEofReached gets `AVIOContext.eof_reached` value.
+// GetEofReached gets `AVIOContext.eof_reached` value.
 func (ctx *AVIOContext) GetEofReached() int32 {
 	return (int32)(ctx.eof_reached)
 }
 
-// Custom: SetEofReached sets `AVIOContext.eof_reached` value.
+// SetEofReached sets `AVIOContext.eof_reached` value.
 func (ctx *AVIOContext) SetEofReached(v int32) {
 	ctx.eof_reached = (C.int)(v)
 }
 
-// Custom: GetEofReachedAddr gets `AVIOContext.eof_reached` address.
+// GetEofReachedAddr gets `AVIOContext.eof_reached` address.
 func (ctx *AVIOContext) GetEofReachedAddr() *int32 {
 	return (*int32)(&ctx.eof_reached)
 }
 
-// Custom: GetWriteFlag gets `AVIOContext.write_flag` value.
+// GetWriteFlag gets `AVIOContext.write_flag` value.
 func (ctx *AVIOContext) GetWriteFlag() int32 {
 	return (int32)(ctx.write_flag)
 }
 
-// Custom: SetWriteFlag sets `AVIOContext.write_flag` value.
+// SetWriteFlag sets `AVIOContext.write_flag` value.
 func (ctx *AVIOContext) SetWriteFlag(v int32) {
 	ctx.write_flag = (C.int)(v)
 }
 
-// Custom: GetWriteFlagAddr gets `AVIOContext.write_flag` address.
+// GetWriteFlagAddr gets `AVIOContext.write_flag` address.
 func (ctx *AVIOContext) GetWriteFlagAddr() *int32 {
 	return (*int32)(&ctx.write_flag)
 }
 
-// Custom: GetMaxPacketSize gets `AVIOContext.max_packet_size` value.
+// GetMaxPacketSize gets `AVIOContext.max_packet_size` value.
 func (ctx *AVIOContext) GetMaxPacketSize() int32 {
 	return (int32)(ctx.max_packet_size)
 }
 
-// Custom: SetMaxPacketSize sets `AVIOContext.max_packet_size` value.
+// SetMaxPacketSize sets `AVIOContext.max_packet_size` value.
 func (ctx *AVIOContext) SetMaxPacketSize(v int32) {
 	ctx.max_packet_size = (C.int)(v)
 }
 
-// Custom: GetMaxPacketSizeAddr gets `AVIOContext.max_packet_size` address.
+// GetMaxPacketSizeAddr gets `AVIOContext.max_packet_size` address.
 func (ctx *AVIOContext) GetMaxPacketSizeAddr() *int32 {
 	return (*int32)(&ctx.max_packet_size)
 }
 
-// Custom: GetChecksum gets `AVIOContext.checksum` value.
+// GetChecksum gets `AVIOContext.checksum` value.
 func (ctx *AVIOContext) GetChecksum() uint32 {
 	return (uint32)(ctx.checksum)
 }
 
-// Custom: SetChecksum sets `AVIOContext.checksum` value.
+// SetChecksum sets `AVIOContext.checksum` value.
 func (ctx *AVIOContext) SetChecksum(v uint32) {
 	ctx.checksum = (C.ulong)(v)
 }
 
-// Custom: GetChecksumAddr gets `AVIOContext.checksum` address.
+// GetChecksumAddr gets `AVIOContext.checksum` address.
 func (ctx *AVIOContext) GetChecksumAddr() *uint32 {
 	return (*uint32)(unsafe.Pointer(&ctx.checksum))
 }
 
-// Custom: GetChecksumPtr gets `AVIOContext.checksum_ptr` value.
+// GetChecksumPtr gets `AVIOContext.checksum_ptr` value.
 func (ctx *AVIOContext) GetChecksumPtr() *uint8 {
 	return (*uint8)(ctx.checksum_ptr)
 }
 
-// Custom: SetChecksumPtr sets `AVIOContext.checksum_ptr` value.
+// SetChecksumPtr sets `AVIOContext.checksum_ptr` value.
 func (ctx *AVIOContext) SetChecksumPtr(v *uint8) {
 	ctx.checksum_ptr = (*C.uint8_t)(v)
 }
 
-// Custom: GetChecksumPtrAddr gets `AVIOContext.checksum_ptr` address.
+// GetChecksumPtrAddr gets `AVIOContext.checksum_ptr` address.
 func (ctx *AVIOContext) GetChecksumPtrAddr() **uint8 {
 	return (**uint8)(unsafe.Pointer(&ctx.checksum_ptr))
 }
 
-// Custom: GetError gets `AVIOContext.error` value.
+// GetError gets `AVIOContext.error` value.
 func (ctx *AVIOContext) GetError() int32 {
 	return (int32)(ctx.error)
 }
 
-// Custom: SetError sets `AVIOContext.error` value.
+// SetError sets `AVIOContext.error` value.
 func (ctx *AVIOContext) SetError(v int32) {
 	ctx.error = (C.int)(v)
 }
 
-// Custom: GetErrorAddr gets `AVIOContext.error` address.
+// GetErrorAddr gets `AVIOContext.error` address.
 func (ctx *AVIOContext) GetErrorAddr() *int32 {
 	return (*int32)(&ctx.error)
 }
 
-// Custom: GetSeekable gets `AVIOContext.seekable` value.
+// GetSeekable gets `AVIOContext.seekable` value.
 func (ctx *AVIOContext) GetSeekable() int32 {
 	return (int32)(ctx.seekable)
 }
 
-// Custom: SetSeekable sets `AVIOContext.seekable` value.
+// SetSeekable sets `AVIOContext.seekable` value.
 func (ctx *AVIOContext) SetSeekable(v int32) {
 	ctx.seekable = (C.int)(v)
 }
 
-// Custom: GetSeekableAddr gets `AVIOContext.seekable` address.
+// GetSeekableAddr gets `AVIOContext.seekable` address.
 func (ctx *AVIOContext) GetSeekableAddr() *int32 {
 	return (*int32)(&ctx.seekable)
 }
 
-// Custom: GetMaxsize gets `AVIOContext.maxsize` value.
+// GetMaxsize gets `AVIOContext.maxsize` value.
 func (ctx *AVIOContext) GetMaxsize() int64 {
 	return (int64)(ctx.maxsize)
 }
 
-// Custom: SetMaxsize sets `AVIOContext.maxsize` value.
+// SetMaxsize sets `AVIOContext.maxsize` value.
 func (ctx *AVIOContext) SetMaxsize(v int64) {
 	ctx.maxsize = (C.int64_t)(v)
 }
 
-// Custom: GetMaxsizeAddr gets `AVIOContext.maxsize` address.
+// GetMaxsizeAddr gets `AVIOContext.maxsize` address.
 func (ctx *AVIOContext) GetMaxsizeAddr() *int64 {
 	return (*int64)(&ctx.maxsize)
 }
 
-// Custom: GetDirect gets `AVIOContext.direct` value.
+// GetDirect gets `AVIOContext.direct` value.
 func (ctx *AVIOContext) GetDirect() int32 {
 	return (int32)(ctx.direct)
 }
 
-// Custom: SetDirect sets `AVIOContext.direct` value.
+// SetDirect sets `AVIOContext.direct` value.
 func (ctx *AVIOContext) SetDirect(v int32) {
 	ctx.direct = (C.int)(v)
 }
 
-// Custom: GetDirectAddr gets `AVIOContext.direct` address.
+// GetDirectAddr gets `AVIOContext.direct` address.
 func (ctx *AVIOContext) GetDirectAddr() *int32 {
 	return (*int32)(&ctx.direct)
 }
 
-// Custom: GetBytesRead gets `AVIOContext.bytes_read` value.
+// GetBytesRead gets `AVIOContext.bytes_read` value.
 func (ctx *AVIOContext) GetBytesRead() int64 {
 	return (int64)(ctx.bytes_read)
 }
 
-// Custom: SetBytesRead sets `AVIOContext.bytes_read` value.
+// SetBytesRead sets `AVIOContext.bytes_read` value.
 func (ctx *AVIOContext) SetBytesRead(v int64) {
 	ctx.bytes_read = (C.int64_t)(v)
 }
 
-// Custom: GetBytesReadAddr gets `AVIOContext.bytes_read` address.
+// GetBytesReadAddr gets `AVIOContext.bytes_read` address.
 func (ctx *AVIOContext) GetBytesReadAddr() *int64 {
 	return (*int64)(&ctx.bytes_read)
 }
 
-// Custom: GetSeekCount gets `AVIOContext.seek_count` value.
+// GetSeekCount gets `AVIOContext.seek_count` value.
 func (ctx *AVIOContext) GetSeekCount() int32 {
 	return (int32)(ctx.seek_count)
 }
 
-// Custom: SetSeekCount sets `AVIOContext.seek_count` value.
+// SetSeekCount sets `AVIOContext.seek_count` value.
 func (ctx *AVIOContext) SetSeekCount(v int32) {
 	ctx.seek_count = (C.int)(v)
 }
 
-// Custom: GetSeekCountAddr gets `AVIOContext.seek_count` address.
+// GetSeekCountAddr gets `AVIOContext.seek_count` address.
 func (ctx *AVIOContext) GetSeekCountAddr() *int32 {
 	return (*int32)(&ctx.seek_count)
 }
 
-// Custom: GetWriteoutCount gets `AVIOContext.writeout_count` value.
+// GetWriteoutCount gets `AVIOContext.writeout_count` value.
 func (ctx *AVIOContext) GetWriteoutCount() int32 {
 	return (int32)(ctx.writeout_count)
 }
 
-// Custom: SetWriteoutCount sets `AVIOContext.writeout_count` value.
+// SetWriteoutCount sets `AVIOContext.writeout_count` value.
 func (ctx *AVIOContext) SetWriteoutCount(v int32) {
 	ctx.writeout_count = (C.int)(v)
 }
 
-// Custom: GetWriteoutCountAddr gets `AVIOContext.writeout_count` address.
+// GetWriteoutCountAddr gets `AVIOContext.writeout_count` address.
 func (ctx *AVIOContext) GetWriteoutCountAddr() *int32 {
 	return (*int32)(&ctx.writeout_count)
 }
 
-// Custom: GetOrigBufferSize gets `AVIOContext.orig_buffer_size` value.
+// GetOrigBufferSize gets `AVIOContext.orig_buffer_size` value.
 func (ctx *AVIOContext) GetOrigBufferSize() int32 {
 	return (int32)(ctx.orig_buffer_size)
 }
 
-// Custom: SetOrigBufferSize sets `AVIOContext.orig_buffer_size` value.
+// SetOrigBufferSize sets `AVIOContext.orig_buffer_size` value.
 func (ctx *AVIOContext) SetOrigBufferSize(v int32) {
 	ctx.orig_buffer_size = (C.int)(v)
 }
 
-// Custom: GetOrigBufferSizeAddr gets `AVIOContext.orig_buffer_size` address.
+// GetOrigBufferSizeAddr gets `AVIOContext.orig_buffer_size` address.
 func (ctx *AVIOContext) GetOrigBufferSizeAddr() *int32 {
 	return (*int32)(&ctx.orig_buffer_size)
 }
 
-// Custom: GetShortSeekThreshold gets `AVIOContext.short_seek_threshold` value.
+// GetShortSeekThreshold gets `AVIOContext.short_seek_threshold` value.
 func (ctx *AVIOContext) GetShortSeekThreshold() int32 {
 	return (int32)(ctx.short_seek_threshold)
 }
 
-// Custom: SetShortSeekThreshold sets `AVIOContext.short_seek_threshold` value.
+// SetShortSeekThreshold sets `AVIOContext.short_seek_threshold` value.
 func (ctx *AVIOContext) SetShortSeekThreshold(v int32) {
 	ctx.short_seek_threshold = (C.int)(v)
 }
 
-// Custom: GetShortSeekThresholdAddr gets `AVIOContext.short_seek_threshold` address.
+// GetShortSeekThresholdAddr gets `AVIOContext.short_seek_threshold` address.
 func (ctx *AVIOContext) GetShortSeekThresholdAddr() *int32 {
 	return (*int32)(&ctx.short_seek_threshold)
 }
 
-// Custom: GetProtocolWhitelist gets `AVIOContext.protocol_whitelist` value.
+// GetProtocolWhitelist gets `AVIOContext.protocol_whitelist` value.
 func (ctx *AVIOContext) GetProtocolWhitelist() string {
 	return C.GoString(ctx.protocol_whitelist)
 }
 
-// Custom: GetProtocolBlacklist gets `AVIOContext.protocol_blacklist` value.
+// GetProtocolBlacklist gets `AVIOContext.protocol_blacklist` value.
 func (ctx *AVIOContext) GetProtocolBlacklist() string {
 	return C.GoString(ctx.protocol_blacklist)
 }
 
-// Custom: GetIgnoreBoundaryPoint gets `AVIOContext.ignore_boundary_point` value.
+// GetIgnoreBoundaryPoint gets `AVIOContext.ignore_boundary_point` value.
 func (ctx *AVIOContext) GetIgnoreBoundaryPoint() int32 {
 	return (int32)(ctx.ignore_boundary_point)
 }
 
-// Custom: SetIgnoreBoundaryPoint sets `AVIOContext.ignore_boundary_point` value.
+// SetIgnoreBoundaryPoint sets `AVIOContext.ignore_boundary_point` value.
 func (ctx *AVIOContext) SetIgnoreBoundaryPoint(v int32) {
 	ctx.ignore_boundary_point = (C.int)(v)
 }
 
-// Custom: GetIgnoreBoundaryPointAddr gets `AVIOContext.ignore_boundary_point` address.
+// GetIgnoreBoundaryPointAddr gets `AVIOContext.ignore_boundary_point` address.
 func (ctx *AVIOContext) GetIgnoreBoundaryPointAddr() *int32 {
 	return (*int32)(&ctx.ignore_boundary_point)
 }
 
-// Custom: GetCurrentType gets `AVIOContext.currenttype` value.
+// GetCurrentType gets `AVIOContext.currenttype` value.
 func (ctx *AVIOContext) GetCurrentType() AVIODataMarkerType {
 	return (AVIODataMarkerType)(ctx.current_type)
 }
 
-// Custom: SetCurrentType sets `AVIOContext.currenttype` value.
+// SetCurrentType sets `AVIOContext.currenttype` value.
 func (ctx *AVIOContext) SetCurrentType(v AVIODataMarkerType) {
 	ctx.current_type = (C.enum_AVIODataMarkerType)(v)
 }
 
-// Custom: GetCurrentTypeAddr gets `AVIOContext.currenttype` address.
+// GetCurrentTypeAddr gets `AVIOContext.currenttype` address.
 func (ctx *AVIOContext) GetCurrentTypeAddr() *AVIODataMarkerType {
 	return (*AVIODataMarkerType)(&ctx.current_type)
 }
 
-// Custom: GetLastTime gets `AVIOContext.last_time` value.
+// GetLastTime gets `AVIOContext.last_time` value.
 func (ctx *AVIOContext) GetLastTime() int64 {
 	return (int64)(ctx.last_time)
 }
 
-// Custom: SetLastTime sets `AVIOContext.last_time` value.
+// SetLastTime sets `AVIOContext.last_time` value.
 func (ctx *AVIOContext) SetLastTime(v int64) {
 	ctx.last_time = (C.int64_t)(v)
 }
 
-// Custom: GetLastTimeAddr gets `AVIOContext.last_time` address.
+// GetLastTimeAddr gets `AVIOContext.last_time` address.
 func (ctx *AVIOContext) GetLastTimeAddr() *int64 {
 	return (*int64)(&ctx.last_time)
 }
 
-// Custom: GetWritten gets `AVIOContext.written` value.
+// GetWritten gets `AVIOContext.written` value.
 func (ctx *AVIOContext) GetWritten() int64 {
 	return (int64)(ctx.written)
 }
 
-// Custom: SetWritten sets `AVIOContext.written` value.
+// SetWritten sets `AVIOContext.written` value.
 func (ctx *AVIOContext) SetWritten(v int64) {
 	ctx.written = (C.int64_t)(v)
 }
 
-// Custom: GetWrittenAddr gets `AVIOContext.written` address.
+// GetWrittenAddr gets `AVIOContext.written` address.
 func (ctx *AVIOContext) GetWrittenAddr() *int64 {
 	return (*int64)(&ctx.written)
 }
 
-// Custom: GetBufPtrMax gets `AVIOContext.buf_ptr_max` value.
+// GetBufPtrMax gets `AVIOContext.buf_ptr_max` value.
 func (ctx *AVIOContext) GetBufPtrMax() *uint8 {
 	return (*uint8)(ctx.buf_ptr_max)
 }
 
-// Custom: SetBufPtrMax sets `AVIOContext.buf_ptr_max` value.
+// SetBufPtrMax sets `AVIOContext.buf_ptr_max` value.
 func (ctx *AVIOContext) SetBufPtrMax(v *uint8) {
 	ctx.buf_ptr_max = (*C.uint8_t)(v)
 }
 
-// Custom: GetBufPtrMaxAddr gets `AVIOContext.buf_ptr_max` address.
+// GetBufPtrMaxAddr gets `AVIOContext.buf_ptr_max` address.
 func (ctx *AVIOContext) GetBufPtrMaxAddr() **uint8 {
 	return (**uint8)(unsafe.Pointer(&ctx.buf_ptr_max))
 }
 
-// Custom: GetMinPacketSize gets `AVIOContext.min_packet_size` value.
+// GetMinPacketSize gets `AVIOContext.min_packet_size` value.
 func (ctx *AVIOContext) GetMinPacketSize() int32 {
 	return (int32)(ctx.min_packet_size)
 }
 
-// Custom: SetMinPacketSize sets `AVIOContext.min_packet_size` value.
+// SetMinPacketSize sets `AVIOContext.min_packet_size` value.
 func (ctx *AVIOContext) SetMinPacketSize(v int32) {
 	ctx.min_packet_size = (C.int)(v)
 }
 
-// Custom: GetMinPacketSizeAddr gets `AVIOContext.min_packet_size` address.
+// GetMinPacketSizeAddr gets `AVIOContext.min_packet_size` address.
 func (ctx *AVIOContext) GetMinPacketSizeAddr() *int32 {
 	return (*int32)(&ctx.min_packet_size)
 }
@@ -727,13 +727,13 @@ func AvIOFreeDirectoryEntry(entry **AVIODirEntry) {
 	C.avio_free_directory_entry((**C.struct_AVIODirEntry)(unsafe.Pointer(entry)))
 }
 
-// typedef int (*avio_context_read_packet_func)(void *opaque, uint8_t *buf, int buf_size)
+// typedef int (*avio_context_read_packet_func)(void *opaque, uint8_t *buf, int buf_size);
 type AVIOContextReadPacketFunc = C.avio_context_read_packet_func
 
-// typedef int (*avio_context_write_packet_func)(void *opaque, uint8_t *buf, int buf_size)
+// typedef int (*avio_context_write_packet_func)(void *opaque, uint8_t *buf, int buf_size);
 type AVIOContextWritePacketFunc = C.avio_context_write_packet_func
 
-// typedef int64_t (*avio_context_seek_func)(void *opaque, int64_t offset, int whence)
+// typedef int64_t (*avio_context_seek_func)(void *opaque, int64_t offset, int whence);
 type AVIOContextSeekFunc = C.avio_context_seek_func
 
 // AvIOAllocContext sllocates and initialize an AVIOContext for buffered I/O. It must be later

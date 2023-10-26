@@ -17,17 +17,17 @@ type AVBuffer C.struct_AVBuffer
 // AVBufferRef
 type AVBufferRef C.struct_AVBufferRef
 
-// Custom: GetBuffer gets `AVBufferRef.buffer` value.
+// GetBuffer gets `AVBufferRef.buffer` value.
 func (bf *AVBufferRef) GetBuffer() *AVBuffer {
 	return (*AVBuffer)(bf.buffer)
 }
 
-// Custom: GetData gets `AVBufferRef.data` value.
+// GetData gets `AVBufferRef.data` value.
 func (bf *AVBufferRef) GetData() *uint8 {
 	return (*uint8)(bf.data)
 }
 
-// Custom: GetSize gets `AVBufferRef.size` value.
+// GetSize gets `AVBufferRef.size` value.
 func (bf *AVBufferRef) GetSize() int32 {
 	return (int32)(bf.size)
 }

@@ -11,5 +11,7 @@ const (
 	AV_XVMC_ID = C.AV_XVMC_ID
 )
 
-// Deprecated: No use
+// Deprecated: No use.
+//
+// XvmcPixFmt
 type XvmcPixFmt C.struct_xvmc_pix_fmt

@@ -18,7 +18,7 @@ const (
 )
 
 // AvThreadMessageQueueAlloc allocates a new message queue.
-func AvThreadMessageQueueAlloc[T HelperInteger](mq **AVThreadMessageQueue, nelem, elsize T) int32 {
+func AvThreadMessageQueueAlloc[T Integer](mq **AVThreadMessageQueue, nelem, elsize T) int32 {
 	return (int32)(C.av_thread_message_queue_alloc(
 		(**C.struct_AVThreadMessageQueue)(unsafe.Pointer(mq)), (C.uint)(nelem), (C.uint)(elsize)))
 }

@@ -16,7 +16,7 @@ func AvTsMakeString(ts int64) string {
 }
 
 // AvTs2str
-func AvTs2str[T HelperInteger](ts T) string {
+func AvTs2str[T Integer](ts T) string {
 	return AvTsMakeString(int64(ts))
 }
 
@@ -28,6 +28,6 @@ func AvTsMakeTimeString(ts int64, tb *AVRational) string {
 }
 
 // AvTs2timestr
-func AvTs2timestr[T HelperInteger](ts T, tb *AVRational) string {
+func AvTs2timestr[T Integer](ts T, tb *AVRational) string {
 	return AvTsMakeTimeString((int64)(ts), tb)
 }

@@ -8,19 +8,19 @@ import "unsafe"
 
 type AVXTEA C.struct_AVXTEA
 
-// Custom: GetKey gets `AVXTEA.key` value.
+// GetKey gets `AVXTEA.key` value.
 func (dct *AVXTEA) GetKey() []uint32 {
 	return unsafe.Slice((*uint32)(&dct.key[0]), 16)
 }
 
-// Custom: SetKey sets `AVXTEA.key` value.
+// SetKey sets `AVXTEA.key` value.
 func (dct *AVXTEA) SetKey(v []uint32) {
 	for i := 0; i < FFMIN(len(v), 16); i++ {
 		dct.key[i] = (C.uint32_t)(v[i])
 	}
 }
 
-// Custom: GetKeyAddr gets `AVXTEA.key` address.
+// GetKeyAddr gets `AVXTEA.key` address.
 func (dct *AVXTEA) GetKeyAddr() **uint32 {
 	return (**uint32)(unsafe.Pointer(&dct.key))
 }

@@ -8,167 +8,230 @@ import "unsafe"
 
 type AVComponentDescriptor C.struct_AVComponentDescriptor
 
-// Custom: GetPlane gets `AVComponentDescriptor.plane` value.
+// GetPlane gets `AVComponentDescriptor.plane` value.
 func (cd *AVComponentDescriptor) GetPlane() int32 {
 	return (int32)(cd.plane)
 }
 
-// Custom: SetPlane sets `AVComponentDescriptor.plane` value.
+// SetPlane sets `AVComponentDescriptor.plane` value.
 func (cd *AVComponentDescriptor) SetPlane(v int32) {
 	cd.plane = (C.int)(v)
 }
 
-// Custom: GetPlaneAddr gets `AVComponentDescriptor.plane` address.
+// GetPlaneAddr gets `AVComponentDescriptor.plane` address.
 func (cd *AVComponentDescriptor) GetPlaneAddr() *int32 {
 	return (*int32)(&cd.plane)
 }
 
-// Custom: GetStep gets `AVComponentDescriptor.step` value.
+// GetStep gets `AVComponentDescriptor.step` value.
 func (cd *AVComponentDescriptor) GetStep() int32 {
 	return (int32)(cd.step)
 }
 
-// Custom: SetStep sets `AVComponentDescriptor.step` value.
+// SetStep sets `AVComponentDescriptor.step` value.
 func (cd *AVComponentDescriptor) SetStep(v int32) {
 	cd.step = (C.int)(v)
 }
 
-// Custom: GetStepAddr gets `AVComponentDescriptor.step` address.
+// GetStepAddr gets `AVComponentDescriptor.step` address.
 func (cd *AVComponentDescriptor) GetStepAddr() *int32 {
 	return (*int32)(&cd.step)
 }
 
-// Custom: GetOffset gets `AVComponentDescriptor.offset` value.
+// GetOffset gets `AVComponentDescriptor.offset` value.
 func (cd *AVComponentDescriptor) GetOffset() int32 {
 	return (int32)(cd.offset)
 }
 
-// Custom: SetOffset sets `AVComponentDescriptor.offset` value.
+// SetOffset sets `AVComponentDescriptor.offset` value.
 func (cd *AVComponentDescriptor) SetOffset(v int32) {
 	cd.offset = (C.int)(v)
 }
 
-// Custom: GetOffsetAddr gets `AVComponentDescriptor.offset` address.
+// GetOffsetAddr gets `AVComponentDescriptor.offset` address.
 func (cd *AVComponentDescriptor) GetOffsetAddr() *int32 {
 	return (*int32)(&cd.offset)
 }
 
-// Custom: GetShift gets `AVComponentDescriptor.shift` value.
+// GetShift gets `AVComponentDescriptor.shift` value.
 func (cd *AVComponentDescriptor) GetShift() int32 {
 	return (int32)(cd.shift)
 }
 
-// Custom: SetShift sets `AVComponentDescriptor.shift` value.
+// SetShift sets `AVComponentDescriptor.shift` value.
 func (cd *AVComponentDescriptor) SetShift(v int32) {
 	cd.shift = (C.int)(v)
 }
 
-// Custom: GetShiftAddr gets `AVComponentDescriptor.shift` address.
+// GetShiftAddr gets `AVComponentDescriptor.shift` address.
 func (cd *AVComponentDescriptor) GetShiftAddr() *int32 {
 	return (*int32)(&cd.shift)
 }
 
-// Custom: GetDepth gets `AVComponentDescriptor.depth` value.
+// GetDepth gets `AVComponentDescriptor.depth` value.
 func (cd *AVComponentDescriptor) GetDepth() int32 {
 	return (int32)(cd.depth)
 }
 
-// Custom: SetDepth sets `AVComponentDescriptor.depth` value.
+// SetDepth sets `AVComponentDescriptor.depth` value.
 func (cd *AVComponentDescriptor) SetDepth(v int32) {
 	cd.depth = (C.int)(v)
 }
 
-// Custom: GetDepthAddr gets `AVComponentDescriptor.depth` address.
+// GetDepthAddr gets `AVComponentDescriptor.depth` address.
 func (cd *AVComponentDescriptor) GetDepthAddr() *int32 {
 	return (*int32)(&cd.depth)
+}
+
+// Deprecated: Use step instead.
+//
+// GetStepMinus1 gets `AVComponentDescriptor.step_minus1` value.
+func (cd *AVComponentDescriptor) GetStepMinus1() int32 {
+	return (int32)(cd.step_minus1)
+}
+
+// Deprecated: Use step instead.
+//
+// SetStepMinus1 sets `AVComponentDescriptor.step_minus1` value.
+func (cd *AVComponentDescriptor) SetStepMinus1(v int32) {
+	cd.step_minus1 = (C.int)(v)
+}
+
+// Deprecated: Use step instead.
+//
+// GetStepMinus1Addr gets `AVComponentDescriptor.step_minus1` address.
+func (cd *AVComponentDescriptor) GetStepMinus1Addr() *int32 {
+	return (*int32)(&cd.step_minus1)
+}
+
+// Deprecated: Use depth instead.
+//
+// GetDepthMinus1 gets `AVComponentDescriptor.depth_minus1` value.
+func (cd *AVComponentDescriptor) GetDepthMinus1() int32 {
+	return (int32)(cd.depth_minus1)
+}
+
+// Deprecated: Use depth instead.
+//
+// SetDepthMinus1 sets `AVComponentDescriptor.depth_minus1` value.
+func (cd *AVComponentDescriptor) SetDepthMinus1(v int32) {
+	cd.depth_minus1 = (C.int)(v)
+}
+
+// Deprecated: Use depth instead.
+//
+// GetDepthMinus1Addr gets `AVComponentDescriptor.depth_minus1` address.
+func (cd *AVComponentDescriptor) GetDepthMinus1Addr() *int32 {
+	return (*int32)(&cd.depth_minus1)
+}
+
+// Deprecated: Use offset instead.
+//
+// GetOffsetPlus1 gets `AVComponentDescriptor.offset_plus1` value.
+func (cd *AVComponentDescriptor) GetOffsetPlus1() int32 {
+	return (int32)(cd.offset_plus1)
+}
+
+// Deprecated: Use offset instead.
+//
+// SetOffsetPlus1 sets `AVComponentDescriptor.offset_plus1` value.
+func (cd *AVComponentDescriptor) SetOffsetPlus1(v int32) {
+	cd.offset_plus1 = (C.int)(v)
+}
+
+// Deprecated: Use offset instead.
+//
+// GetOffsetPlus1Addr gets `AVComponentDescriptor.offset_plus1` address.
+func (cd *AVComponentDescriptor) GetOffsetPlus1Addr() *int32 {
+	return (*int32)(&cd.offset_plus1)
 }
 
 // AVPixFmtDescriptor
 type AVPixFmtDescriptor C.struct_AVPixFmtDescriptor
 
-// Custom: GetName gets `AVPixFmtDescriptor.name` value.
+// GetName gets `AVPixFmtDescriptor.name` value.
 func (pfd *AVPixFmtDescriptor) GetName() string {
 	return C.GoString(pfd.name)
 }
 
-// Custom: GetNbComponents gets `AVPixFmtDescriptor.nb_components` value.
+// GetNbComponents gets `AVPixFmtDescriptor.nb_components` value.
 func (pfd *AVPixFmtDescriptor) GetNbComponents() uint8 {
 	return (uint8)(pfd.nb_components)
 }
 
-// Custom: SetNbComponents sets `AVPixFmtDescriptor.nb_components` value.
+// SetNbComponents sets `AVPixFmtDescriptor.nb_components` value.
 func (pfd *AVPixFmtDescriptor) SetNbComponents(v uint8) {
 	pfd.nb_components = (C.uint8_t)(v)
 }
 
-// Custom: GetNbComponentsAddr gets `AVPixFmtDescriptor.nb_components` address.
+// GetNbComponentsAddr gets `AVPixFmtDescriptor.nb_components` address.
 func (pfd *AVPixFmtDescriptor) GetNbComponentsAddr() *uint8 {
 	return (*uint8)(&pfd.nb_components)
 }
 
-// Custom: GetLog2ChromaW gets `AVPixFmtDescriptor.log2_chroma_w` value.
+// GetLog2ChromaW gets `AVPixFmtDescriptor.log2_chroma_w` value.
 func (pfd *AVPixFmtDescriptor) GetLog2ChromaW() uint8 {
 	return (uint8)(pfd.log2_chroma_w)
 }
 
-// Custom: SetLog2ChromaW sets `AVPixFmtDescriptor.log2_chroma_w` value.
+// SetLog2ChromaW sets `AVPixFmtDescriptor.log2_chroma_w` value.
 func (pfd *AVPixFmtDescriptor) SetLog2ChromaW(v uint8) {
 	pfd.log2_chroma_w = (C.uint8_t)(v)
 }
 
-// Custom: GetLog2ChromaWAddr gets `AVPixFmtDescriptor.log2_chroma_w` address.
+// GetLog2ChromaWAddr gets `AVPixFmtDescriptor.log2_chroma_w` address.
 func (pfd *AVPixFmtDescriptor) GetLog2ChromaWAddr() *uint8 {
 	return (*uint8)(&pfd.log2_chroma_w)
 }
 
-// Custom: GetLog2ChromaH gets `AVPixFmtDescriptor.log2_chroma_h` value.
+// GetLog2ChromaH gets `AVPixFmtDescriptor.log2_chroma_h` value.
 func (pfd *AVPixFmtDescriptor) GetLog2ChromaH() uint8 {
 	return (uint8)(pfd.log2_chroma_h)
 }
 
-// Custom: SetLog2ChromaH sets `AVPixFmtDescriptor.log2_chroma_h` value.
+// SetLog2ChromaH sets `AVPixFmtDescriptor.log2_chroma_h` value.
 func (pfd *AVPixFmtDescriptor) SetLog2ChromaH(v uint8) {
 	pfd.log2_chroma_h = (C.uint8_t)(v)
 }
 
-// Custom: GetLog2ChromaHAddr gets `AVPixFmtDescriptor.log2_chroma_h` address.
+// GetLog2ChromaHAddr gets `AVPixFmtDescriptor.log2_chroma_h` address.
 func (pfd *AVPixFmtDescriptor) GetLog2ChromaHAddr() *uint8 {
 	return (*uint8)(&pfd.log2_chroma_h)
 }
 
-// Custom: GetFlags gets `AVPixFmtDescriptor.flags` value.
+// GetFlags gets `AVPixFmtDescriptor.flags` value.
 func (pfd *AVPixFmtDescriptor) GetFlags() uint64 {
 	return (uint64)(pfd.flags)
 }
 
-// Custom: SetFlags sets `AVPixFmtDescriptor.flags` value.
+// SetFlags sets `AVPixFmtDescriptor.flags` value.
 func (pfd *AVPixFmtDescriptor) SetFlags(v uint64) {
 	pfd.flags = (C.uint64_t)(v)
 }
 
-// Custom: GetFlagsAddr gets `AVPixFmtDescriptor.flags` address.
+// GetFlagsAddr gets `AVPixFmtDescriptor.flags` address.
 func (pfd *AVPixFmtDescriptor) GetFlagsAddr() *uint64 {
 	return (*uint64)(&pfd.flags)
 }
 
-// Custom: GetComp gets `AVPixFmtDescriptor.comp` value.
+// GetComp gets `AVPixFmtDescriptor.comp` value.
 func (pfd *AVPixFmtDescriptor) GetComp() []AVComponentDescriptor {
 	return unsafe.Slice((*AVComponentDescriptor)(&pfd.comp[0]), 4)
 }
 
-// Custom: SetComp sets `AVPixFmtDescriptor.comp` value.
+// SetComp sets `AVPixFmtDescriptor.comp` value.
 func (pfd *AVPixFmtDescriptor) SetComp(v []AVComponentDescriptor) {
 	for i := 0; i < FFMIN(len(v), 4); i++ {
 		pfd.comp[i] = (C.struct_AVComponentDescriptor)(v[i])
 	}
 }
 
-// Custom: GetCompAddr gets `AVPixFmtDescriptor.comp` address.
+// GetCompAddr gets `AVPixFmtDescriptor.comp` address.
 func (pfd *AVPixFmtDescriptor) GetCompAddr() **AVComponentDescriptor {
 	return (**AVComponentDescriptor)(unsafe.Pointer(&pfd.comp))
 }
 
-// Custom: GetAlias gets `AVPixFmtDescriptor.alias` value.
+// GetAlias gets `AVPixFmtDescriptor.alias` value.
 func (pfd *AVPixFmtDescriptor) GetAlias() string {
 	return C.GoString(pfd.alias)
 }

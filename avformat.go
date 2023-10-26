@@ -3,6 +3,14 @@ package ffmpeg
 /*
 #include <libavformat/avformat.h>
 
+typedef int (*av_format_context_open_cb)(struct AVFormatContext *s, AVIOContext **p, const char *url, int flags,
+	const AVIOInterruptCB *int_cb, AVDictionary **options);
+
+typedef int (*av_format_context_io_open_func)(struct AVFormatContext *s, AVIOContext **pb, const char *url,
+	int flags, AVDictionary **options);
+
+typedef void (*av_format_context_io_close_func)(struct AVFormatContext *s, AVIOContext *pb);
+
 int get_av_index_entry_flags(AVIndexEntry *ie) {
 	return ie->flags;
 }
@@ -44,42 +52,42 @@ type AVCodecTag C.struct_AVCodecTag
 // AVProbeData
 type AVProbeData C.struct_AVProbeData
 
-// Custom: GetFilename gets `AVProbeData.filename` value.
+// GetFilename gets `AVProbeData.filename` value.
 func (pd *AVProbeData) GetFilename() string {
 	return C.GoString(pd.filename)
 }
 
-// Custom: GetBuf gets `AVProbeData.buf` value.
+// GetBuf gets `AVProbeData.buf` value.
 func (pd *AVProbeData) GetBuf() *uint8 {
 	return (*uint8)(pd.buf)
 }
 
-// Custom: SetBuf sets `AVProbeData.buf` value.
+// SetBuf sets `AVProbeData.buf` value.
 func (pd *AVProbeData) SetBuf(v *uint8) {
 	pd.buf = (*C.uint8_t)(v)
 }
 
-// Custom: GetBufAddr gets `AVProbeData.buf` address.
+// GetBufAddr gets `AVProbeData.buf` address.
 func (pd *AVProbeData) GetBufAddr() **uint8 {
 	return (**uint8)(unsafe.Pointer(&pd.buf))
 }
 
-// Custom: GetBufSize gets `AVProbeData.buf_size` value.
+// GetBufSize gets `AVProbeData.buf_size` value.
 func (pd *AVProbeData) GetBufSize() int32 {
 	return (int32)(pd.buf_size)
 }
 
-// Custom: SetBufSize sets `AVProbeData.buf_size` value.
+// SetBufSize sets `AVProbeData.buf_size` value.
 func (pd *AVProbeData) SetBufSize(v int32) {
 	pd.buf_size = (C.int)(v)
 }
 
-// Custom: GetBufSizeAddr gets `AVProbeData.buf_size` address.
+// GetBufSizeAddr gets `AVProbeData.buf_size` address.
 func (pd *AVProbeData) GetBufSizeAddr() *int32 {
 	return (*int32)(&pd.buf_size)
 }
 
-// Custom: GetMimeType gets `AVProbeData.mimetype` value.
+// GetMimeType gets `AVProbeData.mimetype` value.
 func (pd *AVProbeData) GetMimeType() string {
 	return C.GoString(pd.mime_type)
 }
@@ -115,97 +123,97 @@ const (
 // AVOutputFormat
 type AVOutputFormat C.struct_AVOutputFormat
 
-// Custom: GetName gets `AVOutputFormat.name` value.
+// GetName gets `AVOutputFormat.name` value.
 func (ofmt *AVOutputFormat) GetName() string {
 	return C.GoString(ofmt.name)
 }
 
-// Custom: GetLongName gets `AVOutputFormat.long_name` value.
+// GetLongName gets `AVOutputFormat.long_name` value.
 func (ofmt *AVOutputFormat) GetLongName() string {
 	return C.GoString(ofmt.long_name)
 }
 
-// Custom: GetMimeType gets `AVOutputFormat.mimetype` value.
+// GetMimeType gets `AVOutputFormat.mimetype` value.
 func (ofmt *AVOutputFormat) GetMimeType() string {
 	return C.GoString(ofmt.mime_type)
 }
 
-// Custom: GetExtensions gets `AVOutputFormat.extensions` value.
+// GetExtensions gets `AVOutputFormat.extensions` value.
 func (ofmt *AVOutputFormat) GetExtensions() string {
 	return C.GoString(ofmt.extensions)
 }
 
-// Custom: GetAudioCodec gets `AVOutputFormat.audio_codec` value.
+// GetAudioCodec gets `AVOutputFormat.audio_codec` value.
 func (ofmt *AVOutputFormat) GetAudioCodec() AVCodecID {
 	return (AVCodecID)(ofmt.audio_codec)
 }
 
-// Custom: SetAudioCodec sets `AVOutputFormat.audio_codec` value.
+// SetAudioCodec sets `AVOutputFormat.audio_codec` value.
 func (ofmt *AVOutputFormat) SetAudioCodec(v AVCodecID) {
 	ofmt.audio_codec = (C.enum_AVCodecID)(v)
 }
 
-// Custom: GetAudioCodecAddr gets `AVOutputFormat.audio_codec` address.
+// GetAudioCodecAddr gets `AVOutputFormat.audio_codec` address.
 func (ofmt *AVOutputFormat) GetAudioCodecAddr() *AVCodecID {
 	return (*AVCodecID)(unsafe.Pointer(&ofmt.audio_codec))
 }
 
-// Custom: GetVideoCodec gets `AVOutputFormat.video_codec` value.
+// GetVideoCodec gets `AVOutputFormat.video_codec` value.
 func (ofmt *AVOutputFormat) GetVideoCodec() AVCodecID {
 	return (AVCodecID)(ofmt.video_codec)
 }
 
-// Custom: SetVideoCodec sets `AVOutputFormat.video_codec` value.
+// SetVideoCodec sets `AVOutputFormat.video_codec` value.
 func (ofmt *AVOutputFormat) SetVideoCodec(v AVCodecID) {
 	ofmt.video_codec = (C.enum_AVCodecID)(v)
 }
 
-// Custom: GetVideoCodecAddr gets `AVOutputFormat.video_codec` address.
+// GetVideoCodecAddr gets `AVOutputFormat.video_codec` address.
 func (ofmt *AVOutputFormat) GetVideoCodecAddr() *AVCodecID {
 	return (*AVCodecID)(unsafe.Pointer(&ofmt.video_codec))
 }
 
-// Custom: GetSubtitleCodec gets `AVOutputFormat.subtitle_codec` value.
+// GetSubtitleCodec gets `AVOutputFormat.subtitle_codec` value.
 func (ofmt *AVOutputFormat) GetSubtitleCodec() AVCodecID {
 	return (AVCodecID)(ofmt.subtitle_codec)
 }
 
-// Custom: SetSubtitleCodec sets `AVOutputFormat.subtitle_codec` value.
+// SetSubtitleCodec sets `AVOutputFormat.subtitle_codec` value.
 func (ofmt *AVOutputFormat) SetSubtitleCodec(v AVCodecID) {
 	ofmt.subtitle_codec = (C.enum_AVCodecID)(v)
 }
 
-// Custom: GetSubtitleCodecAddr gets `AVOutputFormat.subtitle_codec` address.
+// GetSubtitleCodecAddr gets `AVOutputFormat.subtitle_codec` address.
 func (ofmt *AVOutputFormat) GetSubtitleCodecAddr() *AVCodecID {
 	return (*AVCodecID)(unsafe.Pointer(&ofmt.subtitle_codec))
 }
 
-// Custom: GetFlags gets `AVOutputFormat.flags` value.
+// GetFlags gets `AVOutputFormat.flags` value.
 func (ofmt *AVOutputFormat) GetFlags() int32 {
 	return (int32)(ofmt.flags)
 }
 
-// Custom: SetFlags sets `AVOutputFormat.flags` value.
+// SetFlags sets `AVOutputFormat.flags` value.
 func (ofmt *AVOutputFormat) SetFlags(v int32) {
 	ofmt.flags = (C.int)(v)
 }
 
-// Custom: GetFlagsAddr gets `AVOutputFormat.flags` address.
+// GetFlagsAddr gets `AVOutputFormat.flags` address.
 func (ofmt *AVOutputFormat) GetFlagsAddr() *int32 {
 	return (*int32)(&ofmt.flags)
 }
 
-// Custom: GetPrivClass gets `AVOutputFormat.priv_class` value.
+// GetPrivClass gets `AVOutputFormat.priv_class` value.
 func (ofmt *AVOutputFormat) GetPrivClass() *AVClass {
 	return (*AVClass)(ofmt.priv_class)
 }
 
-// Custom: SetPrivClass sets `AVOutputFormat.priv_class` value.
+// SetPrivClass sets `AVOutputFormat.priv_class` value.
 func (ofmt *AVOutputFormat) SetPrivClass(v *AVClass) {
 	ofmt.priv_class = (*C.struct_AVClass)(v)
 }
 
-// Custom: GetPrivClassAddr gets `AVOutputFormat.priv_class` address.
+// GetPrivClassAddr gets `AVOutputFormat.priv_class` address.
 func (ofmt *AVOutputFormat) GetPrivClassAddr() **AVClass {
 	return (**AVClass)(unsafe.Pointer(&ofmt.priv_class))
 }
@@ -213,52 +221,52 @@ func (ofmt *AVOutputFormat) GetPrivClassAddr() **AVClass {
 // AVInputFormat
 type AVInputFormat C.struct_AVInputFormat
 
-// Custom: GetName gets `AVInputFormat.name` value.
+// GetName gets `AVInputFormat.name` value.
 func (ifmt *AVInputFormat) GetName() string {
 	return C.GoString(ifmt.name)
 }
 
-// Custom: GetLongName gets `AVInputFormat.long_name` value.
+// GetLongName gets `AVInputFormat.long_name` value.
 func (ifmt *AVInputFormat) GetLongName() string {
 	return C.GoString(ifmt.long_name)
 }
 
-// Custom: GetFlags gets `AVInputFormat.flags` value.
+// GetFlags gets `AVInputFormat.flags` value.
 func (ifmt *AVInputFormat) GetFlags() int32 {
 	return (int32)(ifmt.flags)
 }
 
-// Custom: SetFlags sets `AVInputFormat.flags` value.
+// SetFlags sets `AVInputFormat.flags` value.
 func (ifmt *AVInputFormat) SetFlags(v int32) {
 	ifmt.flags = (C.int)(v)
 }
 
-// Custom: GetFlagsAddr gets `AVInputFormat.flags` address.
+// GetFlagsAddr gets `AVInputFormat.flags` address.
 func (ifmt *AVInputFormat) GetFlagsAddr() *int32 {
 	return (*int32)(&ifmt.flags)
 }
 
-// Custom: GetExtensions gets `AVInputFormat.extensions` value.
+// GetExtensions gets `AVInputFormat.extensions` value.
 func (ifmt *AVInputFormat) GetExtensions() string {
 	return C.GoString(ifmt.extensions)
 }
 
-// Custom: GetPrivClass gets `AVInputFormat.priv_class` value.
+// GetPrivClass gets `AVInputFormat.priv_class` value.
 func (ifmt *AVInputFormat) GetPrivClass() *AVClass {
 	return (*AVClass)(ifmt.priv_class)
 }
 
-// Custom: SetPrivClass sets `AVInputFormat.priv_class` value.
+// SetPrivClass sets `AVInputFormat.priv_class` value.
 func (ifmt *AVInputFormat) SetPrivClass(v *AVClass) {
 	ifmt.priv_class = (*C.struct_AVClass)(v)
 }
 
-// Custom: GetPrivClassAddr gets `AVInputFormat.priv_class` address.
+// GetPrivClassAddr gets `AVInputFormat.priv_class` address.
 func (ifmt *AVInputFormat) GetPrivClassAddr() **AVClass {
 	return (**AVClass)(unsafe.Pointer(&ifmt.priv_class))
 }
 
-// Custom: GetMimeType gets `AVInputFormat.mimetype` value.
+// GetMimeType gets `AVInputFormat.mimetype` value.
 func (ifmt *AVInputFormat) GetMimeType() string {
 	return C.GoString(ifmt.mime_type)
 }
@@ -278,32 +286,32 @@ const (
 // AVIndexEntry
 type AVIndexEntry C.struct_AVIndexEntry
 
-// Custom: GetPos gets `AVIndexEntry.pos` value.
+// GetPos gets `AVIndexEntry.pos` value.
 func (ie *AVIndexEntry) GetPos() int64 {
 	return (int64)(ie.pos)
 }
 
-// Custom: SetPos sets `AVIndexEntry.pos` value.
+// SetPos sets `AVIndexEntry.pos` value.
 func (ie *AVIndexEntry) SetPos(v int64) {
 	ie.pos = (C.int64_t)(v)
 }
 
-// Custom: GetPosAddr gets `AVIndexEntry.pos` address.
+// GetPosAddr gets `AVIndexEntry.pos` address.
 func (ie *AVIndexEntry) GetPosAddr() *int64 {
 	return (*int64)(&ie.pos)
 }
 
-// Custom: GetTimestamp gets `AVIndexEntry.timestamp` value.
+// GetTimestamp gets `AVIndexEntry.timestamp` value.
 func (ie *AVIndexEntry) GetTimestamp() int64 {
 	return (int64)(ie.timestamp)
 }
 
-// Custom: SetTimestamp sets `AVIndexEntry.timestamp` value.
+// SetTimestamp sets `AVIndexEntry.timestamp` value.
 func (ie *AVIndexEntry) SetTimestamp(v int64) {
 	ie.timestamp = (C.int64_t)(v)
 }
 
-// Custom: GetTimestampAddr gets `AVIndexEntry.timestamp` address.
+// GetTimestampAddr gets `AVIndexEntry.timestamp` address.
 func (ie *AVIndexEntry) GetTimestampAddr() *int64 {
 	return (*int64)(&ie.timestamp)
 }
@@ -313,37 +321,37 @@ const (
 	AVINDEX_DISCARD_FRAME = C.AVINDEX_DISCARD_FRAME
 )
 
-// Custom: GetFlags gets `AVIndexEntry.flags` value.
+// GetFlags gets `AVIndexEntry.flags` value.
 func (ie *AVIndexEntry) GetFlags() int32 {
 	return (int32)(C.get_av_index_entry_flags((*C.struct_AVIndexEntry)(ie)))
 }
 
-// Custom: SetFlags sets `AVIndexEntry.flags` value.
+// SetFlags sets `AVIndexEntry.flags` value.
 func (ie *AVIndexEntry) SetFlags(v int32) {
 	C.set_av_index_entry_flags((*C.struct_AVIndexEntry)(ie), (C.int)(v))
 }
 
-// Custom: GetSize gets `AVIndexEntry.size` value.
+// GetSize gets `AVIndexEntry.size` value.
 func (ie *AVIndexEntry) GetSize() int32 {
 	return (int32)(C.get_av_index_entry_size((*C.struct_AVIndexEntry)(ie)))
 }
 
-// Custom: SetSize sets `AVIndexEntry.size` value.
+// SetSize sets `AVIndexEntry.size` value.
 func (ie *AVIndexEntry) SetSize(v int32) {
 	C.set_av_index_entry_size((*C.struct_AVIndexEntry)(ie), (C.int)(v))
 }
 
-// Custom: GetMinDistance gets `AVIndexEntry.min_distance` value.
+// GetMinDistance gets `AVIndexEntry.min_distance` value.
 func (ie *AVIndexEntry) GetMinDistance() int32 {
 	return (int32)(ie.min_distance)
 }
 
-// Custom: SetMinDistance sets `AVIndexEntry.min_distance` value.
+// SetMinDistance sets `AVIndexEntry.min_distance` value.
 func (ie *AVIndexEntry) SetMinDistance(v int32) {
 	ie.min_distance = (C.int)(v)
 }
 
-// Custom: GetMinDistanceAddr gets `AVIndexEntry.min_distance` address.
+// GetMinDistanceAddr gets `AVIndexEntry.min_distance` address.
 func (ie *AVIndexEntry) GetMinDistanceAddr() *int32 {
 	return (*int32)(&ie.min_distance)
 }
@@ -383,257 +391,263 @@ const (
 // AVStream
 type AVStream C.struct_AVStream
 
-// Custom: GetIndex gets `AVStream.index` value.
+// GetIndex gets `AVStream.index` value.
 func (stm *AVStream) GetIndex() int32 {
 	return (int32)(stm.index)
 }
 
-// Custom: SetIndex sets `AVStream.index` value.
+// SetIndex sets `AVStream.index` value.
 func (stm *AVStream) SetIndex(v int32) {
 	stm.index = (C.int)(v)
 }
 
-// Custom: GetIndexAddr gets `AVStream.index` address.
+// GetIndexAddr gets `AVStream.index` address.
 func (stm *AVStream) GetIndexAddr() *int32 {
 	return (*int32)(&stm.index)
 }
 
-// Custom: GetId gets `AVStream.id` value.
+// GetId gets `AVStream.id` value.
 func (stm *AVStream) GetId() int32 {
 	return (int32)(stm.id)
 }
 
-// Custom: SetId sets `AVStream.id` value.
+// SetId sets `AVStream.id` value.
 func (stm *AVStream) SetId(v int32) {
 	stm.id = (C.int)(v)
 }
 
-// Custom: GetIdAddr gets `AVStream.id` address.
+// GetIdAddr gets `AVStream.id` address.
 func (stm *AVStream) GetIdAddr() *int32 {
 	return (*int32)(&stm.id)
 }
 
-// Custom: GetCodec gets `AVStream.codec` value.
+// Deprecated: No use.
+//
+// GetCodec gets `AVStream.codec` value.
 func (stm *AVStream) GetCodec() *AVCodecContext {
 	return (*AVCodecContext)(stm.codec)
 }
 
-// Custom: SetCodec sets `AVStream.codec` value.
+// Deprecated: No use.
+//
+// SetCodec sets `AVStream.codec` value.
 func (stm *AVStream) SetCodec(v *AVCodecContext) {
 	stm.codec = (*C.struct_AVCodecContext)(v)
 }
 
-// Custom: GetCodecAddr gets `AVStream.codec` address.
+// Deprecated: No use.
+//
+// GetCodecAddr gets `AVStream.codec` address.
 func (stm *AVStream) GetCodecAddr() **AVCodecContext {
 	return (**AVCodecContext)(unsafe.Pointer(&stm.codec))
 }
 
-// Custom: GetPrivData gets `AVStream.priv_data` value.
+// GetPrivData gets `AVStream.priv_data` value.
 func (stm *AVStream) GetPrivData() unsafe.Pointer {
 	return stm.priv_data
 }
 
-// Custom: SetPrivData sets `AVStream.priv_data` value.
+// SetPrivData sets `AVStream.priv_data` value.
 func (stm *AVStream) SetPrivData(v CVoidPointer) {
 	stm.priv_data = VoidPointer(v)
 }
 
-// Custom: GetPrivDataAddr gets `AVStream.priv_data` address.
+// GetPrivDataAddr gets `AVStream.priv_data` address.
 func (stm *AVStream) GetPrivDataAddr() unsafe.Pointer {
 	return (unsafe.Pointer)(&stm.priv_data)
 }
 
-// Custom: GetTimeBase gets `AVStream.time_base` value.
+// GetTimeBase gets `AVStream.time_base` value.
 func (stm *AVStream) GetTimeBase() AVRational {
 	return (AVRational)(stm.time_base)
 }
 
-// Custom: SetTimeBase sets `AVStream.time_base` value.
+// SetTimeBase sets `AVStream.time_base` value.
 func (stm *AVStream) SetTimeBase(v AVRational) {
 	stm.time_base = (C.struct_AVRational)(v)
 }
 
-// Custom: GetTimeBaseAddr gets `AVStream.time_base` address.
+// GetTimeBaseAddr gets `AVStream.time_base` address.
 func (stm *AVStream) GetTimeBaseAddr() *AVRational {
 	return (*AVRational)(&stm.time_base)
 }
 
-// Custom: GetStartTime gets `AVStream.start_time` value.
+// GetStartTime gets `AVStream.start_time` value.
 func (stm *AVStream) GetStartTime() int64 {
 	return (int64)(stm.start_time)
 }
 
-// Custom: SetStartTime sets `AVStream.start_time` value.
+// SetStartTime sets `AVStream.start_time` value.
 func (stm *AVStream) SetStartTime(v int64) {
 	stm.start_time = (C.int64_t)(v)
 }
 
-// Custom: GetStartTimeAddr gets `AVStream.start_time` address.
+// GetStartTimeAddr gets `AVStream.start_time` address.
 func (stm *AVStream) GetStartTimeAddr() *int64 {
 	return (*int64)(&stm.start_time)
 }
 
-// Custom: GetDuration gets `AVStream.duration` value.
+// GetDuration gets `AVStream.duration` value.
 func (stm *AVStream) GetDuration() int64 {
 	return (int64)(stm.duration)
 }
 
-// Custom: SetDuration sets `AVStream.duration` value.
+// SetDuration sets `AVStream.duration` value.
 func (stm *AVStream) SetDuration(v int64) {
 	stm.duration = (C.int64_t)(v)
 }
 
-// Custom: GetDurationAddr gets `AVStream.duration` address.
+// GetDurationAddr gets `AVStream.duration` address.
 func (stm *AVStream) GetDurationAddr() *int64 {
 	return (*int64)(&stm.duration)
 }
 
-// Custom: GetNbFrames gets `AVStream.nb_frames` value.
+// GetNbFrames gets `AVStream.nb_frames` value.
 func (stm *AVStream) GetNbFrames() int64 {
 	return (int64)(stm.nb_frames)
 }
 
-// Custom: SetNbFrames sets `AVStream.nb_frames` value.
+// SetNbFrames sets `AVStream.nb_frames` value.
 func (stm *AVStream) SetNbFrames(v int64) {
 	stm.nb_frames = (C.int64_t)(v)
 }
 
-// Custom: GetNbFramesAddr gets `AVStream.nb_frames` address.
+// GetNbFramesAddr gets `AVStream.nb_frames` address.
 func (stm *AVStream) GetNbFramesAddr() *int64 {
 	return (*int64)(&stm.nb_frames)
 }
 
-// Custom: GetDisposition gets `AVStream.disposition` value.
+// GetDisposition gets `AVStream.disposition` value.
 func (stm *AVStream) GetDisposition() int32 {
 	return (int32)(stm.disposition)
 }
 
-// Custom: SetDisposition sets `AVStream.disposition` value.
+// SetDisposition sets `AVStream.disposition` value.
 func (stm *AVStream) SetDisposition(v int32) {
 	stm.disposition = (C.int)(v)
 }
 
-// Custom: GetDispositionAddr gets `AVStream.disposition` address.
+// GetDispositionAddr gets `AVStream.disposition` address.
 func (stm *AVStream) GetDispositionAddr() *int32 {
 	return (*int32)(&stm.disposition)
 }
 
-// Custom: GetDiscard gets `AVStream.discard` value.
+// GetDiscard gets `AVStream.discard` value.
 func (stm *AVStream) GetDiscard() AVDiscard {
 	return (AVDiscard)(stm.discard)
 }
 
-// Custom: SetDiscard sets `AVStream.discard` value.
+// SetDiscard sets `AVStream.discard` value.
 func (stm *AVStream) SetDiscard(v AVDiscard) {
 	stm.discard = (C.enum_AVDiscard)(v)
 }
 
-// Custom: GetDiscardAddr gets `AVStream.discard` address.
+// GetDiscardAddr gets `AVStream.discard` address.
 func (stm *AVStream) GetDiscardAddr() *AVDiscard {
 	return (*AVDiscard)(&stm.discard)
 }
 
-// Custom: GetSampleAspectRatio gets `AVStream.sample_aspect_ratio` value.
+// GetSampleAspectRatio gets `AVStream.sample_aspect_ratio` value.
 func (stm *AVStream) GetSampleAspectRatio() AVRational {
 	return (AVRational)(stm.sample_aspect_ratio)
 }
 
-// Custom: SetSampleAspectRatio sets `AVStream.sample_aspect_ratio` value.
+// SetSampleAspectRatio sets `AVStream.sample_aspect_ratio` value.
 func (stm *AVStream) SetSampleAspectRatio(v AVRational) {
 	stm.sample_aspect_ratio = (C.struct_AVRational)(v)
 }
 
-// Custom: GetSampleAspectRatioAddr gets `AVStream.sample_aspect_ratio` address.
+// GetSampleAspectRatioAddr gets `AVStream.sample_aspect_ratio` address.
 func (stm *AVStream) GetSampleAspectRatioAddr() *AVRational {
 	return (*AVRational)(&stm.sample_aspect_ratio)
 }
 
-// Custom: GetMetadata gets `AVStream.metadata` value.
+// GetMetadata gets `AVStream.metadata` value.
 func (stm *AVStream) GetMetadata() *AVDictionary {
 	return (*AVDictionary)(stm.metadata)
 }
 
-// Custom: SetMetadata sets `AVStream.metadata` value.
+// SetMetadata sets `AVStream.metadata` value.
 func (stm *AVStream) SetMetadata(v *AVDictionary) {
 	stm.metadata = (*C.struct_AVDictionary)(v)
 }
 
-// Custom: GetMetadataAddr gets `AVStream.metadata` address.
+// GetMetadataAddr gets `AVStream.metadata` address.
 func (stm *AVStream) GetMetadataAddr() **AVDictionary {
 	return (**AVDictionary)(unsafe.Pointer(&stm.metadata))
 }
 
-// Custom: GetAvgFrameRate gets `AVStream.avg_frame_rate` value.
+// GetAvgFrameRate gets `AVStream.avg_frame_rate` value.
 func (stm *AVStream) GetAvgFrameRate() AVRational {
 	return (AVRational)(stm.avg_frame_rate)
 }
 
-// Custom: SetAvgFrameRate sets `AVStream.avg_frame_rate` value.
+// SetAvgFrameRate sets `AVStream.avg_frame_rate` value.
 func (stm *AVStream) SetAvgFrameRate(v AVRational) {
 	stm.avg_frame_rate = (C.struct_AVRational)(v)
 }
 
-// Custom: GetAvgFrameRateAddr gets `AVStream.avg_frame_rate` address.
+// GetAvgFrameRateAddr gets `AVStream.avg_frame_rate` address.
 func (stm *AVStream) GetAvgFrameRateAddr() *AVRational {
 	return (*AVRational)(&stm.avg_frame_rate)
 }
 
-// Custom: GetAttachedPic gets `AVStream.attached_pic` value.
+// GetAttachedPic gets `AVStream.attached_pic` value.
 func (stm *AVStream) GetAttachedPic() AVPacket {
 	return (AVPacket)(stm.attached_pic)
 }
 
-// Custom: SetAttachedPic sets `AVStream.attached_pic` value.
+// SetAttachedPic sets `AVStream.attached_pic` value.
 func (stm *AVStream) SetAttachedPic(v AVPacket) {
 	stm.attached_pic = (C.struct_AVPacket)(v)
 }
 
-// Custom: GetAttachedPicAddr gets `AVStream.attached_pic` address.
+// GetAttachedPicAddr gets `AVStream.attached_pic` address.
 func (stm *AVStream) GetAttachedPicAddr() *AVPacket {
 	return (*AVPacket)(&stm.attached_pic)
 }
 
-// Custom: GetSideData gets `AVStream.side_data` value.
+// GetSideData gets `AVStream.side_data` value.
 func (stm *AVStream) GetSideData() *AVPacketSideData {
 	return (*AVPacketSideData)(stm.side_data)
 }
 
-// Custom: SetSideData sets `AVStream.side_data` value.
+// SetSideData sets `AVStream.side_data` value.
 func (stm *AVStream) SetSideData(v *AVPacketSideData) {
 	stm.side_data = (*C.struct_AVPacketSideData)(v)
 }
 
-// Custom: GetSideDataAddr gets `AVStream.side_data` address.
+// GetSideDataAddr gets `AVStream.side_data` address.
 func (stm *AVStream) GetSideDataAddr() **AVPacketSideData {
 	return (**AVPacketSideData)(unsafe.Pointer(&stm.side_data))
 }
 
-// Custom: GetNbSideData gets `AVStream.nb_side_data` value.
+// GetNbSideData gets `AVStream.nb_side_data` value.
 func (stm *AVStream) GetNbSideData() int32 {
 	return (int32)(stm.nb_side_data)
 }
 
-// Custom: SetNbSideData sets `AVStream.nb_side_data` value.
+// SetNbSideData sets `AVStream.nb_side_data` value.
 func (stm *AVStream) SetNbSideData(v int32) {
 	stm.nb_side_data = (C.int)(v)
 }
 
-// Custom: GetNbSideDataAddr gets `AVStream.nb_side_data` address.
+// GetNbSideDataAddr gets `AVStream.nb_side_data` address.
 func (stm *AVStream) GetNbSideDataAddr() *int32 {
 	return (*int32)(&stm.nb_side_data)
 }
 
-// Custom: GetEventFlags gets `AVStream.event_flags` value.
+// GetEventFlags gets `AVStream.event_flags` value.
 func (stm *AVStream) GetEventFlags() int32 {
 	return (int32)(stm.event_flags)
 }
 
-// Custom: SetEventFlags sets `AVStream.event_flags` value.
+// SetEventFlags sets `AVStream.event_flags` value.
 func (stm *AVStream) SetEventFlags(v int32) {
 	stm.event_flags = (C.int)(v)
 }
 
-// Custom: GetEventFlagsAddr gets `AVStream.event_flags` address.
+// GetEventFlagsAddr gets `AVStream.event_flags` address.
 func (stm *AVStream) GetEventFlagsAddr() *int32 {
 	return (*int32)(&stm.event_flags)
 }
@@ -643,54 +657,71 @@ const (
 	AVSTREAM_EVENT_FLAG_NEW_PACKETS      = int32(C.AVSTREAM_EVENT_FLAG_NEW_PACKETS)
 )
 
-// Custom: GetRFrameRate gets `AVStream.r_frame_rate` value.
+// GetRFrameRate gets `AVStream.r_frame_rate` value.
 func (stm *AVStream) GetRFrameRate() AVRational {
 	return (AVRational)(stm.r_frame_rate)
 }
 
-// Custom: SetRFrameRate sets `AVStream.r_frame_rate` value.
+// SetRFrameRate sets `AVStream.r_frame_rate` value.
 func (stm *AVStream) SetRFrameRate(v AVRational) {
 	stm.r_frame_rate = (C.struct_AVRational)(v)
 }
 
-// Custom: GetRFrameRateAddr gets `AVStream.r_frame_rate` address.
+// GetRFrameRateAddr gets `AVStream.r_frame_rate` address.
 func (stm *AVStream) GetRFrameRateAddr() *AVRational {
 	return (*AVRational)(&stm.r_frame_rate)
 }
 
-// Custom: GetRecommendedEncoderConfiguration gets `AVStream.recommended_encoder_configuration` value.
+// Deprecated: Unused.
+//
+// GetRecommendedEncoderConfiguration gets `AVStream.recommended_encoder_configuration` value.
 func (stm *AVStream) GetRecommendedEncoderConfiguration() string {
 	return C.GoString(stm.recommended_encoder_configuration)
 }
 
-// Custom: GetCodecpar gets `AVStream.codecpar` value.
+// GetCodecpar gets `AVStream.codecpar` value.
 func (stm *AVStream) GetCodecpar() *AVCodecParameters {
 	return (*AVCodecParameters)(stm.codecpar)
 }
 
-// Custom: SetCodecpar sets `AVStream.codecpar` value.
+// SetCodecpar sets `AVStream.codecpar` value.
 func (stm *AVStream) SetCodecpar(v *AVCodecParameters) {
 	stm.codecpar = (*C.struct_AVCodecParameters)(v)
 }
 
-// Custom: GetCodecparAddr gets `AVStream.codecpar` address.
+// GetCodecparAddr gets `AVStream.codecpar` address.
 func (stm *AVStream) GetCodecparAddr() **AVCodecParameters {
 	return (**AVCodecParameters)(unsafe.Pointer(&stm.codecpar))
 }
 
-// Deprecated: No use
+// Deprecated: No use.
+//
+// AvStreamGetRFrameRate
 func AvStreamGetRFrameRate(s *AVStream) AVRational {
 	return (AVRational)(C.av_stream_get_r_frame_rate((*C.struct_AVStream)(s)))
 }
 
-// Deprecated: No use
+// Deprecated: No use.
+//
+// AvStreamSetRFrameRate
 func AvStreamSetRFrameRate(s *AVStream, r AVRational) {
 	C.av_stream_set_r_frame_rate((*C.struct_AVStream)(s), (C.struct_AVRational)(r))
 }
 
-// Deprecated: No use
-func AvStreamGetRecommendedEncoderConfiguration(s *AVStream) *int8 {
-	return (*int8)(C.av_stream_get_recommended_encoder_configuration((*C.struct_AVStream)(s)))
+// Deprecated: No use.
+//
+// AvStreamGetRecommendedEncoderConfiguration
+func AvStreamGetRecommendedEncoderConfiguration(s *AVStream) string {
+	return C.GoString(C.av_stream_get_recommended_encoder_configuration((*C.struct_AVStream)(s)))
+}
+
+// Deprecated: No use.
+//
+// AvStreamSetRecommendedEncoderConfiguration
+func AvStreamSetRecommendedEncoderConfiguration(s *AVStream, configuration string) {
+	configurationPtr, configurationFunc := StringCasting(configuration)
+	defer configurationFunc()
+	C.av_stream_set_recommended_encoder_configuration((*C.struct_AVStream)(s), (*C.char)(configurationPtr))
 }
 
 // AvStreamGetParser
@@ -711,52 +742,52 @@ const (
 // AVProgram
 type AVProgram C.struct_AVProgram
 
-// Custom: GetId gets `AVProgram.id` value.
+// GetId gets `AVProgram.id` value.
 func (pgm *AVProgram) GetId() int32 {
 	return (int32)(pgm.id)
 }
 
-// Custom: SetId sets `AVProgram.id` value.
+// SetId sets `AVProgram.id` value.
 func (pgm *AVProgram) SetId(v int32) {
 	pgm.id = (C.int)(v)
 }
 
-// Custom: GetIdAddr gets `AVProgram.id` address.
+// GetIdAddr gets `AVProgram.id` address.
 func (pgm *AVProgram) GetIdAddr() *int32 {
 	return (*int32)(&pgm.id)
 }
 
-// Custom: GetFlags gets `AVProgram.flags` value.
+// GetFlags gets `AVProgram.flags` value.
 func (pgm *AVProgram) GetFlags() int32 {
 	return (int32)(pgm.flags)
 }
 
-// Custom: SetFlags sets `AVProgram.flags` value.
+// SetFlags sets `AVProgram.flags` value.
 func (pgm *AVProgram) SetFlags(v int32) {
 	pgm.flags = (C.int)(v)
 }
 
-// Custom: GetFlagsAddr gets `AVProgram.flags` address.
+// GetFlagsAddr gets `AVProgram.flags` address.
 func (pgm *AVProgram) GetFlagsAddr() *int32 {
 	return (*int32)(&pgm.flags)
 }
 
-// Custom: GetDiscard gets `AVProgram.discard` value.
+// GetDiscard gets `AVProgram.discard` value.
 func (pgm *AVProgram) GetDiscard() AVDiscard {
 	return (AVDiscard)(pgm.discard)
 }
 
-// Custom: SetDiscard sets `AVProgram.discard` value.
+// SetDiscard sets `AVProgram.discard` value.
 func (pgm *AVProgram) SetDiscard(v AVDiscard) {
 	pgm.discard = (C.enum_AVDiscard)(v)
 }
 
-// Custom: GetDiscardAddr gets `AVProgram.discard` address.
+// GetDiscardAddr gets `AVProgram.discard` address.
 func (pgm *AVProgram) GetDiscardAddr() *AVDiscard {
 	return (*AVDiscard)(unsafe.Pointer(&pgm.discard))
 }
 
-// Custom: GetStreamIndex gets `AVProgram.stream_index` value.
+// GetStreamIndex gets `AVProgram.stream_index` value.
 func (pgm *AVProgram) GetStreamIndex() (v []uint32) {
 	if pgm.stream_index == nil {
 		return v
@@ -764,102 +795,102 @@ func (pgm *AVProgram) GetStreamIndex() (v []uint32) {
 	return unsafe.Slice((*uint32)(unsafe.Pointer(pgm.stream_index)), pgm.nb_stream_indexes)
 }
 
-// Custom: SetStreamIndex sets `AVProgram.stream_index` value.
+// SetStreamIndex sets `AVProgram.stream_index` value.
 func (pgm *AVProgram) SetStreamIndex(v *uint32) {
 	pgm.stream_index = (*C.uint)(v)
 }
 
-// Custom: GetStreamIndexAddr gets `AVProgram.stream_index` address.
+// GetStreamIndexAddr gets `AVProgram.stream_index` address.
 func (pgm *AVProgram) GetStreamIndexAddr() **uint32 {
 	return (**uint32)(unsafe.Pointer(&pgm.stream_index))
 }
 
-// Custom: GetNbStreamIndexes gets `AVProgram.nb_stream_indexes` value.
+// GetNbStreamIndexes gets `AVProgram.nb_stream_indexes` value.
 func (pgm *AVProgram) GetNbStreamIndexes() uint32 {
 	return (uint32)(pgm.nb_stream_indexes)
 }
 
-// Custom: SetNbStreamIndexes sets `AVProgram.nb_stream_indexes` value.
+// SetNbStreamIndexes sets `AVProgram.nb_stream_indexes` value.
 func (pgm *AVProgram) SetNbStreamIndexes(v uint32) {
 	pgm.nb_stream_indexes = (C.uint)(v)
 }
 
-// Custom: GetNbStreamIndexesAddr gets `AVProgram.nb_stream_indexes` address.
+// GetNbStreamIndexesAddr gets `AVProgram.nb_stream_indexes` address.
 func (pgm *AVProgram) GetNbStreamIndexesAddr() *uint32 {
 	return (*uint32)(&pgm.nb_stream_indexes)
 }
 
-// Custom: GetMetadata gets `AVProgram.metadata` value.
+// GetMetadata gets `AVProgram.metadata` value.
 func (pgm *AVProgram) GetMetadata() *AVDictionary {
 	return (*AVDictionary)(pgm.metadata)
 }
 
-// Custom: SetMetadata sets `AVProgram.metadata` value.
+// SetMetadata sets `AVProgram.metadata` value.
 func (pgm *AVProgram) SetMetadata(v *AVDictionary) {
 	pgm.metadata = (*C.struct_AVDictionary)(v)
 }
 
-// Custom: GetMetadataAddr gets `AVProgram.metadata` address.
+// GetMetadataAddr gets `AVProgram.metadata` address.
 func (pgm *AVProgram) GetMetadataAddr() **AVDictionary {
 	return (**AVDictionary)(unsafe.Pointer(&pgm.metadata))
 }
 
-// Custom: GetProgramNum gets `AVProgram.program_num` value.
+// GetProgramNum gets `AVProgram.program_num` value.
 func (pgm *AVProgram) GetProgramNum() int32 {
 	return (int32)(pgm.program_num)
 }
 
-// Custom: SetProgramNum sets `AVProgram.program_num` value.
+// SetProgramNum sets `AVProgram.program_num` value.
 func (pgm *AVProgram) SetProgramNum(v int32) {
 	pgm.program_num = (C.int)(v)
 }
 
-// Custom: GetProgramNumAddr gets `AVProgram.program_num` address.
+// GetProgramNumAddr gets `AVProgram.program_num` address.
 func (pgm *AVProgram) GetProgramNumAddr() *int32 {
 	return (*int32)(&pgm.program_num)
 }
 
-// Custom: GetPmtPid gets `AVProgram.pmt_pid` value.
+// GetPmtPid gets `AVProgram.pmt_pid` value.
 func (pgm *AVProgram) GetPmtPid() int32 {
 	return (int32)(pgm.pmt_pid)
 }
 
-// Custom: SetPmtPid sets `AVProgram.pmt_pid` value.
+// SetPmtPid sets `AVProgram.pmt_pid` value.
 func (pgm *AVProgram) SetPmtPid(v int32) {
 	pgm.pmt_pid = (C.int)(v)
 }
 
-// Custom: GetPmtPidAddr gets `AVProgram.pmt_pid` address.
+// GetPmtPidAddr gets `AVProgram.pmt_pid` address.
 func (pgm *AVProgram) GetPmtPidAddr() *int32 {
 	return (*int32)(&pgm.pmt_pid)
 }
 
-// Custom: GetPcrPid gets `AVProgram.pcr_pid` value.
+// GetPcrPid gets `AVProgram.pcr_pid` value.
 func (pgm *AVProgram) GetPcrPid() int32 {
 	return (int32)(pgm.pcr_pid)
 }
 
-// Custom: SetPcrPid sets `AVProgram.pcr_pid` value.
+// SetPcrPid sets `AVProgram.pcr_pid` value.
 func (pgm *AVProgram) SetPcrPid(v int32) {
 	pgm.pcr_pid = (C.int)(v)
 }
 
-// Custom: GetPcrPidAddr gets `AVProgram.pcr_pid` address.
+// GetPcrPidAddr gets `AVProgram.pcr_pid` address.
 func (pgm *AVProgram) GetPcrPidAddr() *int32 {
 	return (*int32)(&pgm.pcr_pid)
 }
 
-// Custom: GetPmtVersion gets `AVProgram.pmt_version` value.
+// GetPmtVersion gets `AVProgram.pmt_version` value.
 func (pgm *AVProgram) GetPmtVersion() int32 {
 	return (int32)(pgm.pmt_version)
 }
 
-// Custom: SetPmtVersion sets `AVProgram.pmt_version` value.
+// SetPmtVersion sets `AVProgram.pmt_version` value.
 func (pgm *AVProgram) SetPmtVersion(v int32) {
 	pgm.pmt_version = (C.int)(v)
 }
 
-// Custom: GetPmtVersionAddr gets `AVProgram.pmt_version` address.
+// GetPmtVersionAddr gets `AVProgram.pmt_version` address.
 func (pgm *AVProgram) GetPmtVersionAddr() *int32 {
 	return (*int32)(&pgm.pmt_version)
 }
@@ -872,77 +903,77 @@ const (
 // AVChapter
 type AVChapter = C.struct_AVChapter
 
-// Custom: GetId gets `AVChapter.id` value.
+// GetId gets `AVChapter.id` value.
 func (cpt *AVChapter) GetId() int32 {
 	return (int32)(cpt.id)
 }
 
-// Custom: SetId sets `AVChapter.id` value.
+// SetId sets `AVChapter.id` value.
 func (cpt *AVChapter) SetId(v int32) {
 	cpt.id = (C.int)(v)
 }
 
-// Custom: GetIdAddr gets `AVChapter.id` address.
+// GetIdAddr gets `AVChapter.id` address.
 func (cpt *AVChapter) GetIdAddr() *int32 {
 	return (*int32)(&cpt.id)
 }
 
-// Custom: GetTimeBase gets `AVChapter.time_base` value.
+// GetTimeBase gets `AVChapter.time_base` value.
 func (cpt *AVChapter) GetTimeBase() AVRational {
 	return (AVRational)(cpt.time_base)
 }
 
-// Custom: SetTimeBase sets `AVChapter.time_base` value.
+// SetTimeBase sets `AVChapter.time_base` value.
 func (cpt *AVChapter) SetTimeBase(v AVRational) {
 	cpt.time_base = (C.struct_AVRational)(v)
 }
 
-// Custom: GetTimeBaseAddr gets `AVChapter.time_base` address.
+// GetTimeBaseAddr gets `AVChapter.time_base` address.
 func (cpt *AVChapter) GetTimeBaseAddr() *AVRational {
 	return (*AVRational)(&cpt.time_base)
 }
 
-// Custom: GetStart gets `AVChapter.start` value.
+// GetStart gets `AVChapter.start` value.
 func (cpt *AVChapter) GetStart() int64 {
 	return (int64)(cpt.start)
 }
 
-// Custom: SetStart sets `AVChapter.start` value.
+// SetStart sets `AVChapter.start` value.
 func (cpt *AVChapter) SetStart(v int64) {
 	cpt.start = (C.int64_t)(v)
 }
 
-// Custom: GetStartAddr gets `AVChapter.start` address.
+// GetStartAddr gets `AVChapter.start` address.
 func (cpt *AVChapter) GetStartAddr() *int64 {
 	return (*int64)(&cpt.start)
 }
 
-// Custom: GetEnd gets `AVChapter.end` value.
+// GetEnd gets `AVChapter.end` value.
 func (cpt *AVChapter) GetEnd() int64 {
 	return (int64)(cpt.end)
 }
 
-// Custom: SetEnd sets `AVChapter.end` value.
+// SetEnd sets `AVChapter.end` value.
 func (cpt *AVChapter) SetEnd(v int64) {
 	cpt.end = (C.int64_t)(v)
 }
 
-// Custom: GetEndAddr gets `AVChapter.end` address.
+// GetEndAddr gets `AVChapter.end` address.
 func (cpt *AVChapter) GetEndAddr() *int64 {
 	return (*int64)(&cpt.end)
 }
 
-// Custom: GetMetadata gets `AVChapter.metadata` value.
+// GetMetadata gets `AVChapter.metadata` value.
 func (cpt *AVChapter) GetMetadata() *AVDictionary {
 	return (*AVDictionary)(cpt.metadata)
 }
 
-// Custom: SetMetadata sets `AVChapter.metadata` value.
+// SetMetadata sets `AVChapter.metadata` value.
 func (cpt *AVChapter) SetMetadata(v *AVDictionary) {
 	cpt.metadata = (*C.struct_AVDictionary)(v)
 }
 
-// Custom: GetMetadataAddr gets `AVChapter.metadata` address.
+// GetMetadataAddr gets `AVChapter.metadata` address.
 func (cpt *AVChapter) GetMetadataAddr() **AVDictionary {
 	return (**AVDictionary)(unsafe.Pointer(&cpt.metadata))
 }
@@ -966,112 +997,112 @@ type AVFormatInternal C.struct_AVFormatInternal
 // Format I/O context.
 type AVFormatContext C.struct_AVFormatContext
 
-// Custom: GetAvClass gets `AVFormatContext.av_class` value.
+// GetAvClass gets `AVFormatContext.av_class` value.
 func (s *AVFormatContext) GetAvClass() *AVClass {
 	return (*AVClass)(s.av_class)
 }
 
-// Custom: SetAvClass sets `AVFormatContext.av_class` value.
+// SetAvClass sets `AVFormatContext.av_class` value.
 func (s *AVFormatContext) SetAvClass(v *AVClass) {
 	s.av_class = (*C.struct_AVClass)(v)
 }
 
-// Custom: GetAvClassAddr gets `AVFormatContext.av_class` address.
+// GetAvClassAddr gets `AVFormatContext.av_class` address.
 func (s *AVFormatContext) GetAvClassAddr() **AVClass {
 	return (**AVClass)(unsafe.Pointer(&s.av_class))
 }
 
-// Custom: GetIformat gets `AVFormatContext.iformat` value.
+// GetIformat gets `AVFormatContext.iformat` value.
 func (s *AVFormatContext) GetIformat() *AVInputFormat {
 	return (*AVInputFormat)(s.iformat)
 }
 
-// Custom: SetIformat sets `AVFormatContext.iformat` value.
+// SetIformat sets `AVFormatContext.iformat` value.
 func (s *AVFormatContext) SetIformat(v *AVInputFormat) {
 	s.iformat = (*C.struct_AVInputFormat)(v)
 }
 
-// Custom: GetIformatAddr gets `AVFormatContext.iformat` address.
+// GetIformatAddr gets `AVFormatContext.iformat` address.
 func (s *AVFormatContext) GetIformatAddr() **AVInputFormat {
 	return (**AVInputFormat)(unsafe.Pointer(&s.iformat))
 }
 
-// Custom: GetOformat gets `AVFormatContext.oformat` value.
+// GetOformat gets `AVFormatContext.oformat` value.
 func (s *AVFormatContext) GetOformat() *AVOutputFormat {
 	return (*AVOutputFormat)(s.oformat)
 }
 
-// Custom: SetOformat sets `AVFormatContext.oformat` value.
+// SetOformat sets `AVFormatContext.oformat` value.
 func (s *AVFormatContext) SetOformat(v *AVOutputFormat) {
 	s.oformat = (*C.struct_AVOutputFormat)(v)
 }
 
-// Custom: GetOformatAddr gets `AVFormatContext.oformat` address.
+// GetOformatAddr gets `AVFormatContext.oformat` address.
 func (s *AVFormatContext) GetOformatAddr() **AVOutputFormat {
 	return (**AVOutputFormat)(unsafe.Pointer(&s.oformat))
 }
 
-// Custom: GetPrivData gets `AVFormatContext.priv_data` value.
+// GetPrivData gets `AVFormatContext.priv_data` value.
 func (s *AVFormatContext) GetPrivData() unsafe.Pointer {
 	return s.priv_data
 }
 
-// Custom: SetPrivData sets `AVFormatContext.priv_data` value.
+// SetPrivData sets `AVFormatContext.priv_data` value.
 func (s *AVFormatContext) SetPrivData(v CVoidPointer) {
 	s.priv_data = VoidPointer(v)
 }
 
-// Custom: GetPrivDataAddr gets `AVFormatContext.priv_data` address.
+// GetPrivDataAddr gets `AVFormatContext.priv_data` address.
 func (s *AVFormatContext) GetPrivDataAddr() unsafe.Pointer {
 	return (unsafe.Pointer)(&s.priv_data)
 }
 
-// Custom: GetPb gets `AVFormatContext.pb` value.
+// GetPb gets `AVFormatContext.pb` value.
 func (s *AVFormatContext) GetPb() *AVIOContext {
 	return (*AVIOContext)(s.pb)
 }
 
-// Custom: SetPb sets `AVFormatContext.pb` value.
+// SetPb sets `AVFormatContext.pb` value.
 func (s *AVFormatContext) SetPb(v *AVIOContext) {
 	s.pb = (*C.struct_AVIOContext)(v)
 }
 
-// Custom: GetPbAddr gets `AVFormatContext.pb` address.
+// GetPbAddr gets `AVFormatContext.pb` address.
 func (s *AVFormatContext) GetPbAddr() **AVIOContext {
 	return (**AVIOContext)(unsafe.Pointer(&s.pb))
 }
 
-// Custom: GetCtxFlags gets `AVFormatContext.ctx_flags` value.
+// GetCtxFlags gets `AVFormatContext.ctx_flags` value.
 func (s *AVFormatContext) GetCtxFlags() int32 {
 	return (int32)(s.ctx_flags)
 }
 
-// Custom: SetCtxFlags sets `AVFormatContext.ctx_flags` value.
+// SetCtxFlags sets `AVFormatContext.ctx_flags` value.
 func (s *AVFormatContext) SetCtxFlags(v int32) {
 	s.ctx_flags = (C.int)(v)
 }
 
-// Custom: GetCtxFlagsAddr gets `AVFormatContext.ctx_flags` address.
+// GetCtxFlagsAddr gets `AVFormatContext.ctx_flags` address.
 func (s *AVFormatContext) GetCtxFlagsAddr() *int32 {
 	return (*int32)(&s.ctx_flags)
 }
 
-// Custom: GetNbStreams gets `AVFormatContext.nb_streams` value.
+// GetNbStreams gets `AVFormatContext.nb_streams` value.
 func (s *AVFormatContext) GetNbStreams() uint32 {
 	return (uint32)(s.nb_streams)
 }
 
-// Custom: SetNbStreams sets `AVFormatContext.nb_streams` value.
+// SetNbStreams sets `AVFormatContext.nb_streams` value.
 func (s *AVFormatContext) SetNbStreams(v uint32) {
 	s.nb_streams = (C.uint)(v)
 }
 
-// Custom: GetNbStreamsAddr gets `AVFormatContext.nb_streams` address.
+// GetNbStreamsAddr gets `AVFormatContext.nb_streams` address.
 func (s *AVFormatContext) GetNbStreamsAddr() *uint32 {
 	return (*uint32)(&s.nb_streams)
 }
 
-// Custom: GetStreams gets `AVFormatContext.streams` value.
+// GetStreams gets `AVFormatContext.streams` value.
 func (s *AVFormatContext) GetStreams() (v []*AVStream) {
 	if s.streams == nil {
 		return v
@@ -1079,27 +1110,29 @@ func (s *AVFormatContext) GetStreams() (v []*AVStream) {
 	return unsafe.Slice((**AVStream)(unsafe.Pointer(s.streams)), s.nb_streams)
 }
 
-// Custom: SetStreams sets `AVFormatContext.streams` value.
+// SetStreams sets `AVFormatContext.streams` value.
 func (s *AVFormatContext) SetStreams(v **AVStream) {
 	s.streams = (**C.struct_AVStream)(unsafe.Pointer(v))
 }
 
-// Custom: GetStreamsAddr gets `AVFormatContext.streams` address.
+// GetStreamsAddr gets `AVFormatContext.streams` address.
 func (s *AVFormatContext) GetStreamsAddr() ***AVStream {
 	return (***AVStream)(unsafe.Pointer(&s.streams))
 }
 
-// Custom: GetFilename gets `AVFormatContext.filename` value.
+// Deprecated: Use url instead.
+//
+// GetFilename gets `AVFormatContext.filename` value.
 func (s *AVFormatContext) GetFilename() string {
 	return C.GoString((*C.char)(&s.filename[0]))
 }
 
-// Custom: GetUrl gets `AVFormatContext.url` value.
+// GetUrl gets `AVFormatContext.url` value.
 func (s *AVFormatContext) GetUrl() string {
 	return C.GoString(s.url)
 }
 
-// Custom: SetUrl sets `AVFormatContext.url` value.
+// SetUrl sets `AVFormatContext.url` value.
 func (s *AVFormatContext) SetUrl(v string) {
 	vPtr, _ := StringCasting(v)
 	if s.url != nil {
@@ -1108,172 +1141,172 @@ func (s *AVFormatContext) SetUrl(v string) {
 	s.url = (*C.char)(vPtr)
 }
 
-// Custom: GetStartTime gets `AVFormatContext.start_time` value.
+// GetStartTime gets `AVFormatContext.start_time` value.
 func (s *AVFormatContext) GetStartTime() int64 {
 	return (int64)(s.start_time)
 }
 
-// Custom: SetStartTime sets `AVFormatContext.start_time` value.
+// SetStartTime sets `AVFormatContext.start_time` value.
 func (s *AVFormatContext) SetStartTime(v int64) {
 	s.start_time = (C.int64_t)(v)
 }
 
-// Custom: GetStartTimeAddr gets `AVFormatContext.start_time` address.
+// GetStartTimeAddr gets `AVFormatContext.start_time` address.
 func (s *AVFormatContext) GetStartTimeAddr() *int64 {
 	return (*int64)(&s.start_time)
 }
 
-// Custom: GetDuration gets `AVFormatContext.duration` value.
+// GetDuration gets `AVFormatContext.duration` value.
 func (s *AVFormatContext) GetDuration() int64 {
 	return (int64)(s.duration)
 }
 
-// Custom: SetDuration sets `AVFormatContext.duration` value.
+// SetDuration sets `AVFormatContext.duration` value.
 func (s *AVFormatContext) SetDuration(v int64) {
 	s.duration = (C.int64_t)(v)
 }
 
-// Custom: GetDurationAddr gets `AVFormatContext.duration` address.
+// GetDurationAddr gets `AVFormatContext.duration` address.
 func (s *AVFormatContext) GetDurationAddr() *int64 {
 	return (*int64)(&s.duration)
 }
 
-// Custom: GetBitRate gets `AVFormatContext.bit_rate` value.
+// GetBitRate gets `AVFormatContext.bit_rate` value.
 func (s *AVFormatContext) GetBitRate() int64 {
 	return (int64)(s.bit_rate)
 }
 
-// Custom: SetBitRate sets `AVFormatContext.bit_rate` value.
+// SetBitRate sets `AVFormatContext.bit_rate` value.
 func (s *AVFormatContext) SetBitRate(v int64) {
 	s.bit_rate = (C.int64_t)(v)
 }
 
-// Custom: GetBitRateAddr gets `AVFormatContext.bit_rate` address.
+// GetBitRateAddr gets `AVFormatContext.bit_rate` address.
 func (s *AVFormatContext) GetBitRateAddr() *int64 {
 	return (*int64)(&s.bit_rate)
 }
 
-// Custom: GetPacketSize gets `AVFormatContext.packet_size` value.
+// GetPacketSize gets `AVFormatContext.packet_size` value.
 func (s *AVFormatContext) GetPacketSize() uint32 {
 	return (uint32)(s.packet_size)
 }
 
-// Custom: SetPacketSize sets `AVFormatContext.packet_size` value.
+// SetPacketSize sets `AVFormatContext.packet_size` value.
 func (s *AVFormatContext) SetPacketSize(v uint32) {
 	s.packet_size = (C.uint)(v)
 }
 
-// Custom: GetPacketSizeAddr gets `AVFormatContext.packet_size` address.
+// GetPacketSizeAddr gets `AVFormatContext.packet_size` address.
 func (s *AVFormatContext) GetPacketSizeAddr() *uint32 {
 	return (*uint32)(&s.packet_size)
 }
 
-// Custom: GetMaxDelay gets `AVFormatContext.max_delay` value.
+// GetMaxDelay gets `AVFormatContext.max_delay` value.
 func (s *AVFormatContext) GetMaxDelay() int32 {
 	return (int32)(s.max_delay)
 }
 
-// Custom: SetMaxDelay sets `AVFormatContext.max_delay` value.
+// SetMaxDelay sets `AVFormatContext.max_delay` value.
 func (s *AVFormatContext) SetMaxDelay(v int32) {
 	s.max_delay = (C.int)(v)
 }
 
-// Custom: GetMaxDelayAddr gets `AVFormatContext.max_delay` address.
+// GetMaxDelayAddr gets `AVFormatContext.max_delay` address.
 func (s *AVFormatContext) GetMaxDelayAddr() *int32 {
 	return (*int32)(&s.max_delay)
 }
 
-// Custom: GetFlags gets `AVFormatContext.flags` value.
+// GetFlags gets `AVFormatContext.flags` value.
 func (s *AVFormatContext) GetFlags() int32 {
 	return (int32)(s.flags)
 }
 
-// Custom: SetFlags sets `AVFormatContext.flags` value.
+// SetFlags sets `AVFormatContext.flags` value.
 func (s *AVFormatContext) SetFlags(v int32) {
 	s.flags = (C.int)(v)
 }
 
-// Custom: GetFlagsAddr gets `AVFormatContext.flags` address.
+// GetFlagsAddr gets `AVFormatContext.flags` address.
 func (s *AVFormatContext) GetFlagsAddr() *int32 {
 	return (*int32)(&s.flags)
 }
 
-// Custom: GetProbesize gets `AVFormatContext.probesize` value.
+// GetProbesize gets `AVFormatContext.probesize` value.
 func (s *AVFormatContext) GetProbesize() int64 {
 	return (int64)(s.probesize)
 }
 
-// Custom: SetProbesize sets `AVFormatContext.probesize` value.
+// SetProbesize sets `AVFormatContext.probesize` value.
 func (s *AVFormatContext) SetProbesize(v int64) {
 	s.probesize = (C.int64_t)(v)
 }
 
-// Custom: GetProbesizeAddr gets `AVFormatContext.probesize` address.
+// GetProbesizeAddr gets `AVFormatContext.probesize` address.
 func (s *AVFormatContext) GetProbesizeAddr() *int64 {
 	return (*int64)(&s.probesize)
 }
 
-// Custom: GetMaxAnalyzeDuration gets `AVFormatContext.max_analyze_duration` value.
+// GetMaxAnalyzeDuration gets `AVFormatContext.max_analyze_duration` value.
 func (s *AVFormatContext) GetMaxAnalyzeDuration() int64 {
 	return (int64)(s.max_analyze_duration)
 }
 
-// Custom: SetMaxAnalyzeDuration sets `AVFormatContext.max_analyze_duration` value.
+// SetMaxAnalyzeDuration sets `AVFormatContext.max_analyze_duration` value.
 func (s *AVFormatContext) SetMaxAnalyzeDuration(v int64) {
 	s.max_analyze_duration = (C.int64_t)(v)
 }
 
-// Custom: GetMaxAnalyzeDurationAddr gets `AVFormatContext.max_analyze_duration` address.
+// GetMaxAnalyzeDurationAddr gets `AVFormatContext.max_analyze_duration` address.
 func (s *AVFormatContext) GetMaxAnalyzeDurationAddr() *int64 {
 	return (*int64)(&s.max_analyze_duration)
 }
 
-// Custom: GetKey gets `AVFormatContext.key` value.
+// GetKey gets `AVFormatContext.key` value.
 func (s *AVFormatContext) GetKey() *uint8 {
 	return (*uint8)(s.key)
 }
 
-// Custom: SetKey sets `AVFormatContext.key` value.
+// SetKey sets `AVFormatContext.key` value.
 func (s *AVFormatContext) SetKey(v *uint8) {
 	s.key = (*C.uint8_t)(v)
 }
 
-// Custom: GetKeyAddr gets `AVFormatContext.key` address.
+// GetKeyAddr gets `AVFormatContext.key` address.
 func (s *AVFormatContext) GetKeyAddr() **uint8 {
 	return (**uint8)(unsafe.Pointer(&s.key))
 }
 
-// Custom: GetKeylen gets `AVFormatContext.keylen` value.
+// GetKeylen gets `AVFormatContext.keylen` value.
 func (s *AVFormatContext) GetKeylen() int32 {
 	return (int32)(s.keylen)
 }
 
-// Custom: SetKeylen sets `AVFormatContext.keylen` value.
+// SetKeylen sets `AVFormatContext.keylen` value.
 func (s *AVFormatContext) SetKeylen(v int32) {
 	s.keylen = (C.int)(v)
 }
 
-// Custom: GetKeylenAddr gets `AVFormatContext.keylen` address.
+// GetKeylenAddr gets `AVFormatContext.keylen` address.
 func (s *AVFormatContext) GetKeylenAddr() *int32 {
 	return (*int32)(&s.keylen)
 }
 
-// Custom: GetNbPrograms gets `AVFormatContext.nb_programs` value.
+// GetNbPrograms gets `AVFormatContext.nb_programs` value.
 func (s *AVFormatContext) GetNbPrograms() uint32 {
 	return (uint32)(s.nb_programs)
 }
 
-// Custom: SetNbPrograms sets `AVFormatContext.nb_programs` value.
+// SetNbPrograms sets `AVFormatContext.nb_programs` value.
 func (s *AVFormatContext) SetNbPrograms(v uint32) {
 	s.nb_programs = (C.uint)(v)
 }
 
-// Custom: GetNbProgramsAddr gets `AVFormatContext.nb_programs` address.
+// GetNbProgramsAddr gets `AVFormatContext.nb_programs` address.
 func (s *AVFormatContext) GetNbProgramsAddr() *uint32 {
 	return (*uint32)(&s.nb_programs)
 }
 
-// Custom: GetPrograms gets `AVFormatContext.programs` value.
+// GetPrograms gets `AVFormatContext.programs` value.
 func (s *AVFormatContext) GetPrograms() (v []*AVProgram) {
 	if s.programs == nil {
 		return v
@@ -1281,107 +1314,107 @@ func (s *AVFormatContext) GetPrograms() (v []*AVProgram) {
 	return unsafe.Slice((**AVProgram)(unsafe.Pointer(s.programs)), s.nb_programs)
 }
 
-// Custom: SetPrograms sets `AVFormatContext.programs` value.
+// SetPrograms sets `AVFormatContext.programs` value.
 func (s *AVFormatContext) SetPrograms(v **AVProgram) {
 	s.programs = (**C.struct_AVProgram)(unsafe.Pointer(v))
 }
 
-// Custom: GetProgramsAddr gets `AVFormatContext.programs` address.
+// GetProgramsAddr gets `AVFormatContext.programs` address.
 func (s *AVFormatContext) GetProgramsAddr() ***AVProgram {
 	return (***AVProgram)(unsafe.Pointer(&s.programs))
 }
 
-// Custom: GetVideoCodecId gets `AVFormatContext.video_codec_id` value.
+// GetVideoCodecId gets `AVFormatContext.video_codec_id` value.
 func (s *AVFormatContext) GetVideoCodecId() AVCodecID {
 	return (AVCodecID)(s.video_codec_id)
 }
 
-// Custom: SetVideoCodecId sets `AVFormatContext.video_codec_id` value.
+// SetVideoCodecId sets `AVFormatContext.video_codec_id` value.
 func (s *AVFormatContext) SetVideoCodecId(v AVCodecID) {
 	s.video_codec_id = (C.enum_AVCodecID)(v)
 }
 
-// Custom: GetVideoCodecIdAddr gets `AVFormatContext.video_codec_id` address.
+// GetVideoCodecIdAddr gets `AVFormatContext.video_codec_id` address.
 func (s *AVFormatContext) GetVideoCodecIdAddr() *AVCodecID {
 	return (*AVCodecID)(unsafe.Pointer(&s.video_codec_id))
 }
 
-// Custom: GetAudioCodecId gets `AVFormatContext.audio_codec_id` value.
+// GetAudioCodecId gets `AVFormatContext.audio_codec_id` value.
 func (s *AVFormatContext) GetAudioCodecId() AVCodecID {
 	return (AVCodecID)(s.audio_codec_id)
 }
 
-// Custom: SetAudioCodecId sets `AVFormatContext.audio_codec_id` value.
+// SetAudioCodecId sets `AVFormatContext.audio_codec_id` value.
 func (s *AVFormatContext) SetAudioCodecId(v AVCodecID) {
 	s.audio_codec_id = (C.enum_AVCodecID)(v)
 }
 
-// Custom: GetAudioCodecIdAddr gets `AVFormatContext.audio_codec_id` address.
+// GetAudioCodecIdAddr gets `AVFormatContext.audio_codec_id` address.
 func (s *AVFormatContext) GetAudioCodecIdAddr() *AVCodecID {
 	return (*AVCodecID)(unsafe.Pointer(&s.audio_codec_id))
 }
 
-// Custom: GetSubtitleCodecId gets `AVFormatContext.subtitle_codec_id` value.
+// GetSubtitleCodecId gets `AVFormatContext.subtitle_codec_id` value.
 func (s *AVFormatContext) GetSubtitleCodecId() AVCodecID {
 	return (AVCodecID)(s.subtitle_codec_id)
 }
 
-// Custom: SetSubtitleCodecId sets `AVFormatContext.subtitle_codec_id` value.
+// SetSubtitleCodecId sets `AVFormatContext.subtitle_codec_id` value.
 func (s *AVFormatContext) SetSubtitleCodecId(v AVCodecID) {
 	s.subtitle_codec_id = (C.enum_AVCodecID)(v)
 }
 
-// Custom: GetSubtitleCodecIdAddr gets `AVFormatContext.subtitle_codec_id` address.
+// GetSubtitleCodecIdAddr gets `AVFormatContext.subtitle_codec_id` address.
 func (s *AVFormatContext) GetSubtitleCodecIdAddr() *AVCodecID {
 	return (*AVCodecID)(unsafe.Pointer(&s.subtitle_codec_id))
 }
 
-// Custom: GetMaxIndexSize gets `AVFormatContext.max_index_size` value.
+// GetMaxIndexSize gets `AVFormatContext.max_index_size` value.
 func (s *AVFormatContext) GetMaxIndexSize() uint32 {
 	return (uint32)(s.max_index_size)
 }
 
-// Custom: SetMaxIndexSize sets `AVFormatContext.max_index_size` value.
+// SetMaxIndexSize sets `AVFormatContext.max_index_size` value.
 func (s *AVFormatContext) SetMaxIndexSize(v uint32) {
 	s.max_index_size = (C.uint)(v)
 }
 
-// Custom: GetMaxIndexSizeAddr gets `AVFormatContext.max_index_size` address.
+// GetMaxIndexSizeAddr gets `AVFormatContext.max_index_size` address.
 func (s *AVFormatContext) GetMaxIndexSizeAddr() *uint32 {
 	return (*uint32)(&s.max_index_size)
 }
 
-// Custom: GetMaxPictureBuffer gets `AVFormatContext.max_picture_buffer` value.
+// GetMaxPictureBuffer gets `AVFormatContext.max_picture_buffer` value.
 func (s *AVFormatContext) GetMaxPictureBuffer() uint32 {
 	return (uint32)(s.max_picture_buffer)
 }
 
-// Custom: SetMaxPictureBuffer sets `AVFormatContext.max_picture_buffer` value.
+// SetMaxPictureBuffer sets `AVFormatContext.max_picture_buffer` value.
 func (s *AVFormatContext) SetMaxPictureBuffer(v uint32) {
 	s.max_picture_buffer = (C.uint)(v)
 }
 
-// Custom: GetMaxPictureBufferAddr gets `AVFormatContext.max_picture_buffer` address.
+// GetMaxPictureBufferAddr gets `AVFormatContext.max_picture_buffer` address.
 func (s *AVFormatContext) GetMaxPictureBufferAddr() *uint32 {
 	return (*uint32)(&s.max_picture_buffer)
 }
 
-// Custom: GetNbChapters gets `AVFormatContext.nb_chapters` value.
+// GetNbChapters gets `AVFormatContext.nb_chapters` value.
 func (s *AVFormatContext) GetNbChapters() uint32 {
 	return (uint32)(s.nb_chapters)
 }
 
-// Custom: SetNbChapters sets `AVFormatContext.nb_chapters` value.
+// SetNbChapters sets `AVFormatContext.nb_chapters` value.
 func (s *AVFormatContext) SetNbChapters(v uint32) {
 	s.nb_chapters = (C.uint)(v)
 }
 
-// Custom: GetNbChaptersAddr gets `AVFormatContext.nb_chapters` address.
+// GetNbChaptersAddr gets `AVFormatContext.nb_chapters` address.
 func (s *AVFormatContext) GetNbChaptersAddr() *uint32 {
 	return (*uint32)(&s.nb_chapters)
 }
 
-// Custom: GetChapters gets `AVFormatContext.chapters` value.
+// GetChapters gets `AVFormatContext.chapters` value.
 func (s *AVFormatContext) GetChapters() (v []*AVChapter) {
 	if s.chapters == nil {
 		return v
@@ -1389,602 +1422,664 @@ func (s *AVFormatContext) GetChapters() (v []*AVChapter) {
 	return unsafe.Slice((**AVChapter)(unsafe.Pointer(s.chapters)), s.nb_chapters)
 }
 
-// Custom: SetChapters sets `AVFormatContext.chapters` value.
+// SetChapters sets `AVFormatContext.chapters` value.
 func (s *AVFormatContext) SetChapters(v **AVChapter) {
 	s.chapters = (**C.struct_AVChapter)(v)
 }
 
-// Custom: GetChaptersAddr gets `AVFormatContext.chapters` address.
+// GetChaptersAddr gets `AVFormatContext.chapters` address.
 func (s *AVFormatContext) GetChaptersAddr() ***AVChapter {
 	return (***AVChapter)(&s.chapters)
 }
 
-// Custom: GetMetadata gets `AVFormatContext.metadata` value.
+// GetMetadata gets `AVFormatContext.metadata` value.
 func (s *AVFormatContext) GetMetadata() *AVDictionary {
 	return (*AVDictionary)(s.metadata)
 }
 
-// Custom: SetMetadata sets `AVFormatContext.metadata` value.
+// SetMetadata sets `AVFormatContext.metadata` value.
 func (s *AVFormatContext) SetMetadata(v *AVDictionary) {
 	s.metadata = (*C.struct_AVDictionary)(v)
 }
 
-// Custom: GetMetadataAddr gets `AVFormatContext.metadata` address.
+// GetMetadataAddr gets `AVFormatContext.metadata` address.
 func (s *AVFormatContext) GetMetadataAddr() **AVDictionary {
 	return (**AVDictionary)(unsafe.Pointer(&s.metadata))
 }
 
-// Custom: GetStartTimeRealtime gets `AVFormatContext.start_time_realtime` value.
+// GetStartTimeRealtime gets `AVFormatContext.start_time_realtime` value.
 func (s *AVFormatContext) GetStartTimeRealtime() int64 {
 	return (int64)(s.start_time_realtime)
 }
 
-// Custom: SetStartTimeRealtime sets `AVFormatContext.start_time_realtime` value.
+// SetStartTimeRealtime sets `AVFormatContext.start_time_realtime` value.
 func (s *AVFormatContext) SetStartTimeRealtime(v int64) {
 	s.start_time_realtime = (C.int64_t)(v)
 }
 
-// Custom: GetStartTimeRealtimeAddr gets `AVFormatContext.start_time_realtime` address.
+// GetStartTimeRealtimeAddr gets `AVFormatContext.start_time_realtime` address.
 func (s *AVFormatContext) GetStartTimeRealtimeAddr() *int64 {
 	return (*int64)(&s.start_time_realtime)
 }
 
-// Custom: GetFpsProbeSize gets `AVFormatContext.fps_probe_size` value.
+// GetFpsProbeSize gets `AVFormatContext.fps_probe_size` value.
 func (s *AVFormatContext) GetFpsProbeSize() int32 {
 	return (int32)(s.fps_probe_size)
 }
 
-// Custom: SetFpsProbeSize sets `AVFormatContext.fps_probe_size` value.
+// SetFpsProbeSize sets `AVFormatContext.fps_probe_size` value.
 func (s *AVFormatContext) SetFpsProbeSize(v int32) {
 	s.fps_probe_size = (C.int)(v)
 }
 
-// Custom: GetFpsProbeSizeAddr gets `AVFormatContext.fps_probe_size` address.
+// GetFpsProbeSizeAddr gets `AVFormatContext.fps_probe_size` address.
 func (s *AVFormatContext) GetFpsProbeSizeAddr() *int32 {
 	return (*int32)(&s.fps_probe_size)
 }
 
-// Custom: GetErrorRecognition gets `AVFormatContext.error_recognition` value.
+// GetErrorRecognition gets `AVFormatContext.error_recognition` value.
 func (s *AVFormatContext) GetErrorRecognition() int32 {
 	return (int32)(s.error_recognition)
 }
 
-// Custom: SetErrorRecognition sets `AVFormatContext.error_recognition` value.
+// SetErrorRecognition sets `AVFormatContext.error_recognition` value.
 func (s *AVFormatContext) SetErrorRecognition(v int32) {
 	s.error_recognition = (C.int)(v)
 }
 
-// Custom: GetErrorRecognitionAddr gets `AVFormatContext.error_recognition` address.
+// GetErrorRecognitionAddr gets `AVFormatContext.error_recognition` address.
 func (s *AVFormatContext) GetErrorRecognitionAddr() *int32 {
 	return (*int32)(&s.error_recognition)
 }
 
-// Custom: GetInterruptCallback gets `AVFormatContext.interrupt_callback` value.
+// GetInterruptCallback gets `AVFormatContext.interrupt_callback` value.
 func (s *AVFormatContext) GetInterruptCallback() AVIOInterruptCB {
 	return (AVIOInterruptCB)(s.interrupt_callback)
 }
 
-// Custom: SetInterruptCallback sets `AVFormatContext.interrupt_callback` value.
+// SetInterruptCallback sets `AVFormatContext.interrupt_callback` value.
 func (s *AVFormatContext) SetInterruptCallback(v AVIOInterruptCB) {
 	s.interrupt_callback = (C.AVIOInterruptCB)(v)
 }
 
-// Custom: GetInterruptCallbackAddr gets `AVFormatContext.interrupt_callback` address.
+// GetInterruptCallbackAddr gets `AVFormatContext.interrupt_callback` address.
 func (s *AVFormatContext) GetInterruptCallbackAddr() *AVIOInterruptCB {
 	return (*AVIOInterruptCB)(&s.interrupt_callback)
 }
 
-// Custom: GetDebug gets `AVFormatContext.debug` value.
+// GetDebug gets `AVFormatContext.debug` value.
 func (s *AVFormatContext) GetDebug() int32 {
 	return (int32)(s.debug)
 }
 
-// Custom: SetDebug sets `AVFormatContext.debug` value.
+// SetDebug sets `AVFormatContext.debug` value.
 func (s *AVFormatContext) SetDebug(v int32) {
 	s.debug = (C.int)(v)
 }
 
-// Custom: GetDebugAddr gets `AVFormatContext.debug` address.
+// GetDebugAddr gets `AVFormatContext.debug` address.
 func (s *AVFormatContext) GetDebugAddr() *int32 {
 	return (*int32)(&s.debug)
 }
 
-// Custom: GetMaxInterleaveDelta gets `AVFormatContext.max_interleave_delta` value.
+// GetMaxInterleaveDelta gets `AVFormatContext.max_interleave_delta` value.
 func (s *AVFormatContext) GetMaxInterleaveDelta() int64 {
 	return (int64)(s.max_interleave_delta)
 }
 
-// Custom: SetMaxInterleaveDelta sets `AVFormatContext.max_interleave_delta` value.
+// SetMaxInterleaveDelta sets `AVFormatContext.max_interleave_delta` value.
 func (s *AVFormatContext) SetMaxInterleaveDelta(v int64) {
 	s.max_interleave_delta = (C.int64_t)(v)
 }
 
-// Custom: GetMaxInterleaveDeltaAddr gets `AVFormatContext.max_interleave_delta` address.
+// GetMaxInterleaveDeltaAddr gets `AVFormatContext.max_interleave_delta` address.
 func (s *AVFormatContext) GetMaxInterleaveDeltaAddr() *int64 {
 	return (*int64)(&s.max_interleave_delta)
 }
 
-// Custom: GetStrictStdCompliance gets `AVFormatContext.strict_std_compliance` value.
+// GetStrictStdCompliance gets `AVFormatContext.strict_std_compliance` value.
 func (s *AVFormatContext) GetStrictStdCompliance() int32 {
 	return (int32)(s.strict_std_compliance)
 }
 
-// Custom: SetStrictStdCompliance sets `AVFormatContext.strict_std_compliance` value.
+// SetStrictStdCompliance sets `AVFormatContext.strict_std_compliance` value.
 func (s *AVFormatContext) SetStrictStdCompliance(v int32) {
 	s.strict_std_compliance = (C.int)(v)
 }
 
-// Custom: GetStrictStdComplianceAddr gets `AVFormatContext.strict_std_compliance` address.
+// GetStrictStdComplianceAddr gets `AVFormatContext.strict_std_compliance` address.
 func (s *AVFormatContext) GetStrictStdComplianceAddr() *int32 {
 	return (*int32)(&s.strict_std_compliance)
 }
 
-// Custom: GetEventFlags gets `AVFormatContext.event_flags` value.
+// GetEventFlags gets `AVFormatContext.event_flags` value.
 func (s *AVFormatContext) GetEventFlags() int32 {
 	return (int32)(s.event_flags)
 }
 
-// Custom: SetEventFlags sets `AVFormatContext.event_flags` value.
+// SetEventFlags sets `AVFormatContext.event_flags` value.
 func (s *AVFormatContext) SetEventFlags(v int32) {
 	s.event_flags = (C.int)(v)
 }
 
-// Custom: GetEventFlagsAddr gets `AVFormatContext.event_flags` address.
+// GetEventFlagsAddr gets `AVFormatContext.event_flags` address.
 func (s *AVFormatContext) GetEventFlagsAddr() *int32 {
 	return (*int32)(&s.event_flags)
 }
 
-// Custom: GetMaxTsProbe gets `AVFormatContext.max_ts_probe` value.
+// GetMaxTsProbe gets `AVFormatContext.max_ts_probe` value.
 func (s *AVFormatContext) GetMaxTsProbe() int32 {
 	return (int32)(s.max_ts_probe)
 }
 
-// Custom: SetMaxTsProbe sets `AVFormatContext.max_ts_probe` value.
+// SetMaxTsProbe sets `AVFormatContext.max_ts_probe` value.
 func (s *AVFormatContext) SetMaxTsProbe(v int32) {
 	s.max_ts_probe = (C.int)(v)
 }
 
-// Custom: GetMaxTsProbeAddr gets `AVFormatContext.max_ts_probe` address.
+// GetMaxTsProbeAddr gets `AVFormatContext.max_ts_probe` address.
 func (s *AVFormatContext) GetMaxTsProbeAddr() *int32 {
 	return (*int32)(&s.max_ts_probe)
 }
 
-// Custom: GetAvoidNegativeTs gets `AVFormatContext.avoid_negative_ts` value.
+// GetAvoidNegativeTs gets `AVFormatContext.avoid_negative_ts` value.
 func (s *AVFormatContext) GetAvoidNegativeTs() int32 {
 	return (int32)(s.avoid_negative_ts)
 }
 
-// Custom: SetAvoidNegativeTs sets `AVFormatContext.avoid_negative_ts` value.
+// SetAvoidNegativeTs sets `AVFormatContext.avoid_negative_ts` value.
 func (s *AVFormatContext) SetAvoidNegativeTs(v int32) {
 	s.avoid_negative_ts = (C.int)(v)
 }
 
-// Custom: GetAvoidNegativeTsAddr gets `AVFormatContext.avoid_negative_ts` address.
+// GetAvoidNegativeTsAddr gets `AVFormatContext.avoid_negative_ts` address.
 func (s *AVFormatContext) GetAvoidNegativeTsAddr() *int32 {
 	return (*int32)(&s.avoid_negative_ts)
 }
 
-// Custom: GetTsId gets `AVFormatContext.ts_id` value.
+// GetTsId gets `AVFormatContext.ts_id` value.
 func (s *AVFormatContext) GetTsId() int32 {
 	return (int32)(s.ts_id)
 }
 
-// Custom: SetTsId sets `AVFormatContext.ts_id` value.
+// SetTsId sets `AVFormatContext.ts_id` value.
 func (s *AVFormatContext) SetTsId(v int32) {
 	s.ts_id = (C.int)(v)
 }
 
-// Custom: GetTsIdAddr gets `AVFormatContext.ts_id` address.
+// GetTsIdAddr gets `AVFormatContext.ts_id` address.
 func (s *AVFormatContext) GetTsIdAddr() *int32 {
 	return (*int32)(&s.ts_id)
 }
 
-// Custom: GetAudioPreload gets `AVFormatContext.audio_preload` value.
+// GetAudioPreload gets `AVFormatContext.audio_preload` value.
 func (s *AVFormatContext) GetAudioPreload() int32 {
 	return (int32)(s.audio_preload)
 }
 
-// Custom: SetAudioPreload sets `AVFormatContext.audio_preload` value.
+// SetAudioPreload sets `AVFormatContext.audio_preload` value.
 func (s *AVFormatContext) SetAudioPreload(v int32) {
 	s.audio_preload = (C.int)(v)
 }
 
-// Custom: GetAudioPreloadAddr gets `AVFormatContext.audio_preload` address.
+// GetAudioPreloadAddr gets `AVFormatContext.audio_preload` address.
 func (s *AVFormatContext) GetAudioPreloadAddr() *int32 {
 	return (*int32)(&s.audio_preload)
 }
 
-// Custom: GetMaxChunkDuration gets `AVFormatContext.max_chunk_duration` value.
+// GetMaxChunkDuration gets `AVFormatContext.max_chunk_duration` value.
 func (s *AVFormatContext) GetMaxChunkDuration() int32 {
 	return (int32)(s.max_chunk_duration)
 }
 
-// Custom: SetMaxChunkDuration sets `AVFormatContext.max_chunk_duration` value.
+// SetMaxChunkDuration sets `AVFormatContext.max_chunk_duration` value.
 func (s *AVFormatContext) SetMaxChunkDuration(v int32) {
 	s.max_chunk_duration = (C.int)(v)
 }
 
-// Custom: GetMaxChunkDurationAddr gets `AVFormatContext.max_chunk_duration` address.
+// GetMaxChunkDurationAddr gets `AVFormatContext.max_chunk_duration` address.
 func (s *AVFormatContext) GetMaxChunkDurationAddr() *int32 {
 	return (*int32)(&s.max_chunk_duration)
 }
 
-// Custom: GetMaxChunkSize gets `AVFormatContext.max_chunk_size` value.
+// GetMaxChunkSize gets `AVFormatContext.max_chunk_size` value.
 func (s *AVFormatContext) GetMaxChunkSize() int32 {
 	return (int32)(s.max_chunk_size)
 }
 
-// Custom: SetMaxChunkSize sets `AVFormatContext.max_chunk_size` value.
+// SetMaxChunkSize sets `AVFormatContext.max_chunk_size` value.
 func (s *AVFormatContext) SetMaxChunkSize(v int32) {
 	s.max_chunk_size = (C.int)(v)
 }
 
-// Custom: GetMaxChunkSizeAddr gets `AVFormatContext.max_chunk_size` address.
+// GetMaxChunkSizeAddr gets `AVFormatContext.max_chunk_size` address.
 func (s *AVFormatContext) GetMaxChunkSizeAddr() *int32 {
 	return (*int32)(&s.max_chunk_size)
 }
 
-// Custom: GetUseWallclockAsTimestamps gets `AVFormatContext.use_wallclock_as_timestamps` value.
+// GetUseWallclockAsTimestamps gets `AVFormatContext.use_wallclock_as_timestamps` value.
 func (s *AVFormatContext) GetUseWallclockAsTimestamps() int32 {
 	return (int32)(s.use_wallclock_as_timestamps)
 }
 
-// Custom: SetUseWallclockAsTimestamps sets `AVFormatContext.use_wallclock_as_timestamps` value.
+// SetUseWallclockAsTimestamps sets `AVFormatContext.use_wallclock_as_timestamps` value.
 func (s *AVFormatContext) SetUseWallclockAsTimestamps(v int32) {
 	s.use_wallclock_as_timestamps = (C.int)(v)
 }
 
-// Custom: GetUseWallclockAsTimestampsAddr gets `AVFormatContext.use_wallclock_as_timestamps` address.
+// GetUseWallclockAsTimestampsAddr gets `AVFormatContext.use_wallclock_as_timestamps` address.
 func (s *AVFormatContext) GetUseWallclockAsTimestampsAddr() *int32 {
 	return (*int32)(&s.use_wallclock_as_timestamps)
 }
 
-// Custom: GetAvioFlags gets `AVFormatContext.avio_flags` value.
+// GetAvioFlags gets `AVFormatContext.avio_flags` value.
 func (s *AVFormatContext) GetAvioFlags() int32 {
 	return (int32)(s.avio_flags)
 }
 
-// Custom: SetAvioFlags sets `AVFormatContext.avio_flags` value.
+// SetAvioFlags sets `AVFormatContext.avio_flags` value.
 func (s *AVFormatContext) SetAvioFlags(v int32) {
 	s.avio_flags = (C.int)(v)
 }
 
-// Custom: GetAvioFlagsAddr gets `AVFormatContext.avio_flags` address.
+// GetAvioFlagsAddr gets `AVFormatContext.avio_flags` address.
 func (s *AVFormatContext) GetAvioFlagsAddr() *int32 {
 	return (*int32)(&s.avio_flags)
 }
 
-// Custom: GetDurationEstimationMethod gets `AVFormatContext.duration_estimation_method` value.
+// GetDurationEstimationMethod gets `AVFormatContext.duration_estimation_method` value.
 func (s *AVFormatContext) GetDurationEstimationMethod() AVDurationEstimationMethod {
 	return (AVDurationEstimationMethod)(s.duration_estimation_method)
 }
 
-// Custom: SetDurationEstimationMethod sets `AVFormatContext.duration_estimation_method` value.
+// SetDurationEstimationMethod sets `AVFormatContext.duration_estimation_method` value.
 func (s *AVFormatContext) SetDurationEstimationMethod(v AVDurationEstimationMethod) {
 	s.duration_estimation_method = (C.enum_AVDurationEstimationMethod)(v)
 }
 
-// Custom: GetDurationEstimationMethodAddr gets `AVFormatContext.duration_estimation_method` address.
+// GetDurationEstimationMethodAddr gets `AVFormatContext.duration_estimation_method` address.
 func (s *AVFormatContext) GetDurationEstimationMethodAddr() *AVDurationEstimationMethod {
 	return (*AVDurationEstimationMethod)(unsafe.Pointer(&s.duration_estimation_method))
 }
 
-// Custom: GetSkipInitialBytes gets `AVFormatContext.skip_initial_bytes` value.
+// GetSkipInitialBytes gets `AVFormatContext.skip_initial_bytes` value.
 func (s *AVFormatContext) GetSkipInitialBytes() int64 {
 	return (int64)(s.skip_initial_bytes)
 }
 
-// Custom: SetSkipInitialBytes sets `AVFormatContext.skip_initial_bytes` value.
+// SetSkipInitialBytes sets `AVFormatContext.skip_initial_bytes` value.
 func (s *AVFormatContext) SetSkipInitialBytes(v int64) {
 	s.skip_initial_bytes = (C.int64_t)(v)
 }
 
-// Custom: GetSkipInitialBytesAddr gets `AVFormatContext.skip_initial_bytes` address.
+// GetSkipInitialBytesAddr gets `AVFormatContext.skip_initial_bytes` address.
 func (s *AVFormatContext) GetSkipInitialBytesAddr() *int64 {
 	return (*int64)(&s.skip_initial_bytes)
 }
 
-// Custom: GetCorrectTsOverflow gets `AVFormatContext.correct_ts_overflow` value.
+// GetCorrectTsOverflow gets `AVFormatContext.correct_ts_overflow` value.
 func (s *AVFormatContext) GetCorrectTsOverflow() uint32 {
 	return (uint32)(s.correct_ts_overflow)
 }
 
-// Custom: SetCorrectTsOverflow sets `AVFormatContext.correct_ts_overflow` value.
+// SetCorrectTsOverflow sets `AVFormatContext.correct_ts_overflow` value.
 func (s *AVFormatContext) SetCorrectTsOverflow(v uint32) {
 	s.correct_ts_overflow = (C.uint)(v)
 }
 
-// Custom: GetCorrectTsOverflowAddr gets `AVFormatContext.correct_ts_overflow` address.
+// GetCorrectTsOverflowAddr gets `AVFormatContext.correct_ts_overflow` address.
 func (s *AVFormatContext) GetCorrectTsOverflowAddr() *uint32 {
 	return (*uint32)(&s.correct_ts_overflow)
 }
 
-// Custom: GetSeek2any gets `AVFormatContext.seek2any` value.
+// GetSeek2any gets `AVFormatContext.seek2any` value.
 func (s *AVFormatContext) GetSeek2any() int32 {
 	return (int32)(s.seek2any)
 }
 
-// Custom: SetSeek2any sets `AVFormatContext.seek2any` value.
+// SetSeek2any sets `AVFormatContext.seek2any` value.
 func (s *AVFormatContext) SetSeek2any(v int32) {
 	s.seek2any = (C.int)(v)
 }
 
-// Custom: GetSeek2anyAddr gets `AVFormatContext.seek2any` address.
+// GetSeek2anyAddr gets `AVFormatContext.seek2any` address.
 func (s *AVFormatContext) GetSeek2anyAddr() *int32 {
 	return (*int32)(&s.seek2any)
 }
 
-// Custom: GetFlushPackets gets `AVFormatContext.flush_packets` value.
+// GetFlushPackets gets `AVFormatContext.flush_packets` value.
 func (s *AVFormatContext) GetFlushPackets() int32 {
 	return (int32)(s.flush_packets)
 }
 
-// Custom: SetFlushPackets sets `AVFormatContext.flush_packets` value.
+// SetFlushPackets sets `AVFormatContext.flush_packets` value.
 func (s *AVFormatContext) SetFlushPackets(v int32) {
 	s.flush_packets = (C.int)(v)
 }
 
-// Custom: GetFlushPacketsAddr gets `AVFormatContext.flush_packets` address.
+// GetFlushPacketsAddr gets `AVFormatContext.flush_packets` address.
 func (s *AVFormatContext) GetFlushPacketsAddr() *int32 {
 	return (*int32)(&s.flush_packets)
 }
 
-// Custom: GetProbeScore gets `AVFormatContext.probe_score` value.
+// GetProbeScore gets `AVFormatContext.probe_score` value.
 func (s *AVFormatContext) GetProbeScore() int32 {
 	return (int32)(s.probe_score)
 }
 
-// Custom: SetProbeScore sets `AVFormatContext.probe_score` value.
+// SetProbeScore sets `AVFormatContext.probe_score` value.
 func (s *AVFormatContext) SetProbeScore(v int32) {
 	s.probe_score = (C.int)(v)
 }
 
-// Custom: GetProbeScoreAddr gets `AVFormatContext.probe_score` address.
+// GetProbeScoreAddr gets `AVFormatContext.probe_score` address.
 func (s *AVFormatContext) GetProbeScoreAddr() *int32 {
 	return (*int32)(&s.probe_score)
 }
 
-// Custom: GetFormatProbesize gets `AVFormatContext.format_probesize` value.
+// GetFormatProbesize gets `AVFormatContext.format_probesize` value.
 func (s *AVFormatContext) GetFormatProbesize() int32 {
 	return (int32)(s.format_probesize)
 }
 
-// Custom: SetFormatProbesize sets `AVFormatContext.format_probesize` value.
+// SetFormatProbesize sets `AVFormatContext.format_probesize` value.
 func (s *AVFormatContext) SetFormatProbesize(v int32) {
 	s.format_probesize = (C.int)(v)
 }
 
-// Custom: GetFormatProbesizeAddr gets `AVFormatContext.format_probesize` address.
+// GetFormatProbesizeAddr gets `AVFormatContext.format_probesize` address.
 func (s *AVFormatContext) GetFormatProbesizeAddr() *int32 {
 	return (*int32)(&s.format_probesize)
 }
 
-// Custom: GetCodecWhitelist gets `AVFormatContext.codec_whitelist` value.
+// GetCodecWhitelist gets `AVFormatContext.codec_whitelist` value.
 func (s *AVFormatContext) GetCodecWhitelist() string {
 	return C.GoString(s.codec_whitelist)
 }
 
-// Custom: GetFormatWhitelist gets `AVFormatContext.format_whitelist` value.
+// GetFormatWhitelist gets `AVFormatContext.format_whitelist` value.
 func (s *AVFormatContext) GetFormatWhitelist() string {
 	return C.GoString(s.format_whitelist)
 }
 
-// Custom: GetInternal gets `AVFormatContext.internal` value.
+// GetInternal gets `AVFormatContext.internal` value.
 func (s *AVFormatContext) GetInternal() *AVFormatInternal {
 	return (*AVFormatInternal)(s.internal)
 }
 
-// Custom: SetInternal sets `AVFormatContext.internal` value.
+// SetInternal sets `AVFormatContext.internal` value.
 func (s *AVFormatContext) SetInternal(v *AVFormatInternal) {
 	s.internal = (*C.struct_AVFormatInternal)(v)
 }
 
-// Custom: GetInternalAddr gets `AVFormatContext.internal` address.
+// GetInternalAddr gets `AVFormatContext.internal` address.
 func (s *AVFormatContext) GetInternalAddr() **AVFormatInternal {
 	return (**AVFormatInternal)(unsafe.Pointer(&s.internal))
 }
 
-// Custom: GetIoRepositioned gets `AVFormatContext.io_repositioned` value.
+// GetIoRepositioned gets `AVFormatContext.io_repositioned` value.
 func (s *AVFormatContext) GetIoRepositioned() int32 {
 	return (int32)(s.io_repositioned)
 }
 
-// Custom: SetIoRepositioned sets `AVFormatContext.io_repositioned` value.
+// SetIoRepositioned sets `AVFormatContext.io_repositioned` value.
 func (s *AVFormatContext) SetIoRepositioned(v int32) {
 	s.io_repositioned = (C.int)(v)
 }
 
-// Custom: GetIoRepositionedAddr gets `AVFormatContext.io_repositioned` address.
+// GetIoRepositionedAddr gets `AVFormatContext.io_repositioned` address.
 func (s *AVFormatContext) GetIoRepositionedAddr() *int32 {
 	return (*int32)(&s.io_repositioned)
 }
 
-// Custom: GetVideoCodec gets `AVFormatContext.video_codec` value.
+// GetVideoCodec gets `AVFormatContext.video_codec` value.
 func (s *AVFormatContext) GetVideoCodec() *AVCodec {
 	return (*AVCodec)(s.video_codec)
 }
 
-// Custom: SetVideoCodec sets `AVFormatContext.video_codec` value.
+// SetVideoCodec sets `AVFormatContext.video_codec` value.
 func (s *AVFormatContext) SetVideoCodec(v *AVCodec) {
 	s.video_codec = (*C.struct_AVCodec)(v)
 }
 
-// Custom: GetVideoCodecAddr gets `AVFormatContext.video_codec` address.
+// GetVideoCodecAddr gets `AVFormatContext.video_codec` address.
 func (s *AVFormatContext) GetVideoCodecAddr() **AVCodec {
 	return (**AVCodec)(unsafe.Pointer(&s.video_codec))
 }
 
-// Custom: GetAudioCodec gets `AVFormatContext.audio_codec` value.
+// GetAudioCodec gets `AVFormatContext.audio_codec` value.
 func (s *AVFormatContext) GetAudioCodec() *AVCodec {
 	return (*AVCodec)(s.audio_codec)
 }
 
-// Custom: SetAudioCodec sets `AVFormatContext.audio_codec` value.
+// SetAudioCodec sets `AVFormatContext.audio_codec` value.
 func (s *AVFormatContext) SetAudioCodec(v *AVCodec) {
 	s.audio_codec = (*C.struct_AVCodec)(v)
 }
 
-// Custom: GetAudioCodecAddr gets `AVFormatContext.audio_codec` address.
+// GetAudioCodecAddr gets `AVFormatContext.audio_codec` address.
 func (s *AVFormatContext) GetAudioCodecAddr() **AVCodec {
 	return (**AVCodec)(unsafe.Pointer(&s.audio_codec))
 }
 
-// Custom: GetSubtitleCodec gets `AVFormatContext.subtitle_codec` value.
+// GetSubtitleCodec gets `AVFormatContext.subtitle_codec` value.
 func (s *AVFormatContext) GetSubtitleCodec() *AVCodec {
 	return (*AVCodec)(s.subtitle_codec)
 }
 
-// Custom: SetSubtitleCodec sets `AVFormatContext.subtitle_codec` value.
+// SetSubtitleCodec sets `AVFormatContext.subtitle_codec` value.
 func (s *AVFormatContext) SetSubtitleCodec(v *AVCodec) {
 	s.subtitle_codec = (*C.struct_AVCodec)(v)
 }
 
-// Custom: GetSubtitleCodecAddr gets `AVFormatContext.subtitle_codec` address.
+// GetSubtitleCodecAddr gets `AVFormatContext.subtitle_codec` address.
 func (s *AVFormatContext) GetSubtitleCodecAddr() **AVCodec {
 	return (**AVCodec)(unsafe.Pointer(&s.subtitle_codec))
 }
 
-// Custom: GetDataCodec gets `AVFormatContext.data_codec` value.
+// GetDataCodec gets `AVFormatContext.data_codec` value.
 func (s *AVFormatContext) GetDataCodec() *AVCodec {
 	return (*AVCodec)(s.data_codec)
 }
 
-// Custom: SetDataCodec sets `AVFormatContext.data_codec` value.
+// SetDataCodec sets `AVFormatContext.data_codec` value.
 func (s *AVFormatContext) SetDataCodec(v *AVCodec) {
 	s.data_codec = (*C.struct_AVCodec)(v)
 }
 
-// Custom: GetDataCodecAddr gets `AVFormatContext.data_codec` address.
+// GetDataCodecAddr gets `AVFormatContext.data_codec` address.
 func (s *AVFormatContext) GetDataCodecAddr() **AVCodec {
 	return (**AVCodec)(unsafe.Pointer(&s.data_codec))
 }
 
-// Custom: GetMetadataHeaderPadding gets `AVFormatContext.metadata_header_padding` value.
+// GetMetadataHeaderPadding gets `AVFormatContext.metadata_header_padding` value.
 func (s *AVFormatContext) GetMetadataHeaderPadding() int32 {
 	return (int32)(s.metadata_header_padding)
 }
 
-// Custom: SetMetadataHeaderPadding sets `AVFormatContext.metadata_header_padding` value.
+// SetMetadataHeaderPadding sets `AVFormatContext.metadata_header_padding` value.
 func (s *AVFormatContext) SetMetadataHeaderPadding(v int32) {
 	s.metadata_header_padding = (C.int)(v)
 }
 
-// Custom: GetMetadataHeaderPaddingAddr gets `AVFormatContext.metadata_header_padding` address.
+// GetMetadataHeaderPaddingAddr gets `AVFormatContext.metadata_header_padding` address.
 func (s *AVFormatContext) GetMetadataHeaderPaddingAddr() *int32 {
 	return (*int32)(&s.metadata_header_padding)
 }
 
-// Custom: GetOpaque gets `AVFormatContext.opaque` value.
+// GetOpaque gets `AVFormatContext.opaque` value.
 func (s *AVFormatContext) GetOpaque() unsafe.Pointer {
 	return s.opaque
 }
 
-// Custom: SetOpaque sets `AVFormatContext.opaque` value.
+// SetOpaque sets `AVFormatContext.opaque` value.
 func (s *AVFormatContext) SetOpaque(v CVoidPointer) {
 	s.opaque = VoidPointer(v)
 }
 
-// Custom: GetOpaqueAddr gets `AVFormatContext.opaque` address.
+// GetOpaqueAddr gets `AVFormatContext.opaque` address.
 func (s *AVFormatContext) GetOpaqueAddr() unsafe.Pointer {
 	return (unsafe.Pointer)(&s.opaque)
 }
 
-// Custom: GetOutputTsOffset gets `AVFormatContext.output_ts_offset` value.
+// GetOutputTsOffset gets `AVFormatContext.output_ts_offset` value.
 func (s *AVFormatContext) GetOutputTsOffset() int64 {
 	return (int64)(s.output_ts_offset)
 }
 
-// Custom: SetOutputTsOffset sets `AVFormatContext.output_ts_offset` value.
+// SetOutputTsOffset sets `AVFormatContext.output_ts_offset` value.
 func (s *AVFormatContext) SetOutputTsOffset(v int64) {
 	s.output_ts_offset = (C.int64_t)(v)
 }
 
-// Custom: GetOutputTsOffsetAddr gets `AVFormatContext.output_ts_offset` address.
+// GetOutputTsOffsetAddr gets `AVFormatContext.output_ts_offset` address.
 func (s *AVFormatContext) GetOutputTsOffsetAddr() *int64 {
 	return (*int64)(&s.output_ts_offset)
 }
 
-// Custom: GetDumpSeparator gets `AVFormatContext.dump_separator` value.
+// GetDumpSeparator gets `AVFormatContext.dump_separator` value.
 func (s *AVFormatContext) GetDumpSeparator() *uint8 {
 	return (*uint8)(s.dump_separator)
 }
 
-// Custom: SetDumpSeparator sets `AVFormatContext.dump_separator` value.
+// SetDumpSeparator sets `AVFormatContext.dump_separator` value.
 func (s *AVFormatContext) SetDumpSeparator(v *uint8) {
 	s.dump_separator = (*C.uint8_t)(v)
 }
 
-// Custom: GetDumpSeparatorAddr gets `AVFormatContext.dump_separator` address.
+// GetDumpSeparatorAddr gets `AVFormatContext.dump_separator` address.
 func (s *AVFormatContext) GetDumpSeparatorAddr() **uint8 {
 	return (**uint8)(unsafe.Pointer(&s.dump_separator))
 }
 
-// Custom: GetDataCodecId gets `AVFormatContext.data_codec_id` value.
+// GetDataCodecId gets `AVFormatContext.data_codec_id` value.
 func (s *AVFormatContext) GetDataCodecId() AVCodecID {
 	return (AVCodecID)(s.data_codec_id)
 }
 
-// Custom: SetDataCodecId sets `AVFormatContext.data_codec_id` value.
+// SetDataCodecId sets `AVFormatContext.data_codec_id` value.
 func (s *AVFormatContext) SetDataCodecId(v AVCodecID) {
 	s.data_codec_id = (C.enum_AVCodecID)(v)
 }
 
-// Custom: GetDataCodecIdAddr gets `AVFormatContext.data_codec_id` address.
+// GetDataCodecIdAddr gets `AVFormatContext.data_codec_id` address.
 func (s *AVFormatContext) GetDataCodecIdAddr() *AVCodecID {
 	return (*AVCodecID)(unsafe.Pointer(&s.data_codec_id))
 }
 
-// Custom: GetProtocolWhitelist gets `AVFormatContext.protocol_whitelist` value.
+// typedef int (*av_format_context_open_cb)(struct AVFormatContext *s, AVIOContext **p, const char *url, int flags,
+// const AVIOInterruptCB *int_cb, AVDictionary **options);
+type AvFormatContextOpenCb = C.av_format_context_open_cb
+
+// Deprecated: Use io_open and io_close.
+//
+// GetOpenCb gets `AVFormatContext.open_cb` value.
+func (s *AVFormatContext) GetOpenCb() AvFormatContextOpenCb {
+	return (AvFormatContextOpenCb)(s.open_cb)
+}
+
+// Deprecated: Use io_open and io_close.
+//
+// SetOpenCb sets `AVFormatContext.open_cb` value.
+func (s *AVFormatContext) SetOpenCb(v AvFormatContextOpenCb) {
+	s.open_cb = (C.av_format_context_open_cb)(v)
+}
+
+// Deprecated: Use io_open and io_close.
+//
+// GetOpenCbAddr gets `AVFormatContext.open_cb` address.
+func (s *AVFormatContext) GetOpenCbAddr() *AvFormatContextOpenCb {
+	return (*AvFormatContextOpenCb)(&s.open_cb)
+}
+
+// GetProtocolWhitelist gets `AVFormatContext.protocol_whitelist` value.
 func (s *AVFormatContext) GetProtocolWhitelist() string {
 	return C.GoString(s.protocol_whitelist)
 }
 
-// Custom: GetProtocolBlacklist gets `AVFormatContext.protocol_blacklist` value.
+// typedef int (*av_format_context_io_open_func)(struct AVFormatContext *s, AVIOContext **pb, const char *url,
+// int flags, AVDictionary **options);
+type AvFormatContextIoOpenFunc = C.av_format_context_io_open_func
+
+// typedef void (*av_format_context_io_close_func)(struct AVFormatContext *s, AVIOContext *pb);
+type AvFormatContextIoCloseFunc = C.av_format_context_io_close_func
+
+// GetIoOpen gets `AVFormatContext.io_open` value.
+func (s *AVFormatContext) GetIoOpen() AvFormatContextIoOpenFunc {
+	return (AvFormatContextIoOpenFunc)(s.io_open)
+}
+
+// SetIoOpen sets `AVFormatContext.io_open` value.
+func (s *AVFormatContext) SetIoOpen(v AvFormatContextIoOpenFunc) {
+	s.io_open = (C.av_format_context_io_open_func)(v)
+}
+
+// GetIoOpenAddr gets `AVFormatContext.io_open` address.
+func (s *AVFormatContext) GetIoOpenAddr() *AvFormatContextIoOpenFunc {
+	return (*AvFormatContextIoOpenFunc)(&s.io_open)
+}
+
+// GetIoClose gets `AVFormatContext.io_close` value.
+func (s *AVFormatContext) GetIoClose() AvFormatContextIoCloseFunc {
+	return (AvFormatContextIoCloseFunc)(s.io_close)
+}
+
+// SetIoClose sets `AVFormatContext.io_close` value.
+func (s *AVFormatContext) SetIoClose(v AvFormatContextIoCloseFunc) {
+	s.io_close = (C.av_format_context_io_close_func)(v)
+}
+
+// GetIoCloseAddr gets `AVFormatContext.io_close` address.
+func (s *AVFormatContext) GetIoCloseAddr() *AvFormatContextIoCloseFunc {
+	return (*AvFormatContextIoCloseFunc)(&s.io_close)
+}
+
+// GetProtocolBlacklist gets `AVFormatContext.protocol_blacklist` value.
 func (s *AVFormatContext) GetProtocolBlacklist() string {
 	return C.GoString(s.protocol_blacklist)
 }
 
-// Custom: GetMaxStreams gets `AVFormatContext.max_streams` value.
+// GetMaxStreams gets `AVFormatContext.max_streams` value.
 func (s *AVFormatContext) GetMaxStreams() int32 {
 	return (int32)(s.max_streams)
 }
 
-// Custom: SetMaxStreams sets `AVFormatContext.max_streams` value.
+// SetMaxStreams sets `AVFormatContext.max_streams` value.
 func (s *AVFormatContext) SetMaxStreams(v int32) {
 	s.max_streams = (C.int)(v)
 }
 
-// Custom: GetMaxStreamsAddr gets `AVFormatContext.max_streams` address.
+// GetMaxStreamsAddr gets `AVFormatContext.max_streams` address.
 func (s *AVFormatContext) GetMaxStreamsAddr() *int32 {
 	return (*int32)(&s.max_streams)
 }
 
-// Custom: GetSkipEstimateDurationFromPts gets `AVFormatContext.skip_estimate_duration_from_pts` value.
+// GetSkipEstimateDurationFromPts gets `AVFormatContext.skip_estimate_duration_from_pts` value.
 func (s *AVFormatContext) GetSkipEstimateDurationFromPts() int32 {
 	return (int32)(s.skip_estimate_duration_from_pts)
 }
 
-// Custom: SetSkipEstimateDurationFromPts sets `AVFormatContext.skip_estimate_duration_from_pts` value.
+// SetSkipEstimateDurationFromPts sets `AVFormatContext.skip_estimate_duration_from_pts` value.
 func (s *AVFormatContext) SetSkipEstimateDurationFromPts(v int32) {
 	s.skip_estimate_duration_from_pts = (C.int)(v)
 }
 
-// Custom: GetSkipEstimateDurationFromPtsAddr gets `AVFormatContext.skip_estimate_duration_from_pts` address.
+// GetSkipEstimateDurationFromPtsAddr gets `AVFormatContext.skip_estimate_duration_from_pts` address.
 func (s *AVFormatContext) GetSkipEstimateDurationFromPtsAddr() *int32 {
 	return (*int32)(&s.skip_estimate_duration_from_pts)
 }
 
-// Custom: GetMaxProbePackets gets `AVFormatContext.max_probe_packets` value.
+// GetMaxProbePackets gets `AVFormatContext.max_probe_packets` value.
 func (s *AVFormatContext) GetMaxProbePackets() int32 {
 	return (int32)(s.max_probe_packets)
 }
 
-// Custom: SetMaxProbePackets sets `AVFormatContext.max_probe_packets` value.
+// SetMaxProbePackets sets `AVFormatContext.max_probe_packets` value.
 func (s *AVFormatContext) SetMaxProbePackets(v int32) {
 	s.max_probe_packets = (C.int)(v)
 }
 
-// Custom: GetMaxProbePacketsAddr gets `AVFormatContext.max_probe_packets` address.
+// GetMaxProbePacketsAddr gets `AVFormatContext.max_probe_packets` address.
 func (s *AVFormatContext) GetMaxProbePacketsAddr() *int32 {
 	return (*int32)(&s.max_probe_packets)
 }
@@ -2014,77 +2109,107 @@ const (
 	AVFMT_EVENT_FLAG_METADATA_UPDATED = C.AVFMT_EVENT_FLAG_METADATA_UPDATED
 )
 
-// Deprecated: No use
+// Deprecated: No use.
+//
+// AvFormatGetProbeScore
 func AvFormatGetProbeScore(s *AVFormatContext) int32 {
 	return (int32)(C.av_format_get_probe_score((*C.struct_AVFormatContext)(s)))
 }
 
-// Deprecated: No use
+// Deprecated: No use.
+//
+// AvFormatGetVideoCodec
 func AvFormatGetVideoCodec(s *AVFormatContext) *AVCodec {
 	return (*AVCodec)(C.av_format_get_video_codec((*C.struct_AVFormatContext)(s)))
 }
 
-// Deprecated: No use
+// Deprecated: No use.
+//
+// AvFormatSetVideoCodec
 func AvFormatSetVideoCodec(s *AVFormatContext, c *AVCodec) {
 	C.av_format_set_video_codec((*C.struct_AVFormatContext)(s), (*C.struct_AVCodec)(c))
 }
 
-// Deprecated: No use
+// Deprecated: No use.
+//
+// AvFormatGetAudioCodec
 func AvFormatGetAudioCodec(s *AVFormatContext) *AVCodec {
 	return (*AVCodec)(C.av_format_get_audio_codec((*C.struct_AVFormatContext)(s)))
 }
 
-// Deprecated: No use
+// Deprecated: No use.
+//
+// AvFormatSetAudioCodec
 func AvFormatSetAudioCodec(s *AVFormatContext, c *AVCodec) {
 	C.av_format_set_audio_codec((*C.struct_AVFormatContext)(s), (*C.struct_AVCodec)(c))
 }
 
-// Deprecated: No use
+// Deprecated: No use.
+//
+// AvFormatGetSubtitleCodec
 func AvFormatGetSubtitleCodec(s *AVFormatContext) *AVCodec {
 	return (*AVCodec)(C.av_format_get_subtitle_codec((*C.struct_AVFormatContext)(s)))
 }
 
-// Deprecated: No use
+// Deprecated: No use.
+//
+// AvFormatSetSubtitleCodec
 func AvFormatSetSubtitleCodec(s *AVFormatContext, c *AVCodec) {
 	C.av_format_set_subtitle_codec((*C.struct_AVFormatContext)(s), (*C.struct_AVCodec)(c))
 }
 
-// Deprecated: No use
+// Deprecated: No use.
+//
+// AvFormatGetDataCodec
 func AvFormatGetDataCodec(s *AVFormatContext) *AVCodec {
 	return (*AVCodec)(C.av_format_get_data_codec((*C.struct_AVFormatContext)(s)))
 }
 
-// Deprecated: No use
+// Deprecated: No use.
+//
+// AvFormatSetDataCodec
 func AvFormatSetDataCodec(s *AVFormatContext, c *AVCodec) {
 	C.av_format_set_data_codec((*C.struct_AVFormatContext)(s), (*C.struct_AVCodec)(c))
 }
 
-// Deprecated: No use
+// Deprecated: No use.
+//
+// AvFormatGetOpaque
 func AvFormatGetOpaque(s *AVFormatContext) unsafe.Pointer {
 	return C.av_format_get_opaque((*C.struct_AVFormatContext)(s))
 }
 
-// Deprecated: No use
+// Deprecated: No use.
+//
+// AvFormatSetOpaque
 func AvFormatSetOpaque(s *AVFormatContext, opaque CVoidPointer) {
 	C.av_format_set_opaque((*C.struct_AVFormatContext)(s), VoidPointer(opaque))
 }
 
-// Deprecated: No use
+// Deprecated: No use.
+//
+// AvFormatGetControlMessageCb
 func AvFormatGetControlMessageCb(s *AVFormatContext) AVFormatControlMessageFunc {
 	return (AVFormatControlMessageFunc)(C.av_format_get_control_message_cb((*C.struct_AVFormatContext)(s)))
 }
 
-// Deprecated: No use
+// Deprecated: No use.
+//
+// AvFormatSetControlMessageCb
 func AvFormatSetControlMessageCb(s *AVFormatContext, callback AVFormatControlMessageFunc) {
 	C.av_format_set_control_message_cb((*C.struct_AVFormatContext)(s), (C.av_format_control_message)(callback))
 }
 
-// Deprecated: No use
+// Deprecated: No use.
+//
+// AvFormatGetOpenCb
 func AvFormatGetOpenCb(s *AVFormatContext) AVOpenCallbackFunc {
 	return (AVOpenCallbackFunc)(C.av_format_get_open_cb((*C.struct_AVFormatContext)(s)))
 }
 
-// Deprecated: No use
+// Deprecated: No use.
+//
+// AvFormatSetOpenCb
 func AvFormatSetOpenCb(s *AVFormatContext, callback AVOpenCallbackFunc) {
 	C.av_format_set_open_cb((*C.struct_AVFormatContext)(s), (C.AVOpenCallback)(callback))
 }
@@ -2115,17 +2240,23 @@ func AvFormatLicense() string {
 	return C.GoString(C.avformat_license())
 }
 
-// Deprecated: No use
+// Deprecated: No use.
+//
+// AvRegisterAll
 func AvRegisterAll() {
 	C.av_register_all()
 }
 
-// Deprecated: No use
+// Deprecated: No use.
+//
+// AvRegisterInputFormat
 func AvRegisterInputFormat(format *AVInputFormat) {
 	C.av_register_input_format((*C.struct_AVInputFormat)(format))
 }
 
-// Deprecated: No use
+// Deprecated: No use.
+//
+// AvRegisterOutputFormat
 func AvRegisterOutputFormat(format *AVOutputFormat) {
 	C.av_register_output_format((*C.struct_AVOutputFormat)(format))
 }
@@ -2142,12 +2273,20 @@ func AvFormatNetworkDeinit() int32 {
 	return (int32)(C.avformat_network_deinit())
 }
 
-// Deprecated: No use
+// Deprecated: No use.
+//
+// AvIformatNext returns the first registered input format if f is NULL,
+// returns the next registered input format after f if f is non-NULL,
+// or NULL if f is the last one.
 func AvIformatNext(f *AVInputFormat) *AVInputFormat {
 	return (*AVInputFormat)(C.av_iformat_next((*C.struct_AVInputFormat)(f)))
 }
 
-// Deprecated: No use
+// Deprecated: No use.
+//
+// AvOformatNext returns the first registered output format if f is NULL,
+// returns the next registered output format after f if f is non-NULL,
+// or NULL if f is the last one.
 func AvOformatNext(f *AVOutputFormat) *AVOutputFormat {
 	return (*AVOutputFormat)(C.av_oformat_next((*C.struct_AVOutputFormat)(f)))
 }
@@ -2272,6 +2411,8 @@ func AvFormatOpenInput(ps **AVFormatContext, url string, fmt *AVInputFormat, opt
 }
 
 // Deprecated: Use an AVDictionary to pass options to a demuxer.
+//
+// AvDemuxerOpen
 func AvDemuxerOpen(ic *AVFormatContext) int32 {
 	return (int32)(C.av_demuxer_open((*C.struct_AVFormatContext)(ic)))
 }
@@ -2629,6 +2770,8 @@ func AvFormatQueueAttachedPictures(ic *AVFormatContext) int32 {
 	return (int32)(C.avformat_queue_attached_pictures((*C.struct_AVFormatContext)(ic)))
 }
 
+// Deprecated: No use.
+//
 // AvApplyBitstreamFilters applies a list of bitstream filters to a packet.
 func AvApplyBitstreamFilters(codec *AVCodecContext, pkt *AVPacket, bsfc *AVBitStreamFilterContext) int32 {
 	return (int32)(C.av_apply_bitstream_filters((*C.struct_AVCodecContext)(codec),

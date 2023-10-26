@@ -51,15 +51,11 @@ AVRational* get_av_option_default_val_q_addr(AVOption *opt) {
 	return &opt->default_val.q;
 }
 
-int av_opt_set_int_list_wrap(void *obj, const char *name, void *val, uint64_t term, int flags, int size) {
-	if (av_int_list_length(val, term) > INT_MAX / size) {
-		return AVERROR(EINVAL);
-	}
-	return av_opt_set_bin(obj, name, (const uint8_t *)val, av_int_list_length(val, term) * size , flags);
-}
 */
 import "C"
 import (
+	"math"
+	"syscall"
 	"unsafe"
 )
 
@@ -91,147 +87,147 @@ const (
 // AVOption
 type AVOption C.struct_AVOption
 
-// Custom: GetName gets `AVOption.name` value.
+// GetName gets `AVOption.name` value.
 func (opt *AVOption) GetName() string {
 	return C.GoString(opt.name)
 }
 
-// Custom: GetHelp gets `AVOption.help` value.
+// GetHelp gets `AVOption.help` value.
 func (opt *AVOption) GetHelp() string {
 	return C.GoString(opt.help)
 }
 
-// Custom: GetOffset gets `AVOption.offset` value.
+// GetOffset gets `AVOption.offset` value.
 func (opt *AVOption) GetOffset() int32 {
 	return (int32)(opt.offset)
 }
 
-// Custom: SetOffset sets `AVOption.offset` value.
+// SetOffset sets `AVOption.offset` value.
 func (opt *AVOption) SetOffset(v int32) {
 	opt.offset = (C.int)(v)
 }
 
-// Custom: GetOffsetAddr gets `AVOption.offset` address.
+// GetOffsetAddr gets `AVOption.offset` address.
 func (opt *AVOption) GetOffsetAddr() *int32 {
 	return (*int32)(&opt.offset)
 }
 
-// Custom: GetType gets `AVOption.type` value.
+// GetType gets `AVOption.type` value.
 func (opt *AVOption) GetType() AVOptionType {
 	return (AVOptionType)(opt._type)
 }
 
-// Custom: SetType sets `AVOption.type` value.
+// SetType sets `AVOption.type` value.
 func (opt *AVOption) SetType(v AVOptionType) {
 	opt._type = (C.enum_AVOptionType)(v)
 }
 
-// Custom: GetTypeAddr gets `AVOption.type` address.
+// GetTypeAddr gets `AVOption.type` address.
 func (opt *AVOption) GetTypeAddr() *AVOptionType {
 	return (*AVOptionType)(unsafe.Pointer(&opt._type))
 }
 
-// Custom: GetDefaultValI64 gets `AVOption.default_val.i64` value.
+// GetDefaultValI64 gets `AVOption.default_val.i64` value.
 func (opt *AVOption) GetDefaultValI64() int64 {
 	return (int64)(C.get_av_option_default_val_i64((*C.struct_AVOption)(opt)))
 }
 
-// Custom: SetDefaultValI64 sets `AVOption.default_val.i64` value.
+// SetDefaultValI64 sets `AVOption.default_val.i64` value.
 func (opt *AVOption) SetDefaultValI64(v int64) {
 	C.set_av_option_default_val_i64((*C.struct_AVOption)(opt), (C.int64_t)(v))
 }
 
-// Custom: GetDefaultValI64Addr gets `AVOption.default_val.i64` address.
+// GetDefaultValI64Addr gets `AVOption.default_val.i64` address.
 func (opt *AVOption) GetDefaultValI64Addr() *int64 {
 	return (*int64)(C.get_av_option_default_val_i64_addr((*C.struct_AVOption)(opt)))
 }
 
-// Custom: GetDefaultValDbl gets `AVOption.default_val.dbl` value.
+// GetDefaultValDbl gets `AVOption.default_val.dbl` value.
 func (opt *AVOption) GetDefaultValDbl() float64 {
 	return (float64)(C.get_av_option_default_val_dbl((*C.struct_AVOption)(opt)))
 }
 
-// Custom: SetDefaultValDbl sets `AVOption.default_val.dbl` value.
+// SetDefaultValDbl sets `AVOption.default_val.dbl` value.
 func (opt *AVOption) SetDefaultValDbl(v float64) {
 	C.set_av_option_default_val_dbl((*C.struct_AVOption)(opt), (C.double)(v))
 }
 
-// Custom: GetDefaultValDblAddr gets `AVOption.default_val.dbl` address.
+// GetDefaultValDblAddr gets `AVOption.default_val.dbl` address.
 func (opt *AVOption) GetDefaultValDblAddr() *float64 {
 	return (*float64)(C.get_av_option_default_val_dbl_addr((*C.struct_AVOption)(opt)))
 }
 
-// Custom: GetDefaultValStr gets `AVOption.default_val.str` value.
+// GetDefaultValStr gets `AVOption.default_val.str` value.
 func (opt *AVOption) GetDefaultValStr() string {
 	return C.GoString(C.get_av_option_default_val_str((*C.struct_AVOption)(opt)))
 }
 
-// Custom: SetDefaultValStr sets `AVOption.default_val.str` value.
+// SetDefaultValStr sets `AVOption.default_val.str` value.
 func (opt *AVOption) SetDefaultValStr(v *int8) {
 	C.set_av_option_default_val_str((*C.struct_AVOption)(opt), (*C.char)(v))
 }
 
-// Custom: GetDefaultValStrAddr gets `AVOption.default_val.str` address.
+// GetDefaultValStrAddr gets `AVOption.default_val.str` address.
 func (opt *AVOption) GetDefaultValStrAddr() **int8 {
 	return (**int8)(unsafe.Pointer(C.get_av_option_default_val_str_addr((*C.struct_AVOption)(opt))))
 }
 
-// Custom: GetDefaultValQ gets `AVOption.default_val.q` value.
+// GetDefaultValQ gets `AVOption.default_val.q` value.
 func (opt *AVOption) GetDefaultValQ() AVRational {
 	return (AVRational)(C.get_av_option_default_val_q((*C.struct_AVOption)(opt)))
 }
 
-// Custom: SetDefaultValQ sets `AVOption.default_val.q` value.
+// SetDefaultValQ sets `AVOption.default_val.q` value.
 func (opt *AVOption) SetDefaultValQ(v AVRational) {
 	C.set_av_option_default_val_q((*C.struct_AVOption)(opt), (C.struct_AVRational)(v))
 }
 
-// Custom: GetDefaultValQAddr gets `AVOption.default_val.q` address.
+// GetDefaultValQAddr gets `AVOption.default_val.q` address.
 func (opt *AVOption) GetDefaultValQAddr() *AVRational {
 	return (*AVRational)(C.get_av_option_default_val_q_addr((*C.struct_AVOption)(opt)))
 }
 
-// Custom: GetMin gets `AVOption.min` value.
+// GetMin gets `AVOption.min` value.
 func (opt *AVOption) GetMin() float64 {
 	return (float64)(opt.min)
 }
 
-// Custom: SetMin sets `AVOption.min` value.
+// SetMin sets `AVOption.min` value.
 func (opt *AVOption) SetMin(v float64) {
 	opt.min = (C.double)(v)
 }
 
-// Custom: GetMinAddr gets `AVOption.min` address.
+// GetMinAddr gets `AVOption.min` address.
 func (opt *AVOption) GetMinAddr() *float64 {
 	return (*float64)(&opt.min)
 }
 
-// Custom: GetMax gets `AVOption.max` value.
+// GetMax gets `AVOption.max` value.
 func (opt *AVOption) GetMax() float64 {
 	return (float64)(opt.max)
 }
 
-// Custom: SetMax sets `AVOption.max` value.
+// SetMax sets `AVOption.max` value.
 func (opt *AVOption) SetMax(v float64) {
 	opt.max = (C.double)(v)
 }
 
-// Custom: GetMaxAddr gets `AVOption.max` address.
+// GetMaxAddr gets `AVOption.max` address.
 func (opt *AVOption) GetMaxAddr() *float64 {
 	return (*float64)(&opt.max)
 }
 
-// Custom: GetFlags gets `AVOption.flags` value.
+// GetFlags gets `AVOption.flags` value.
 func (opt *AVOption) GetFlags() int32 {
 	return (int32)(opt.flags)
 }
 
-// Custom: SetFlags sets `AVOption.flags` value.
+// SetFlags sets `AVOption.flags` value.
 func (opt *AVOption) SetFlags(v int32) {
 	opt.flags = (C.int)(v)
 }
 
-// Custom: GetFlagsAddr gets `AVOption.flags` address.
+// GetFlagsAddr gets `AVOption.flags` address.
 func (opt *AVOption) GetFlagsAddr() *int32 {
 	return (*int32)(&opt.flags)
 }
@@ -253,7 +249,7 @@ const (
 	AV_OPT_FLAG_CHILD_CONSTS    = int32(C.AV_OPT_FLAG_CHILD_CONSTS)
 )
 
-// Custom: GetUnit gets `AVOption.unit` value.
+// GetUnit gets `AVOption.unit` value.
 func (opt *AVOption) GetUnit() string {
 	return C.GoString(opt.unit)
 }
@@ -261,82 +257,82 @@ func (opt *AVOption) GetUnit() string {
 // AVOptionRange
 type AVOptionRange C.struct_AVOptionRange
 
-// Custom: GetStr gets `AVOptionRange.str` value.
+// GetStr gets `AVOptionRange.str` value.
 func (optr *AVOptionRange) GetStr() string {
 	return C.GoString(optr.str)
 }
 
-// Custom: GetValueMin gets `AVOptionRange.value_min` value.
+// GetValueMin gets `AVOptionRange.value_min` value.
 func (optr *AVOptionRange) GetValueMin() float64 {
 	return (float64)(optr.value_min)
 }
 
-// Custom: SetValueMin sets `AVOptionRange.value_min` value.
+// SetValueMin sets `AVOptionRange.value_min` value.
 func (optr *AVOptionRange) SetValueMin(v float64) {
 	optr.value_min = (C.double)(v)
 }
 
-// Custom: GetValueMinAddr gets `AVOptionRange.value_min` address.
+// GetValueMinAddr gets `AVOptionRange.value_min` address.
 func (optr *AVOptionRange) GetValueMinAddr() *float64 {
 	return (*float64)(&optr.value_min)
 }
 
-// Custom: GetValueMax gets `AVOptionRange.value_max` value.
+// GetValueMax gets `AVOptionRange.value_max` value.
 func (optr *AVOptionRange) GetValueMax() float64 {
 	return (float64)(optr.value_max)
 }
 
-// Custom: SetValueMax sets `AVOptionRange.value_max` value.
+// SetValueMax sets `AVOptionRange.value_max` value.
 func (optr *AVOptionRange) SetValueMax(v float64) {
 	optr.value_max = (C.double)(v)
 }
 
-// Custom: GetValueMaxAddr gets `AVOptionRange.value_max` address.
+// GetValueMaxAddr gets `AVOptionRange.value_max` address.
 func (optr *AVOptionRange) GetValueMaxAddr() *float64 {
 	return (*float64)(&optr.value_max)
 }
 
-// Custom: GetComponentMin gets `AVOptionRange.component_min` value.
+// GetComponentMin gets `AVOptionRange.component_min` value.
 func (optr *AVOptionRange) GetComponentMin() float64 {
 	return (float64)(optr.component_min)
 }
 
-// Custom: SetComponentMin sets `AVOptionRange.component_min` value.
+// SetComponentMin sets `AVOptionRange.component_min` value.
 func (optr *AVOptionRange) SetComponentMin(v float64) {
 	optr.component_min = (C.double)(v)
 }
 
-// Custom: GetComponentMinAddr gets `AVOptionRange.component_min` address.
+// GetComponentMinAddr gets `AVOptionRange.component_min` address.
 func (optr *AVOptionRange) GetComponentMinAddr() *float64 {
 	return (*float64)(&optr.component_min)
 }
 
-// Custom: GetComponentMax gets `AVOptionRange.component_max` value.
+// GetComponentMax gets `AVOptionRange.component_max` value.
 func (optr *AVOptionRange) GetComponentMax() float64 {
 	return (float64)(optr.component_max)
 }
 
-// Custom: SetComponentMax sets `AVOptionRange.component_max` value.
+// SetComponentMax sets `AVOptionRange.component_max` value.
 func (optr *AVOptionRange) SetComponentMax(v float64) {
 	optr.component_max = (C.double)(v)
 }
 
-// Custom: GetComponentMaxAddr gets `AVOptionRange.component_max` address.
+// GetComponentMaxAddr gets `AVOptionRange.component_max` address.
 func (optr *AVOptionRange) GetComponentMaxAddr() *float64 {
 	return (*float64)(&optr.component_max)
 }
 
-// Custom: GetIsRange gets `AVOptionRange.isrange` value.
+// GetIsRange gets `AVOptionRange.isrange` value.
 func (optr *AVOptionRange) GetIsRange() int32 {
 	return (int32)(optr.is_range)
 }
 
-// Custom: SetIsRange sets `AVOptionRange.isrange` value.
+// SetIsRange sets `AVOptionRange.isrange` value.
 func (optr *AVOptionRange) SetIsRange(v int32) {
 	optr.is_range = (C.int)(v)
 }
 
-// Custom: GetIsRangeAddr gets `AVOptionRange.isrange` address.
+// GetIsRangeAddr gets `AVOptionRange.isrange` address.
 func (optr *AVOptionRange) GetIsRangeAddr() *int32 {
 	return (*int32)(&optr.is_range)
 }
@@ -344,7 +340,7 @@ func (optr *AVOptionRange) GetIsRangeAddr() *int32 {
 // AVOptionRanges
 type AVOptionRanges C.struct_AVOptionRanges
 
-// Custom: GetRange gets `AVOptionRanges.range` value.
+// GetRange gets `AVOptionRanges.range` value.
 func (optrs *AVOptionRanges) GetRange() []*AVOptionRange {
 	if optrs._range == nil {
 		return nil
@@ -353,12 +349,12 @@ func (optrs *AVOptionRanges) GetRange() []*AVOptionRange {
 		optrs.nb_components*optrs.nb_ranges)
 }
 
-// Custom: GetNbRanges gets `AVOptionRanges.nb_ranges` value.
+// GetNbRanges gets `AVOptionRanges.nb_ranges` value.
 func (optrs *AVOptionRanges) GetNbRanges() int32 {
 	return (int32)(optrs.nb_ranges)
 }
 
-// Custom: GetNbComponents gets `AVOptionRanges.nb_components` value.
+// GetNbComponents gets `AVOptionRanges.nb_components` value.
 func (optrs *AVOptionRanges) GetNbComponents() int32 {
 	return (int32)(optrs.nb_components)
 }
@@ -508,6 +504,8 @@ func AvOptChildNext(obj, prev CVoidPointer) unsafe.Pointer {
 }
 
 // Deprecated: Use AvOptChildClassIterate instead.
+//
+// AvOptChildClassNext
 func AvOptChildClassNext(parent, prev *AVClass) *AVClass {
 	return (*AVClass)(C.av_opt_child_class_next((*C.struct_AVClass)(parent),
 		(*C.struct_AVClass)(prev)))
@@ -598,13 +596,17 @@ func AvOptSetDictVal(obj CVoidPointer, name string, val *AVDictionary, searchFla
 }
 
 // AvOptSetIntList sets a binary option to an integer list.
-func AvOptSetIntList[T HelperInteger](obj CVoidPointer, name string,
-	val *T, term uint64, flags int32) int32 {
+func AvOptSetIntList[U, V Integer](obj CVoidPointer, name string,
+	val *U, term V, flags int32) int32 {
 	namePtr, nameFunc := StringCasting(name)
 	defer nameFunc()
-	size := (int32)(unsafe.Sizeof(*val))
-	return (int32)(C.av_opt_set_int_list_wrap(VoidPointer(obj), (*C.char)(namePtr),
-		unsafe.Pointer(val), (C.uint64_t)(term), (C.int)(flags), (C.int)(size)))
+	elmSize := (uint32)(unsafe.Sizeof(*val))
+	lstSize := AvIntListLengthForSize(elmSize, val, term)
+	if lstSize > uint32(math.MaxInt32)/elmSize {
+		return AVERROR(syscall.EINVAL)
+	}
+	return (int32)(C.av_opt_set_bin(VoidPointer(obj), (*C.char)(namePtr),
+		(*C.uint8_t)(unsafe.Pointer(val)), (C.int)(elmSize*lstSize), (C.int)(flags)))
 }
 
 // AvOptGet

@@ -93,12 +93,12 @@ func AvXIfNull(p, x unsafe.Pointer) unsafe.Pointer {
 }
 
 // AvIntListLengthForSize computes the length of an integer list.
-func AvIntListLengthForSize(elsize uint32, list CVoidPointer, term uint64) uint32 {
+func AvIntListLengthForSize[T Integer](elsize uint32, list CVoidPointer, term T) uint32 {
 	return (uint32)(C.av_int_list_length_for_size((C.uint)(elsize), VoidPointer(list), (C.uint64_t)(term)))
 }
 
 // AvIntListLength
-func AvIntListLength[T any](list *T, term uint64) uint32 {
+func AvIntListLength[U, V Integer](list *U, term V) uint32 {
 	elsize := unsafe.Sizeof(*list)
 	return (uint32)(C.av_int_list_length_for_size((C.uint)(elsize), (unsafe.Pointer)(list), (C.uint64_t)(term)))
 }

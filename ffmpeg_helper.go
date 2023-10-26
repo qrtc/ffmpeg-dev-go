@@ -9,19 +9,19 @@ import (
 	"unsafe"
 )
 
-type HelperInteger interface {
-	HelperSingedInteger | HelperUnsingedInteger
+type Integer interface {
+	SingedInteger | UnsingedInteger
 }
 
-type HelperSingedInteger interface {
+type SingedInteger interface {
 	~int | ~int8 | ~int16 | ~int32 | ~int64
 }
 
-type HelperUnsingedInteger interface {
+type UnsingedInteger interface {
 	~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64 | ~uintptr
 }
 
-const NIL = "\\'nil'\\"
+const NIL = "\\'<nil>'\\"
 
 // StringCasting casts go string to c world char* with free function.
 // Note: if input is a NIL string will return a nil pointer.
@@ -50,7 +50,7 @@ func StringSliceCasting(ss []string) (allocPtrs []*C.char, freeFunc func()) {
 }
 
 // SliceSlice returns a slice of slice from a pointer to pointer.
-func SliceSlice[T any, X, Y HelperInteger](data **T, x X, y Y) (v [][]T) {
+func SliceSlice[T any, X, Y Integer](data **T, x X, y Y) (v [][]T) {
 	for i := 0; i < int(x); i++ {
 		v = append(v, unsafe.Slice(*PointerOffset(data, i), y))
 	}
@@ -84,7 +84,7 @@ func SliceTruncString(ptr **C.char) (v []string) {
 }
 
 // PointerOffset offset the pointer point.
-func PointerOffset[U any, V HelperInteger](ptr *U, offset V) *U {
+func PointerOffset[U any, V Integer](ptr *U, offset V) *U {
 	if ptr == nil {
 		return nil
 	}

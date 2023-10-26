@@ -19,62 +19,62 @@ const (
 
 type AVTimecode C.AVTimecode
 
-// Custom: GetStart gets `AVTimecode.start` value.
+// GetStart gets `AVTimecode.start` value.
 func (tc *AVTimecode) GetStart() int32 {
 	return (int32)(tc.start)
 }
 
-// Custom: SetStart sets `AVTimecode.start` value.
+// SetStart sets `AVTimecode.start` value.
 func (tc *AVTimecode) SetStart(v int32) {
 	tc.start = (C.int)(v)
 }
 
-// Custom: GetStartAddr gets `AVTimecode.start` address.
+// GetStartAddr gets `AVTimecode.start` address.
 func (tc *AVTimecode) GetStartAddr() *int32 {
 	return (*int32)(&tc.start)
 }
 
-// Custom: GetFlags gets `AVTimecode.flags` value.
+// GetFlags gets `AVTimecode.flags` value.
 func (tc *AVTimecode) GetFlags() uint32 {
 	return (uint32)(tc.flags)
 }
 
-// Custom: SetFlags sets `AVTimecode.flags` value.
+// SetFlags sets `AVTimecode.flags` value.
 func (tc *AVTimecode) SetFlags(v uint32) {
 	tc.flags = (C.uint32_t)(v)
 }
 
-// Custom: GetFlagsAddr gets `AVTimecode.flags` address.
+// GetFlagsAddr gets `AVTimecode.flags` address.
 func (tc *AVTimecode) GetFlagsAddr() *uint32 {
 	return (*uint32)(&tc.flags)
 }
 
-// Custom: GetRate gets `AVTimecode.rate` value.
+// GetRate gets `AVTimecode.rate` value.
 func (tc *AVTimecode) GetRate() AVRational {
 	return (AVRational)(tc.rate)
 }
 
-// Custom: SetRate sets `AVTimecode.rate` value.
+// SetRate sets `AVTimecode.rate` value.
 func (tc *AVTimecode) SetRate(v AVRational) {
 	tc.rate = (C.struct_AVRational)(v)
 }
 
-// Custom: GetRateAddr gets `AVTimecode.rate` address.
+// GetRateAddr gets `AVTimecode.rate` address.
 func (tc *AVTimecode) GetRateAddr() *AVRational {
 	return (*AVRational)(&tc.rate)
 }
 
-// Custom: GetFps gets `AVTimecode.fps` value.
+// GetFps gets `AVTimecode.fps` value.
 func (tc *AVTimecode) GetFps() uint32 {
 	return (uint32)(tc.fps)
 }
 
-// Custom: SetFps sets `AVTimecode.fps` value.
+// SetFps sets `AVTimecode.fps` value.
 func (tc *AVTimecode) SetFps(v uint32) {
 	tc.fps = (C.uint)(v)
 }
 
-// Custom: GetFpsAddr gets `AVTimecode.fps` address.
+// GetFpsAddr gets `AVTimecode.fps` address.
 func (tc *AVTimecode) GetFpsAddr() *uint32 {
 	return (*uint32)(&tc.fps)
 }

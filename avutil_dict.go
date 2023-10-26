@@ -18,12 +18,12 @@ const (
 
 type AVDictionaryEntry C.struct_AVDictionaryEntry
 
-// Custom: GetKey gets `AVDictionaryEntry.key` value.
+// GetKey gets `AVDictionaryEntry.key` value.
 func (e *AVDictionaryEntry) GetKey() string {
 	return C.GoString(e.key)
 }
 
-// Custom: GetValue gets `AVDictionaryEntry.value` value.
+// GetValue gets `AVDictionaryEntry.value` value.
 func (e *AVDictionaryEntry) GetValue() string {
 	return C.GoString(e.value)
 }

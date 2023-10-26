@@ -9,7 +9,7 @@ import "unsafe"
 // AVDES
 type AVDES C.struct_AVDES
 
-// Custom: GetRoundKeys gets `AVDES.round_keys` value.
+// GetRoundKeys gets `AVDES.round_keys` value.
 func (d *AVDES) GetRoundKeys() (v [][]uint64) {
 	for i := 0; i < 3; i++ {
 		v = append(v, unsafe.Slice((*uint64)(&d.round_keys[i][0]), 16))
@@ -17,7 +17,7 @@ func (d *AVDES) GetRoundKeys() (v [][]uint64) {
 	return v
 }
 
-// Custom: SetRoundKeys sets `AVDES.round_keys` value.
+// SetRoundKeys sets `AVDES.round_keys` value.
 func (d *AVDES) SetRoundKeys(v [][]uint64) {
 	for i := 0; i < FFMIN(len(v), 3); i++ {
 		for j := 0; j < FFMIN(len(v[i]), 16); j++ {
@@ -26,22 +26,22 @@ func (d *AVDES) SetRoundKeys(v [][]uint64) {
 	}
 }
 
-// Custom: GetRoundKeysAddr gets `AVDES.round_keys` address.
+// GetRoundKeysAddr gets `AVDES.round_keys` address.
 func (d *AVDES) GetRoundKeysAddr() **uint64 {
 	return (**uint64)(unsafe.Pointer(&d.round_keys))
 }
 
-// Custom: GetTripleDes gets `AVDES.triple_des` value.
+// GetTripleDes gets `AVDES.triple_des` value.
 func (d *AVDES) GetTripleDes() int32 {
 	return (int32)(d.triple_des)
 }
 
-// Custom: SetTripleDes sets `AVDES.triple_des` value.
+// SetTripleDes sets `AVDES.triple_des` value.
 func (d *AVDES) SetTripleDes(v int32) {
 	d.triple_des = (C.int)(v)
 }
 
-// Custom: GetTripleDesAddr gets `AVDES.triple_des` address.
+// GetTripleDesAddr gets `AVDES.triple_des` address.
 func (d *AVDES) GetTripleDesAddr() *int32 {
 	return (*int32)(&d.triple_des)
 }

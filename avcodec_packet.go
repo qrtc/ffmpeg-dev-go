@@ -45,54 +45,54 @@ const (
 )
 
 const (
-	// Deprecated: No use
+	// Deprecated: No use.
 	AV_PKT_DATA_QUALITY_FACTOR = AVPacketSideDataType(C.AV_PKT_DATA_QUALITY_FACTOR)
 )
 
 // AVPacketSideData
 type AVPacketSideData C.struct_AVPacketSideData
 
-// Custom: GetData gets `AVPacketSideData.data` value.
+// GetData gets `AVPacketSideData.data` value.
 func (psd *AVPacketSideData) GetData() *uint8 {
 	return (*uint8)(psd.data)
 }
 
-// Custom: SetData sets `AVPacketSideData.data` value.
+// SetData sets `AVPacketSideData.data` value.
 func (psd *AVPacketSideData) SetData(v *uint8) {
 	psd.data = (*C.uint8_t)(v)
 }
 
-// Custom: GetDataAddr gets `AVPacketSideData.data` address.
+// GetDataAddr gets `AVPacketSideData.data` address.
 func (psd *AVPacketSideData) GetDataAddr() **uint8 {
 	return (**uint8)(unsafe.Pointer(&psd.data))
 }
 
-// Custom: GetSize gets `AVPacketSideData.size` value.
+// GetSize gets `AVPacketSideData.size` value.
 func (psd *AVPacketSideData) GetSize() int32 {
 	return (int32)(psd.size)
 }
 
-// Custom: SetSize sets `AVPacketSideData.size` value.
+// SetSize sets `AVPacketSideData.size` value.
 func (psd *AVPacketSideData) SetSize(v int32) {
 	psd.size = (C.int)(v)
 }
 
-// Custom: GetSizeAddr gets `AVPacketSideData.size` address.
+// GetSizeAddr gets `AVPacketSideData.size` address.
 func (psd *AVPacketSideData) GetSizeAddr() *int32 {
 	return (*int32)(&psd.size)
 }
 
-// Custom: GetType gets `AVPacketSideData.type` value.
+// GetType gets `AVPacketSideData.type` value.
 func (psd *AVPacketSideData) GetType() AVPacketSideDataType {
 	return (AVPacketSideDataType)(psd._type)
 }
 
-// Custom: SetType sets `AVPacketSideData.type` value.
+// SetType sets `AVPacketSideData.type` value.
 func (psd *AVPacketSideData) SetType(v AVPacketSideDataType) {
 	psd._type = (C.enum_AVPacketSideDataType)(v)
 }
 
-// Custom: GetTypeAddr gets `AVPacketSideData.type` address.
+// GetTypeAddr gets `AVPacketSideData.type` address.
 func (psd *AVPacketSideData) GetTypeAddr() *AVPacketSideDataType {
 	return (*AVPacketSideDataType)(&psd._type)
 }
@@ -100,200 +100,208 @@ func (psd *AVPacketSideData) GetTypeAddr() *AVPacketSideDataType {
 // AVPacket
 type AVPacket C.struct_AVPacket
 
-// Custom: GetBuf gets `AVPacket.buf` value.
+// GetBuf gets `AVPacket.buf` value.
 func (pkt *AVPacket) GetBuf() *AVBufferRef {
 	return (*AVBufferRef)(pkt.buf)
 }
 
-// Custom: SetBuf sets `AVPacket.buf` value.
+// SetBuf sets `AVPacket.buf` value.
 func (pkt *AVPacket) SetBuf(v *AVBufferRef) {
 	pkt.buf = (*C.struct_AVBufferRef)(v)
 }
 
-// Custom: GetBufAddr gets `AVPacket.buf` address.
+// GetBufAddr gets `AVPacket.buf` address.
 func (pkt *AVPacket) GetBufAddr() **AVBufferRef {
 	return (**AVBufferRef)(unsafe.Pointer(&pkt.buf))
 }
 
-// Custom: GetPts gets `AVPacket.pts` value.
+// GetPts gets `AVPacket.pts` value.
 func (pkt *AVPacket) GetPts() int64 {
 	return (int64)(pkt.pts)
 }
 
-// Custom: SetPts sets `AVPacket.pts` value.
+// SetPts sets `AVPacket.pts` value.
 func (pkt *AVPacket) SetPts(v int64) {
 	pkt.pts = (C.int64_t)(v)
 }
 
-// Custom: GetPtsAddr gets `AVPacket.pts` address.
+// GetPtsAddr gets `AVPacket.pts` address.
 func (pkt *AVPacket) GetPtsAddr() *int64 {
 	return (*int64)(&pkt.pts)
 }
 
-// Custom: GetDts gets `AVPacket.dts` value.
+// GetDts gets `AVPacket.dts` value.
 func (pkt *AVPacket) GetDts() int64 {
 	return (int64)(pkt.dts)
 }
 
-// Custom: SetDts sets `AVPacket.dts` value.
+// SetDts sets `AVPacket.dts` value.
 func (pkt *AVPacket) SetDts(v int64) {
 	pkt.dts = (C.int64_t)(v)
 }
 
-// Custom: GetDtsAddr gets `AVPacket.dts` address.
+// GetDtsAddr gets `AVPacket.dts` address.
 func (pkt *AVPacket) GetDtsAddr() *int64 {
 	return (*int64)(&pkt.dts)
 }
 
-// Custom: GetData gets `AVPacket.data` value.
+// GetData gets `AVPacket.data` value.
 func (pkt *AVPacket) GetData() *uint8 {
 	return (*uint8)(pkt.data)
 }
 
-// Custom: SetData sets `AVPacket.data` value.
+// SetData sets `AVPacket.data` value.
 func (pkt *AVPacket) SetData(v *uint8) {
 	pkt.data = (*C.uint8_t)(v)
 }
 
-// Custom: GetDataAddr gets `AVPacket.data` address.
+// GetDataAddr gets `AVPacket.data` address.
 func (pkt *AVPacket) GetDataAddr() **uint8 {
 	return (**uint8)(unsafe.Pointer(&pkt.data))
 }
 
-// Custom: GetSize gets `AVPacket.size` value.
+// GetSize gets `AVPacket.size` value.
 func (pkt *AVPacket) GetSize() int32 {
 	return (int32)(pkt.size)
 }
 
-// Custom: SetSize sets `AVPacket.size` value.
+// SetSize sets `AVPacket.size` value.
 func (pkt *AVPacket) SetSize(v int32) {
 	pkt.size = (C.int)(v)
 }
 
-// Custom: GetSizeAddr gets `AVPacket.size` address.
+// GetSizeAddr gets `AVPacket.size` address.
 func (pkt *AVPacket) GetSizeAddr() *int32 {
 	return (*int32)(&pkt.size)
 }
 
-// Custom: GetStreamIndex gets `AVPacket.stream_index` value.
+// GetStreamIndex gets `AVPacket.stream_index` value.
 func (pkt *AVPacket) GetStreamIndex() int32 {
 	return (int32)(pkt.stream_index)
 }
 
-// Custom: SetStreamIndex sets `AVPacket.stream_index` value.
+// SetStreamIndex sets `AVPacket.stream_index` value.
 func (pkt *AVPacket) SetStreamIndex(v int32) {
 	pkt.stream_index = (C.int)(v)
 }
 
-// Custom: GetStreamIndexAddr gets `AVPacket.stream_index` address.
+// GetStreamIndexAddr gets `AVPacket.stream_index` address.
 func (pkt *AVPacket) GetStreamIndexAddr() *int32 {
 	return (*int32)(&pkt.stream_index)
 }
 
-// Custom: GetFlags gets `AVPacket.flags` value.
+// GetFlags gets `AVPacket.flags` value.
 func (pkt *AVPacket) GetFlags() int32 {
 	return (int32)(pkt.flags)
 }
 
-// Custom: SetFlags sets `AVPacket.flags` value.
+// SetFlags sets `AVPacket.flags` value.
 func (pkt *AVPacket) SetFlags(v int32) {
 	pkt.flags = (C.int)(v)
 }
 
-// Custom: GetFlagsAddr gets `AVPacket.flags` address.
+// GetFlagsAddr gets `AVPacket.flags` address.
 func (pkt *AVPacket) GetFlagsAddr() *int32 {
 	return (*int32)(&pkt.flags)
 }
 
-// Custom: GetSideData gets `AVPacket.side_data` value.
+// GetSideData gets `AVPacket.side_data` value.
 func (pkt *AVPacket) GetSideData() *AVPacketSideData {
 	return (*AVPacketSideData)(pkt.side_data)
 }
 
-// Custom: SetSideData sets `AVPacket.side_data` value.
+// SetSideData sets `AVPacket.side_data` value.
 func (pkt *AVPacket) SetSideData(v *AVPacketSideData) {
 	pkt.side_data = (*C.struct_AVPacketSideData)(v)
 }
 
-// Custom: GetSideDataAddr gets `AVPacket.side_data` address.
+// GetSideDataAddr gets `AVPacket.side_data` address.
 func (pkt *AVPacket) GetSideDataAddr() **AVPacketSideData {
 	return (**AVPacketSideData)(unsafe.Pointer(&pkt.side_data))
 }
 
-// Custom: GetSideDataElems gets `AVPacket.side_data_elems` value.
+// GetSideDataElems gets `AVPacket.side_data_elems` value.
 func (pkt *AVPacket) GetSideDataElems() int32 {
 	return (int32)(pkt.side_data_elems)
 }
 
-// Custom: SetSideDataElems sets `AVPacket.side_data_elems` value.
+// SetSideDataElems sets `AVPacket.side_data_elems` value.
 func (pkt *AVPacket) SetSideDataElems(v int32) {
 	pkt.side_data_elems = (C.int)(v)
 }
 
-// Custom: GetSideDataElemsAddr gets `AVPacket.side_data_elems` address.
+// GetSideDataElemsAddr gets `AVPacket.side_data_elems` address.
 func (pkt *AVPacket) GetSideDataElemsAddr() *int32 {
 	return (*int32)(&pkt.side_data_elems)
 }
 
-// Custom: GetDuration gets `AVPacket.duration` value.
+// GetDuration gets `AVPacket.duration` value.
 func (pkt *AVPacket) GetDuration() int64 {
 	return (int64)(pkt.duration)
 }
 
-// Custom: SetDuration sets `AVPacket.duration` value.
+// SetDuration sets `AVPacket.duration` value.
 func (pkt *AVPacket) SetDuration(v int64) {
 	pkt.duration = (C.int64_t)(v)
 }
 
-// Custom: GetDurationAddr gets `AVPacket.duration` address.
+// GetDurationAddr gets `AVPacket.duration` address.
 func (pkt *AVPacket) GetDurationAddr() *int64 {
 	return (*int64)(&pkt.duration)
 }
 
-// Custom: GetPos gets `AVPacket.pos` value.
+// GetPos gets `AVPacket.pos` value.
 func (pkt *AVPacket) GetPos() int64 {
 	return (int64)(pkt.pos)
 }
 
-// Custom: SetPos sets `AVPacket.pos` value.
+// SetPos sets `AVPacket.pos` value.
 func (pkt *AVPacket) SetPos(v int64) {
 	pkt.pos = (C.int64_t)(v)
 }
 
-// Custom: GetPosAddr gets `AVPacket.pos` address.
+// GetPosAddr gets `AVPacket.pos` address.
 func (pkt *AVPacket) GetPosAddr() *int64 {
 	return (*int64)(&pkt.pos)
 }
 
-// Custom: GetConvergenceDuration gets `AVPacket.convergence_duration` value.
+// Deprecated: No use.
+//
+// GetConvergenceDuration gets `AVPacket.convergence_duration` value.
 func (pkt *AVPacket) GetConvergenceDuration() int64 {
 	return (int64)(pkt.convergence_duration)
 }
 
-// Custom: SetConvergenceDuration sets `AVPacket.convergence_duration` value.
+// Deprecated: No use.
+//
+// SetConvergenceDuration sets `AVPacket.convergence_duration` value.
 func (pkt *AVPacket) SetConvergenceDuration(v int64) {
 	pkt.convergence_duration = (C.int64_t)(v)
 }
 
-// Custom: GetConvergenceDurationAddr gets `AVPacket.convergence_duration` address.
+// Deprecated: No use.
+//
+// GetConvergenceDurationAddr gets `AVPacket.convergence_duration` address.
 func (pkt *AVPacket) GetConvergenceDurationAddr() *int64 {
 	return (*int64)(&pkt.convergence_duration)
 }
 
+// Deprecated: No use.
+//
 // AVPacketList
 type AVPacketList C.struct_AVPacketList
 
-// Custom: Getgets `AVPacketList.next` value.
+// Getgets `AVPacketList.next` value.
 func (pl *AVPacketList) Get() *AVPacketList {
 	return (*AVPacketList)(pl.next)
 }
 
-// Custom: Set sets `AVPacketList.next` value.
+// Set sets `AVPacketList.next` value.
 func (pl *AVPacketList) Set(v *AVPacketList) {
 	pl.next = (*C.struct_AVPacketList)(v)
 }
 
-// Custom: GetAddr gets `AVPacketList.next` address.
+// GetAddr gets `AVPacketList.next` address.
 func (pl *AVPacketList) GetAddr() **AVPacketList {
 	return (**AVPacketList)(unsafe.Pointer(&pl.next))
 }
@@ -333,6 +341,13 @@ func AvPacketFree(pkt **AVPacket) {
 	C.av_packet_free((**C.struct_AVPacket)(unsafe.Pointer(pkt)))
 }
 
+// Deprecated: No use.
+//
+// AvInitPacket initializes optional fields of a packet with default values.
+func AvInitPacket(pkt *AVPacket) {
+	C.av_init_packet((*C.struct_AVPacket)(pkt))
+}
+
 // AvNewPacket allocates the payload of a packet and initialize its fields with
 // default values.
 func AvNewPacket(pkt *AVPacket, size int32) int32 {
@@ -356,23 +371,28 @@ func AvPacketFromData(pkt *AVPacket, data *uint8, size int32) int32 {
 }
 
 // Deprecated: Use AVPacketRef() or AVPacketMakeRefcounted() instead.
+//
+// AvDupPacket
 func AvDupPacket(pkt *AVPacket) {
 	C.av_dup_packet((*C.struct_AVPacket)(pkt))
 }
 
 // Deprecated: Use AVPacketRef instead.
+//
 // AvCopyPacket copies packet, including contents
 func AvCopyPacket(dst, src *AVPacket) int32 {
 	return (int32)(C.av_copy_packet((*C.struct_AVPacket)(dst), (*C.struct_AVPacket)(src)))
 }
 
 // Deprecated: Use AVPacketCopyProps instead.
+//
 // AvCopyPacketSideData copies packet side data
 func AvCopyPacketSideData(dst, src *AVPacket) int32 {
 	return (int32)(C.av_copy_packet_side_data((*C.struct_AVPacket)(dst), (*C.struct_AVPacket)(src)))
 }
 
 // Deprecated: Use AVPacketUnref() instead.
+//
 // AvFreePacket frees a packet.
 func AvFreePacket(pkt *AVPacket) {
 	C.av_free_packet((*C.struct_AVPacket)(pkt))
@@ -402,12 +422,16 @@ func AvPacketGetSideData(pkt *AVPacket, _type AVPacketSideDataType, size *int32)
 		(C.enum_AVPacketSideDataType)(_type), (*C.int)(size)))
 }
 
-// Deprecated: No use
+// Deprecated: No use.
+//
+// AvPacketMergeSideData
 func AvPacketMergeSideData(pkt *AVPacket) int32 {
 	return (int32)(C.av_packet_merge_side_data((*C.struct_AVPacket)(pkt)))
 }
 
-// Deprecated: No use
+// Deprecated: No use.
+//
+// AvPacketSplitSideData
 func AvPacketSplitSideData(pkt *AVPacket) int32 {
 	return (int32)(C.av_packet_split_side_data((*C.struct_AVPacket)(pkt)))
 }

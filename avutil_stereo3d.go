@@ -34,47 +34,47 @@ const (
 
 type AVStereo3D C.struct_AVStereo3D
 
-// Custom: GetType gets `AVStereo3D.type` value.
+// GetType gets `AVStereo3D.type` value.
 func (s3d *AVStereo3D) GetType() AVStereo3DType {
 	return (AVStereo3DType)(s3d._type)
 }
 
-// Custom: SetType sets `AVStereo3D.type` value.
+// SetType sets `AVStereo3D.type` value.
 func (s3d *AVStereo3D) SetType(v AVStereo3DType) {
 	s3d._type = (C.enum_AVStereo3DType)(v)
 }
 
-// Custom: GetTypeAddr gets `AVStereo3D.type` address.
+// GetTypeAddr gets `AVStereo3D.type` address.
 func (s3d *AVStereo3D) GetTypeAddr() *AVStereo3DType {
 	return (*AVStereo3DType)(&s3d._type)
 }
 
-// Custom: GetFlags gets `AVStereo3D.flags` value.
+// GetFlags gets `AVStereo3D.flags` value.
 func (s3d *AVStereo3D) GetFlags() int32 {
 	return (int32)(s3d.flags)
 }
 
-// Custom: SetFlags sets `AVStereo3D.flags` value.
+// SetFlags sets `AVStereo3D.flags` value.
 func (s3d *AVStereo3D) SetFlags(v int32) {
 	s3d.flags = (C.int32_t)(v)
 }
 
-// Custom: GetFlagsAddr gets `AVStereo3D.flags` address.
+// GetFlagsAddr gets `AVStereo3D.flags` address.
 func (s3d *AVStereo3D) GetFlagsAddr() *int32 {
 	return (*int32)(&s3d.flags)
 }
 
-// Custom: GetView gets `AVStereo3D.view` value.
+// GetView gets `AVStereo3D.view` value.
 func (s3d *AVStereo3D) GetView() AVStereo3DView {
 	return (AVStereo3DView)(s3d.view)
 }
 
-// Custom: SetView sets `AVStereo3D.view` value.
+// SetView sets `AVStereo3D.view` value.
 func (s3d *AVStereo3D) SetView(v AVStereo3DView) {
 	s3d.view = (C.enum_AVStereo3DView)(v)
 }
 
-// Custom: GetViewAddr gets `AVStereo3D.view` address.
+// GetViewAddr gets `AVStereo3D.view` address.
 func (s3d *AVStereo3D) GetViewAddr() *AVStereo3DView {
 	return (*AVStereo3DView)(&s3d.view)
 }

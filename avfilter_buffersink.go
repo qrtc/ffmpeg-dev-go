@@ -19,14 +19,16 @@ const (
 // AVBufferSinkParams
 type AVBufferSinkParams C.struct_AVBufferSinkParams
 
-// Custom: GetPixelFmts gets `AVBufferSinkParams.pixel_fmts` value.
+// GetPixelFmts gets `AVBufferSinkParams.pixel_fmts` value.
 func (bsp *AVBufferSinkParams) GetPixelFmts() []AVPixelFormat {
 	return SliceTrunc((*AVPixelFormat)(bsp.pixel_fmts), func(pf AVPixelFormat) bool {
 		return pf == AV_PIX_FMT_NONE
 	})
 }
 
-// Deprecated: No use
+// Deprecated: No use.
+//
+// AvBuffersinkParamsAlloc creates an AVBufferSinkParams structure.
 func AvBuffersinkParamsAlloc() *AVBufferSinkParams {
 	return (*AVBufferSinkParams)(C.av_buffersink_params_alloc())
 }
@@ -34,40 +36,42 @@ func AvBuffersinkParamsAlloc() *AVBufferSinkParams {
 // AVABufferSinkParams
 type AVABufferSinkParams C.struct_AVABufferSinkParams
 
-// Custom: GetSampleFmts gets `AVABufferSinkParams.sample_fmts` value.
+// GetSampleFmts gets `AVABufferSinkParams.sample_fmts` value.
 func (absp *AVABufferSinkParams) GetSampleFmts() []AVSampleFormat {
 	return SliceTrunc((*AVSampleFormat)(absp.sample_fmts), func(sf AVSampleFormat) bool {
 		return sf == AV_SAMPLE_FMT_NONE
 	})
 }
 
-// Custom: GetChannelLayouts gets `AVABufferSinkParams.channel_layouts` value.
+// GetChannelLayouts gets `AVABufferSinkParams.channel_layouts` value.
 func (absp *AVABufferSinkParams) GetChannelLayouts() []int64 {
 	return SliceTrunc((*int64)(absp.channel_layouts), func(i int64) bool {
 		return i == -1
 	})
 }
 
-// Custom: GetChannelCounts gets `AVABufferSinkParams.channel_counts` value.
+// GetChannelCounts gets `AVABufferSinkParams.channel_counts` value.
 func (absp *AVABufferSinkParams) GetChannelCounts() []int32 {
 	return SliceTrunc((*int32)(absp.channel_counts), func(i int32) bool {
 		return i == -1
 	})
 }
 
-// Custom: GetAllChannelCounts gets `AVABufferSinkParams.all_channel_counts` value.
+// GetAllChannelCounts gets `AVABufferSinkParams.all_channel_counts` value.
 func (absp *AVABufferSinkParams) GetAllChannelCounts() int32 {
 	return (int32)(absp.all_channel_counts)
 }
 
-// Custom: GetSampleRates gets `AVABufferSinkParams.sample_rates` value.
+// GetSampleRates gets `AVABufferSinkParams.sample_rates` value.
 func (absp *AVABufferSinkParams) GetSampleRates() []int32 {
 	return SliceTrunc((*int32)(absp.sample_rates), func(i int32) bool {
 		return i == -1
 	})
 }
 
-// Deprecated: No use
+// Deprecated: No use.
+//
+// AvAbuffersinkParamsAlloc creates an AVABufferSinkParams structure.
 func AvAbuffersinkParamsAlloc() *AVABufferSinkParams {
 	return (*AVABufferSinkParams)(C.av_abuffersink_params_alloc())
 }

@@ -8,12 +8,12 @@ import "C"
 // AVRational
 type AVRational C.struct_AVRational
 
-// Custom: GetNum gets `AVRational.num` value.
+// GetNum gets `AVRational.num` value.
 func (q *AVRational) GetNum() int32 {
 	return (int32)(q.num)
 }
 
-// Custom: GetDen gets `AVRational.den` value.
+// GetDen gets `AVRational.den` value.
 func (q *AVRational) GetDen() int32 {
 	return (int32)(q.den)
 }

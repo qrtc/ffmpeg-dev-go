@@ -14,7 +14,7 @@ func AV_NE[T any](be, le T) T {
 }
 
 // RSHIFT
-func RSHIFT[U, V HelperInteger](a U, b V) U {
+func RSHIFT[U, V Integer](a U, b V) U {
 	if a > 0 {
 		return ((a) + ((1 << (b)) >> 1)) >> b
 	}
@@ -22,7 +22,7 @@ func RSHIFT[U, V HelperInteger](a U, b V) U {
 }
 
 // ROUNDED_DIV
-func ROUNDED_DIV[T HelperInteger](a, b T) T {
+func ROUNDED_DIV[T Integer](a, b T) T {
 	if a >= 0 {
 		return ((a) + ((b) >> 1)) / b
 	}
@@ -30,17 +30,17 @@ func ROUNDED_DIV[T HelperInteger](a, b T) T {
 }
 
 // AV_CEIL_RSHIFT
-func AV_CEIL_RSHIFT[U, V HelperInteger](a U, b V) U {
+func AV_CEIL_RSHIFT[U, V Integer](a U, b V) U {
 	return -((-(a)) >> (b))
 }
 
 // FF_CEIL_RSHIFT
-func FF_CEIL_RSHIFT[U, V HelperInteger](a U, b V) U {
+func FF_CEIL_RSHIFT[U, V Integer](a U, b V) U {
 	return AV_CEIL_RSHIFT(a, b)
 }
 
 // FFUDIV
-func FFUDIV[T HelperInteger](a, b T) T {
+func FFUDIV[T Integer](a, b T) T {
 	if a > 0 {
 		return a / b
 	}
@@ -48,18 +48,18 @@ func FFUDIV[T HelperInteger](a, b T) T {
 }
 
 // FFUMOD
-func FFUMOD[T HelperInteger](a, b T) T {
+func FFUMOD[T Integer](a, b T) T {
 	return a - b*FFUDIV(a, b)
 }
 
-func FFABS[T HelperSingedInteger](a T) T {
+func FFABS[T SingedInteger](a T) T {
 	if a >= 0 {
 		return a
 	}
 	return -a
 }
 
-func FFSIGNT[T HelperSingedInteger](a T) T {
+func FFSIGNT[T SingedInteger](a T) T {
 	if a > 0 {
 		return 1
 	}
@@ -67,7 +67,7 @@ func FFSIGNT[T HelperSingedInteger](a T) T {
 }
 
 // FFNABS
-func FFNABS[T HelperSingedInteger](a T) T {
+func FFNABS[T SingedInteger](a T) T {
 	if a <= 0 {
 		return a
 	}
@@ -75,7 +75,7 @@ func FFNABS[T HelperSingedInteger](a T) T {
 }
 
 // FFABSU
-func FFABSU[T HelperSingedInteger](a T) uint32 {
+func FFABSU[T SingedInteger](a T) uint32 {
 	if a <= 0 {
 		return -(uint32)(a)
 	}
@@ -83,7 +83,7 @@ func FFABSU[T HelperSingedInteger](a T) uint32 {
 }
 
 // FFABS64U
-func FFABS64U[T HelperSingedInteger](a T) uint64 {
+func FFABS64U[T SingedInteger](a T) uint64 {
 	if a <= 0 {
 		return -(uint64)(a)
 	}
@@ -91,7 +91,7 @@ func FFABS64U[T HelperSingedInteger](a T) uint64 {
 }
 
 // FFDIFFSIGN
-func FFDIFFSIGN[T HelperInteger](x, y T) int {
+func FFDIFFSIGN[T Integer](x, y T) int {
 	if x > y {
 		return 1
 	} else if x < y {
@@ -101,25 +101,25 @@ func FFDIFFSIGN[T HelperInteger](x, y T) int {
 	}
 }
 
-func FFMAX[T HelperInteger](a, b T) T {
+func FFMAX[T Integer](a, b T) T {
 	if a > b {
 		return a
 	}
 	return b
 }
 
-func FFMAX3[T HelperInteger](a, b, c T) T {
+func FFMAX3[T Integer](a, b, c T) T {
 	return FFMAX(FFMAX(a, b), c)
 }
 
-func FFMIN[T HelperInteger](a, b T) T {
+func FFMIN[T Integer](a, b T) T {
 	if a > b {
 		return b
 	}
 	return a
 }
 
-func FFMIN3[T HelperInteger](a, b, c T) T {
+func FFMIN3[T Integer](a, b, c T) T {
 	return FFMIN(FFMIN(a, b), c)
 }
 

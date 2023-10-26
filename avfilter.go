@@ -59,72 +59,72 @@ const (
 // callback functions used to interact with the filter.
 type AVFilter C.struct_AVFilter
 
-// Custom: GetName gets `AVFilter.name` value.
+// GetName gets `AVFilter.name` value.
 func (flt *AVFilter) GetName() string {
 	return C.GoString(flt.name)
 }
 
-// Custom: GetDescription gets `AVFilter.description` value.
+// GetDescription gets `AVFilter.description` value.
 func (flt *AVFilter) GetDescription() string {
 	return C.GoString(flt.description)
 }
 
-// Custom: GetInputs gets `AVFilter.inputs` value.
+// GetInputs gets `AVFilter.inputs` value.
 func (flt *AVFilter) GetInputs() *AVFilterPad {
 	return (*AVFilterPad)(flt.inputs)
 }
 
-// Custom: SetInputs sets `AVFilter.inputs` value.
+// SetInputs sets `AVFilter.inputs` value.
 func (flt *AVFilter) SetInputs(v *AVFilterPad) {
 	flt.inputs = (*C.struct_AVFilterPad)(v)
 }
 
-// Custom: GetInputsAddr gets `AVFilter.inputs` address.
+// GetInputsAddr gets `AVFilter.inputs` address.
 func (flt *AVFilter) GetInputsAddr() **AVFilterPad {
 	return (**AVFilterPad)(unsafe.Pointer(&flt.inputs))
 }
 
-// Custom: GetOutputs gets `AVFilter.outputs` value.
+// GetOutputs gets `AVFilter.outputs` value.
 func (flt *AVFilter) GetOutputs() *AVFilterPad {
 	return (*AVFilterPad)(flt.outputs)
 }
 
-// Custom: SetOutputs sets `AVFilter.outputs` value.
+// SetOutputs sets `AVFilter.outputs` value.
 func (flt *AVFilter) SetOutputs(v *AVFilterPad) {
 	flt.outputs = (*C.struct_AVFilterPad)(v)
 }
 
-// Custom: GetOutputsAddr gets `AVFilter.outputs` address.
+// GetOutputsAddr gets `AVFilter.outputs` address.
 func (flt *AVFilter) GetOutputsAddr() **AVFilterPad {
 	return (**AVFilterPad)(unsafe.Pointer(&flt.outputs))
 }
 
-// Custom: GetPrivClass gets `AVFilter.priv_class` value.
+// GetPrivClass gets `AVFilter.priv_class` value.
 func (flt *AVFilter) GetPrivClass() *AVClass {
 	return (*AVClass)(flt.priv_class)
 }
 
-// Custom: SetPrivClass sets `AVFilter.priv_class` value.
+// SetPrivClass sets `AVFilter.priv_class` value.
 func (flt *AVFilter) SetPrivClass(v *AVClass) {
 	flt.priv_class = (*C.struct_AVClass)(v)
 }
 
-// Custom: GetPrivClassAddr gets `AVFilter.priv_class` address.
+// GetPrivClassAddr gets `AVFilter.priv_class` address.
 func (flt *AVFilter) GetPrivClassAddr() **AVClass {
 	return (**AVClass)(unsafe.Pointer(&flt.priv_class))
 }
 
-// Custom: GetFlags gets `AVFilter.flags` value.
+// GetFlags gets `AVFilter.flags` value.
 func (flt *AVFilter) GetFlags() int32 {
 	return (int32)(flt.flags)
 }
 
-// Custom: SetFlags sets `AVFilter.flags` value.
+// SetFlags sets `AVFilter.flags` value.
 func (flt *AVFilter) SetFlags(v int32) {
 	flt.flags = (C.int)(v)
 }
 
-// Custom: GetFlagsAddr gets `AVFilter.flags` address.
+// GetFlagsAddr gets `AVFilter.flags` address.
 func (flt *AVFilter) GetFlagsAddr() *int32 {
 	return (*int32)(&flt.flags)
 }
@@ -139,57 +139,63 @@ type AVFilterInternal C.struct_AVFilterInternal
 // AVFilterContext
 type AVFilterContext C.struct_AVFilterContext
 
-// Custom: GetAvClass gets `AVFilterContext.av_class` value.
+// GetAvClass gets `AVFilterContext.av_class` value.
 func (fltc *AVFilterContext) GetAvClass() *AVClass {
 	return (*AVClass)(fltc.av_class)
 }
 
-// Custom: SetAvClass sets `AVFilterContext.av_class` value.
+// SetAvClass sets `AVFilterContext.av_class` value.
 func (fltc *AVFilterContext) SetAvClass(v *AVClass) {
 	fltc.av_class = (*C.struct_AVClass)(v)
 }
 
-// Custom: GetAvClassAddr gets `AVFilterContext.av_class` address.
+// GetAvClassAddr gets `AVFilterContext.av_class` address.
 func (fltc *AVFilterContext) GetAvClassAddr() **AVClass {
 	return (**AVClass)(unsafe.Pointer(&fltc.av_class))
 }
 
-// Custom: GetFilter gets `AVFilterContext.filter` value.
+// GetFilter gets `AVFilterContext.filter` value.
 func (fltc *AVFilterContext) GetFilter() *AVFilter {
 	return (*AVFilter)(fltc.filter)
 }
 
-// Custom: SetFilter sets `AVFilterContext.filter` value.
+// SetFilter sets `AVFilterContext.filter` value.
 func (fltc *AVFilterContext) SetFilter(v *AVFilter) {
 	fltc.filter = (*C.struct_AVFilter)(v)
 }
 
-// Custom: GetFilterAddr gets `AVFilterContext.filter` address.
+// GetFilterAddr gets `AVFilterContext.filter` address.
 func (fltc *AVFilterContext) GetFilterAddr() **AVFilter {
 	return (**AVFilter)(unsafe.Pointer(&fltc.filter))
 }
 
-// Custom: GetName gets `AVFilterContext.name` value.
+// GetName gets `AVFilterContext.name` value.
 func (fltc *AVFilterContext) GetName() string {
 	return C.GoString(fltc.name)
 }
 
-// Custom: GetInputPads gets `AVFilterContext.input_pads` value.
+// SetName sets `AVFilterContext.name` value.
+func (fltc *AVFilterContext) SetName(v string) {
+	C.free(unsafe.Pointer(fltc.name))
+	fltc.name, _ = StringCasting(v)
+}
+
+// GetInputPads gets `AVFilterContext.input_pads` value.
 func (fltc *AVFilterContext) GetInputPads() *AVFilterPad {
 	return (*AVFilterPad)(fltc.input_pads)
 }
 
-// Custom: SetInputPads sets `AVFilterContext.input_pads` value.
+// SetInputPads sets `AVFilterContext.input_pads` value.
 func (fltc *AVFilterContext) SetInputPads(v *AVFilterPad) {
 	fltc.input_pads = (*C.struct_AVFilterPad)(v)
 }
 
-// Custom: GetInputPadsAddr gets `AVFilterContext.input_pads` address.
+// GetInputPadsAddr gets `AVFilterContext.input_pads` address.
 func (fltc *AVFilterContext) GetInputPadsAddr() **AVFilterPad {
 	return (**AVFilterPad)(unsafe.Pointer(&fltc.input_pads))
 }
 
-// Custom: GetInputs gets `AVFilterContext.inputs` value.
+// GetInputs gets `AVFilterContext.inputs` value.
 func (fltc *AVFilterContext) GetInputs() []*AVFilterLink {
 	if fltc.inputs == nil {
 		return nil
@@ -197,47 +203,47 @@ func (fltc *AVFilterContext) GetInputs() []*AVFilterLink {
 	return unsafe.Slice((**AVFilterLink)(unsafe.Pointer(fltc.inputs)), fltc.nb_inputs)
 }
 
-// Custom: SetInputs sets `AVFilterContext.inputs` value.
+// SetInputs sets `AVFilterContext.inputs` value.
 func (fltc *AVFilterContext) SetInputs(v **AVFilterLink) {
 	fltc.inputs = (**C.struct_AVFilterLink)(unsafe.Pointer(v))
 }
 
-// Custom: GetInputsAddr gets `AVFilterContext.inputs` address.
+// GetInputsAddr gets `AVFilterContext.inputs` address.
 func (fltc *AVFilterContext) GetInputsAddr() ***AVFilterLink {
 	return (***AVFilterLink)(unsafe.Pointer(&fltc.inputs))
 }
 
-// Custom: GetNbInputs gets `AVFilterContext.nb_inputs` value.
+// GetNbInputs gets `AVFilterContext.nb_inputs` value.
 func (fltc *AVFilterContext) GetNbInputs() uint32 {
 	return (uint32)(fltc.nb_inputs)
 }
 
-// Custom: SetNbInputs sets `AVFilterContext.nb_inputs` value.
+// SetNbInputs sets `AVFilterContext.nb_inputs` value.
 func (fltc *AVFilterContext) SetNbInputs(v uint32) {
 	fltc.nb_inputs = (C.uint)(v)
 }
 
-// Custom: GetNbInputsAddr gets `AVFilterContext.nb_inputs` address.
+// GetNbInputsAddr gets `AVFilterContext.nb_inputs` address.
 func (fltc *AVFilterContext) GetNbInputsAddr() *uint32 {
 	return (*uint32)(&fltc.nb_inputs)
 }
 
-// Custom: GetOutputPads gets `AVFilterContext.output_pads` value.
+// GetOutputPads gets `AVFilterContext.output_pads` value.
 func (fltc *AVFilterContext) GetOutputPads() *AVFilterPad {
 	return (*AVFilterPad)(unsafe.Pointer(fltc.output_pads))
 }
 
-// Custom: SetOutputPads sets `AVFilterContext.output_pads` value.
+// SetOutputPads sets `AVFilterContext.output_pads` value.
 func (fltc *AVFilterContext) SetOutputPads(v *AVFilterPad) {
 	fltc.output_pads = (*C.struct_AVFilterPad)(v)
 }
 
-// Custom: GetOutputPadsAddr gets `AVFilterContext.output_pads` address.
+// GetOutputPadsAddr gets `AVFilterContext.output_pads` address.
 func (fltc *AVFilterContext) GetOutputPadsAddr() **AVFilterPad {
 	return (**AVFilterPad)(unsafe.Pointer(&fltc.output_pads))
 }
 
-// Custom: GetOutputs gets `AVFilterContext.outputs` value.
+// GetOutputs gets `AVFilterContext.outputs` value.
 func (fltc *AVFilterContext) GetOutputs() []*AVFilterLink {
 	if fltc.outputs == nil {
 		return nil
@@ -245,87 +251,87 @@ func (fltc *AVFilterContext) GetOutputs() []*AVFilterLink {
 	return unsafe.Slice((**AVFilterLink)(unsafe.Pointer(fltc.outputs)), fltc.nb_outputs)
 }
 
-// Custom: SetOutputs sets `AVFilterContext.outputs` value.
+// SetOutputs sets `AVFilterContext.outputs` value.
 func (fltc *AVFilterContext) SetOutputs(v **AVFilterLink) {
 	fltc.outputs = (**C.struct_AVFilterLink)(unsafe.Pointer(v))
 }
 
-// Custom: GetOutputsAddr gets `AVFilterContext.outputs` address.
+// GetOutputsAddr gets `AVFilterContext.outputs` address.
 func (fltc *AVFilterContext) GetOutputsAddr() ***AVFilterLink {
 	return (***AVFilterLink)(unsafe.Pointer(&fltc.outputs))
 }
 
-// Custom: GetNbOutputs gets `AVFilterContext.nb_outputs` value.
+// GetNbOutputs gets `AVFilterContext.nb_outputs` value.
 func (fltc *AVFilterContext) GetNbOutputs() uint32 {
 	return (uint32)(fltc.nb_outputs)
 }
 
-// Custom: SetNbOutputs sets `AVFilterContext.nb_outputs` value.
+// SetNbOutputs sets `AVFilterContext.nb_outputs` value.
 func (fltc *AVFilterContext) SetNbOutputs(v uint32) {
 	fltc.nb_outputs = (C.uint)(v)
 }
 
-// Custom: GetNbOutputsAddr gets `AVFilterContext.nb_outputs` address.
+// GetNbOutputsAddr gets `AVFilterContext.nb_outputs` address.
 func (fltc *AVFilterContext) GetNbOutputsAddr() *uint32 {
 	return (*uint32)(&fltc.nb_outputs)
 }
 
-// Custom: GetPriv gets `AVFilterContext.priv` value.
+// GetPriv gets `AVFilterContext.priv` value.
 func (fltc *AVFilterContext) GetPriv() unsafe.Pointer {
 	return fltc.priv
 }
 
-// Custom: SetPriv sets `AVFilterContext.priv` value.
+// SetPriv sets `AVFilterContext.priv` value.
 func (fltc *AVFilterContext) SetPriv(v CVoidPointer) {
 	fltc.priv = VoidPointer(v)
 }
 
-// Custom: GetPrivAddr gets `AVFilterContext.priv` address.
+// GetPrivAddr gets `AVFilterContext.priv` address.
 func (fltc *AVFilterContext) GetPrivAddr() *unsafe.Pointer {
 	return &fltc.priv
 }
 
-// Custom: GetGraph gets `AVFilterContext.graph` value.
+// GetGraph gets `AVFilterContext.graph` value.
 func (fltc *AVFilterContext) GetGraph() *AVFilterGraph {
 	return (*AVFilterGraph)(fltc.graph)
 }
 
-// Custom: SetGraph sets `AVFilterContext.graph` value.
+// SetGraph sets `AVFilterContext.graph` value.
 func (fltc *AVFilterContext) SetGraph(v *AVFilterGraph) {
 	fltc.graph = (*C.struct_AVFilterGraph)(v)
 }
 
-// Custom: GetGraphAddr gets `AVFilterContext.graph` address.
+// GetGraphAddr gets `AVFilterContext.graph` address.
 func (fltc *AVFilterContext) GetGraphAddr() **AVFilterGraph {
 	return (**AVFilterGraph)(unsafe.Pointer(&fltc.graph))
 }
 
-// Custom: GetThreadType gets `AVFilterContext.threadtype` value.
+// GetThreadType gets `AVFilterContext.threadtype` value.
 func (fltc *AVFilterContext) GetThreadType() int32 {
 	return (int32)(fltc.thread_type)
 }
 
-// Custom: SetThreadType sets `AVFilterContext.threadtype` value.
+// SetThreadType sets `AVFilterContext.threadtype` value.
 func (fltc *AVFilterContext) SetThreadType(v int32) {
 	fltc.thread_type = (C.int)(v)
 }
 
-// Custom: GetThreadTypeAddr gets `AVFilterContext.threadtype` address.
+// GetThreadTypeAddr gets `AVFilterContext.threadtype` address.
 func (fltc *AVFilterContext) GetThreadTypeAddr() *int32 {
 	return (*int32)(&fltc.thread_type)
 }
 
-// Custom: GetInternal gets `AVFilterContext.internal` value.
+// GetInternal gets `AVFilterContext.internal` value.
 func (fltc *AVFilterContext) GetInternal() *AVFilterInternal {
 	return (*AVFilterInternal)(fltc.internal)
 }
 
-// Custom: SetInternal sets `AVFilterContext.internal` value.
+// SetInternal sets `AVFilterContext.internal` value.
 func (fltc *AVFilterContext) SetInternal(v *AVFilterInternal) {
 	fltc.internal = (*C.struct_AVFilterInternal)(v)
 }
 
-// Custom: GetInternalAddr gets `AVFilterContext.internal` address.
+// GetInternalAddr gets `AVFilterContext.internal` address.
 func (fltc *AVFilterContext) GetInternalAddr() **AVFilterInternal {
 	return (**AVFilterInternal)(unsafe.Pointer(&fltc.internal))
 }
@@ -333,127 +339,127 @@ func (fltc *AVFilterContext) GetInternalAddr() **AVFilterInternal {
 // AVFilterCommand
 type AVFilterCommand C.struct_AVFilterCommand
 
-// Custom: GetCommandQueue gets `AVFilterContext.command_queue` value.
+// GetCommandQueue gets `AVFilterContext.command_queue` value.
 func (fltc *AVFilterContext) GetCommandQueue() *AVFilterCommand {
 	return (*AVFilterCommand)(fltc.command_queue)
 }
 
-// Custom: SetCommandQueue sets `AVFilterContext.command_queue` value.
+// SetCommandQueue sets `AVFilterContext.command_queue` value.
 func (fltc *AVFilterContext) SetCommandQueue(v *AVFilterCommand) {
 	fltc.command_queue = (*C.struct_AVFilterCommand)(v)
 }
 
-// Custom: GetCommandQueueAddr gets `AVFilterContext.command_queue` address.
+// GetCommandQueueAddr gets `AVFilterContext.command_queue` address.
 func (fltc *AVFilterContext) GetCommandQueueAddr() **AVFilterCommand {
 	return (**AVFilterCommand)(unsafe.Pointer(&fltc.command_queue))
 }
 
-// Custom: GetEnableStr gets `AVFilterContext.enable_str` value.
+// GetEnableStr gets `AVFilterContext.enable_str` value.
 func (fltc *AVFilterContext) GetEnableStr() string {
 	return C.GoString(fltc.enable_str)
 }
 
-// Custom: GetEnable gets `AVFilterContext.enable` value.
+// GetEnable gets `AVFilterContext.enable` value.
 func (fltc *AVFilterContext) GetEnable() unsafe.Pointer {
 	return fltc.enable
 }
 
-// Custom: SetEnable sets `AVFilterContext.enable` value.
+// SetEnable sets `AVFilterContext.enable` value.
 func (fltc *AVFilterContext) SetEnable(v CVoidPointer) {
 	fltc.enable = VoidPointer(v)
 }
 
-// Custom: GetEnableAddr gets `AVFilterContext.enable` address.
+// GetEnableAddr gets `AVFilterContext.enable` address.
 func (fltc *AVFilterContext) GetEnableAddr() *unsafe.Pointer {
 	return &fltc.enable
 }
 
-// Custom: GetVarValues gets `AVFilterContext.var_values` value.
+// GetVarValues gets `AVFilterContext.var_values` value.
 func (fltc *AVFilterContext) GetVarValues() *float64 {
 	return (*float64)(fltc.var_values)
 }
 
-// Custom: SetVarValues sets `AVFilterContext.var_values` value.
+// SetVarValues sets `AVFilterContext.var_values` value.
 func (fltc *AVFilterContext) SetVarValues(v *float64) {
 	fltc.var_values = (*C.double)(v)
 }
 
-// Custom: GetVarValuesAddr gets `AVFilterContext.var_values` address.
+// GetVarValuesAddr gets `AVFilterContext.var_values` address.
 func (fltc *AVFilterContext) GetVarValuesAddr() **float64 {
 	return (**float64)(unsafe.Pointer(&fltc.var_values))
 }
 
-// Custom: GetIsDisabled gets `AVFilterContext.is_disabled` value.
+// GetIsDisabled gets `AVFilterContext.is_disabled` value.
 func (fltc *AVFilterContext) GetIsDisabled() int32 {
 	return (int32)(fltc.is_disabled)
 }
 
-// Custom: SetIsDisabled sets `AVFilterContext.is_disabled` value.
+// SetIsDisabled sets `AVFilterContext.is_disabled` value.
 func (fltc *AVFilterContext) SetIsDisabled(v int32) {
 	fltc.is_disabled = (C.int)(v)
 }
 
-// Custom: GetIsDisabledAddr gets `AVFilterContext.is_disabled` address.
+// GetIsDisabledAddr gets `AVFilterContext.is_disabled` address.
 func (fltc *AVFilterContext) GetIsDisabledAddr() *int32 {
 	return (*int32)(&fltc.is_disabled)
 }
 
-// Custom: GetHwDeviceCtx gets `AVFilterContext.hw_device_ctx` value.
+// GetHwDeviceCtx gets `AVFilterContext.hw_device_ctx` value.
 func (fltc *AVFilterContext) GetHwDeviceCtx() *AVBufferRef {
 	return (*AVBufferRef)(fltc.hw_device_ctx)
 }
 
-// Custom: SetHwDeviceCtx sets `AVFilterContext.hw_device_ctx` value.
+// SetHwDeviceCtx sets `AVFilterContext.hw_device_ctx` value.
 func (fltc *AVFilterContext) SetHwDeviceCtx(v *AVBufferRef) {
 	fltc.hw_device_ctx = (*C.struct_AVBufferRef)(v)
 }
 
-// Custom: GetHwDeviceCtxAddr gets `AVFilterContext.hw_device_ctx` address.
+// GetHwDeviceCtxAddr gets `AVFilterContext.hw_device_ctx` address.
 func (fltc *AVFilterContext) GetHwDeviceCtxAddr() **AVBufferRef {
 	return (**AVBufferRef)(unsafe.Pointer(&fltc.hw_device_ctx))
 }
 
-// Custom: GetNbThreads gets `AVFilterContext.nb_threads` value.
+// GetNbThreads gets `AVFilterContext.nb_threads` value.
 func (fltc *AVFilterContext) GetNbThreads() int32 {
 	return (int32)(fltc.nb_threads)
 }
 
-// Custom: SetNbThreads sets `AVFilterContext.nb_threads` value.
+// SetNbThreads sets `AVFilterContext.nb_threads` value.
 func (fltc *AVFilterContext) SetNbThreads(v int32) {
 	fltc.nb_threads = (C.int)(v)
 }
 
-// Custom: GetNbThreadsAddr gets `AVFilterContext.nb_threads` address.
+// GetNbThreadsAddr gets `AVFilterContext.nb_threads` address.
 func (fltc *AVFilterContext) GetNbThreadsAddr() *int32 {
 	return (*int32)(&fltc.nb_threads)
 }
 
-// Custom: GetReady gets `AVFilterContext.ready` value.
+// GetReady gets `AVFilterContext.ready` value.
 func (fltc *AVFilterContext) GetReady() uint32 {
 	return (uint32)(fltc.ready)
 }
 
-// Custom: SetReady sets `AVFilterContext.ready` value.
+// SetReady sets `AVFilterContext.ready` value.
 func (fltc *AVFilterContext) SetReady(v uint32) {
 	fltc.ready = (C.uint)(v)
 }
 
-// Custom: GetReadyAddr gets `AVFilterContext.ready` address.
+// GetReadyAddr gets `AVFilterContext.ready` address.
 func (fltc *AVFilterContext) GetReadyAddr() *uint32 {
 	return (*uint32)(&fltc.ready)
 }
 
-// Custom: GetExtraHwFrames gets `AVFilterContext.extra_hw_frames` value.
+// GetExtraHwFrames gets `AVFilterContext.extra_hw_frames` value.
 func (fltc *AVFilterContext) GetExtraHwFrames() int32 {
 	return (int32)(fltc.extra_hw_frames)
 }
 
-// Custom: SetExtraHwFrames sets `AVFilterContext.extra_hw_frames` value.
+// SetExtraHwFrames sets `AVFilterContext.extra_hw_frames` value.
 func (fltc *AVFilterContext) SetExtraHwFrames(v int32) {
 	fltc.extra_hw_frames = (C.int)(v)
 }
 
-// Custom: GetExtraHwFramesAddr gets `AVFilterContext.extra_hw_frames` address.
+// GetExtraHwFramesAddr gets `AVFilterContext.extra_hw_frames` address.
 func (fltc *AVFilterContext) GetExtraHwFramesAddr() *int32 {
 	return (*int32)(&fltc.extra_hw_frames)
 }
@@ -461,47 +467,47 @@ func (fltc *AVFilterContext) GetExtraHwFramesAddr() *int32 {
 // AVFilterFormatsConfig
 type AVFilterFormatsConfig C.struct_AVFilterFormatsConfig
 
-// Custom: GetFormats gets `AVFilterFormatsConfig.formats` value.
+// GetFormats gets `AVFilterFormatsConfig.formats` value.
 func (fltf *AVFilterFormatsConfig) GetFormats() *AVFilterFormats {
 	return (*AVFilterFormats)(fltf.formats)
 }
 
-// Custom: SetFormats sets `AVFilterFormatsConfig.formats` value.
+// SetFormats sets `AVFilterFormatsConfig.formats` value.
 func (fltf *AVFilterFormatsConfig) SetFormats(v *AVFilterFormats) {
 	fltf.formats = (*C.struct_AVFilterFormats)(v)
 }
 
-// Custom: GetFormatsAddr gets `AVFilterFormatsConfig.formats` address.
+// GetFormatsAddr gets `AVFilterFormatsConfig.formats` address.
 func (fltf *AVFilterFormatsConfig) GetFormatsAddr() **AVFilterFormats {
 	return (**AVFilterFormats)(unsafe.Pointer(&fltf.formats))
 }
 
-// Custom: GetSamplerates gets `AVFilterFormatsConfig.samplerates` value.
+// GetSamplerates gets `AVFilterFormatsConfig.samplerates` value.
 func (fltf *AVFilterFormatsConfig) GetSamplerates() *AVFilterFormats {
 	return (*AVFilterFormats)(fltf.samplerates)
 }
 
-// Custom: SetSamplerates sets `AVFilterFormatsConfig.samplerates` value.
+// SetSamplerates sets `AVFilterFormatsConfig.samplerates` value.
 func (fltf *AVFilterFormatsConfig) SetSamplerates(v *AVFilterFormats) {
 	fltf.samplerates = (*C.struct_AVFilterFormats)(v)
 }
 
-// Custom: GetSampleratesAddr gets `AVFilterFormatsConfig.samplerates` address.
+// GetSampleratesAddr gets `AVFilterFormatsConfig.samplerates` address.
 func (fltf *AVFilterFormatsConfig) GetSampleratesAddr() **AVFilterFormats {
 	return (**AVFilterFormats)(unsafe.Pointer(&fltf.samplerates))
 }
 
-// Custom: GetChannelLayouts gets `AVFilterFormatsConfig.channel_layouts` value.
+// GetChannelLayouts gets `AVFilterFormatsConfig.channel_layouts` value.
 func (fltf *AVFilterFormatsConfig) GetChannelLayouts() *AVFilterChannelLayouts {
 	return (*AVFilterChannelLayouts)(fltf.channel_layouts)
 }
 
-// Custom: SetChannelLayouts sets `AVFilterFormatsConfig.channel_layouts` value.
+// SetChannelLayouts sets `AVFilterFormatsConfig.channel_layouts` value.
 func (fltf *AVFilterFormatsConfig) SetChannelLayouts(v *AVFilterChannelLayouts) {
 	fltf.channel_layouts = (*C.struct_AVFilterChannelLayouts)(v)
 }
 
-// Custom: GetChannelLayoutsAddr gets `AVFilterFormatsConfig.channel_layouts` address.
+// GetChannelLayoutsAddr gets `AVFilterFormatsConfig.channel_layouts` address.
 func (fltf *AVFilterFormatsConfig) GetChannelLayoutsAddr() **AVFilterChannelLayouts {
 	return (**AVFilterChannelLayouts)(unsafe.Pointer(&fltf.channel_layouts))
 }
@@ -509,182 +515,182 @@ func (fltf *AVFilterFormatsConfig) GetChannelLayoutsAddr() **AVFilterChannelLayo
 // AVFilterLink
 type AVFilterLink C.struct_AVFilterLink
 
-// Custom: GetSrc gets `AVFilterLink.src` value.
+// GetSrc gets `AVFilterLink.src` value.
 func (fltl *AVFilterLink) GetSrc() *AVFilterContext {
 	return (*AVFilterContext)(fltl.src)
 }
 
-// Custom: SetSrc sets `AVFilterLink.src` value.
+// SetSrc sets `AVFilterLink.src` value.
 func (fltl *AVFilterLink) SetSrc(v *AVFilterContext) {
 	fltl.src = (*C.struct_AVFilterContext)(v)
 }
 
-// Custom: GetSrcAddr gets `AVFilterLink.src` address.
+// GetSrcAddr gets `AVFilterLink.src` address.
 func (fltl *AVFilterLink) GetSrcAddr() **AVFilterContext {
 	return (**AVFilterContext)(unsafe.Pointer(&fltl.src))
 }
 
-// Custom: GetSrcpad gets `AVFilterLink.srcpad` value.
+// GetSrcpad gets `AVFilterLink.srcpad` value.
 func (fltl *AVFilterLink) GetSrcpad() *AVFilterPad {
 	return (*AVFilterPad)(fltl.srcpad)
 }
 
-// Custom: SetSrcpad sets `AVFilterLink.srcpad` value.
+// SetSrcpad sets `AVFilterLink.srcpad` value.
 func (fltl *AVFilterLink) SetSrcpad(v *AVFilterPad) {
 	fltl.srcpad = (*C.struct_AVFilterPad)(v)
 }
 
-// Custom: GetSrcpadAddr gets `AVFilterLink.srcpad` address.
+// GetSrcpadAddr gets `AVFilterLink.srcpad` address.
 func (fltl *AVFilterLink) GetSrcpadAddr() **AVFilterPad {
 	return (**AVFilterPad)(unsafe.Pointer(&fltl.srcpad))
 }
 
-// Custom: GetDst gets `AVFilterLink.dst` value.
+// GetDst gets `AVFilterLink.dst` value.
 func (fltl *AVFilterLink) GetDst() *AVFilterContext {
 	return (*AVFilterContext)(fltl.dst)
 }
 
-// Custom: SetDst sets `AVFilterLink.dst` value.
+// SetDst sets `AVFilterLink.dst` value.
 func (fltl *AVFilterLink) SetDst(v *AVFilterContext) {
 	fltl.dst = (*C.struct_AVFilterContext)(v)
 }
 
-// Custom: GetDstAddr gets `AVFilterLink.dst` address.
+// GetDstAddr gets `AVFilterLink.dst` address.
 func (fltl *AVFilterLink) GetDstAddr() **AVFilterContext {
 	return (**AVFilterContext)(unsafe.Pointer(&fltl.dst))
 }
 
-// Custom: GetDstpad gets `AVFilterLink.dstpad` value.
+// GetDstpad gets `AVFilterLink.dstpad` value.
 func (fltl *AVFilterLink) GetDstpad() *AVFilterPad {
 	return (*AVFilterPad)(fltl.dstpad)
 }
 
-// Custom: SetDstpad sets `AVFilterLink.dstpad` value.
+// SetDstpad sets `AVFilterLink.dstpad` value.
 func (fltl *AVFilterLink) SetDstpad(v *AVFilterPad) {
 	fltl.dstpad = (*C.struct_AVFilterPad)(v)
 }
 
-// Custom: GetDstpadAddr gets `AVFilterLink.dstpad` address.
+// GetDstpadAddr gets `AVFilterLink.dstpad` address.
 func (fltl *AVFilterLink) GetDstpadAddr() **AVFilterPad {
 	return (**AVFilterPad)(unsafe.Pointer(&fltl.dstpad))
 }
 
-// Custom: GetType gets `AVFilterLink.type` value.
+// GetType gets `AVFilterLink.type` value.
 func (fltl *AVFilterLink) GetType() AVMediaType {
 	return (AVMediaType)(fltl._type)
 }
 
-// Custom: SetType sets `AVFilterLink.type` value.
+// SetType sets `AVFilterLink.type` value.
 func (fltl *AVFilterLink) SetType(v AVMediaType) {
 	fltl._type = (C.enum_AVMediaType)(v)
 }
 
-// Custom: GetTypeAddr gets `AVFilterLink.type` address.
+// GetTypeAddr gets `AVFilterLink.type` address.
 func (fltl *AVFilterLink) GetTypeAddr() *AVMediaType {
 	return (*AVMediaType)(&fltl._type)
 }
 
-// Custom: GetW gets `AVFilterLink.w` value.
+// GetW gets `AVFilterLink.w` value.
 func (fltl *AVFilterLink) GetW() int32 {
 	return (int32)(fltl.w)
 }
 
-// Custom: SetW sets `AVFilterLink.w` value.
+// SetW sets `AVFilterLink.w` value.
 func (fltl *AVFilterLink) SetW(v int32) {
 	fltl.w = (C.int)(v)
 }
 
-// Custom: GetWAddr gets `AVFilterLink.w` address.
+// GetWAddr gets `AVFilterLink.w` address.
 func (fltl *AVFilterLink) GetWAddr() *int32 {
 	return (*int32)(&fltl.w)
 }
 
-// Custom: GetH gets `AVFilterLink.h` value.
+// GetH gets `AVFilterLink.h` value.
 func (fltl *AVFilterLink) GetH() int32 {
 	return (int32)(fltl.h)
 }
 
-// Custom: SetH sets `AVFilterLink.h` value.
+// SetH sets `AVFilterLink.h` value.
 func (fltl *AVFilterLink) SetH(v int32) {
 	fltl.h = (C.int)(v)
 }
 
-// Custom: GetHAddr gets `AVFilterLink.h` address.
+// GetHAddr gets `AVFilterLink.h` address.
 func (fltl *AVFilterLink) GetHAddr() *int32 {
 	return (*int32)(&fltl.h)
 }
 
-// Custom: GetSampleAspectRatio gets `AVFilterLink.sample_aspect_ratio` value.
+// GetSampleAspectRatio gets `AVFilterLink.sample_aspect_ratio` value.
 func (fltl *AVFilterLink) GetSampleAspectRatio() AVRational {
 	return (AVRational)(fltl.sample_aspect_ratio)
 }
 
-// Custom: SetSampleAspectRatio sets `AVFilterLink.sample_aspect_ratio` value.
+// SetSampleAspectRatio sets `AVFilterLink.sample_aspect_ratio` value.
 func (fltl *AVFilterLink) SetSampleAspectRatio(v AVRational) {
 	fltl.sample_aspect_ratio = (C.struct_AVRational)(v)
 }
 
-// Custom: GetSampleAspectRatioAddr gets `AVFilterLink.sample_aspect_ratio` address.
+// GetSampleAspectRatioAddr gets `AVFilterLink.sample_aspect_ratio` address.
 func (fltl *AVFilterLink) GetSampleAspectRatioAddr() *AVRational {
 	return (*AVRational)(&fltl.sample_aspect_ratio)
 }
 
-// Custom: GetChannelLayout gets `AVFilterLink.channel_layout` value.
+// GetChannelLayout gets `AVFilterLink.channel_layout` value.
 func (fltl *AVFilterLink) GetChannelLayout() uint64 {
 	return (uint64)(fltl.channel_layout)
 }
 
-// Custom: SetChannelLayout sets `AVFilterLink.channel_layout` value.
+// SetChannelLayout sets `AVFilterLink.channel_layout` value.
 func (fltl *AVFilterLink) SetChannelLayout(v uint64) {
 	fltl.channel_layout = (C.uint64_t)(v)
 }
 
-// Custom: GetChannelLayoutAddr gets `AVFilterLink.channel_layout` address.
+// GetChannelLayoutAddr gets `AVFilterLink.channel_layout` address.
 func (fltl *AVFilterLink) GetChannelLayoutAddr() *uint64 {
 	return (*uint64)(&fltl.channel_layout)
 }
 
-// Custom: GetSampleRate gets `AVFilterLink.sample_rate` value.
+// GetSampleRate gets `AVFilterLink.sample_rate` value.
 func (fltl *AVFilterLink) GetSampleRate() int32 {
 	return (int32)(fltl.sample_rate)
 }
 
-// Custom: SetSampleRate sets `AVFilterLink.sample_rate` value.
+// SetSampleRate sets `AVFilterLink.sample_rate` value.
 func (fltl *AVFilterLink) SetSampleRate(v int32) {
 	fltl.sample_rate = (C.int)(v)
 }
 
-// Custom: GetSampleRateAddr gets `AVFilterLink.sample_rate` address.
+// GetSampleRateAddr gets `AVFilterLink.sample_rate` address.
 func (fltl *AVFilterLink) GetSampleRateAddr() *int32 {
 	return (*int32)(&fltl.sample_rate)
 }
 
-// Custom: GetFormat gets `AVFilterLink.format` value.
+// GetFormat gets `AVFilterLink.format` value.
 func (fltl *AVFilterLink) GetFormat() int32 {
 	return (int32)(fltl.format)
 }
 
-// Custom: SetFormat sets `AVFilterLink.format` value.
+// SetFormat sets `AVFilterLink.format` value.
 func (fltl *AVFilterLink) SetFormat(v int32) {
 	fltl.format = (C.int)(v)
 }
 
-// Custom: GetFormatAddr gets `AVFilterLink.format` address.
+// GetFormatAddr gets `AVFilterLink.format` address.
 func (fltl *AVFilterLink) GetFormatAddr() *int32 {
 	return (*int32)(&fltl.format)
 }
 
-// Custom: GetTimeBase gets `AVFilterLink.time_base` value.
+// GetTimeBase gets `AVFilterLink.time_base` value.
 func (fltl *AVFilterLink) GetTimeBase() AVRational {
 	return (AVRational)(fltl.time_base)
 }
 
-// Custom: SetTimeBase sets `AVFilterLink.time_base` value.
+// SetTimeBase sets `AVFilterLink.time_base` value.
 func (fltl *AVFilterLink) SetTimeBase(v AVRational) {
 	fltl.time_base = (C.struct_AVRational)(v)
 }
 
-// Custom: GetTimeBaseAddr gets `AVFilterLink.time_base` address.
+// GetTimeBaseAddr gets `AVFilterLink.time_base` address.
 func (fltl *AVFilterLink) GetTimeBaseAddr() *AVRational {
 	return (*AVRational)(&fltl.time_base)
 }
@@ -702,11 +708,15 @@ func AvFilterLinkFree(link **AVFilterLink) {
 }
 
 // Deprecated: Use av_buffersink_get_channels() instead.
+//
+// AvFilterLinkGetChannels gets the number of channels of a link.
 func AvFilterLinkGetChannels(link *AVFilterLink) int32 {
 	return (int32)(C.avfilter_link_get_channels((*C.struct_AVFilterLink)(link)))
 }
 
-// Deprecated: No use
+// Deprecated: No use.
+//
+// AvFilterLinkSetClosed sets the closed field of a link.
 func AvFilterLinkSetClosed(link *AVFilterLink, closed int32) {
 	C.avfilter_link_set_closed((*C.struct_AVFilterLink)(link), (C.int)(closed))
 }
@@ -739,17 +749,23 @@ func AvFilterIterate(opaque CVoidPointerPointer) *AVFilter {
 	return (*AVFilter)(C.av_filter_iterate(VoidPointerPointer(opaque)))
 }
 
-// Deprecated: No use
+// Deprecated: No use.
+//
+// AvFilterRegisterAll initializes the filter system. Register all builtin filters.
 func AvFilterRegisterAll() {
 	C.avfilter_register_all()
 }
 
-// Deprecated: No use
+// Deprecated: No use.
+//
+// AvFilterRegister registers a filter.
 func AvFilterRegister(filter *AVFilter) {
 	C.avfilter_register((*C.struct_AVFilter)(filter))
 }
 
-// Deprecated: No use
+// Deprecated: No use.
+//
+// AvFilterNext iterates over all registered filters.
 func AvFilterNext(filter *AVFilter) *AVFilter {
 	return (*AVFilter)(C.avfilter_next((*C.struct_AVFilter)(filter)))
 }
@@ -798,32 +814,32 @@ func AvFilterGetClass() *AVClass {
 // AVFilterGraphInternal
 type AVFilterGraphInternal C.struct_AVFilterGraphInternal
 
-// typedef int (avfilter_action_func)(AVFilterContext *ctx, void *arg, int jobnr, int nb_jobs)
+// typedef int (avfilter_action_func)(AVFilterContext *ctx, void *arg, int jobnr, int nb_jobs);
 type AVFilterActionFunc = C.avfilter_action_func
 
 // typedef int (avfilter_execute_func)(AVFilterContext *ctx, avfilter_action_func *func,
-// void *arg, int *ret, int nb_jobs)
+// void *arg, int *ret, int nb_jobs);
 type AVFilterExecuteFunc = C.avfilter_execute_func
 
 // AVFilterGraph
 type AVFilterGraph C.struct_AVFilterGraph
 
-// Custom: GetAvClass gets `AVFilterGraph.av_class` value.
+// GetAvClass gets `AVFilterGraph.av_class` value.
 func (fltg *AVFilterGraph) GetAvClass() *AVClass {
 	return (*AVClass)(fltg.av_class)
 }
 
-// Custom: SetAvClass sets `AVFilterGraph.av_class` value.
+// SetAvClass sets `AVFilterGraph.av_class` value.
 func (fltg *AVFilterGraph) SetAvClass(v *AVClass) {
 	fltg.av_class = (*C.struct_AVClass)(v)
 }
 
-// Custom: GetAvClassAddr gets `AVFilterGraph.av_class` address.
+// GetAvClassAddr gets `AVFilterGraph.av_class` address.
 func (fltg *AVFilterGraph) GetAvClassAddr() **AVClass {
 	return (**AVClass)(unsafe.Pointer(&fltg.av_class))
 }
 
-// Custom: GetFilters gets `AVFilterGraph.filters` value.
+// GetFilters gets `AVFilterGraph.filters` value.
 func (fltg *AVFilterGraph) GetFilters() []*AVFilterContext {
 	if fltg.filters == nil {
 		return nil
@@ -831,117 +847,119 @@ func (fltg *AVFilterGraph) GetFilters() []*AVFilterContext {
 	return unsafe.Slice((**AVFilterContext)(unsafe.Pointer(fltg.filters)), fltg.nb_filters)
 }
 
-// Custom: SetFilters sets `AVFilterGraph.filters` value.
+// SetFilters sets `AVFilterGraph.filters` value.
 func (fltg *AVFilterGraph) SetFilters(v **AVFilterContext) {
 	fltg.filters = (**C.struct_AVFilterContext)(unsafe.Pointer(v))
 }
 
-// Custom: GetFiltersAddr gets `AVFilterGraph.filters` address.
+// GetFiltersAddr gets `AVFilterGraph.filters` address.
 func (fltg *AVFilterGraph) GetFiltersAddr() ***AVFilterContext {
 	return (***AVFilterContext)(unsafe.Pointer(&fltg.filters))
 }
 
-// Custom: GetNbFilters gets `AVFilterGraph.nb_filters` value.
+// GetNbFilters gets `AVFilterGraph.nb_filters` value.
 func (fltg *AVFilterGraph) GetNbFilters() uint32 {
 	return (uint32)(fltg.nb_filters)
 }
 
-// Custom: SetNbFilters sets `AVFilterGraph.nb_filters` value.
+// SetNbFilters sets `AVFilterGraph.nb_filters` value.
 func (fltg *AVFilterGraph) SetNbFilters(v uint32) {
 	fltg.nb_filters = (C.uint)(v)
 }
 
-// Custom: GetNbFiltersAddr gets `AVFilterGraph.nb_filters` address.
+// GetNbFiltersAddr gets `AVFilterGraph.nb_filters` address.
 func (fltg *AVFilterGraph) GetNbFiltersAddr() *uint32 {
 	return (*uint32)(&fltg.nb_filters)
 }
 
-// Custom: GetScaleSwsOpts gets `AVFilterGraph.scale_sws_opts` value.
+// GetScaleSwsOpts gets `AVFilterGraph.scale_sws_opts` value.
 func (fltg *AVFilterGraph) GetScaleSwsOpts() string {
 	return C.GoString(fltg.scale_sws_opts)
 }
 
-// Custom: GetResampleLavrOpts gets `AVFilterGraph.resample_lavr_opts` value.
+// Deprecated: No use.
+//
+// GetResampleLavrOpts gets `AVFilterGraph.resample_lavr_opts` value.
 func (fltg *AVFilterGraph) GetResampleLavrOpts() string {
 	return C.GoString(fltg.resample_lavr_opts)
 }
 
-// Custom: GetThreadType gets `AVFilterGraph.threadtype` value.
+// GetThreadType gets `AVFilterGraph.threadtype` value.
 func (fltg *AVFilterGraph) GetThreadType() int32 {
 	return (int32)(fltg.thread_type)
 }
 
-// Custom: SetThreadType sets `AVFilterGraph.threadtype` value.
+// SetThreadType sets `AVFilterGraph.threadtype` value.
 func (fltg *AVFilterGraph) SetThreadType(v int32) {
 	fltg.thread_type = (C.int)(v)
 }
 
-// Custom: GetThreadTypeAddr gets `AVFilterGraph.threadtype` address.
+// GetThreadTypeAddr gets `AVFilterGraph.threadtype` address.
 func (fltg *AVFilterGraph) GetThreadTypeAddr() *int32 {
 	return (*int32)(&fltg.thread_type)
 }
 
-// Custom: GetNbThreads gets `AVFilterGraph.nb_threads` value.
+// GetNbThreads gets `AVFilterGraph.nb_threads` value.
 func (fltg *AVFilterGraph) GetNbThreads() int32 {
 	return (int32)(fltg.nb_threads)
 }
 
-// Custom: SetNbThreads sets `AVFilterGraph.nb_threads` value.
+// SetNbThreads sets `AVFilterGraph.nb_threads` value.
 func (fltg *AVFilterGraph) SetNbThreads(v int32) {
 	fltg.nb_threads = (C.int)(v)
 }
 
-// Custom: GetNbThreadsAddr gets `AVFilterGraph.nb_threads` address.
+// GetNbThreadsAddr gets `AVFilterGraph.nb_threads` address.
 func (fltg *AVFilterGraph) GetNbThreadsAddr() *int32 {
 	return (*int32)(&fltg.nb_threads)
 }
 
-// Custom: GetInternal gets `AVFilterGraph.internal` value.
+// GetInternal gets `AVFilterGraph.internal` value.
 func (fltg *AVFilterGraph) GetInternal() *AVFilterGraphInternal {
 	return (*AVFilterGraphInternal)(fltg.internal)
 }
 
-// Custom: SetInternal sets `AVFilterGraph.internal` value.
+// SetInternal sets `AVFilterGraph.internal` value.
 func (fltg *AVFilterGraph) SetInternal(v *AVFilterGraphInternal) {
 	fltg.internal = (*C.struct_AVFilterGraphInternal)(v)
 }
 
-// Custom: GetInternalAddr gets `AVFilterGraph.internal` address.
+// GetInternalAddr gets `AVFilterGraph.internal` address.
 func (fltg *AVFilterGraph) GetInternalAddr() **AVFilterGraphInternal {
 	return (**AVFilterGraphInternal)(unsafe.Pointer(&fltg.internal))
 }
 
-// Custom: GetOpaque gets `AVFilterGraph.opaque` value.
+// GetOpaque gets `AVFilterGraph.opaque` value.
 func (fltg *AVFilterGraph) GetOpaque() unsafe.Pointer {
 	return fltg.opaque
 }
 
-// Custom: SetOpaque sets `AVFilterGraph.opaque` value.
+// SetOpaque sets `AVFilterGraph.opaque` value.
 func (fltg *AVFilterGraph) SetOpaque(v CVoidPointer) {
 	fltg.opaque = VoidPointer(v)
 }
 
-// Custom: GetOpaqueAddr gets `AVFilterGraph.opaque` address.
+// GetOpaqueAddr gets `AVFilterGraph.opaque` address.
 func (fltg *AVFilterGraph) GetOpaqueAddr() *unsafe.Pointer {
 	return (*unsafe.Pointer)(&fltg.opaque)
 }
 
-// Custom: GetExecute gets `AVFilterGraph.execute` value.
+// GetExecute gets `AVFilterGraph.execute` value.
 func (fltg *AVFilterGraph) GetExecute() *AVFilterExecuteFunc {
 	return (*AVFilterExecuteFunc)(fltg.execute)
 }
 
-// Custom: SetExecute sets `AVFilterGraph.execute` value.
+// SetExecute sets `AVFilterGraph.execute` value.
 func (fltg *AVFilterGraph) SetExecute(v *AVFilterExecuteFunc) {
 	fltg.execute = (*C.avfilter_execute_func)(v)
 }
 
-// Custom: GetExecuteAddr gets `AVFilterGraph.execute` address.
+// GetExecuteAddr gets `AVFilterGraph.execute` address.
 func (fltg *AVFilterGraph) GetExecuteAddr() **AVFilterExecuteFunc {
 	return (**AVFilterExecuteFunc)(unsafe.Pointer(&fltg.execute))
 }
 
-// Custom: GetAresampleSwrOpts gets `AVFilterGraph.aresample_swr_opts` value.
+// GetAresampleSwrOpts gets `AVFilterGraph.aresample_swr_opts` value.
 func (fltg *AVFilterGraph) GetAresampleSwrOpts() string {
 	return C.GoString(fltg.aresample_swr_opts)
 }
@@ -968,8 +986,8 @@ func AvFilterGraphGetFilter(graph *AVFilterGraph, name string) *AVFilterContext 
 }
 
 // AvFilterGraphCreateFilter creates and adds a filter instance into an existing graph.
-func AvFilterGraphCreateFilter(graph *AVFilterGraph, filtCtx **AVFilterContext, filter *AVFilter,
-	name, args string, opaque CVoidPointer) int32 {
+func AvFilterGraphCreateFilter(filtCtx **AVFilterContext, filter *AVFilter,
+	name, args string, opaque CVoidPointer, graph *AVFilterGraph) int32 {
 	namePtr, nameFunc := StringCasting(name)
 	defer nameFunc()
 	argsPtr, argsFunc := StringCasting(args)
@@ -1003,52 +1021,58 @@ func AvFilterGraphFree(graph **AVFilterGraph) {
 // AVFilterInOut
 type AVFilterInOut C.struct_AVFilterInOut
 
-// Custom: GetName gets `AVFilterInOut.name` value.
+// GetName gets `AVFilterInOut.name` value.
 func (fltio *AVFilterInOut) GetName() string {
 	return C.GoString(fltio.name)
 }
 
-// Custom: GetFilterCtx gets `AVFilterInOut.filter_ctx` value.
+// SetName sets `AVFilterInOut.name` value.
+func (fltio *AVFilterInOut) SetName(v string) {
+	C.free(unsafe.Pointer(fltio.name))
+	fltio.name, _ = StringCasting(v)
+}
+
+// GetFilterCtx gets `AVFilterInOut.filter_ctx` value.
 func (fltio *AVFilterInOut) GetFilterCtx() *AVFilterContext {
 	return (*AVFilterContext)(fltio.filter_ctx)
 }
 
-// Custom: SetFilterCtx sets `AVFilterInOut.filter_ctx` value.
+// SetFilterCtx sets `AVFilterInOut.filter_ctx` value.
 func (fltio *AVFilterInOut) SetFilterCtx(v *AVFilterContext) {
 	fltio.filter_ctx = (*C.struct_AVFilterContext)(v)
 }
 
-// Custom: GetFilterCtxAddr gets `AVFilterInOut.filter_ctx` address.
+// GetFilterCtxAddr gets `AVFilterInOut.filter_ctx` address.
 func (fltio *AVFilterInOut) GetFilterCtxAddr() **AVFilterContext {
 	return (**AVFilterContext)(unsafe.Pointer(&fltio.filter_ctx))
 }
 
-// Custom: GetPadIdx gets `AVFilterInOut.pad_idx` value.
+// GetPadIdx gets `AVFilterInOut.pad_idx` value.
 func (fltio *AVFilterInOut) GetPadIdx() int32 {
 	return (int32)(fltio.pad_idx)
 }
 
-// Custom: SetPadIdx sets `AVFilterInOut.pad_idx` value.
+// SetPadIdx sets `AVFilterInOut.pad_idx` value.
 func (fltio *AVFilterInOut) SetPadIdx(v int32) {
 	fltio.pad_idx = (C.int)(v)
 }
 
-// Custom: GetPadIdxAddr gets `AVFilterInOut.pad_idx` address.
+// GetPadIdxAddr gets `AVFilterInOut.pad_idx` address.
 func (fltio *AVFilterInOut) GetPadIdxAddr() *int32 {
 	return (*int32)(&fltio.pad_idx)
 }
 
-// Custom: GetNext gets `AVFilterInOut.next` value.
+// GetNext gets `AVFilterInOut.next` value.
 func (fltio *AVFilterInOut) GetNext() *AVFilterInOut {
 	return (*AVFilterInOut)(fltio.next)
 }
 
-// Custom: SetNext sets `AVFilterInOut.next` value.
+// SetNext sets `AVFilterInOut.next` value.
 func (fltio *AVFilterInOut) SetNext(v *AVFilterInOut) {
 	fltio.next = (*C.struct_AVFilterInOut)(v)
 }
 
-// Custom: GetNextAddr gets `AVFilterInOut.next` address.
+// GetNextAddr gets `AVFilterInOut.next` address.
 func (fltio *AVFilterInOut) GetNextAddr() **AVFilterInOut {
 	return (**AVFilterInOut)(unsafe.Pointer(&fltio.next))
 }
@@ -1075,7 +1099,7 @@ func AvFilterGraphParse(graph *AVFilterGraph, filters string, inputs, outputs *A
 }
 
 // AvFilterGraphParsePtr adds a graph described by a string to a graph.
-func AvFilterGraphParsePtr(graph *AVFilterGraph, filters string, inputs, outputs *AVFilterInOut,
+func AvFilterGraphParsePtr(graph *AVFilterGraph, filters string, inputs, outputs **AVFilterInOut,
 	logCtx CVoidPointer) int32 {
 	filtersPtr, filtersFunc := StringCasting(filters)
 	defer filtersFunc()
@@ -1087,7 +1111,7 @@ func AvFilterGraphParsePtr(graph *AVFilterGraph, filters string, inputs, outputs
 
 // AvFilterGraphParse2 adds a graph described by a string to a graph.
 func AvFilterGraphParse2(graph *AVFilterGraph, filters string,
-	inputs, outputs *AVFilterInOut) int32 {
+	inputs, outputs **AVFilterInOut) int32 {
 	filtersPtr, filtersFunc := StringCasting(filters)
 	defer filtersFunc()
 	return (int32)(C.avfilter_graph_parse2((*C.struct_AVFilterGraph)(graph),

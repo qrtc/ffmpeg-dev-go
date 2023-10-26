@@ -15,12 +15,12 @@ import "unsafe"
 type AVFifoBuffer C.struct_AVFifoBuffer
 
 // AvFifoAlloc initializes an AVFifoBuffer.
-func AvFifoAlloc[T HelperInteger](size T) *AVFifoBuffer {
+func AvFifoAlloc[T Integer](size T) *AVFifoBuffer {
 	return (*AVFifoBuffer)(C.av_fifo_alloc((C.uint)(size)))
 }
 
 // AvFifoAllocArray initializes an AVFifoBuffer.
-func AvFifoAllocArray[U, V HelperInteger](nmemb U, size V) *AVFifoBuffer {
+func AvFifoAllocArray[U, V Integer](nmemb U, size V) *AVFifoBuffer {
 	return (*AVFifoBuffer)(C.av_fifo_alloc_array((C.size_t)(nmemb), (C.size_t)(size)))
 }
 
@@ -89,22 +89,22 @@ func AvFifoGenericWrite(f *AVFifoBuffer, src CVoidPointer,
 }
 
 // AvFifoRealloc2 resizes an AVFifoBuffer.
-func AvFifoRealloc2[T HelperInteger](f *AVFifoBuffer, size T) int32 {
+func AvFifoRealloc2[T Integer](f *AVFifoBuffer, size T) int32 {
 	return (int32)(C.av_fifo_realloc2((*C.struct_AVFifoBuffer)(f), (C.uint)(size)))
 }
 
 // AvFifoGrow enlarges an AVFifoBuffer.
-func AvFifoGrow[T HelperInteger](f *AVFifoBuffer, additionalSpace T) int32 {
+func AvFifoGrow[T Integer](f *AVFifoBuffer, additionalSpace T) int32 {
 	return (int32)(C.av_fifo_grow((*C.struct_AVFifoBuffer)(f), (C.uint)(additionalSpace)))
 }
 
 // AvFifoDrain reads and discards the specified amount of data from an AVFifoBuffer.
-func AvFifoDrain[T HelperInteger](f *AVFifoBuffer, size T) {
+func AvFifoDrain[T Integer](f *AVFifoBuffer, size T) {
 	C.av_fifo_drain((*C.struct_AVFifoBuffer)(f), (C.int)(size))
 }
 
 // AvFifoPeek2 returns a pointer to the data stored in a FIFO buffer at a certain offset.
 // The FIFO buffer is not modified.
-func AvFifoPeek2[T HelperInteger](f *AVFifoBuffer, offs T) *uint8 {
+func AvFifoPeek2[T Integer](f *AVFifoBuffer, offs T) *uint8 {
 	return (*uint8)(C.av_fifo_peek2((*C.struct_AVFifoBuffer)(f), (C.int)(offs)))
 }

@@ -32,12 +32,12 @@ const (
 // AVProfile
 type AVProfile C.struct_AVProfile
 
-// Custom: GetProfile gets `AVProfile.profile` value.
+// GetProfile gets `AVProfile.profile` value.
 func (p *AVProfile) GetProfile() int32 {
 	return (int32)(p.profile)
 }
 
-// Custom: GetName gets `AVProfile.name` value.
+// GetName gets `AVProfile.name` value.
 func (p *AVProfile) GetName() string {
 	return C.GoString(p.name)
 }
@@ -45,79 +45,79 @@ func (p *AVProfile) GetName() string {
 // AVCodec
 type AVCodec C.struct_AVCodec
 
-// Custom: GetName gets `AVCodec.name` value.
+// GetName gets `AVCodec.name` value.
 func (codec *AVCodec) GetName() string {
 	return C.GoString(codec.name)
 }
 
-// Custom: GetLongName gets `AVCodec.long_name` value.
+// GetLongName gets `AVCodec.long_name` value.
 func (codec *AVCodec) GetLongName() string {
 	return C.GoString(codec.long_name)
 }
 
-// Custom: GetType gets `AVCodec.type` value.
+// GetType gets `AVCodec.type` value.
 func (codec *AVCodec) GetType() AVMediaType {
 	return (AVMediaType)(codec._type)
 }
 
-// Custom: GetType gets `AVCodec.id` value.
+// GetType gets `AVCodec.id` value.
 func (codec *AVCodec) GetID() AVCodecID {
 	return (AVCodecID)(codec.id)
 }
 
-// Custom: GetCapabilities gets `AVCodec.capabilities` value.
+// GetCapabilities gets `AVCodec.capabilities` value.
 func (codec *AVCodec) GetCapabilities() int32 {
 	return (int32)(codec.capabilities)
 }
 
-// Custom: GetSupportedFramerates gets `AVCodec.supportedFramerates` value.
+// GetSupportedFramerates gets `AVCodec.supportedFramerates` value.
 func (codec *AVCodec) GetSupportedFramerates() []AVRational {
 	return SliceTrunc((*AVRational)(codec.supported_framerates), func(ar AVRational) bool {
 		return ar.GetNum() == 0 && ar.GetDen() == 0
 	})
 }
 
-// Custom: GetPixFmts gets `AVCodec.pix_fmts` value.
+// GetPixFmts gets `AVCodec.pix_fmts` value.
 func (codec *AVCodec) GetPixFmts() []AVPixelFormat {
 	return SliceTrunc((*AVPixelFormat)(codec.pix_fmts), func(pf AVPixelFormat) bool {
 		return pf == AV_PIX_FMT_NONE
 	})
 }
 
-// Custom: GetSupportedSamplerates gets `AVCodec.supported_samplerates` value.
+// GetSupportedSamplerates gets `AVCodec.supported_samplerates` value.
 func (codec *AVCodec) GetSupportedSamplerates() []int32 {
 	return SliceTrunc((*int32)(codec.supported_samplerates), func(i int32) bool {
 		return i == 0
 	})
 }
 
-// Custom: GetSampleFmts gets `AVCodec.sample_fmts` value.
+// GetSampleFmts gets `AVCodec.sample_fmts` value.
 func (codec *AVCodec) GetSampleFmts() []AVSampleFormat {
 	return SliceTrunc((*AVSampleFormat)(codec.sample_fmts), func(sf AVSampleFormat) bool {
 		return sf == AV_SAMPLE_FMT_NONE
 	})
 }
 
-// Custom: GetChannelLayouts gets `AVCodec.channel_layouts` value.
+// GetChannelLayouts gets `AVCodec.channel_layouts` value.
 func (codec *AVCodec) GetChannelLayouts() []uint64 {
 	return SliceTrunc((*uint64)(codec.channel_layouts), func(u uint64) bool {
 		return u == 0
 	})
 }
 
-// Custom: GetMaxLowres gets `AVCodec.max_lowres` value.
+// GetMaxLowres gets `AVCodec.max_lowres` value.
 func (codec *AVCodec) GetMaxLowres() uint8 {
 	return (uint8)(codec.max_lowres)
 }
 
-// Custom: GetProfiles gets `AVCodec.profiles` value.
+// GetProfiles gets `AVCodec.profiles` value.
 func (codec *AVCodec) GetProfiles() []AVProfile {
 	return SliceTrunc((*AVProfile)(codec.profiles), func(ap AVProfile) bool {
 		return ap.GetProfile() == FF_PROFILE_UNKNOWN
 	})
 }
 
-// Custom: GetWrapperName gets `AVCodec.wrapper_name` value.
+// GetWrapperName gets `AVCodec.wrapper_name` value.
 func (codec *AVCodec) GetWrapperName() string {
 	return C.GoString(codec.wrapper_name)
 }
@@ -171,52 +171,52 @@ const (
 // AVCodecHWConfig
 type AVCodecHWConfig C.struct_AVCodecHWConfig
 
-// Custom: GetPixFmt gets `AVCodecHWConfig.pix_fmt` value.
+// GetPixFmt gets `AVCodecHWConfig.pix_fmt` value.
 func (hwc *AVCodecHWConfig) GetPixFmt() AVPixelFormat {
 	return (AVPixelFormat)(hwc.pix_fmt)
 }
 
-// Custom: SetPixFmt sets `AVCodecHWConfig.pix_fmt` value.
+// SetPixFmt sets `AVCodecHWConfig.pix_fmt` value.
 func (hwc *AVCodecHWConfig) SetPixFmt(v AVPixelFormat) {
 	hwc.pix_fmt = (C.enum_AVPixelFormat)(v)
 }
 
-// Custom: GetPixFmtAddr gets `AVCodecHWConfig.pix_fmt` address.
+// GetPixFmtAddr gets `AVCodecHWConfig.pix_fmt` address.
 func (hwc *AVCodecHWConfig) GetPixFmtAddr() *AVPixelFormat {
 	return (*AVPixelFormat)(&hwc.pix_fmt)
 }
 
-// Custom: GetMethods gets `AVCodecHWConfig.methods` value.
+// GetMethods gets `AVCodecHWConfig.methods` value.
 func (hwc *AVCodecHWConfig) GetMethods() int32 {
 	return (int32)(hwc.methods)
 }
 
-// Custom: SetMethods sets `AVCodecHWConfig.methods` value.
+// SetMethods sets `AVCodecHWConfig.methods` value.
 func (hwc *AVCodecHWConfig) SetMethods(v int32) {
 	hwc.methods = (C.int)(v)
 }
 
-// Custom: GetMethodsAddr gets `AVCodecHWConfig.methods` address.
+// GetMethodsAddr gets `AVCodecHWConfig.methods` address.
 func (hwc *AVCodecHWConfig) GetMethodsAddr() *int32 {
 	return (*int32)(&hwc.methods)
 }
 
-// Custom: GetDeviceType gets `AVCodecHWConfig.devicetype` value.
+// GetDeviceType gets `AVCodecHWConfig.devicetype` value.
 func (hwc *AVCodecHWConfig) GetDeviceType() AVHWDeviceType {
 	return (AVHWDeviceType)(hwc.device_type)
 }
 
-// Custom: SetDeviceType sets `AVCodecHWConfig.devicetype` value.
+// SetDeviceType sets `AVCodecHWConfig.devicetype` value.
 func (hwc *AVCodecHWConfig) SetDeviceType(v AVHWDeviceType) {
 	hwc.device_type = (C.enum_AVHWDeviceType)(v)
 }
 
-// Custom: GetDeviceTypeAddr gets `AVCodecHWConfig.devicetype` address.
+// GetDeviceTypeAddr gets `AVCodecHWConfig.devicetype` address.
 func (hwc *AVCodecHWConfig) GetDeviceTypeAddr() *AVHWDeviceType {
 	return (*AVHWDeviceType)(&hwc.device_type)
 }
 
 // AvCodecGetHwConfig retrieves supported hardware configurations for a codec.
-func AvCodecGetHwConfig[T HelperInteger](codec *AVCodec, index T) *AVCodecHWConfig {
+func AvCodecGetHwConfig[T Integer](codec *AVCodec, index T) *AVCodecHWConfig {
 	return (*AVCodecHWConfig)(C.avcodec_get_hw_config((*C.struct_AVCodec)(codec), (C.int)(index)))
 }

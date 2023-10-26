@@ -75,32 +75,32 @@ func SwsGetCoefficients(colorspace int32) *int32 {
 // SwsVector
 type SwsVector C.struct_SwsVector
 
-// Custom: GetCoeff gets `SwsVector.coeff` value.
+// GetCoeff gets `SwsVector.coeff` value.
 func (sv *SwsVector) GetCoeff() *float64 {
 	return (*float64)(sv.coeff)
 }
 
-// Custom: SetCoeff sets `SwsVector.coeff` value.
+// SetCoeff sets `SwsVector.coeff` value.
 func (sv *SwsVector) SetCoeff(v *float64) {
 	sv.coeff = (*C.double)(v)
 }
 
-// Custom: GetCoeffAddr gets `SwsVector.coeff` address.
+// GetCoeffAddr gets `SwsVector.coeff` address.
 func (sv *SwsVector) GetCoeffAddr() **float64 {
 	return (**float64)(unsafe.Pointer(&sv.coeff))
 }
 
-// Custom: GetLength gets `SwsVector.length` value.
+// GetLength gets `SwsVector.length` value.
 func (sv *SwsVector) GetLength() int32 {
 	return (int32)(sv.length)
 }
 
-// Custom: SetLength sets `SwsVector.length` value.
+// SetLength sets `SwsVector.length` value.
 func (sv *SwsVector) SetLength(v int32) {
 	sv.length = (C.int)(v)
 }
 
-// Custom: GetLengthAddr gets `SwsVector.length` address.
+// GetLengthAddr gets `SwsVector.length` address.
 func (sv *SwsVector) GetLengthAddr() *int32 {
 	return (*int32)(&sv.length)
 }
@@ -108,62 +108,62 @@ func (sv *SwsVector) GetLengthAddr() *int32 {
 // SwsFilter
 type SwsFilter C.struct_SwsFilter
 
-// Custom: GetLumH gets `SwsFilter.lumH` value.
+// GetLumH gets `SwsFilter.lumH` value.
 func (sf *SwsFilter) GetLumH() *SwsVector {
 	return (*SwsVector)(sf.lumH)
 }
 
-// Custom: SetLumH sets `SwsFilter.lumH` value.
+// SetLumH sets `SwsFilter.lumH` value.
 func (sf *SwsFilter) SetLumH(v *SwsVector) {
 	sf.lumH = (*C.struct_SwsVector)(v)
 }
 
-// Custom: GetLumHAddr gets `SwsFilter.lumH` address.
+// GetLumHAddr gets `SwsFilter.lumH` address.
 func (sf *SwsFilter) GetLumHAddr() **SwsVector {
 	return (**SwsVector)(unsafe.Pointer(&sf.lumH))
 }
 
-// Custom: GetLumV gets `SwsFilter.lumV` value.
+// GetLumV gets `SwsFilter.lumV` value.
 func (sf *SwsFilter) GetLumV() *SwsVector {
 	return (*SwsVector)(sf.lumV)
 }
 
-// Custom: SetLumV sets `SwsFilter.lumV` value.
+// SetLumV sets `SwsFilter.lumV` value.
 func (sf *SwsFilter) SetLumV(v *SwsVector) {
 	sf.lumV = (*C.struct_SwsVector)(v)
 }
 
-// Custom: GetLumVAddr gets `SwsFilter.lumV` address.
+// GetLumVAddr gets `SwsFilter.lumV` address.
 func (sf *SwsFilter) GetLumVAddr() **SwsVector {
 	return (**SwsVector)(unsafe.Pointer(&sf.lumV))
 }
 
-// Custom: GetChrH gets `SwsFilter.chrH` value.
+// GetChrH gets `SwsFilter.chrH` value.
 func (sf *SwsFilter) GetChrH() *SwsVector {
 	return (*SwsVector)(sf.chrH)
 }
 
-// Custom: SetChrH sets `SwsFilter.chrH` value.
+// SetChrH sets `SwsFilter.chrH` value.
 func (sf *SwsFilter) SetChrH(v *SwsVector) {
 	sf.chrH = (*C.struct_SwsVector)(v)
 }
 
-// Custom: GetChrHAddr gets `SwsFilter.chrH` address.
+// GetChrHAddr gets `SwsFilter.chrH` address.
 func (sf *SwsFilter) GetChrHAddr() **SwsVector {
 	return (**SwsVector)(unsafe.Pointer(&sf.chrH))
 }
 
-// Custom: GetChrV gets `SwsFilter.chrV` value.
+// GetChrV gets `SwsFilter.chrV` value.
 func (sf *SwsFilter) GetChrV() *SwsVector {
 	return (*SwsVector)(sf.chrV)
 }
 
-// Custom: SetChrV sets `SwsFilter.chrV` value.
+// SetChrV sets `SwsFilter.chrV` value.
 func (sf *SwsFilter) SetChrV(v *SwsVector) {
 	sf.chrV = (*C.struct_SwsVector)(v)
 }
 
-// Custom: GetChrVAddr gets `SwsFilter.chrV` address.
+// GetChrVAddr gets `SwsFilter.chrV` address.
 func (sf *SwsFilter) GetChrVAddr() **SwsVector {
 	return (**SwsVector)(unsafe.Pointer(&sf.chrV))
 }
@@ -276,42 +276,58 @@ func SwsNormalizeVec(a *SwsVector, height float64) {
 	C.sws_normalizeVec((*C.struct_SwsVector)(a), (C.double)(height))
 }
 
-// Deprecated: No use
+// Deprecated: No use.
+//
+// SwsGetConstVec
 func SwsGetConstVec(c float64, length int32) *SwsVector {
 	return (*SwsVector)(C.sws_getConstVec((C.double)(c), (C.int)(length)))
 }
 
-// Deprecated: No use
+// Deprecated: No use.
+//
+// SwsGetIdentityVec
 func SwsGetIdentityVec() *SwsVector {
 	return (*SwsVector)(C.sws_getIdentityVec())
 }
 
-// Deprecated: No use
+// Deprecated: No use.
+//
+// SwsConvVec
 func SwsConvVec(a, b *SwsVector) {
 	C.sws_convVec((*C.struct_SwsVector)(a), (*C.struct_SwsVector)(b))
 }
 
-// Deprecated: No use
+// Deprecated: No use.
+//
+// SwsAddVec
 func SwsAddVec(a, b *SwsVector) {
 	C.sws_addVec((*C.struct_SwsVector)(a), (*C.struct_SwsVector)(b))
 }
 
-// Deprecated: No use
+// Deprecated: No use.
+//
+// SwsSubVec
 func SwsSubVec(a, b *SwsVector) {
 	C.sws_subVec((*C.struct_SwsVector)(a), (*C.struct_SwsVector)(b))
 }
 
-// Deprecated: No use
+// Deprecated: No use.
+//
+// SwsShiftVec
 func SwsShiftVec(a *SwsVector, shift int32) {
 	C.sws_shiftVec((*C.struct_SwsVector)(a), (C.int)(shift))
 }
 
-// Deprecated: No use
+// Deprecated: No use.
+//
+// SwsCloneVec
 func SwsCloneVec(a *SwsVector) *SwsVector {
 	return (*SwsVector)(C.sws_cloneVec((*C.struct_SwsVector)(a)))
 }
 
-// Deprecated: No use
+// Deprecated: No use.
+//
+// SwsPrintVec2
 func SwsPrintVec2(a *SwsVector, logCtx *AVClass, logLevel int32) {
 	C.sws_printVec2((*C.struct_SwsVector)(a),
 		(*C.struct_AVClass)(logCtx), (C.int)(logLevel))

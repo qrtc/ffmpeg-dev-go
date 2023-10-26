@@ -3,6 +3,12 @@ package ffmpeg
 /*
 #include <libavutil/log.h>
 
+typedef const char* (*av_class_item_name_func)(void* ctx);
+
+typedef void* (*av_class_child_next_func)(void *obj, void *prev);
+
+typedef const struct AVClass* (*av_class_child_class_next_func)(const struct AVClass *prev);
+
 void av_log_wrap(void *avcl, int level, char *fmt) {
 	av_log(avcl, level, fmt, NULL);
 }
@@ -58,32 +64,92 @@ func Av_IS_OUTPUT_DEVICE(c AVClassCategory) bool {
 // AVClass
 type AVClass C.struct_AVClass
 
-// Custom: GetClassName gets `AVClass.class_name` value.
+// GetClassName gets `AVClass.class_name` value.
 func (cls *AVClass) GetClassName() string {
 	return C.GoString(cls.class_name)
 }
 
-// Custom: GetOption gets `AVClass.option` value.
+// typedef const char* (*av_class_item_name_func)(void* ctx);
+type AvClassItemNameFunc = C.av_class_item_name_func
+
+// GetItemName gets `AVClass.item_name` value.
+func (cls *AVClass) GetItemName() AvClassItemNameFunc {
+	return (AvClassItemNameFunc)(cls.item_name)
+}
+
+// SetItemName sets `AVClass.item_name` value.
+func (cls *AVClass) SetItemName(v AvClassItemNameFunc) {
+	cls.item_name = (C.av_class_item_name_func)(v)
+}
+
+// GetItemNameAddr gets `AVClass.item_name` address.
+func (cls *AVClass) GetItemNameAddr() *AvClassItemNameFunc {
+	return (*AvClassItemNameFunc)(&cls.item_name)
+}
+
+// GetOption gets `AVClass.option` value.
 func (cls *AVClass) GetOption() *AVOption {
 	return (*AVOption)(cls.option)
 }
 
-// Custom: GetVersion gets `AVClass.version` value.
+// GetVersion gets `AVClass.version` value.
 func (cls *AVClass) GetVersion() int32 {
 	return (int32)(cls.version)
 }
 
-// Custom: GetLogLevelOffsetOffset gets `AVClass.log_level_offset_offset` value.
+// GetLogLevelOffsetOffset gets `AVClass.log_level_offset_offset` value.
 func (cls *AVClass) GetLogLevelOffsetOffset() int32 {
 	return (int32)(cls.log_level_offset_offset)
 }
 
-// Custom: GetParentLogContextOffset gets `AVClass.parent_log_context_offset` value.
+// GetParentLogContextOffset gets `AVClass.parent_log_context_offset` value.
 func (cls *AVClass) GetParentLogContextOffset() int32 {
 	return (int32)(cls.parent_log_context_offset)
 }
 
-// Custom: GetCategory gets `AVClass.category` value.
+// typedef void* (*av_class_child_next_func)(void *obj, void *prev);
+type AvClassChildNextFunc = C.av_class_child_next_func
+
+// typedef const struct AVClass* (*av_class_child_class_next_func)(const struct AVClass *prev);
+type AvClassChildClassNextFunc = C.av_class_child_class_next_func
+
+// GetChildNext gets `AVClass.child_next` value.
+func (cls *AVClass) GetChildNext() AvClassChildNextFunc {
+	return (AvClassChildNextFunc)(cls.child_next)
+}
+
+// SetChildNext sets `AVClass.child_next` value.
+func (cls *AVClass) SetChildNext(v AvClassChildNextFunc) {
+	cls.child_next = (C.av_class_child_next_func)(v)
+}
+
+// GetChildNextAddr gets `AVClass.child_next` address.
+func (cls *AVClass) GetChildNextAddr() *AvClassChildNextFunc {
+	return (*AvClassChildNextFunc)(&cls.child_next)
+}
+
+// Deprecated: No use.
+//
+// GetChildClassNext gets `AVClass.child_class_next` value.
+func (cls *AVClass) GetChildClassNext() AvClassChildClassNextFunc {
+	return (AvClassChildClassNextFunc)(cls.child_class_next)
+}
+
+// Deprecated: No use.
+//
+// SetChildClassNext sets `AVClass.child_class_next` value.
+func (cls *AVClass) SetChildClassNext(v AvClassChildClassNextFunc) {
+	cls.child_class_next = (C.av_class_child_class_next_func)(v)
+}
+
+// Deprecated: No use.
+//
+// GetChildClassNextAddr gets `AVClass.child_class_next` address.
+func (cls *AVClass) GetChildClassNextAddr() *AvClassChildClassNextFunc {
+	return (*AvClassChildClassNextFunc)(&cls.child_class_next)
+}
+
+// GetCategory gets `AVClass.category` value.
 func (cls *AVClass) GetCategory() AVClassCategory {
 	return (AVClassCategory)(cls.category)
 }
@@ -139,7 +205,7 @@ func AvLogSetLevel(level int32) {
 	C.av_log_set_level(C.int(level))
 }
 
-// typedef void (*av_log_callback_func)(void*, int, const char*, va_list)
+// typedef void (*av_log_callback_func)(void*, int, const char*, va_list);
 type AVLogCallbackFunc = C.av_log_callback_func
 
 // AvLogSetCallback sets the logging callback

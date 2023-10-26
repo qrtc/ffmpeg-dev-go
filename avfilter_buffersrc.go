@@ -20,137 +20,137 @@ func AvBuffersrcGetNbFailedRequests(bufferSrc *AVFilterContext) uint32 {
 // AVBufferSrcParameters
 type AVBufferSrcParameters C.struct_AVBufferSrcParameters
 
-// Custom: GetFormat gets `AVBufferSrcParameters.format` value.
+// GetFormat gets `AVBufferSrcParameters.format` value.
 func (bsrc *AVBufferSrcParameters) GetFormat() int32 {
 	return (int32)(bsrc.format)
 }
 
-// Custom: SetFormat sets `AVBufferSrcParameters.format` value.
+// SetFormat sets `AVBufferSrcParameters.format` value.
 func (bsrc *AVBufferSrcParameters) SetFormat(v int32) {
 	bsrc.format = (C.int)(v)
 }
 
-// Custom: GetFormatAddr gets `AVBufferSrcParameters.format` address.
+// GetFormatAddr gets `AVBufferSrcParameters.format` address.
 func (bsrc *AVBufferSrcParameters) GetFormatAddr() *int32 {
 	return (*int32)(&bsrc.format)
 }
 
-// Custom: GetTimeBase gets `AVBufferSrcParameters.time_base` value.
+// GetTimeBase gets `AVBufferSrcParameters.time_base` value.
 func (bsrc *AVBufferSrcParameters) GetTimeBase() AVRational {
 	return (AVRational)(bsrc.time_base)
 }
 
-// Custom: SetTimeBase sets `AVBufferSrcParameters.time_base` value.
+// SetTimeBase sets `AVBufferSrcParameters.time_base` value.
 func (bsrc *AVBufferSrcParameters) SetTimeBase(v AVRational) {
 	bsrc.time_base = (C.struct_AVRational)(v)
 }
 
-// Custom: GetTimeBaseAddr gets `AVBufferSrcParameters.time_base` address.
+// GetTimeBaseAddr gets `AVBufferSrcParameters.time_base` address.
 func (bsrc *AVBufferSrcParameters) GetTimeBaseAddr() *AVRational {
 	return (*AVRational)(&bsrc.time_base)
 }
 
-// Custom: GetWidth gets `AVBufferSrcParameters.width` value.
+// GetWidth gets `AVBufferSrcParameters.width` value.
 func (bsrc *AVBufferSrcParameters) GetWidth() int32 {
 	return (int32)(bsrc.width)
 }
 
-// Custom: SetWidth sets `AVBufferSrcParameters.width` value.
+// SetWidth sets `AVBufferSrcParameters.width` value.
 func (bsrc *AVBufferSrcParameters) SetWidth(v int32) {
 	bsrc.width = (C.int)(v)
 }
 
-// Custom: GetWidthAddr gets `AVBufferSrcParameters.width` address.
+// GetWidthAddr gets `AVBufferSrcParameters.width` address.
 func (bsrc *AVBufferSrcParameters) GetWidthAddr() *int32 {
 	return (*int32)(&bsrc.width)
 }
 
-// Custom: GetHeight gets `AVBufferSrcParameters.height` value.
+// GetHeight gets `AVBufferSrcParameters.height` value.
 func (bsrc *AVBufferSrcParameters) GetHeight() int32 {
 	return (int32)(bsrc.height)
 }
 
-// Custom: SetHeight sets `AVBufferSrcParameters.height` value.
+// SetHeight sets `AVBufferSrcParameters.height` value.
 func (bsrc *AVBufferSrcParameters) SetHeight(v int32) {
 	bsrc.height = (C.int)(v)
 }
 
-// Custom: GetHeightAddr gets `AVBufferSrcParameters.height` address.
+// GetHeightAddr gets `AVBufferSrcParameters.height` address.
 func (bsrc *AVBufferSrcParameters) GetHeightAddr() *int32 {
 	return (*int32)(&bsrc.height)
 }
 
-// Custom: GetSampleAspectRatio gets `AVBufferSrcParameters.sample_aspect_ratio` value.
+// GetSampleAspectRatio gets `AVBufferSrcParameters.sample_aspect_ratio` value.
 func (bsrc *AVBufferSrcParameters) GetSampleAspectRatio() AVRational {
 	return (AVRational)(bsrc.sample_aspect_ratio)
 }
 
-// Custom: SetSampleAspectRatio sets `AVBufferSrcParameters.sample_aspect_ratio` value.
+// SetSampleAspectRatio sets `AVBufferSrcParameters.sample_aspect_ratio` value.
 func (bsrc *AVBufferSrcParameters) SetSampleAspectRatio(v AVRational) {
 	bsrc.sample_aspect_ratio = (C.struct_AVRational)(v)
 }
 
-// Custom: GetSampleAspectRatioAddr gets `AVBufferSrcParameters.sample_aspect_ratio` address.
+// GetSampleAspectRatioAddr gets `AVBufferSrcParameters.sample_aspect_ratio` address.
 func (bsrc *AVBufferSrcParameters) GetSampleAspectRatioAddr() *AVRational {
 	return (*AVRational)(&bsrc.sample_aspect_ratio)
 }
 
-// Custom: GetFrameRate gets `AVBufferSrcParameters.frame_rate` value.
+// GetFrameRate gets `AVBufferSrcParameters.frame_rate` value.
 func (bsrc *AVBufferSrcParameters) GetFrameRate() AVRational {
 	return (AVRational)(bsrc.frame_rate)
 }
 
-// Custom: SetFrameRate sets `AVBufferSrcParameters.frame_rate` value.
+// SetFrameRate sets `AVBufferSrcParameters.frame_rate` value.
 func (bsrc *AVBufferSrcParameters) SetFrameRate(v AVRational) {
 	bsrc.frame_rate = (C.struct_AVRational)(v)
 }
 
-// Custom: GetFrameRateAddr gets `AVBufferSrcParameters.frame_rate` address.
+// GetFrameRateAddr gets `AVBufferSrcParameters.frame_rate` address.
 func (bsrc *AVBufferSrcParameters) GetFrameRateAddr() *AVRational {
 	return (*AVRational)(&bsrc.frame_rate)
 }
 
-// Custom: GetHwFramesCtx gets `AVBufferSrcParameters.hw_frames_ctx` value.
+// GetHwFramesCtx gets `AVBufferSrcParameters.hw_frames_ctx` value.
 func (bsrc *AVBufferSrcParameters) GetHwFramesCtx() *AVBufferRef {
 	return (*AVBufferRef)(bsrc.hw_frames_ctx)
 }
 
-// Custom: SetHwFramesCtx sets `AVBufferSrcParameters.hw_frames_ctx` value.
+// SetHwFramesCtx sets `AVBufferSrcParameters.hw_frames_ctx` value.
 func (bsrc *AVBufferSrcParameters) SetHwFramesCtx(v *AVBufferRef) {
 	bsrc.hw_frames_ctx = (*C.struct_AVBufferRef)(v)
 }
 
-// Custom: GetHwFramesCtxAddr gets `AVBufferSrcParameters.hw_frames_ctx` address.
+// GetHwFramesCtxAddr gets `AVBufferSrcParameters.hw_frames_ctx` address.
 func (bsrc *AVBufferSrcParameters) GetHwFramesCtxAddr() **AVBufferRef {
 	return (**AVBufferRef)(unsafe.Pointer(&bsrc.hw_frames_ctx))
 }
 
-// Custom: GetSampleRate gets `AVBufferSrcParameters.sample_rate` value.
+// GetSampleRate gets `AVBufferSrcParameters.sample_rate` value.
 func (bsrc *AVBufferSrcParameters) GetSampleRate() int32 {
 	return (int32)(bsrc.sample_rate)
 }
 
-// Custom: SetSampleRate sets `AVBufferSrcParameters.sample_rate` value.
+// SetSampleRate sets `AVBufferSrcParameters.sample_rate` value.
 func (bsrc *AVBufferSrcParameters) SetSampleRate(v int32) {
 	bsrc.sample_rate = (C.int)(v)
 }
 
-// Custom: GetSampleRateAddr gets `AVBufferSrcParameters.sample_rate` address.
+// GetSampleRateAddr gets `AVBufferSrcParameters.sample_rate` address.
 func (bsrc *AVBufferSrcParameters) GetSampleRateAddr() *int32 {
 	return (*int32)(&bsrc.sample_rate)
 }
 
-// Custom: GetChannelLayout gets `AVBufferSrcParameters.channel_layout` value.
+// GetChannelLayout gets `AVBufferSrcParameters.channel_layout` value.
 func (bsrc *AVBufferSrcParameters) GetChannelLayout() uint64 {
 	return (uint64)(bsrc.channel_layout)
 }
 
-// Custom: SetChannelLayout sets `AVBufferSrcParameters.channel_layout` value.
+// SetChannelLayout sets `AVBufferSrcParameters.channel_layout` value.
 func (bsrc *AVBufferSrcParameters) SetChannelLayout(v uint64) {
 	bsrc.channel_layout = (C.uint64_t)(v)
 }
 
-// Custom: GetChannelLayoutAddr gets `AVBufferSrcParameters.channel_layout` address.
+// GetChannelLayoutAddr gets `AVBufferSrcParameters.channel_layout` address.
 func (bsrc *AVBufferSrcParameters) GetChannelLayoutAddr() *uint64 {
 	return (*uint64)(&bsrc.channel_layout)
 }

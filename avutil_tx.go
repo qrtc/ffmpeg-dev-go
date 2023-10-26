@@ -12,39 +12,39 @@ type AVTXContext C.struct_AVTXContext
 // AVComplexFloat
 type AVComplexFloat C.struct_AVComplexFloat
 
-// Custom: Make new AVComplexFloat.
+// Make new AVComplexFloat.
 func AvMakeComxFloat(re, im float32) AVComplexFloat {
 	return (AVComplexFloat)(C.struct_AVComplexFloat{
 		re: (C.float)(re),
 		im: (C.float)(im)})
 }
 
-// Custom: GetRe gets `AVComplexFloat.re` value.
+// GetRe gets `AVComplexFloat.re` value.
 func (cf *AVComplexFloat) GetRe() float32 {
 	return (float32)(cf.re)
 }
 
-// Custom: SetRe sets `AVComplexFloat.re` value.
+// SetRe sets `AVComplexFloat.re` value.
 func (cf *AVComplexFloat) SetRe(v float32) {
 	cf.re = (C.float)(v)
 }
 
-// Custom: GetReAddr gets `AVComplexFloat.re` address.
+// GetReAddr gets `AVComplexFloat.re` address.
 func (cf *AVComplexFloat) GetReAddr() *float32 {
 	return (*float32)(&cf.re)
 }
 
-// Custom: GetIm gets `AVComplexFloat.im` value.
+// GetIm gets `AVComplexFloat.im` value.
 func (cf *AVComplexFloat) GetIm() float32 {
 	return (float32)(cf.im)
 }
 
-// Custom: SetIm sets `AVComplexFloat.im` value.
+// SetIm sets `AVComplexFloat.im` value.
 func (cf *AVComplexFloat) SetIm(v float32) {
 	cf.im = (C.float)(v)
 }
 
-// Custom: GetImAddr gets `AVComplexFloat.im` address.
+// GetImAddr gets `AVComplexFloat.im` address.
 func (cf *AVComplexFloat) GetImAddr() *float32 {
 	return (*float32)(&cf.im)
 }
@@ -52,39 +52,39 @@ func (cf *AVComplexFloat) GetImAddr() *float32 {
 // AVComplexDouble
 type AVComplexDouble C.struct_AVComplexDouble
 
-// Custom: Make new AVComplexDouble.
+// Make new AVComplexDouble.
 func AvMakeComxDouble(re, im float64) AVComplexDouble {
 	return (AVComplexDouble)(C.struct_AVComplexDouble{
 		re: (C.double)(re),
 		im: (C.double)(im)})
 }
 
-// Custom: GetRe gets `AVComplexDouble.re` value.
+// GetRe gets `AVComplexDouble.re` value.
 func (cd *AVComplexDouble) GetRe() float64 {
 	return (float64)(cd.re)
 }
 
-// Custom: SetRe sets `AVComplexDouble.re` value.
+// SetRe sets `AVComplexDouble.re` value.
 func (cd *AVComplexDouble) SetRe(v float64) {
 	cd.re = (C.double)(v)
 }
 
-// Custom: GetReAddr gets `AVComplexDouble.re` address.
+// GetReAddr gets `AVComplexDouble.re` address.
 func (cd *AVComplexDouble) GetReAddr() *float64 {
 	return (*float64)(&cd.re)
 }
 
-// Custom: GetIm gets `AVComplexDouble.im` value.
+// GetIm gets `AVComplexDouble.im` value.
 func (cd *AVComplexDouble) GetIm() float64 {
 	return (float64)(cd.im)
 }
 
-// Custom: SetIm sets `AVComplexDouble.im` value.
+// SetIm sets `AVComplexDouble.im` value.
 func (cd *AVComplexDouble) SetIm(v float64) {
 	cd.im = (C.double)(v)
 }
 
-// Custom: GetImAddr gets `AVComplexDouble.im` address.
+// GetImAddr gets `AVComplexDouble.im` address.
 func (cd *AVComplexDouble) GetImAddr() *float64 {
 	return (*float64)(&cd.im)
 }
@@ -92,39 +92,39 @@ func (cd *AVComplexDouble) GetImAddr() *float64 {
 // AVComplexInt32
 type AVComplexInt32 C.struct_AVComplexInt32
 
-// Custom: Make new AVComplexFloat.
+// Make new AVComplexFloat.
 func AvMakeComxInt32(re, im int32) AVComplexInt32 {
 	return (AVComplexInt32)(C.struct_AVComplexInt32{
 		re: (C.int32_t)(re),
 		im: (C.int32_t)(im)})
 }
 
-// Custom: GetRe gets `AVComplexInt32.re` value.
+// GetRe gets `AVComplexInt32.re` value.
 func (ci *AVComplexInt32) GetRe() int32 {
 	return (int32)(ci.re)
 }
 
-// Custom: SetRe sets `AVComplexInt32.re` value.
+// SetRe sets `AVComplexInt32.re` value.
 func (ci *AVComplexInt32) SetRe(v int32) {
 	ci.re = (C.int32_t)(v)
 }
 
-// Custom: GetReAddr gets `AVComplexInt32.re` address.
+// GetReAddr gets `AVComplexInt32.re` address.
 func (ci *AVComplexInt32) GetReAddr() *int32 {
 	return (*int32)(&ci.re)
 }
 
-// Custom: GetIm gets `AVComplexInt32.im` value.
+// GetIm gets `AVComplexInt32.im` value.
 func (ci *AVComplexInt32) GetIm() int32 {
 	return (int32)(ci.im)
 }
 
-// Custom: SetIm sets `AVComplexInt32.im` value.
+// SetIm sets `AVComplexInt32.im` value.
 func (ci *AVComplexInt32) SetIm(v int32) {
 	ci.im = (C.int32_t)(v)
 }
 
-// Custom: GetImAddr gets `AVComplexInt32.im` address.
+// GetImAddr gets `AVComplexInt32.im` address.
 func (ci *AVComplexInt32) GetImAddr() *int32 {
 	return (*int32)(&ci.im)
 }

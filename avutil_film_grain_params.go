@@ -29,22 +29,22 @@ const (
 // AVFilmGrainAOMParams
 type AVFilmGrainAOMParams C.struct_AVFilmGrainAOMParams
 
-// Custom: GetNumYPoints gets `AVFilmGrainAOMParams.num_y_points` value.
+// GetNumYPoints gets `AVFilmGrainAOMParams.num_y_points` value.
 func (aomp *AVFilmGrainAOMParams) GetNumYPoints() int32 {
 	return (int32)(aomp.num_y_points)
 }
 
-// Custom: SetNumYPoints sets `AVFilmGrainAOMParams.num_y_points` value.
+// SetNumYPoints sets `AVFilmGrainAOMParams.num_y_points` value.
 func (aomp *AVFilmGrainAOMParams) SetNumYPoints(v int32) {
 	aomp.num_y_points = (C.int)(v)
 }
 
-// Custom: GetNumYPointsAddr gets `AVFilmGrainAOMParams.num_y_points` address.
+// GetNumYPointsAddr gets `AVFilmGrainAOMParams.num_y_points` address.
 func (aomp *AVFilmGrainAOMParams) GetNumYPointsAddr() *int32 {
 	return (*int32)(&aomp.num_y_points)
 }
 
-// Custom: GetYPoints gets `AVFilmGrainAOMParams.y_points` value.
+// GetYPoints gets `AVFilmGrainAOMParams.y_points` value.
 func (aomp *AVFilmGrainAOMParams) GetYPoints() (v [][]uint8) {
 	for i := 0; i < 14; i++ {
 		v = append(v, unsafe.Slice((*uint8)(&aomp.y_points[i][0]), 2))
@@ -52,7 +52,7 @@ func (aomp *AVFilmGrainAOMParams) GetYPoints() (v [][]uint8) {
 	return v
 }
 
-// Custom: SetYPoints sets `AVFilmGrainAOMParams.y_points` value.
+// SetYPoints sets `AVFilmGrainAOMParams.y_points` value.
 func (aomp *AVFilmGrainAOMParams) SetYPoints(v [][]uint8) {
 	for i := 0; i < FFMIN(len(v), 14); i++ {
 		for j := 0; j < FFMIN(len(v[i]), 2); j++ {
@@ -61,44 +61,44 @@ func (aomp *AVFilmGrainAOMParams) SetYPoints(v [][]uint8) {
 	}
 }
 
-// Custom: GetYPointsAddr gets `AVFilmGrainAOMParams.y_points` address.
+// GetYPointsAddr gets `AVFilmGrainAOMParams.y_points` address.
 func (aomp *AVFilmGrainAOMParams) GetYPointsAddr() **uint8 {
 	return (**uint8)(unsafe.Pointer(&aomp.y_points))
 }
 
-// Custom: GetChromaScalingFromLuma gets `AVFilmGrainAOMParams.chroma_scaling_from_luma` value.
+// GetChromaScalingFromLuma gets `AVFilmGrainAOMParams.chroma_scaling_from_luma` value.
 func (aomp *AVFilmGrainAOMParams) GetChromaScalingFromLuma() int32 {
 	return (int32)(aomp.chroma_scaling_from_luma)
 }
 
-// Custom: SetChromaScalingFromLuma sets `AVFilmGrainAOMParams.chroma_scaling_from_luma` value.
+// SetChromaScalingFromLuma sets `AVFilmGrainAOMParams.chroma_scaling_from_luma` value.
 func (aomp *AVFilmGrainAOMParams) SetChromaScalingFromLuma(v int32) {
 	aomp.chroma_scaling_from_luma = (C.int)(v)
 }
 
-// Custom: GetChromaScalingFromLumaAddr gets `AVFilmGrainAOMParams.chroma_scaling_from_luma` address.
+// GetChromaScalingFromLumaAddr gets `AVFilmGrainAOMParams.chroma_scaling_from_luma` address.
 func (aomp *AVFilmGrainAOMParams) GetChromaScalingFromLumaAddr() *int32 {
 	return (*int32)(&aomp.chroma_scaling_from_luma)
 }
 
-// Custom: GetNumUvPoints gets `AVFilmGrainAOMParams.num_uv_points` value.
+// GetNumUvPoints gets `AVFilmGrainAOMParams.num_uv_points` value.
 func (aomp *AVFilmGrainAOMParams) GetNumUvPoints() []int32 {
 	return unsafe.Slice((*int32)(&aomp.num_uv_points[0]), 2)
 }
 
-// Custom: SetNumUvPoints sets `AVFilmGrainAOMParams.num_uv_points` value.
+// SetNumUvPoints sets `AVFilmGrainAOMParams.num_uv_points` value.
 func (aomp *AVFilmGrainAOMParams) SetNumUvPoints(v []int32) {
 	for i := 0; i < FFMIN(len(v), 2); i++ {
 		aomp.num_uv_points[i] = (C.int)(v[i])
 	}
 }
 
-// Custom: GetNumUvPointsAddr gets `AVFilmGrainAOMParams.num_uv_points` address.
+// GetNumUvPointsAddr gets `AVFilmGrainAOMParams.num_uv_points` address.
 func (aomp *AVFilmGrainAOMParams) GetNumUvPointsAddr() **int32 {
 	return (**int32)(unsafe.Pointer(&aomp.num_uv_points))
 }
 
-// Custom: GetUvPoints gets `AVFilmGrainAOMParams.uv_points` value.
+// GetUvPoints gets `AVFilmGrainAOMParams.uv_points` value.
 func (aomp *AVFilmGrainAOMParams) GetUvPoints() (v [][][]uint8) {
 	for i := 0; i < 2; i++ {
 		tmp := [][]uint8{}
@@ -110,7 +110,7 @@ func (aomp *AVFilmGrainAOMParams) GetUvPoints() (v [][][]uint8) {
 	return v
 }
 
-// Custom: SetUvPoints sets `AVFilmGrainAOMParams.uv_points` value.
+// SetUvPoints sets `AVFilmGrainAOMParams.uv_points` value.
 func (aomp *AVFilmGrainAOMParams) SetUvPoints(v [][][]uint8) {
 	for i := 0; i < FFMIN(len(v), 2); i++ {
 		for j := 0; j < FFMIN(len(v[i]), 10); j++ {
@@ -121,59 +121,59 @@ func (aomp *AVFilmGrainAOMParams) SetUvPoints(v [][][]uint8) {
 	}
 }
 
-// Custom: GetUvPointsAddr gets `AVFilmGrainAOMParams.uv_points` address.
+// GetUvPointsAddr gets `AVFilmGrainAOMParams.uv_points` address.
 func (aomp *AVFilmGrainAOMParams) GetUvPointsAddr() **uint8 {
 	return (**uint8)(unsafe.Pointer(&aomp.uv_points))
 }
 
-// Custom: GetScalingShift gets `AVFilmGrainAOMParams.scaling_shift` value.
+// GetScalingShift gets `AVFilmGrainAOMParams.scaling_shift` value.
 func (aomp *AVFilmGrainAOMParams) GetScalingShift() int32 {
 	return (int32)(aomp.scaling_shift)
 }
 
-// Custom: SetScalingShift sets `AVFilmGrainAOMParams.scaling_shift` value.
+// SetScalingShift sets `AVFilmGrainAOMParams.scaling_shift` value.
 func (aomp *AVFilmGrainAOMParams) SetScalingShift(v int32) {
 	aomp.scaling_shift = (C.int)(v)
 }
 
-// Custom: GetScalingShiftAddr gets `AVFilmGrainAOMParams.scaling_shift` address.
+// GetScalingShiftAddr gets `AVFilmGrainAOMParams.scaling_shift` address.
 func (aomp *AVFilmGrainAOMParams) GetScalingShiftAddr() *int32 {
 	return (*int32)(&aomp.scaling_shift)
 }
 
-// Custom: GetArCoeffLag gets `AVFilmGrainAOMParams.ar_coeff_lag` value.
+// GetArCoeffLag gets `AVFilmGrainAOMParams.ar_coeff_lag` value.
 func (aomp *AVFilmGrainAOMParams) GetArCoeffLag() int32 {
 	return (int32)(aomp.ar_coeff_lag)
 }
 
-// Custom: SetArCoeffLag sets `AVFilmGrainAOMParams.ar_coeff_lag` value.
+// SetArCoeffLag sets `AVFilmGrainAOMParams.ar_coeff_lag` value.
 func (aomp *AVFilmGrainAOMParams) SetArCoeffLag(v int32) {
 	aomp.ar_coeff_lag = (C.int)(v)
 }
 
-// Custom: GetArCoeffLagAddr gets `AVFilmGrainAOMParams.ar_coeff_lag` address.
+// GetArCoeffLagAddr gets `AVFilmGrainAOMParams.ar_coeff_lag` address.
 func (aomp *AVFilmGrainAOMParams) GetArCoeffLagAddr() *int32 {
 	return (*int32)(&aomp.ar_coeff_lag)
 }
 
-// Custom: GetArCoeffsY gets `AVFilmGrainAOMParams.ar_coeffs_y` value.
+// GetArCoeffsY gets `AVFilmGrainAOMParams.ar_coeffs_y` value.
 func (aomp *AVFilmGrainAOMParams) GetArCoeffsY() []int8 {
 	return unsafe.Slice((*int8)(&aomp.ar_coeffs_y[0]), 24)
 }
 
-// Custom: SetArCoeffsY sets `AVFilmGrainAOMParams.ar_coeffs_y` value.
+// SetArCoeffsY sets `AVFilmGrainAOMParams.ar_coeffs_y` value.
 func (aomp *AVFilmGrainAOMParams) SetArCoeffsY(v []int8) {
 	for i := 0; i < FFMIN(len(v), 24); i++ {
 		aomp.ar_coeffs_y[i] = (C.int8_t)(v[i])
 	}
 }
 
-// Custom: GetArCoeffsYAddr gets `AVFilmGrainAOMParams.ar_coeffs_y` address.
+// GetArCoeffsYAddr gets `AVFilmGrainAOMParams.ar_coeffs_y` address.
 func (aomp *AVFilmGrainAOMParams) GetArCoeffsYAddr() **int8 {
 	return (**int8)(unsafe.Pointer(&aomp.ar_coeffs_y))
 }
 
-// Custom: GetArCoeffsUv gets `AVFilmGrainAOMParams.ar_coeffs_uv` value.
+// GetArCoeffsUv gets `AVFilmGrainAOMParams.ar_coeffs_uv` value.
 func (aomp *AVFilmGrainAOMParams) GetArCoeffsUv() (v [][]int8) {
 	for i := 0; i < 2; i++ {
 		v = append(v, unsafe.Slice((*int8)(&aomp.ar_coeffs_uv[i][0]), 25))
@@ -181,7 +181,7 @@ func (aomp *AVFilmGrainAOMParams) GetArCoeffsUv() (v [][]int8) {
 	return v
 }
 
-// Custom: SetArCoeffsUv sets `AVFilmGrainAOMParams.ar_coeffs_uv` value.
+// SetArCoeffsUv sets `AVFilmGrainAOMParams.ar_coeffs_uv` value.
 func (aomp *AVFilmGrainAOMParams) SetArCoeffsUv(v [][]int8) {
 	for i := 0; i < FFMIN(len(v), 2); i++ {
 		for j := 0; j < FFMIN(len(v[i]), 25); j++ {
@@ -190,118 +190,118 @@ func (aomp *AVFilmGrainAOMParams) SetArCoeffsUv(v [][]int8) {
 	}
 }
 
-// Custom: GetArCoeffsUvAddr gets `AVFilmGrainAOMParams.ar_coeffs_uv` address.
+// GetArCoeffsUvAddr gets `AVFilmGrainAOMParams.ar_coeffs_uv` address.
 func (aomp *AVFilmGrainAOMParams) GetArCoeffsUvAddr() **int8 {
 	return (**int8)(unsafe.Pointer(&aomp.ar_coeffs_uv))
 }
 
-// Custom: GetArCoeffShift gets `AVFilmGrainAOMParams.ar_coeff_shift` value.
+// GetArCoeffShift gets `AVFilmGrainAOMParams.ar_coeff_shift` value.
 func (aomp *AVFilmGrainAOMParams) GetArCoeffShift() int32 {
 	return (int32)(aomp.ar_coeff_shift)
 }
 
-// Custom: SetArCoeffShift sets `AVFilmGrainAOMParams.ar_coeff_shift` value.
+// SetArCoeffShift sets `AVFilmGrainAOMParams.ar_coeff_shift` value.
 func (aomp *AVFilmGrainAOMParams) SetArCoeffShift(v int32) {
 	aomp.ar_coeff_shift = (C.int)(v)
 }
 
-// Custom: GetArCoeffShiftAddr gets `AVFilmGrainAOMParams.ar_coeff_shift` address.
+// GetArCoeffShiftAddr gets `AVFilmGrainAOMParams.ar_coeff_shift` address.
 func (aomp *AVFilmGrainAOMParams) GetArCoeffShiftAddr() *int32 {
 	return (*int32)(&aomp.ar_coeff_shift)
 }
 
-// Custom: GetGrainScaleShift gets `AVFilmGrainAOMParams.grain_scale_shift` value.
+// GetGrainScaleShift gets `AVFilmGrainAOMParams.grain_scale_shift` value.
 func (aomp *AVFilmGrainAOMParams) GetGrainScaleShift() int32 {
 	return (int32)(aomp.grain_scale_shift)
 }
 
-// Custom: SetGrainScaleShift sets `AVFilmGrainAOMParams.grain_scale_shift` value.
+// SetGrainScaleShift sets `AVFilmGrainAOMParams.grain_scale_shift` value.
 func (aomp *AVFilmGrainAOMParams) SetGrainScaleShift(v int32) {
 	aomp.grain_scale_shift = (C.int)(v)
 }
 
-// Custom: GetGrainScaleShiftAddr gets `AVFilmGrainAOMParams.grain_scale_shift` address.
+// GetGrainScaleShiftAddr gets `AVFilmGrainAOMParams.grain_scale_shift` address.
 func (aomp *AVFilmGrainAOMParams) GetGrainScaleShiftAddr() *int32 {
 	return (*int32)(&aomp.grain_scale_shift)
 }
 
-// Custom: GetUvMult gets `AVFilmGrainAOMParams.uv_mult` value.
+// GetUvMult gets `AVFilmGrainAOMParams.uv_mult` value.
 func (aomp *AVFilmGrainAOMParams) GetUvMult() []int32 {
 	return unsafe.Slice((*int32)(&aomp.uv_mult[0]), 2)
 }
 
-// Custom: SetUvMult sets `AVFilmGrainAOMParams.uv_mult` value.
+// SetUvMult sets `AVFilmGrainAOMParams.uv_mult` value.
 func (aomp *AVFilmGrainAOMParams) SetUvMult(v []int32) {
 	for i := 0; i < FFMIN(len(v), 2); i++ {
 		aomp.uv_mult[i] = (C.int)(v[i])
 	}
 }
 
-// Custom: GetUvMultAddr gets `AVFilmGrainAOMParams.uv_mult` address.
+// GetUvMultAddr gets `AVFilmGrainAOMParams.uv_mult` address.
 func (aomp *AVFilmGrainAOMParams) GetUvMultAddr() **int32 {
 	return (**int32)(unsafe.Pointer(&aomp.uv_mult))
 }
 
-// Custom: GetUvMultLuma gets `AVFilmGrainAOMParams.uv_mult_luma` value.
+// GetUvMultLuma gets `AVFilmGrainAOMParams.uv_mult_luma` value.
 func (aomp *AVFilmGrainAOMParams) GetUvMultLuma() []int32 {
 	return unsafe.Slice((*int32)(&aomp.uv_mult_luma[0]), 2)
 }
 
-// Custom: SetUvMultLuma sets `AVFilmGrainAOMParams.uv_mult_luma` value.
+// SetUvMultLuma sets `AVFilmGrainAOMParams.uv_mult_luma` value.
 func (aomp *AVFilmGrainAOMParams) SetUvMultLuma(v []int32) {
 	for i := 0; i < FFMIN(len(v), 2); i++ {
 		aomp.uv_mult_luma[i] = (C.int)(v[i])
 	}
 }
 
-// Custom: GetUvMultLumaAddr gets `AVFilmGrainAOMParams.uv_mult_luma` address.
+// GetUvMultLumaAddr gets `AVFilmGrainAOMParams.uv_mult_luma` address.
 func (aomp *AVFilmGrainAOMParams) GetUvMultLumaAddr() **int32 {
 	return (**int32)(unsafe.Pointer(&aomp.uv_mult_luma))
 }
 
-// Custom: GetUvOffset gets `AVFilmGrainAOMParams.uv_offset` value.
+// GetUvOffset gets `AVFilmGrainAOMParams.uv_offset` value.
 func (aomp *AVFilmGrainAOMParams) GetUvOffset() []int32 {
 	return unsafe.Slice((*int32)(&aomp.uv_offset[0]), 2)
 }
 
-// Custom: SetUvOffset sets `AVFilmGrainAOMParams.uv_offset` value.
+// SetUvOffset sets `AVFilmGrainAOMParams.uv_offset` value.
 func (aomp *AVFilmGrainAOMParams) SetUvOffset(v []int32) {
 	for i := 0; i < FFMIN(len(v), 2); i++ {
 		aomp.uv_offset[i] = (C.int)(v[i])
 	}
 }
 
-// Custom: GetUvOffsetAddr gets `AVFilmGrainAOMParams.uv_offset` address.
+// GetUvOffsetAddr gets `AVFilmGrainAOMParams.uv_offset` address.
 func (aomp *AVFilmGrainAOMParams) GetUvOffsetAddr() **int32 {
 	return (**int32)(unsafe.Pointer(&aomp.uv_offset))
 }
 
-// Custom: GetOverlapFlag gets `AVFilmGrainAOMParams.overlap_flag` value.
+// GetOverlapFlag gets `AVFilmGrainAOMParams.overlap_flag` value.
 func (aomp *AVFilmGrainAOMParams) GetOverlapFlag() int32 {
 	return (int32)(aomp.overlap_flag)
 }
 
-// Custom: SetOverlapFlag sets `AVFilmGrainAOMParams.overlap_flag` value.
+// SetOverlapFlag sets `AVFilmGrainAOMParams.overlap_flag` value.
 func (aomp *AVFilmGrainAOMParams) SetOverlapFlag(v int32) {
 	aomp.overlap_flag = (C.int)(v)
 }
 
-// Custom: GetOverlapFlagAddr gets `AVFilmGrainAOMParams.overlap_flag` address.
+// GetOverlapFlagAddr gets `AVFilmGrainAOMParams.overlap_flag` address.
 func (aomp *AVFilmGrainAOMParams) GetOverlapFlagAddr() *int32 {
 	return (*int32)(&aomp.overlap_flag)
 }
 
-// Custom: GetLimitOutputRange gets `AVFilmGrainAOMParams.limit_outputrange` value.
+// GetLimitOutputRange gets `AVFilmGrainAOMParams.limit_outputrange` value.
 func (aomp *AVFilmGrainAOMParams) GetLimitOutputRange() int32 {
 	return (int32)(aomp.limit_output_range)
 }
 
-// Custom: SetLimitOutputRange sets `AVFilmGrainAOMParams.limit_outputrange` value.
+// SetLimitOutputRange sets `AVFilmGrainAOMParams.limit_outputrange` value.
 func (aomp *AVFilmGrainAOMParams) SetLimitOutputRange(v int32) {
 	aomp.limit_output_range = (C.int)(v)
 }
 
-// Custom: GetLimitOutputRangeAddr gets `AVFilmGrainAOMParams.limit_outputrange` address.
+// GetLimitOutputRangeAddr gets `AVFilmGrainAOMParams.limit_outputrange` address.
 func (aomp *AVFilmGrainAOMParams) GetLimitOutputRangeAddr() *int32 {
 	return (*int32)(&aomp.limit_output_range)
 }
@@ -309,49 +309,49 @@ func (aomp *AVFilmGrainAOMParams) GetLimitOutputRangeAddr() *int32 {
 // AVFilmGrainParams
 type AVFilmGrainParams C.struct_AVFilmGrainParams
 
-// Custom: GetType gets `AVFilmGrainParams.type` value.
+// GetType gets `AVFilmGrainParams.type` value.
 func (fgp *AVFilmGrainParams) GetType() AVFilmGrainParamsType {
 	return (AVFilmGrainParamsType)(fgp._type)
 }
 
-// Custom: SetType sets `AVFilmGrainParams.type` value.
+// SetType sets `AVFilmGrainParams.type` value.
 func (fgp *AVFilmGrainParams) SetType(v AVFilmGrainParamsType) {
 	fgp._type = (C.enum_AVFilmGrainParamsType)(v)
 }
 
-// Custom: GetTypeAddr gets `AVFilmGrainParams.type` address.
+// GetTypeAddr gets `AVFilmGrainParams.type` address.
 func (fgp *AVFilmGrainParams) GetTypeAddr() *AVFilmGrainParamsType {
 	return (*AVFilmGrainParamsType)(&fgp._type)
 }
 
-// Custom: GetSeed gets `AVFilmGrainParams.seed` value.
+// GetSeed gets `AVFilmGrainParams.seed` value.
 func (fgp *AVFilmGrainParams) GetSeed() uint64 {
 	return (uint64)(fgp.seed)
 }
 
-// Custom: SetSeed sets `AVFilmGrainParams.seed` value.
+// SetSeed sets `AVFilmGrainParams.seed` value.
 func (fgp *AVFilmGrainParams) SetSeed(v uint64) {
 	fgp.seed = (C.uint64_t)(v)
 }
 
-// Custom: GetSeedAddr gets `AVFilmGrainParams.seed` address.
+// GetSeedAddr gets `AVFilmGrainParams.seed` address.
 func (fgp *AVFilmGrainParams) GetSeedAddr() *uint64 {
 	return (*uint64)(&fgp.seed)
 }
 
-// Custom: GetCodecAom gets `AVFilmGrainParams.codec_aom` value.
+// GetCodecAom gets `AVFilmGrainParams.codec_aom` value.
 func (fgp *AVFilmGrainParams) GetCodecAom() AVFilmGrainAOMParams {
 	return (AVFilmGrainAOMParams)(
 		C.get_av_film_grain_params_codec_aom((*C.struct_AVFilmGrainParams)(fgp)))
 }
 
-// Custom: SetCodecAom sets `AVFilmGrainParams.codec_aom` value.
+// SetCodecAom sets `AVFilmGrainParams.codec_aom` value.
 func (fgp *AVFilmGrainParams) SetCodecAom(v AVFilmGrainAOMParams) {
 	C.set_av_film_grain_params_codec_aom((*C.struct_AVFilmGrainParams)(fgp),
 		(C.struct_AVFilmGrainAOMParams)(v))
 }
 
-// Custom: GetCodecAomAddr gets `AVFilmGrainParams.codec_aom` address.
+// GetCodecAomAddr gets `AVFilmGrainParams.codec_aom` address.
 func (fgp *AVFilmGrainParams) GetCodecAomAddr() *AVFilmGrainAOMParams {
 	return (*AVFilmGrainAOMParams)(C.get_av_film_grain_params_codec_aom_addr(
 		(*C.struct_AVFilmGrainParams)(fgp)))

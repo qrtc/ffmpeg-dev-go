@@ -65,11 +65,15 @@ func AvForceCpuFlags(flags int32) {
 }
 
 // Deprecated: Use AvForceCpuFlags() and AvGetCpuFlags() instead
+//
+// AvSetCpuFlagsMask set a mask on flags returned by AvGetCpuFlags().
 func AvSetCpuFlagsMask(mask int32) {
 	C.av_set_cpu_flags_mask((C.int)(mask))
 }
 
 // Deprecated: Use AvParseCpuCaps() when possible.
+//
+// AvParseCpuFlags parses CPU flags from a string.
 func AvParseCpuFlags(str string) int32 {
 	strPtr, strFunc := StringCasting(str)
 	defer strFunc()

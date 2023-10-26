@@ -11,7 +11,7 @@ func AvBase64Decode(out *uint8, in *int8, outSize int32) int32 {
 }
 
 // AV_BASE64_DECODE_SIZE
-func AV_BASE64_DECODE_SIZE[T HelperInteger](x T) T {
+func AV_BASE64_DECODE_SIZE[T Integer](x T) T {
 	return x * 3 / 4
 }
 
@@ -21,6 +21,6 @@ func AvBase64Encode(out *int8, outSize int32, in *uint8, inSize int32) *int8 {
 }
 
 // AV_BASE64_SIZE
-func AV_BASE64_SIZE[T HelperInteger](x T) T {
+func AV_BASE64_SIZE[T Integer](x T) T {
 	return (x+2)/3*4 + 1
 }

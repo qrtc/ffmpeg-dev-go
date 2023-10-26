@@ -12,24 +12,24 @@ const (
 
 type AVBlowfish C.struct_AVBlowfish
 
-// Custom: GetP gets `AVBlowfish.p` value.
+// GetP gets `AVBlowfish.p` value.
 func (bf *AVBlowfish) GetP() []uint32 {
 	return unsafe.Slice((*uint32)(&bf.p[0]), AV_BF_ROUNDS+2)
 }
 
-// Custom: SetP sets `AVBlowfish.p` value.
+// SetP sets `AVBlowfish.p` value.
 func (bf *AVBlowfish) SetP(v []uint32) {
 	for i := 0; i < FFMIN(len(v), AV_BF_ROUNDS+2); i++ {
 		bf.p[i] = (C.uint32_t)(v[i])
 	}
 }
 
-// Custom: GetPAddr gets `AVBlowfish.p` address.
+// GetPAddr gets `AVBlowfish.p` address.
 func (bf *AVBlowfish) GetPAddr() **uint32 {
 	return (**uint32)(unsafe.Pointer(&bf.p))
 }
 
-// Custom: GetS gets `AVBlowfish.s` value.
+// GetS gets `AVBlowfish.s` value.
 func (bf *AVBlowfish) GetS() (v [][]uint32) {
 	for i := 0; i < 4; i++ {
 		v = append(v, unsafe.Slice((*uint32)(&bf.s[i][0]), 256))
@@ -37,7 +37,7 @@ func (bf *AVBlowfish) GetS() (v [][]uint32) {
 	return v
 }
 
-// Custom: SetS sets `AVBlowfish.s` value.
+// SetS sets `AVBlowfish.s` value.
 func (bf *AVBlowfish) SetS(v [][]uint32) {
 	for i := 0; i < FFMIN(len(v), 4); i++ {
 		for j := 0; j < FFMIN(len(v[i]), 256); j++ {
@@ -46,7 +46,7 @@ func (bf *AVBlowfish) SetS(v [][]uint32) {
 	}
 }
 
-// Custom: GetSAddr gets `AVBlowfish.s` address.
+// GetSAddr gets `AVBlowfish.s` address.
 func (bf *AVBlowfish) GetSAddr() **uint32 {
 	return (**uint32)(unsafe.Pointer(&bf.s))
 }

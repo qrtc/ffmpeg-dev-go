@@ -7,5 +7,7 @@ package ffmpeg
 */
 import "C"
 
-// Deprecated: No use
+// Deprecated: No use.
+//
+// VaapiContext
 type VaapiContext C.struct_vaapi_context

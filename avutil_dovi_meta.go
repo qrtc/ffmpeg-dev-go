@@ -9,124 +9,124 @@ import "unsafe"
 // AVDOVIDecoderConfigurationRecord
 type AVDOVIDecoderConfigurationRecord C.struct_AVDOVIDecoderConfigurationRecord
 
-// Custom: GetDvVersionMajor gets `AVDOVIDecoderConfigurationRecord.dv_version_major` value.
+// GetDvVersionMajor gets `AVDOVIDecoderConfigurationRecord.dv_version_major` value.
 func (dcr *AVDOVIDecoderConfigurationRecord) GetDvVersionMajor() uint8 {
 	return (uint8)(dcr.dv_version_major)
 }
 
-// Custom: SetDvVersionMajor sets `AVDOVIDecoderConfigurationRecord.dv_version_major` value.
+// SetDvVersionMajor sets `AVDOVIDecoderConfigurationRecord.dv_version_major` value.
 func (dcr *AVDOVIDecoderConfigurationRecord) SetDvVersionMajor(v uint8) {
 	dcr.dv_version_major = (C.uint8_t)(v)
 }
 
-// Custom: GetDvVersionMajorAddr gets `AVDOVIDecoderConfigurationRecord.dv_version_major` address.
+// GetDvVersionMajorAddr gets `AVDOVIDecoderConfigurationRecord.dv_version_major` address.
 func (dcr *AVDOVIDecoderConfigurationRecord) GetDvVersionMajorAddr() *uint8 {
 	return (*uint8)(&dcr.dv_version_major)
 }
 
-// Custom: GetDvVersionMinor gets `AVDOVIDecoderConfigurationRecord.dv_version_minor` value.
+// GetDvVersionMinor gets `AVDOVIDecoderConfigurationRecord.dv_version_minor` value.
 func (dcr *AVDOVIDecoderConfigurationRecord) GetDvVersionMinor() uint8 {
 	return (uint8)(dcr.dv_version_minor)
 }
 
-// Custom: SetDvVersionMinor sets `AVDOVIDecoderConfigurationRecord.dv_version_minor` value.
+// SetDvVersionMinor sets `AVDOVIDecoderConfigurationRecord.dv_version_minor` value.
 func (dcr *AVDOVIDecoderConfigurationRecord) SetDvVersionMinor(v uint8) {
 	dcr.dv_version_minor = (C.uint8_t)(v)
 }
 
-// Custom: GetDvVersionMinorAddr gets `AVDOVIDecoderConfigurationRecord.dv_version_minor` address.
+// GetDvVersionMinorAddr gets `AVDOVIDecoderConfigurationRecord.dv_version_minor` address.
 func (dcr *AVDOVIDecoderConfigurationRecord) GetDvVersionMinorAddr() *uint8 {
 	return (*uint8)(&dcr.dv_version_minor)
 }
 
-// Custom: GetDvProfile gets `AVDOVIDecoderConfigurationRecord.dv_profile` value.
+// GetDvProfile gets `AVDOVIDecoderConfigurationRecord.dv_profile` value.
 func (dcr *AVDOVIDecoderConfigurationRecord) GetDvProfile() uint8 {
 	return (uint8)(dcr.dv_profile)
 }
 
-// Custom: SetDvProfile sets `AVDOVIDecoderConfigurationRecord.dv_profile` value.
+// SetDvProfile sets `AVDOVIDecoderConfigurationRecord.dv_profile` value.
 func (dcr *AVDOVIDecoderConfigurationRecord) SetDvProfile(v uint8) {
 	dcr.dv_profile = (C.uint8_t)(v)
 }
 
-// Custom: GetDvProfileAddr gets `AVDOVIDecoderConfigurationRecord.dv_profile` address.
+// GetDvProfileAddr gets `AVDOVIDecoderConfigurationRecord.dv_profile` address.
 func (dcr *AVDOVIDecoderConfigurationRecord) GetDvProfileAddr() *uint8 {
 	return (*uint8)(&dcr.dv_profile)
 }
 
-// Custom: GetDvLevel gets `AVDOVIDecoderConfigurationRecord.dv_level` value.
+// GetDvLevel gets `AVDOVIDecoderConfigurationRecord.dv_level` value.
 func (dcr *AVDOVIDecoderConfigurationRecord) GetDvLevel() uint8 {
 	return (uint8)(dcr.dv_level)
 }
 
-// Custom: SetDvLevel sets `AVDOVIDecoderConfigurationRecord.dv_level` value.
+// SetDvLevel sets `AVDOVIDecoderConfigurationRecord.dv_level` value.
 func (dcr *AVDOVIDecoderConfigurationRecord) SetDvLevel(v uint8) {
 	dcr.dv_level = (C.uint8_t)(v)
 }
 
-// Custom: GetDvLevelAddr gets `AVDOVIDecoderConfigurationRecord.dv_level` address.
+// GetDvLevelAddr gets `AVDOVIDecoderConfigurationRecord.dv_level` address.
 func (dcr *AVDOVIDecoderConfigurationRecord) GetDvLevelAddr() *uint8 {
 	return (*uint8)(&dcr.dv_level)
 }
 
-// Custom: GetRpuPresentFlag gets `AVDOVIDecoderConfigurationRecord.rpu_present_flag` value.
+// GetRpuPresentFlag gets `AVDOVIDecoderConfigurationRecord.rpu_present_flag` value.
 func (dcr *AVDOVIDecoderConfigurationRecord) GetRpuPresentFlag() uint8 {
 	return (uint8)(dcr.rpu_present_flag)
 }
 
-// Custom: SetRpuPresentFlag sets `AVDOVIDecoderConfigurationRecord.rpu_present_flag` value.
+// SetRpuPresentFlag sets `AVDOVIDecoderConfigurationRecord.rpu_present_flag` value.
 func (dcr *AVDOVIDecoderConfigurationRecord) SetRpuPresentFlag(v uint8) {
 	dcr.rpu_present_flag = (C.uint8_t)(v)
 }
 
-// Custom: GetRpuPresentFlagAddr gets `AVDOVIDecoderConfigurationRecord.rpu_present_flag` address.
+// GetRpuPresentFlagAddr gets `AVDOVIDecoderConfigurationRecord.rpu_present_flag` address.
 func (dcr *AVDOVIDecoderConfigurationRecord) GetRpuPresentFlagAddr() *uint8 {
 	return (*uint8)(&dcr.rpu_present_flag)
 }
 
-// Custom: GetElPresentFlag gets `AVDOVIDecoderConfigurationRecord.el_present_flag` value.
+// GetElPresentFlag gets `AVDOVIDecoderConfigurationRecord.el_present_flag` value.
 func (dcr *AVDOVIDecoderConfigurationRecord) GetElPresentFlag() uint8 {
 	return (uint8)(dcr.el_present_flag)
 }
 
-// Custom: SetElPresentFlag sets `AVDOVIDecoderConfigurationRecord.el_present_flag` value.
+// SetElPresentFlag sets `AVDOVIDecoderConfigurationRecord.el_present_flag` value.
 func (dcr *AVDOVIDecoderConfigurationRecord) SetElPresentFlag(v uint8) {
 	dcr.el_present_flag = (C.uint8_t)(v)
 }
 
-// Custom: GetElPresentFlagAddr gets `AVDOVIDecoderConfigurationRecord.el_present_flag` address.
+// GetElPresentFlagAddr gets `AVDOVIDecoderConfigurationRecord.el_present_flag` address.
 func (dcr *AVDOVIDecoderConfigurationRecord) GetElPresentFlagAddr() *uint8 {
 	return (*uint8)(&dcr.el_present_flag)
 }
 
-// Custom: GetBlPresentFlag gets `AVDOVIDecoderConfigurationRecord.bl_present_flag` value.
+// GetBlPresentFlag gets `AVDOVIDecoderConfigurationRecord.bl_present_flag` value.
 func (dcr *AVDOVIDecoderConfigurationRecord) GetBlPresentFlag() uint8 {
 	return (uint8)(dcr.bl_present_flag)
 }
 
-// Custom: SetBlPresentFlag sets `AVDOVIDecoderConfigurationRecord.bl_present_flag` value.
+// SetBlPresentFlag sets `AVDOVIDecoderConfigurationRecord.bl_present_flag` value.
 func (dcr *AVDOVIDecoderConfigurationRecord) SetBlPresentFlag(v uint8) {
 	dcr.bl_present_flag = (C.uint8_t)(v)
 }
 
-// Custom: GetBlPresentFlagAddr gets `AVDOVIDecoderConfigurationRecord.bl_present_flag` address.
+// GetBlPresentFlagAddr gets `AVDOVIDecoderConfigurationRecord.bl_present_flag` address.
 func (dcr *AVDOVIDecoderConfigurationRecord) GetBlPresentFlagAddr() *uint8 {
 	return (*uint8)(&dcr.bl_present_flag)
 }
 
-// Custom: GetDvBlSignalCompatibilityId
+// GetDvBlSignalCompatibilityId
 // gets `AVDOVIDecoderConfigurationRecord.dv_bl_signal_compatibility_id` value.
 func (dcr *AVDOVIDecoderConfigurationRecord) GetDvBlSignalCompatibilityId() uint8 {
 	return (uint8)(dcr.dv_bl_signal_compatibility_id)
 }
 
-// Custom: SetDvBlSignalCompatibilityId
+// SetDvBlSignalCompatibilityId
 // sets `AVDOVIDecoderConfigurationRecord.dv_bl_signal_compatibility_id` value.
 func (dcr *AVDOVIDecoderConfigurationRecord) SetDvBlSignalCompatibilityId(v uint8) {
 	dcr.dv_bl_signal_compatibility_id = (C.uint8_t)(v)
 }
 
-// Custom: GetDvBlSignalCompatibilityIdAddr
+// GetDvBlSignalCompatibilityIdAddr
 // gets `AVDOVIDecoderConfigurationRecord.dv_bl_signal_compatibility_id` address.
 func (dcr *AVDOVIDecoderConfigurationRecord) GetDvBlSignalCompatibilityIdAddr() *uint8 {
 	return (*uint8)(&dcr.dv_bl_signal_compatibility_id)
