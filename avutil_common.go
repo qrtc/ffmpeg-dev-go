@@ -137,8 +137,8 @@ func AvLog2(v uint32) int32 {
 	return (int32)(C.av_log2((C.uint)(v)))
 }
 
-// AvLog2_16bit
-func AvLog2_16bit(v uint32) int32 {
+// AvLog2With16bit
+func AvLog2With16bit(v uint32) int32 {
 	return (int32)(C.av_log2_16bit((C.uint)(v)))
 }
 

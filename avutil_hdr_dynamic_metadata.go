@@ -7,7 +7,7 @@ import "C"
 import "unsafe"
 
 // AVHDRPlusOverlapProcessOption
-type AVHDRPlusOverlapProcessOption C.enum_AVHDRPlusOverlapProcessOption
+type AVHDRPlusOverlapProcessOption = C.enum_AVHDRPlusOverlapProcessOption
 
 const (
 	AV_HDR_PLUS_OVERLAP_PROCESS_WEIGHTED_AVERAGING = AVHDRPlusOverlapProcessOption(

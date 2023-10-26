@@ -6,6 +6,7 @@ package ffmpeg
 import "C"
 import "unsafe"
 
+// AVHashContext
 type AVHashContext C.struct_AVHashContext
 
 // AvHashAlloc allocates a hash context for the algorithm specified by name.

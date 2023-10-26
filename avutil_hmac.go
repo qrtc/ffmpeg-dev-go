@@ -6,7 +6,7 @@ package ffmpeg
 import "C"
 
 // AVHMACType
-type AVHMACType C.enum_AVHMACType
+type AVHMACType = C.enum_AVHMACType
 
 const (
 	AV_HMAC_MD5    = AVHMACType(C.AV_HMAC_MD5)
@@ -17,6 +17,7 @@ const (
 	AV_HMAC_SHA512 = AVHMACType(C.AV_HMAC_SHA512)
 )
 
+// AVHMAC
 type AVHMAC C.struct_AVHMAC
 
 // AvHmacAlloc allocates an AVHMAC context.

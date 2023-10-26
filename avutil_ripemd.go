@@ -5,6 +5,7 @@ package ffmpeg
 */
 import "C"
 
+// AVRIPEMD
 type AVRIPEMD C.struct_AVRIPEMD
 
 // AvRipemdAlloc allocates an AVRIPEMD context.

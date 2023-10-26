@@ -5,6 +5,7 @@ package ffmpeg
 */
 import "C"
 
+// AVRC4
 type AVRC4 C.struct_AVRC4
 
 // AvRc4Alloc allocates an AVRC4 context.

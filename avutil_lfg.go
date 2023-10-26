@@ -5,6 +5,7 @@ package ffmpeg
 */
 import "C"
 
+// AVLFG
 type AVLFG C.struct_AVLFG
 
 // AvLfgInit
