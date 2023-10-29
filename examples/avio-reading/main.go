@@ -2,6 +2,7 @@ package main
 
 /*
 #include <stdlib.h>
+#include <stdint.h>
 
 int readPacket(void* opaque, uint8_t *buf, int bufSize);
 

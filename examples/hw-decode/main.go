@@ -40,7 +40,7 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/qrtc/ffmpeg-dev-go"
+	ffmpeg "github.com/qrtc/ffmpeg-dev-go"
 )
 
 var (

@@ -1,3 +1,7 @@
+// Copyright (c) 2023 QRTC. All rights reserved.
+// Use of this source code is governed by a MIT
+// license that can be found in the LICENSE file.
+
 package ffmpeg
 
 /*
@@ -522,77 +526,88 @@ func AvOptSet(obj CVoidPointer, name string, val string, searchFlags int32) int3
 	defer nameFunc()
 	valPtr, valFunc := StringCasting(val)
 	defer valFunc()
-	return (int32)(C.av_opt_set(VoidPointer(obj), (*C.char)(namePtr), (*C.char)(valPtr), (C.int)(searchFlags)))
+	return (int32)(C.av_opt_set(VoidPointer(obj), (*C.char)(namePtr),
+		(*C.char)(valPtr), (C.int)(searchFlags)))
 }
 
 // AvOptSetInt
-func AvOptSetInt(obj CVoidPointer, name string, val int64, searchFlags int32) int32 {
+func AvOptSetInt[T Integer](obj CVoidPointer, name string, val T, searchFlags int32) int32 {
 	namePtr, nameFunc := StringCasting(name)
 	defer nameFunc()
-	return (int32)(C.av_opt_set_int(VoidPointer(obj), (*C.char)(namePtr), (C.int64_t)(val), (C.int)(searchFlags)))
+	return (int32)(C.av_opt_set_int(VoidPointer(obj), (*C.char)(namePtr),
+		(C.int64_t)(val), (C.int)(searchFlags)))
 }
 
 // AvOptSetDouble
 func AvOptSetDouble(obj CVoidPointer, name string, val float64, searchFlags int32) int32 {
 	namePtr, nameFunc := StringCasting(name)
 	defer nameFunc()
-	return (int32)(C.av_opt_set_double(VoidPointer(obj), (*C.char)(namePtr), (C.double)(val), (C.int)(searchFlags)))
+	return (int32)(C.av_opt_set_double(VoidPointer(obj), (*C.char)(namePtr),
+		(C.double)(val), (C.int)(searchFlags)))
 }
 
 // AvOptSetQ
 func AvOptSetQ(obj CVoidPointer, name string, val AVRational, searchFlags int32) int32 {
 	namePtr, nameFunc := StringCasting(name)
 	defer nameFunc()
-	return (int32)(C.av_opt_set_q(VoidPointer(obj), (*C.char)(namePtr), (C.struct_AVRational)(val), (C.int)(searchFlags)))
+	return (int32)(C.av_opt_set_q(VoidPointer(obj), (*C.char)(namePtr),
+		(C.struct_AVRational)(val), (C.int)(searchFlags)))
 }
 
 // AvOptSetBin
-func AvOptSetBin(obj CVoidPointer, name string, val *uint8, size int32, searchFlags int32) int32 {
+func AvOptSetBin[U any, V Integer](obj CVoidPointer, name string, val *U, size V, searchFlags int32) int32 {
 	namePtr, nameFunc := StringCasting(name)
 	defer nameFunc()
-	return (int32)(C.av_opt_set_bin(VoidPointer(obj), (*C.char)(namePtr), (*C.uint8_t)(val), (C.int)(size), (C.int)(searchFlags)))
+	return (int32)(C.av_opt_set_bin(VoidPointer(obj), (*C.char)(namePtr),
+		(*C.uint8_t)(unsafe.Pointer(val)), (C.int)(size), (C.int)(searchFlags)))
 }
 
 // AvOptSetImageSize
 func AvOptSetImageSize(obj CVoidPointer, name string, w, h int32, searchFlags int32) int32 {
 	namePtr, nameFunc := StringCasting(name)
 	defer nameFunc()
-	return (int32)(C.av_opt_set_image_size(VoidPointer(obj), (*C.char)(namePtr), (C.int)(w), (C.int)(h), (C.int)(searchFlags)))
+	return (int32)(C.av_opt_set_image_size(VoidPointer(obj), (*C.char)(namePtr),
+		(C.int)(w), (C.int)(h), (C.int)(searchFlags)))
 }
 
 // AvOptSetPixelFmt
 func AvOptSetPixelFmt(obj CVoidPointer, name string, fmt AVPixelFormat, searchFlags int32) int32 {
 	namePtr, nameFunc := StringCasting(name)
 	defer nameFunc()
-	return (int32)(C.av_opt_set_pixel_fmt(VoidPointer(obj), (*C.char)(namePtr), (C.enum_AVPixelFormat)(fmt), (C.int)(searchFlags)))
+	return (int32)(C.av_opt_set_pixel_fmt(VoidPointer(obj), (*C.char)(namePtr),
+		(C.enum_AVPixelFormat)(fmt), (C.int)(searchFlags)))
 }
 
 // AvOptSetSampleFmt
 func AvOptSetSampleFmt(obj CVoidPointer, name string, fmt AVSampleFormat, searchFlags int32) int32 {
 	namePtr, nameFunc := StringCasting(name)
 	defer nameFunc()
-	return (int32)(C.av_opt_set_sample_fmt(VoidPointer(obj), (*C.char)(namePtr), (C.enum_AVSampleFormat)(fmt), (C.int)(searchFlags)))
+	return (int32)(C.av_opt_set_sample_fmt(VoidPointer(obj), (*C.char)(namePtr),
+		(C.enum_AVSampleFormat)(fmt), (C.int)(searchFlags)))
 }
 
 // AvOptSetVideoRate
 func AvOptSetVideoRate(obj CVoidPointer, name string, val AVRational, searchFlags int32) int32 {
 	namePtr, nameFunc := StringCasting(name)
 	defer nameFunc()
-	return (int32)(C.av_opt_set_video_rate(VoidPointer(obj), (*C.char)(namePtr), (C.struct_AVRational)(val), (C.int)(searchFlags)))
+	return (int32)(C.av_opt_set_video_rate(VoidPointer(obj), (*C.char)(namePtr),
+		(C.struct_AVRational)(val), (C.int)(searchFlags)))
 }
 
 // AvOptSetChannelLayout
 func AvOptSetChannelLayout(obj CVoidPointer, name string, chLayout int64, searchFlags int32) int32 {
 	namePtr, nameFunc := StringCasting(name)
 	defer nameFunc()
-	return (int32)(C.av_opt_set_channel_layout(VoidPointer(obj), (*C.char)(namePtr), (C.int64_t)(chLayout), (C.int)(searchFlags)))
+	return (int32)(C.av_opt_set_channel_layout(VoidPointer(obj), (*C.char)(namePtr),
+		(C.int64_t)(chLayout), (C.int)(searchFlags)))
 }
 
 // AvOptSetDictVal
 func AvOptSetDictVal(obj CVoidPointer, name string, val *AVDictionary, searchFlags int32) int32 {
 	namePtr, nameFunc := StringCasting(name)
 	defer nameFunc()
-	return (int32)(C.av_opt_set_dict_val(VoidPointer(obj), (*C.char)(namePtr), (*C.struct_AVDictionary)(val), (C.int)(searchFlags)))
+	return (int32)(C.av_opt_set_dict_val(VoidPointer(obj), (*C.char)(namePtr),
+		(*C.struct_AVDictionary)(val), (C.int)(searchFlags)))
 }
 
 // AvOptSetIntList sets a binary option to an integer list.
@@ -621,64 +636,72 @@ func AvOptGet(obj CVoidPointer, name string, searchFlags int32, outVal **uint8) 
 func AvOptGetInt(obj CVoidPointer, name string, searchFlags int32, outVal *int64) int32 {
 	namePtr, nameFunc := StringCasting(name)
 	defer nameFunc()
-	return (int32)(C.av_opt_get_int(VoidPointer(obj), (*C.char)(namePtr), (C.int)(searchFlags), (*C.int64_t)(outVal)))
+	return (int32)(C.av_opt_get_int(VoidPointer(obj), (*C.char)(namePtr),
+		(C.int)(searchFlags), (*C.int64_t)(outVal)))
 }
 
 // AvOptGetDouble
 func AvOptGetDouble(obj CVoidPointer, name string, searchFlags int32, outVal *float64) int32 {
 	namePtr, nameFunc := StringCasting(name)
 	defer nameFunc()
-	return (int32)(C.av_opt_get_double(VoidPointer(obj), (*C.char)(namePtr), (C.int)(searchFlags), (*C.double)(outVal)))
+	return (int32)(C.av_opt_get_double(VoidPointer(obj), (*C.char)(namePtr),
+		(C.int)(searchFlags), (*C.double)(outVal)))
 }
 
 // AvOptGetQ
 func AvOptGetQ(obj CVoidPointer, name string, searchFlags int32, outVal *AVRational) int32 {
 	namePtr, nameFunc := StringCasting(name)
 	defer nameFunc()
-	return (int32)(C.av_opt_get_q(VoidPointer(obj), (*C.char)(namePtr), (C.int)(searchFlags), (*C.struct_AVRational)(outVal)))
+	return (int32)(C.av_opt_get_q(VoidPointer(obj), (*C.char)(namePtr),
+		(C.int)(searchFlags), (*C.struct_AVRational)(outVal)))
 }
 
 // AvOptGetImageSize
 func AvOptGetImageSize(obj CVoidPointer, name string, searchFlags int32, wOut, hOut *int32) int32 {
 	namePtr, nameFunc := StringCasting(name)
 	defer nameFunc()
-	return (int32)(C.av_opt_get_image_size(VoidPointer(obj), (*C.char)(namePtr), (C.int)(searchFlags), (*C.int)(wOut), (*C.int)(hOut)))
+	return (int32)(C.av_opt_get_image_size(VoidPointer(obj), (*C.char)(namePtr),
+		(C.int)(searchFlags), (*C.int)(wOut), (*C.int)(hOut)))
 }
 
 // AvOptGetPixelFmt
 func AvOptGetPixelFmt(obj CVoidPointer, name string, searchFlags int32, outFmt *AVPixelFormat) int32 {
 	namePtr, nameFunc := StringCasting(name)
 	defer nameFunc()
-	return (int32)(C.av_opt_get_pixel_fmt(VoidPointer(obj), (*C.char)(namePtr), (C.int)(searchFlags), (*C.enum_AVPixelFormat)(outFmt)))
+	return (int32)(C.av_opt_get_pixel_fmt(VoidPointer(obj), (*C.char)(namePtr),
+		(C.int)(searchFlags), (*C.enum_AVPixelFormat)(outFmt)))
 }
 
 // AvOptGetSampleFmt
 func AvOptGetSampleFmt(obj CVoidPointer, name string, searchFlags int32, outFmt *AVSampleFormat) int32 {
 	namePtr, nameFunc := StringCasting(name)
 	defer nameFunc()
-	return (int32)(C.av_opt_get_sample_fmt(VoidPointer(obj), (*C.char)(namePtr), (C.int)(searchFlags), (*C.enum_AVSampleFormat)(outFmt)))
+	return (int32)(C.av_opt_get_sample_fmt(VoidPointer(obj), (*C.char)(namePtr),
+		(C.int)(searchFlags), (*C.enum_AVSampleFormat)(outFmt)))
 }
 
 // AvOptGetVideoRate
 func AvOptGetVideoRate(obj CVoidPointer, name string, searchFlags int32, outVal *AVRational) int32 {
 	namePtr, nameFunc := StringCasting(name)
 	defer nameFunc()
-	return (int32)(C.av_opt_get_video_rate(VoidPointer(obj), (*C.char)(namePtr), (C.int)(searchFlags), (*C.struct_AVRational)(outVal)))
+	return (int32)(C.av_opt_get_video_rate(VoidPointer(obj), (*C.char)(namePtr),
+		(C.int)(searchFlags), (*C.struct_AVRational)(outVal)))
 }
 
 // AvOptGetChannelLayout
 func AvOptGetChannelLayout(obj CVoidPointer, name string, searchFlags int32, outVal *int64) int32 {
 	namePtr, nameFunc := StringCasting(name)
 	defer nameFunc()
-	return (int32)(C.av_opt_get_channel_layout(VoidPointer(obj), (*C.char)(namePtr), (C.int)(searchFlags), (*C.int64_t)(outVal)))
+	return (int32)(C.av_opt_get_channel_layout(VoidPointer(obj), (*C.char)(namePtr),
+		(C.int)(searchFlags), (*C.int64_t)(outVal)))
 }
 
 // AvOptGetDictVal
 func AvOptGetDictVal(obj CVoidPointer, name string, searchFlags int32, outVal **AVDictionary) int32 {
 	namePtr, nameFunc := StringCasting(name)
 	defer nameFunc()
-	return (int32)(C.av_opt_get_dict_val(VoidPointer(obj), (*C.char)(namePtr), (C.int)(searchFlags),
-		(**C.struct_AVDictionary)(unsafe.Pointer(outVal))))
+	return (int32)(C.av_opt_get_dict_val(VoidPointer(obj), (*C.char)(namePtr),
+		(C.int)(searchFlags), (**C.struct_AVDictionary)(unsafe.Pointer(outVal))))
 }
 
 // AvOptPtr gets a pointer to the requested field in a struct.

@@ -1,3 +1,7 @@
+// Copyright (c) 2023 QRTC. All rights reserved.
+// Use of this source code is governed by a MIT
+// license that can be found in the LICENSE file.
+
 package ffmpeg
 
 /*
@@ -88,8 +92,18 @@ func AvGetPictureTypeChar(pictType AVPictureType) string {
 }
 
 // AvXIfNull returns x default pointer in case p is NULL.
-func AvXIfNull(p, x unsafe.Pointer) unsafe.Pointer {
-	return C.av_x_if_null(p, x)
+func AvXIfNull[T any](p, x *T) *T {
+	if p != nil {
+		return p
+	}
+	return x
+}
+
+func AvStringIfNull(p, x string) string {
+	if len(p) != 0 {
+		return p
+	}
+	return x
 }
 
 // AvIntListLengthForSize computes the length of an integer list.

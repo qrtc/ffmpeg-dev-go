@@ -1,22 +1,5 @@
 package main
 
-/*
-#include <stdlib.h>
-#include <stdio.h>
-
-static void putcs(uint16_t *p, int n)
-{
-    const uint16_t *p_end = p + n;
-    while (p < p_end) {
-        fputc(*p    & 0xff, stdout);
-        fputc(*p>>8 & 0xff, stdout);
-        p++;
-    }
-    fflush(stdout);
-}
-*/
-import "C"
-
 import (
 	"fmt"
 	"os"
@@ -24,7 +7,7 @@ import (
 	"time"
 	"unsafe"
 
-	"github.com/qrtc/ffmpeg-dev-go"
+	ffmpeg "github.com/qrtc/ffmpeg-dev-go"
 )
 
 var (

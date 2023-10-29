@@ -1,3 +1,7 @@
+// Copyright (c) 2023 QRTC. All rights reserved.
+// Use of this source code is governed by a MIT
+// license that can be found in the LICENSE file.
+
 package ffmpeg
 
 /*
@@ -17,29 +21,29 @@ const (
 )
 
 // AvGcd computes the greatest common divisor of two integer operands.
-func AvGcd(a, b int64) int64 {
-	return (int64)(C.av_gcd((C.int64_t)(a), (C.int64_t)(b)))
+func AvGcd[T Integer](a, b T) T {
+	return (T)(C.av_gcd((C.int64_t)(a), (C.int64_t)(b)))
 }
 
 // AvRescale rescale a 64-bit integer with rounding to nearest.
-func AvRescale(a, b, c int64) int64 {
-	return (int64)(C.av_rescale((C.int64_t)(a), (C.int64_t)(b), (C.int64_t)(c)))
+func AvRescale[T Integer](a, b, c T) T {
+	return (T)(C.av_rescale((C.int64_t)(a), (C.int64_t)(b), (C.int64_t)(c)))
 }
 
 // AvRescaleRnd rescales a 64-bit integer with specified rounding.
-func AvRescaleRnd(a, b, c int64, rnd AVRounding) int64 {
-	return (int64)(C.av_rescale_rnd((C.int64_t)(a), (C.int64_t)(b), (C.int64_t)(c),
+func AvRescaleRnd[T Integer](a, b, c T, rnd AVRounding) T {
+	return (T)(C.av_rescale_rnd((C.int64_t)(a), (C.int64_t)(b), (C.int64_t)(c),
 		(C.enum_AVRounding)(rnd)))
 }
 
 // AvRescaleQ rescales a 64-bit integer by 2 rational numbers.
-func AvRescaleQ(a int64, bq, cq AVRational) int64 {
-	return (int64)(C.av_rescale_q((C.int64_t)(a), (C.struct_AVRational)(bq), (C.struct_AVRational)(cq)))
+func AvRescaleQ[T Integer](a T, bq, cq AVRational) T {
+	return (T)(C.av_rescale_q((C.int64_t)(a), (C.struct_AVRational)(bq), (C.struct_AVRational)(cq)))
 }
 
 // AvRescaleQRnd rescales a 64-bit integer by 2 rational numbers with specified rounding.
-func AvRescaleQRnd(a int64, bq, cq AVRational, rnd AVRounding) int64 {
-	return (int64)(C.av_rescale_q_rnd((C.int64_t)(a), (C.struct_AVRational)(bq), (C.struct_AVRational)(cq),
+func AvRescaleQRnd[T Integer](a T, bq, cq AVRational, rnd AVRounding) T {
+	return (T)(C.av_rescale_q_rnd((C.int64_t)(a), (C.struct_AVRational)(bq), (C.struct_AVRational)(cq),
 		(C.enum_AVRounding)(rnd)))
 }
 

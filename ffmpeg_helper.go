@@ -1,3 +1,7 @@
+// Copyright (c) 2023 QRTC. All rights reserved.
+// Use of this source code is governed by a MIT
+// license that can be found in the LICENSE file.
+
 package ffmpeg
 
 /*
@@ -112,4 +116,17 @@ func VoidPointerPointer(a CVoidPointerPointer) *unsafe.Pointer {
 		return nil
 	}
 	return (*unsafe.Pointer)(unsafe.Pointer(reflect.ValueOf(a).Pointer()))
+}
+
+// CondExpr is Conditional Operator like Ternary Operator in the C world.
+func CondExpr[T any](cond bool, x, y T) T {
+	if cond {
+		return x
+	}
+	return y
+}
+
+func PlusPlus[T Integer](x *T) T {
+	defer func() { *x++ }()
+	return *x
 }

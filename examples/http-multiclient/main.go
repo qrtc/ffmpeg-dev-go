@@ -47,7 +47,7 @@ func processClient(client *ffmpeg.AVIOContext, inUri string) {
 		ffmpeg.AvLog(client, ffmpeg.AV_LOG_TRACE, "resource: %s", resourceStr)
 		replyCode = ffmpeg.AVERROR_HTTP_NOT_FOUND
 	}
-	if ret = ffmpeg.AvOptSetInt(client, "reply_code", int64(replyCode), ffmpeg.AV_OPT_SEARCH_CHILDREN); ret < 0 {
+	if ret = ffmpeg.AvOptSetInt(client, "reply_code", replyCode, ffmpeg.AV_OPT_SEARCH_CHILDREN); ret < 0 {
 		ffmpeg.AvLog(client, ffmpeg.AV_LOG_ERROR, "Failed to set reply_code: %s.\n", ffmpeg.AvErr2str(ret))
 		goto end
 	}

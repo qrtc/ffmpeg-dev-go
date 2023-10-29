@@ -6,7 +6,7 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/qrtc/ffmpeg-dev-go"
+	ffmpeg "github.com/qrtc/ffmpeg-dev-go"
 )
 
 var (
@@ -151,7 +151,7 @@ func initFilters(decCtx *ffmpeg.AVCodecContext, fmtCtx *ffmpeg.AVFormatContext, 
 	args = ffmpeg.AvGetChannelLayoutString(-1, outlink.GetChannelLayout())
 	ffmpeg.AvLog(nil, ffmpeg.AV_LOG_INFO, "Output: srate:%dHz fmt:%s chlayout:%s\n",
 		outlink.GetSampleRate(),
-		ffmpeg.AvGetSampleFmtName(outlink.GetFormat()),
+		ffmpeg.AvStringIfNull(ffmpeg.AvGetSampleFmtName(outlink.GetFormat()), "?"),
 		args)
 
 end:

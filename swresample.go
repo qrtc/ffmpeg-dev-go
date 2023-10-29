@@ -1,3 +1,7 @@
+// Copyright (c) 2023 QRTC. All rights reserved.
+// Use of this source code is governed by a MIT
+// license that can be found in the LICENSE file.
+
 package ffmpeg
 
 /*
@@ -144,8 +148,8 @@ func SwrInjectSilence(s *SwrContext, count int32) int32 {
 }
 
 // SwrGetDelay gets the delay the next input sample will experience relative to the next output sample.
-func SwrGetDelay(s *SwrContext, base int64) int64 {
-	return (int64)(C.swr_get_delay((*C.struct_SwrContext)(s), (C.int64_t)(base)))
+func SwrGetDelay[T Integer](s *SwrContext, base T) T {
+	return (T)(C.swr_get_delay((*C.struct_SwrContext)(s), (C.int64_t)(base)))
 }
 
 // SwrGetOutSamples Find an upper bound on the number of samples that the next swr_convert
