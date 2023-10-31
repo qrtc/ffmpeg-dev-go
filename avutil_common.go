@@ -9,14 +9,6 @@ package ffmpeg
 */
 import "C"
 
-// AV_NE
-func AV_NE[T any](be, le T) T {
-	if C.AV_HAVE_BIGENDIAN > 0 {
-		return be
-	}
-	return le
-}
-
 // RSHIFT
 func RSHIFT[U, V Integer](a U, b V) U {
 	if a > 0 {
@@ -56,6 +48,7 @@ func FFUMOD[T Integer](a, b T) T {
 	return a - b*FFUDIV(a, b)
 }
 
+// FFABS
 func FFABS[T SingedInteger](a T) T {
 	if a >= 0 {
 		return a
@@ -63,6 +56,7 @@ func FFABS[T SingedInteger](a T) T {
 	return -a
 }
 
+// FFSIGNT
 func FFSIGNT[T SingedInteger](a T) T {
 	if a > 0 {
 		return 1
@@ -93,48 +87,6 @@ func FFABS64U[T SingedInteger](a T) uint64 {
 	}
 	return (uint64)(a)
 }
-
-// FFDIFFSIGN
-func FFDIFFSIGN[T Integer](x, y T) int {
-	if x > y {
-		return 1
-	} else if x < y {
-		return -1
-	} else {
-		return 0
-	}
-}
-
-func FFMAX[T Integer](a, b T) T {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-func FFMAX3[T Integer](a, b, c T) T {
-	return FFMAX(FFMAX(a, b), c)
-}
-
-func FFMIN[T Integer](a, b T) T {
-	if a > b {
-		return b
-	}
-	return a
-}
-
-func FFMIN3[T Integer](a, b, c T) T {
-	return FFMIN(FFMIN(a, b), c)
-}
-
-// FFSWAP
-func FFSWAP[T any](a, b *T) {
-	swapTmp := *b
-	*b = *a
-	*a = swapTmp
-}
-
-// NONEED: FF_ARRAY_ELEMS
 
 // AvLog2
 func AvLog2(v uint32) int32 {
@@ -241,12 +193,12 @@ func AvCeilLog2C(x int32) int32 {
 	return (int32)(C.av_ceil_log2_c((C.int)(x)))
 }
 
-// AvPopcountC counts number of bits set to one in x
+// AvPopcountC counts number of bits set to one in x.
 func AvPopcountC(x uint32) int32 {
 	return (int32)(C.av_popcount_c((C.uint)(x)))
 }
 
-// AvPopcount64C counts number of bits set to one in x
+// AvPopcount64C counts number of bits set to one in x.
 func AvPopcount64C(x uint64) int32 {
 	return (int32)(C.av_popcount64_c((C.uint64_t)(x)))
 }
@@ -254,16 +206,6 @@ func AvPopcount64C(x uint64) int32 {
 // AvParityC
 func AvParityC(x uint32) int32 {
 	return (int32)(C.av_parity_c((C.uint32_t)(x)))
-}
-
-// MKTAG
-func MKTAG(a, b, c, d uint32) uint32 {
-	return (a) | ((b) << 8) | ((c) << 16) | ((uint32)(d) << 24)
-}
-
-// MKBETAG
-func MKBETAG(a, b, c, d uint32) uint32 {
-	return (d) | ((c) << 8) | ((b) << 16) | ((uint32)(a) << 24)
 }
 
 // See https://pkg.go.dev/unicode/utf8

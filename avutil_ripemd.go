@@ -23,8 +23,8 @@ func AvRipemdInit(context *AVRIPEMD, bits int32) int32 {
 }
 
 // AvRipemdUpdate updates hash value.
-func AvRipemdUpdate(context *AVRIPEMD, data *uint8, len uint32) {
-	C.av_ripemd_update((*C.struct_AVRIPEMD)(context), (*C.uint8_t)(data), (C.uint)(len))
+func AvRipemdUpdate(context *AVRIPEMD, data *uint8, len uintptr) {
+	C.av_ripemd_update((*C.struct_AVRIPEMD)(context), (*C.uint8_t)(data), (C.size_t)(len))
 }
 
 // AvRipemdFinal finishes hashing and output digest value.

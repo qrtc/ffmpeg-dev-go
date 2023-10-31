@@ -74,12 +74,12 @@ func initFilters(decCtx *ffmpeg.AVCodecContext, fmtCtx *ffmpeg.AVFormatContext, 
 	}
 
 	// buffer audio source: the decoded frames from the decoder will be inserted here.
-	if decCtx.GetChannelLayout() == 0 {
-		decCtx.SetChannelLayout(uint64(ffmpeg.AvGetDefaultChannelLayout(decCtx.GetChannels())))
+	if decCtx.GetChLayoutAddr().GetOrder() == ffmpeg.AV_CHANNEL_ORDER_UNSPEC {
+		ffmpeg.AvChannelLayoutDefault(decCtx.GetChLayoutAddr(), decCtx.GetChLayoutAddr().GetNbChannels())
 	}
 	args = fmt.Sprintf("time_base=%d/%d:sample_rate=%d:sample_fmt=%s:channel_layout=0x%d",
 		timeBase.GetNum(), timeBase.GetDen(), decCtx.GetSampleRate(),
-		ffmpeg.AvGetSampleFmtName(decCtx.GetSampleFmt()), decCtx.GetChannelLayout())
+		ffmpeg.AvGetSampleFmtName(decCtx.GetSampleFmt()), decCtx.GetChLayoutAddr().GetNbChannels())
 
 	ffmpeg.AvLog(nil, ffmpeg.AV_LOG_INFO, "audio source args: %s\n", args)
 
@@ -148,7 +148,7 @@ func initFilters(decCtx *ffmpeg.AVCodecContext, fmtCtx *ffmpeg.AVFormatContext, 
 	// Print summary of the sink buffer
 	// Note: args buffer is reused to store channel layout string
 	outlink = buffersinkCtx.GetInputs()[0]
-	args = ffmpeg.AvGetChannelLayoutString(-1, outlink.GetChannelLayout())
+	args = ffmpeg.AvChannelLayoutDescribe(outlink.GetChLayoutAddr())
 	ffmpeg.AvLog(nil, ffmpeg.AV_LOG_INFO, "Output: srate:%dHz fmt:%s chlayout:%s\n",
 		outlink.GetSampleRate(),
 		ffmpeg.AvStringIfNull(ffmpeg.AvGetSampleFmtName(outlink.GetFormat()), "?"),
@@ -161,7 +161,7 @@ end:
 }
 
 func printFrame(frame *ffmpeg.AVFrame) {
-	n := frame.GetNbSamples() * ffmpeg.AvGetChannelLayoutNbChannels(frame.GetChannelLayout())
+	n := frame.GetNbSamples() * frame.GetChLayoutAddr().GetNbChannels()
 	p := (*uint16)(unsafe.Pointer(frame.GetData()[0]))
 	data := unsafe.Slice(p, n)
 	for i := int32(0); i < n; i++ {

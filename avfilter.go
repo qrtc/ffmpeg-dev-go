@@ -34,12 +34,6 @@ type AVFilterFormats C.struct_AVFilterFormats
 // AVFilterChannelLayouts
 type AVFilterChannelLayouts C.struct_AVFilterChannelLayouts
 
-// AvFilterPadCount gets the number of elements in a NULL-terminated array of AVFilterPads (e.g.
-// AvFilter.inputs/outputs).
-func AvFilterPadCount(pads *AVFilterPad) int32 {
-	return (int32)(C.avfilter_pad_count((*C.struct_AVFilterPad)(pads)))
-}
-
 // AvFilterPadGetName gets the name of an AVFilterPad.
 func AvFilterPadGetName(pads *AVFilterPad, padIdx int32) string {
 	return C.GoString(C.avfilter_pad_get_name((*C.struct_AVFilterPad)(pads), (C.int)(padIdx)))
@@ -54,6 +48,7 @@ const (
 	AVFILTER_FLAG_DYNAMIC_INPUTS            = C.AVFILTER_FLAG_DYNAMIC_INPUTS
 	AVFILTER_FLAG_DYNAMIC_OUTPUTS           = C.AVFILTER_FLAG_DYNAMIC_OUTPUTS
 	AVFILTER_FLAG_SLICE_THREADS             = C.AVFILTER_FLAG_SLICE_THREADS
+	AVFILTER_FLAG_METADATA_ONLY             = C.AVFILTER_FLAG_METADATA_ONLY
 	AVFILTER_FLAG_SUPPORT_TIMELINE_GENERIC  = C.AVFILTER_FLAG_SUPPORT_TIMELINE_GENERIC
 	AVFILTER_FLAG_SUPPORT_TIMELINE_INTERNAL = C.AVFILTER_FLAG_SUPPORT_TIMELINE_INTERNAL
 	AVFILTER_FLAG_SUPPORT_TIMELINE          = C.AVFILTER_FLAG_SUPPORT_TIMELINE
@@ -133,6 +128,11 @@ func (flt *AVFilter) GetFlagsAddr() *int32 {
 	return (*int32)(&flt.flags)
 }
 
+// AvfilterFilterPadCount
+func AvfilterFilterPadCount(filter *AVFilter, isOutput int32) uint32 {
+	return (uint32)(C.avfilter_filter_pad_count((*C.struct_AVFilter)(filter), (C.int)(isOutput)))
+}
+
 const (
 	AVFILTER_THREAD_SLICE = C.AVFILTER_THREAD_SLICE
 )
@@ -180,7 +180,7 @@ func (fltc *AVFilterContext) GetName() string {
 
 // SetName sets `AVFilterContext.name` value.
 func (fltc *AVFilterContext) SetName(v string) {
-	C.free(unsafe.Pointer(fltc.name))
+	FreePointer(fltc.name)
 	fltc.name, _ = StringCasting(v)
 }
 
@@ -639,16 +639,22 @@ func (fltl *AVFilterLink) GetSampleAspectRatioAddr() *AVRational {
 	return (*AVRational)(&fltl.sample_aspect_ratio)
 }
 
+// Deprecated: Use ChLayout instead.
+//
 // GetChannelLayout gets `AVFilterLink.channel_layout` value.
 func (fltl *AVFilterLink) GetChannelLayout() uint64 {
 	return (uint64)(fltl.channel_layout)
 }
 
+// Deprecated: Use ChLayout instead.
+//
 // SetChannelLayout sets `AVFilterLink.channel_layout` value.
 func (fltl *AVFilterLink) SetChannelLayout(v uint64) {
 	fltl.channel_layout = (C.uint64_t)(v)
 }
 
+// Deprecated: Use ChLayout instead.
+//
 // GetChannelLayoutAddr gets `AVFilterLink.channel_layout` address.
 func (fltl *AVFilterLink) GetChannelLayoutAddr() *uint64 {
 	return (*uint64)(&fltl.channel_layout)
@@ -699,6 +705,21 @@ func (fltl *AVFilterLink) GetTimeBaseAddr() *AVRational {
 	return (*AVRational)(&fltl.time_base)
 }
 
+// GetChLayout gets `AVFilterLink.ch_layout` value.
+func (fltl *AVFilterLink) GetChLayout() AVChannelLayout {
+	return (AVChannelLayout)(fltl.ch_layout)
+}
+
+// SetChLayout sets `AVFilterLink.ch_layout` value.
+func (fltl *AVFilterLink) SetChLayout(v AVChannelLayout) {
+	fltl.ch_layout = (C.struct_AVChannelLayout)(v)
+}
+
+// GetChLayoutAddr gets `AVFilterLink.ch_layout` address.
+func (fltl *AVFilterLink) GetChLayoutAddr() *AVChannelLayout {
+	return (*AVChannelLayout)(&fltl.ch_layout)
+}
+
 // AvFilterLink links two filters together.
 func AvFilterLink(src *AVFilterContext, srcpad uint32,
 	dst *AVFilterContext, dstpad uint32) int32 {
@@ -711,20 +732,6 @@ func AvFilterLinkFree(link **AVFilterLink) {
 	C.avfilter_link_free((**C.struct_AVFilterLink)(unsafe.Pointer(link)))
 }
 
-// Deprecated: Use av_buffersink_get_channels() instead.
-//
-// AvFilterLinkGetChannels gets the number of channels of a link.
-func AvFilterLinkGetChannels(link *AVFilterLink) int32 {
-	return (int32)(C.avfilter_link_get_channels((*C.struct_AVFilterLink)(link)))
-}
-
-// Deprecated: No use.
-//
-// AvFilterLinkSetClosed sets the closed field of a link.
-func AvFilterLinkSetClosed(link *AVFilterLink, closed int32) {
-	C.avfilter_link_set_closed((*C.struct_AVFilterLink)(link), (C.int)(closed))
-}
-
 // AvFilterConfigLinks negotiates the media format, dimensions, etc of all inputs to a filter.
 func AvFilterConfigLinks(filter *AVFilterContext) int32 {
 	return (int32)(C.avfilter_config_links((*C.struct_AVFilterContext)(filter)))
@@ -735,7 +742,7 @@ const (
 	AVFILTER_CMD_FLAG_FAST = C.AVFILTER_CMD_FLAG_FAST
 )
 
-// AvFilterProcessCommand  makes the filter instance process a command.
+// AvFilterProcessCommand makes the filter instance process a command.
 // It is recommended to use AVFilterGraphSendCommand().
 func AvFilterProcessCommand(filter *AVFilterContext, cmd, arg string, resLen, flags int32) (res string, ret int32) {
 	cmdPtr, cmdFunc := StringCasting(cmd)
@@ -751,27 +758,6 @@ func AvFilterProcessCommand(filter *AVFilterContext, cmd, arg string, resLen, fl
 // AvFilterIterate iterates over all registered filters.
 func AvFilterIterate(opaque CVoidPointerPointer) *AVFilter {
 	return (*AVFilter)(C.av_filter_iterate(VoidPointerPointer(opaque)))
-}
-
-// Deprecated: No use.
-//
-// AvFilterRegisterAll initializes the filter system. Register all builtin filters.
-func AvFilterRegisterAll() {
-	C.avfilter_register_all()
-}
-
-// Deprecated: No use.
-//
-// AvFilterRegister registers a filter.
-func AvFilterRegister(filter *AVFilter) {
-	C.avfilter_register((*C.struct_AVFilter)(filter))
-}
-
-// Deprecated: No use.
-//
-// AvFilterNext iterates over all registered filters.
-func AvFilterNext(filter *AVFilter) *AVFilter {
-	return (*AVFilter)(C.avfilter_next((*C.struct_AVFilter)(filter)))
 }
 
 // AvFilterGetByName gets a filter definition matching the given name.
@@ -879,13 +865,6 @@ func (fltg *AVFilterGraph) GetNbFiltersAddr() *uint32 {
 // GetScaleSwsOpts gets `AVFilterGraph.scale_sws_opts` value.
 func (fltg *AVFilterGraph) GetScaleSwsOpts() string {
 	return C.GoString(fltg.scale_sws_opts)
-}
-
-// Deprecated: No use.
-//
-// GetResampleLavrOpts gets `AVFilterGraph.resample_lavr_opts` value.
-func (fltg *AVFilterGraph) GetResampleLavrOpts() string {
-	return C.GoString(fltg.resample_lavr_opts)
 }
 
 // GetThreadType gets `AVFilterGraph.threadtype` value.
@@ -1032,7 +1011,7 @@ func (fltio *AVFilterInOut) GetName() string {
 
 // SetName sets `AVFilterInOut.name` value.
 func (fltio *AVFilterInOut) SetName(v string) {
-	C.free(unsafe.Pointer(fltio.name))
+	FreePointer(fltio.name)
 	fltio.name, _ = StringCasting(v)
 }
 
@@ -1122,6 +1101,280 @@ func AvFilterGraphParse2(graph *AVFilterGraph, filters string,
 		(*C.char)(filtersPtr),
 		(**C.struct_AVFilterInOut)(unsafe.Pointer(inputs)),
 		(**C.struct_AVFilterInOut)(unsafe.Pointer(outputs))))
+}
+
+// AVFilterPadParams
+type AVFilterPadParams C.struct_AVFilterPadParams
+
+// GetLabel gets `AVFilterPadParams.label` value.
+func (fpp *AVFilterPadParams) GetLabel() string {
+	return C.GoString(fpp.label)
+}
+
+// SetLabel sets `AVFilterPadParams.label` value.
+func (fpp *AVFilterPadParams) SetLabel(v string) {
+	FreePointer(fpp.label)
+	fpp.label, _ = StringCasting(v)
+}
+
+// AVFilterParams
+type AVFilterParams C.struct_AVFilterParams
+
+// GetFilter gets `AVFilterParams.filter` value.
+func (fp *AVFilterParams) GetFilter() *AVFilterContext {
+	return (*AVFilterContext)(fp.filter)
+}
+
+// SetFilter sets `AVFilterParams.filter` value.
+func (fp *AVFilterParams) SetFilter(v *AVFilterContext) {
+	fp.filter = (*C.struct_AVFilterContext)(v)
+}
+
+// GetFilterAddr gets `AVFilterParams.` address.
+func (fp *AVFilterParams) GetFilterAddr() **AVFilterContext {
+	return (**AVFilterContext)(unsafe.Pointer(&fp.filter))
+}
+
+// GetFilterName gets `AVFilterParams.filter_name` value.
+func (fp *AVFilterParams) GetFilterName() string {
+	return C.GoString(fp.filter_name)
+}
+
+// SetFilterName sets `AVFilterParams.filter_name` value.
+func (fp *AVFilterParams) SetFilterName(v string) {
+	FreePointer(fp.filter_name)
+	fp.filter_name, _ = StringCasting(v)
+}
+
+// GetInstanceName gets `AVFilterParams.instance_name` value.
+func (fp *AVFilterParams) GetInstanceName() string {
+	return C.GoString(fp.instance_name)
+
+}
+
+// SetInstanceName sets `AVFilterParams.instance_name` value.
+func (fp *AVFilterParams) SetInstanceName(v string) {
+	FreePointer(fp.instance_name)
+	fp.instance_name, _ = StringCasting(v)
+}
+
+// GetOpts gets `AVFilterParams.opts` value.
+func (fp *AVFilterParams) GetOpts() *AVDictionary {
+	return (*AVDictionary)(fp.opts)
+}
+
+// SetOpts sets `AVFilterParams.opts` value.
+func (fp *AVFilterParams) SetOpts(v *AVDictionary) {
+	fp.opts = (*C.struct_AVDictionary)(v)
+}
+
+// GetOptsAddr gets `AVFilterParams.` address.
+func (fp *AVFilterParams) GetOptsAddr() **AVDictionary {
+	return (**AVDictionary)(unsafe.Pointer(&fp.opts))
+}
+
+// GetInputs gets `AVFilterParams.inputs` value.
+func (fp *AVFilterParams) GetInputs() []*AVFilterPadParams {
+	return unsafe.Slice((**AVFilterPadParams)(unsafe.Pointer(fp.inputs)), fp.nb_inputs)
+}
+
+// SetInputs sets `AVFilterParams.inputs` value.
+func (fp *AVFilterParams) SetInputs(v **AVFilterPadParams) {
+	fp.inputs = (**C.struct_AVFilterPadParams)(unsafe.Pointer(v))
+}
+
+// GetInputsAddr gets `AVFilterParams.` address.
+func (fp *AVFilterParams) GetInputsAddr() ***AVFilterPadParams {
+	return (***AVFilterPadParams)(unsafe.Pointer(&fp.inputs))
+}
+
+// GetNbInputs gets `AVFilterParams.nb_inputs` value.
+func (fp *AVFilterParams) GetNbInputs() uint32 {
+	return (uint32)(fp.nb_inputs)
+}
+
+// SetNbInputs sets `AVFilterParams.nb_inputs` value.
+func (fp *AVFilterParams) SetNbInputs(v uint32) {
+	fp.nb_inputs = (C.uint)(v)
+}
+
+// GetNbInputsAddr gets `AVFilterParams.` address.
+func (fp *AVFilterParams) GetNbInputsAddr() *uint32 {
+	return (*uint32)(&fp.nb_inputs)
+}
+
+// GetOutputs gets `AVFilterParams.outputs` value.
+func (fp *AVFilterParams) GetOutputs() []*AVFilterPadParams {
+	return unsafe.Slice((**AVFilterPadParams)(unsafe.Pointer(fp.outputs)), fp.nb_outputs)
+}
+
+// SetOutputs sets `AVFilterParams.outputs` value.
+func (fp *AVFilterParams) SetOutputs(v **AVFilterPadParams) {
+	fp.outputs = (**C.struct_AVFilterPadParams)(unsafe.Pointer(v))
+}
+
+// GetOutputsAddr gets `AVFilterParams.` address.
+func (fp *AVFilterParams) GetOutputsAddr() ***AVFilterPadParams {
+	return (***AVFilterPadParams)(unsafe.Pointer(&fp.outputs))
+}
+
+// GetNbOutputs gets `AVFilterParams.nb_outputs` value.
+func (fp *AVFilterParams) GetNbOutputs() uint32 {
+	return (uint32)(fp.nb_outputs)
+}
+
+// SetNbOutputs sets `AVFilterParams.nb_outputs` value.
+func (fp *AVFilterParams) SetNbOutputs(v uint32) {
+	fp.nb_outputs = (C.uint)(v)
+}
+
+// GetNbOutputsAddr gets `AVFilterParams.` address.
+func (fp *AVFilterParams) GetNbOutputsAddr() *uint32 {
+	return (*uint32)(&fp.nb_outputs)
+}
+
+// AVFilterChain
+type AVFilterChain C.struct_AVFilterChain
+
+// GetFilters gets `AVFilterChain.filters` value.
+func (fc *AVFilterChain) GetFilters() []*AVFilterParams {
+	return unsafe.Slice((**AVFilterParams)(unsafe.Pointer(fc.filters)), fc.nb_filters)
+}
+
+// SetFilters sets `AVFilterChain.filters` value.
+func (fc *AVFilterChain) SetFilters(v **AVFilterParams) {
+	fc.filters = (**C.struct_AVFilterParams)(unsafe.Pointer(v))
+}
+
+// GetFiltersAddr gets `AVFilterChain.filters` address.
+func (fc *AVFilterChain) GetFiltersAddr() ***AVFilterParams {
+	return (***AVFilterParams)(unsafe.Pointer(&fc.filters))
+}
+
+// GetNbFilters gets `AVFilterChain.nb_filters` value.
+func (fc *AVFilterChain) GetNbFilters() uintptr {
+	return (uintptr)(fc.nb_filters)
+}
+
+// SetNbFilters sets `AVFilterChain.nb_filters` value.
+func (fc *AVFilterChain) SetNbFilters(v uintptr) {
+	fc.nb_filters = (C.size_t)(v)
+}
+
+// GetNbFiltersAddr gets `AVFilterChain.nb_filters` address.
+func (fc *AVFilterChain) GetNbFiltersAddr() *uintptr {
+	return (*uintptr)(unsafe.Pointer(&fc.nb_filters))
+}
+
+// AVFilterGraphSegment
+type AVFilterGraphSegment C.struct_AVFilterGraphSegment
+
+// GetGraph gets `AVFilterGraphSegment.graph` value.
+func (fgs *AVFilterGraphSegment) GetGraph() *AVFilterGraph {
+	return (*AVFilterGraph)(fgs.graph)
+}
+
+// SetGraph sets `AVFilterGraphSegment.graph` value.
+func (fgs *AVFilterGraphSegment) SetGraph(v *AVFilterGraph) {
+	fgs.graph = (*C.struct_AVFilterGraph)(v)
+}
+
+// GetGraphAddr gets `AVFilterGraphSegment.graph` address.
+func (fgs *AVFilterGraphSegment) GetGraphAddr() **AVFilterGraph {
+	return (**AVFilterGraph)(unsafe.Pointer(&fgs.graph))
+}
+
+// GetChains gets `AVFilterGraphSegment.chains` value.
+func (fgs *AVFilterGraphSegment) GetChains() []*AVFilterChain {
+	return unsafe.Slice((**AVFilterChain)(unsafe.Pointer(fgs.chains)), fgs.nb_chains)
+}
+
+// SetChains sets `AVFilterGraphSegment.chains` value.
+func (fgs *AVFilterGraphSegment) SetChains(v **AVFilterChain) {
+	fgs.chains = (**C.struct_AVFilterChain)(unsafe.Pointer(v))
+}
+
+// GetChainsAddr gets `AVFilterGraphSegment.chains` address.
+func (fgs *AVFilterGraphSegment) GetChainsAddr() ***AVFilterChain {
+	return (***AVFilterChain)(unsafe.Pointer(&fgs.chains))
+}
+
+// GetNb_Chains gets `AVFilterGraphSegment.nb_chains` value.
+func (fgs *AVFilterGraphSegment) GetNb_Chains() uintptr {
+	return (uintptr)(fgs.nb_chains)
+}
+
+// SetNb_Chains sets `AVFilterGraphSegment.nb_chains` value.
+func (fgs *AVFilterGraphSegment) SetNb_Chains(v uintptr) {
+	fgs.nb_chains = (C.size_t)(v)
+}
+
+// GetNb_ChainsAddr gets `AVFilterGraphSegment.nb_chains` address.
+func (fgs *AVFilterGraphSegment) GetNb_ChainsAddr() *uintptr {
+	return (*uintptr)(unsafe.Pointer(&fgs.nb_chains))
+}
+
+// GetScale_Sws_Opts gets `AVFilterGraphSegment.scale_sws_opts` value.
+func (fgs *AVFilterGraphSegment) GetScale_Sws_Opts() string {
+	return C.GoString(fgs.scale_sws_opts)
+}
+
+// SetScale_Sws_Opts sets `AVFilterGraphSegment.scale_sws_opts` value.
+func (fgs *AVFilterGraphSegment) SetScale_Sws_Opts(v string) {
+	FreePointer(fgs.scale_sws_opts)
+	fgs.scale_sws_opts, _ = StringCasting(v)
+}
+
+// AvfilterGraphSegmentParse parses a textual filtergraph description into an intermediate form.
+func AvfilterGraphSegmentParse(graph *AVFilterGraph, graphStr string,
+	flags int32, seg **AVFilterGraphSegment) int32 {
+	graphStrPtr, graphStrFunc := StringCasting(graphStr)
+	defer graphStrFunc()
+	return (int32)(C.avfilter_graph_segment_parse((*C.struct_AVFilterGraph)(graph),
+		(*C.char)(graphStrPtr), (C.int)(flags),
+		(**C.struct_AVFilterGraphSegment)(unsafe.Pointer(seg))))
+}
+
+// AvfilterGraphSegmentCreateFilters creates filters specified in a graph segment.
+func AvfilterGraphSegmentCreateFilters(seg *AVFilterGraphSegment, flags int32) int32 {
+	return (int32)(C.avfilter_graph_segment_create_filters(
+		(*C.struct_AVFilterGraphSegment)(seg), (C.int)(flags)))
+}
+
+// AvfilterGraphSegmentApplyOpts applies parsed options to filter instances in a graph segment.
+func AvfilterGraphSegmentApplyOpts(seg *AVFilterGraphSegment, flags int32) int32 {
+	return (int32)(C.avfilter_graph_segment_apply_opts(
+		(*C.struct_AVFilterGraphSegment)(seg), (C.int)(flags)))
+}
+
+// AvfilterGraphSegmentInit initializes all filter instances in a graph segment.
+func AvfilterGraphSegmentInit(seg *AVFilterGraphSegment, flags int32) int32 {
+	return (int32)(C.avfilter_graph_segment_init(
+		(*C.struct_AVFilterGraphSegment)(seg), (C.int)(flags)))
+}
+
+// AvfilterGraphSegmentLink links filters in a graph segment.
+func AvfilterGraphSegmentLink(seg *AVFilterGraphSegment, flags int32,
+	intputs, outputs **AVFilterInOut) int32 {
+	return (int32)(C.avfilter_graph_segment_link(
+		(*C.struct_AVFilterGraphSegment)(seg), (C.int)(flags),
+		(**C.struct_AVFilterInOut)(unsafe.Pointer(intputs)),
+		(**C.struct_AVFilterInOut)(unsafe.Pointer(outputs))))
+}
+
+// AvfilterGraphSegmentApply applies all filter/link descriptions from a graph segment
+// to the associated filtergraph.
+func AvfilterGraphSegmentApply(seg *AVFilterGraphSegment, flags int32,
+	intputs, outputs **AVFilterInOut) int32 {
+	return (int32)(C.avfilter_graph_segment_apply(
+		(*C.struct_AVFilterGraphSegment)(seg), (C.int)(flags),
+		(**C.struct_AVFilterInOut)(unsafe.Pointer(intputs)),
+		(**C.struct_AVFilterInOut)(unsafe.Pointer(outputs))))
+}
+
+// AvfilterGraphSegmentFree frees the provided AVFilterGraphSegment and everything associated with it.
+func AvfilterGraphSegmentFree(seg **AVFilterGraphSegment) {
+	C.avfilter_graph_segment_free((**C.struct_AVFilterGraphSegment)(unsafe.Pointer(seg)))
 }
 
 // AvFilterGraphSendCommand sends a command to one or more filter instances.

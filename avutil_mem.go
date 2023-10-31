@@ -28,11 +28,6 @@ func AvMallocArray[U, V Integer](nmemb U, size V) unsafe.Pointer {
 	return C.av_malloc_array((C.size_t)(nmemb), (C.size_t)(size))
 }
 
-// AvMalloczArray allocates a memory block for an array with AvMallocz().
-func AvMalloczArray[U, V Integer](nmemb U, size V) unsafe.Pointer {
-	return C.av_mallocz_array((C.size_t)(nmemb), (C.size_t)(size))
-}
-
 // AvCalloc is non-inlined equivalent of AvMalloczArray().
 func AvCalloc[U, V Integer](nmemb U, size V) unsafe.Pointer {
 	return C.av_calloc((C.size_t)(nmemb), (C.size_t)(size))

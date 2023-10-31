@@ -30,14 +30,19 @@ const (
 	AV_FRAME_DATA_SPHERICAL                  = AVFrameSideDataType(C.AV_FRAME_DATA_SPHERICAL)
 	AV_FRAME_DATA_CONTENT_LIGHT_LEVEL        = AVFrameSideDataType(C.AV_FRAME_DATA_CONTENT_LIGHT_LEVEL)
 	AV_FRAME_DATA_ICC_PROFILE                = AVFrameSideDataType(C.AV_FRAME_DATA_ICC_PROFILE)
-	AV_FRAME_DATA_QP_TABLE_PROPERTIES        = AVFrameSideDataType(C.AV_FRAME_DATA_QP_TABLE_PROPERTIES)
-	AV_FRAME_DATA_QP_TABLE_DATA              = AVFrameSideDataType(C.AV_FRAME_DATA_QP_TABLE_DATA)
-	AV_FRAME_DATA_S12M_TIMECODE              = AVFrameSideDataType(C.AV_FRAME_DATA_S12M_TIMECODE)
-	AV_FRAME_DATA_DYNAMIC_HDR_PLUS           = AVFrameSideDataType(C.AV_FRAME_DATA_DYNAMIC_HDR_PLUS)
-	AV_FRAME_DATA_REGIONS_OF_INTEREST        = AVFrameSideDataType(C.AV_FRAME_DATA_REGIONS_OF_INTEREST)
-	AV_FRAME_DATA_VIDEO_ENC_PARAMS           = AVFrameSideDataType(C.AV_FRAME_DATA_VIDEO_ENC_PARAMS)
-	AV_FRAME_DATA_SEI_UNREGISTERED           = AVFrameSideDataType(C.AV_FRAME_DATA_SEI_UNREGISTERED)
-	AV_FRAME_DATA_FILM_GRAIN_PARAMS          = AVFrameSideDataType(C.AV_FRAME_DATA_FILM_GRAIN_PARAMS)
+
+	AV_FRAME_DATA_S12M_TIMECODE       = AVFrameSideDataType(C.AV_FRAME_DATA_S12M_TIMECODE)
+	AV_FRAME_DATA_DYNAMIC_HDR_PLUS    = AVFrameSideDataType(C.AV_FRAME_DATA_DYNAMIC_HDR_PLUS)
+	AV_FRAME_DATA_REGIONS_OF_INTEREST = AVFrameSideDataType(C.AV_FRAME_DATA_REGIONS_OF_INTEREST)
+	AV_FRAME_DATA_VIDEO_ENC_PARAMS    = AVFrameSideDataType(C.AV_FRAME_DATA_VIDEO_ENC_PARAMS)
+	AV_FRAME_DATA_SEI_UNREGISTERED    = AVFrameSideDataType(C.AV_FRAME_DATA_SEI_UNREGISTERED)
+	AV_FRAME_DATA_FILM_GRAIN_PARAMS   = AVFrameSideDataType(C.AV_FRAME_DATA_FILM_GRAIN_PARAMS)
+	AV_FRAME_DATA_DETECTION_BBOXES    = AVFrameSideDataType(C.AV_FRAME_DATA_DETECTION_BBOXES)
+	AV_FRAME_DATA_DOVI_RPU_BUFFER     = AVFrameSideDataType(C.AV_FRAME_DATA_DOVI_RPU_BUFFER)
+	AV_FRAME_DATA_DOVI_METADATA       = AVFrameSideDataType(C.AV_FRAME_DATA_DOVI_METADATA)
+
+	AV_FRAME_DATA_DYNAMIC_HDR_VIVID           = AVFrameSideDataType(C.AV_FRAME_DATA_DYNAMIC_HDR_VIVID)
+	AV_FRAME_DATA_AMBIENT_VIEWING_ENVIRONMENT = AVFrameSideDataType(C.AV_FRAME_DATA_AMBIENT_VIEWING_ENVIRONMENT)
 )
 
 // AVActiveFormatDescription
@@ -87,18 +92,18 @@ func (sd *AVFrameSideData) GetDataAddr() **uint8 {
 }
 
 // GetSize gets `AVFrameSideData.size` value.
-func (sd *AVFrameSideData) GetSize() int32 {
-	return (int32)(sd.size)
+func (sd *AVFrameSideData) GetSize() uintptr {
+	return (uintptr)(sd.size)
 }
 
 // SetSize sets `AVFrameSideData.size` value.
-func (sd *AVFrameSideData) SetSize(v int32) {
-	sd.size = (C.int)(v)
+func (sd *AVFrameSideData) SetSize(v uintptr) {
+	sd.size = (C.size_t)(v)
 }
 
 // GetSizeAddr gets `AVFrameSideData.size` address.
-func (sd *AVFrameSideData) GetSizeAddr() *int32 {
-	return (*int32)(&sd.size)
+func (sd *AVFrameSideData) GetSizeAddr() *uintptr {
+	return (*uintptr)(unsafe.Pointer(&sd.size))
 }
 
 // GetMetadata gets `AVFrameSideData.metadata` value.
@@ -400,27 +405,6 @@ func (frame *AVFrame) GetPtsAddr() *int64 {
 	return (*int64)(&frame.pts)
 }
 
-// Deprecated: Use the pts field instead.
-//
-// GetPktPts gets `AVFrame.pkt_pts` value.
-func (frame *AVFrame) GetPktPts() int64 {
-	return (int64)(frame.pkt_pts)
-}
-
-// Deprecated: Use the pts field instead.
-//
-// SetPktPts sets `AVFrame.pkt_pts` value.
-func (frame *AVFrame) SetPktPts(v int64) {
-	frame.pkt_pts = (C.int64_t)(v)
-}
-
-// Deprecated: Use the pts field instead.
-//
-// GetPktPtsAddr gets `AVFrame.pkt_pts` address.
-func (frame *AVFrame) GetPktPtsAddr() *int64 {
-	return (*int64)(&frame.pkt_pts)
-}
-
 // GetPktDts gets `AVFrame.pkt_dts` value.
 func (frame *AVFrame) GetPktDts() int64 {
 	return (int64)(frame.pkt_dts)
@@ -436,31 +420,58 @@ func (frame *AVFrame) GetPktDtsAddr() *int64 {
 	return (*int64)(&frame.pkt_dts)
 }
 
+// GetTimeBase gets `AVFrame.time_base` value.
+func (frame *AVFrame) GetTimeBase() AVRational {
+	return (AVRational)(frame.time_base)
+}
+
+// SetTimeBase sets `AVFrame.time_base` value.
+func (frame *AVFrame) SetTimeBase(v AVRational) {
+	frame.time_base = (C.struct_AVRational)(v)
+}
+
+// GetTimeBaseAddr gets `AVFrame.time_base` address.
+func (frame *AVFrame) GetTimeBaseAddr() *AVRational {
+	return (*AVRational)(&frame.time_base)
+}
+
+// Deprecated: Unused.
+//
 // GetCodedPictureNumber gets `AVFrame.coded_picture_number` value.
 func (frame *AVFrame) GetCodedPictureNumber() int32 {
 	return (int32)(frame.coded_picture_number)
 }
 
+// Deprecated: Unused.
+//
 // SetCodedPictureNumber sets `AVFrame.coded_picture_number` value.
 func (frame *AVFrame) SetCodedPictureNumber(v int32) {
 	frame.coded_picture_number = (C.int)(v)
 }
 
+// Deprecated: Unused.
+//
 // GetCodedPictureNumberAddr gets `AVFrame.coded_picture_number` address.
 func (frame *AVFrame) GetCodedPictureNumberAddr() *int32 {
 	return (*int32)(&frame.coded_picture_number)
 }
 
+// Deprecated: Unused.
+//
 // GetDisplayPictureNumber gets `AVFrame.display_picture_number` value.
 func (frame *AVFrame) GetDisplayPictureNumber() int32 {
 	return (int32)(frame.display_picture_number)
 }
 
+// Deprecated: Unused.
+//
 // SetDisplayPictureNumber sets `AVFrame.display_picture_number` value.
 func (frame *AVFrame) SetDisplayPictureNumber(v int32) {
 	frame.display_picture_number = (C.int)(v)
 }
 
+// Deprecated: Unused.
+//
 // GetDisplayPictureNumberAddr gets `AVFrame.display_picture_number` address.
 func (frame *AVFrame) GetDisplayPictureNumberAddr() *int32 {
 	return (*int32)(&frame.display_picture_number)
@@ -479,29 +490,6 @@ func (frame *AVFrame) SetQuality(v int32) {
 // GetQualityAddr gets `AVFrame.quality` address.
 func (frame *AVFrame) GetQualityAddr() *int32 {
 	return (*int32)(&frame.quality)
-}
-
-// Deprecated: Unused.
-//
-// GetError gets `AVFrame.error` value.
-func (frame *AVFrame) GetError() []uint64 {
-	return unsafe.Slice((*uint64)(&frame.error[0]), AV_NUM_DATA_POINTERS)
-}
-
-// Deprecated: Unused.
-//
-// SetError sets `AVFrame.error` value.
-func (frame *AVFrame) SetError(v []uint64) {
-	for i := 0; i < FFMIN(len(v), AV_NUM_DATA_POINTERS); i++ {
-		frame.error[i] = (C.uint64_t)(v[i])
-	}
-}
-
-// Deprecated: Unused.
-//
-// GetErrorAddr gets `AVFrame.error` address.
-func (frame *AVFrame) GetErrorAddr() **uint64 {
-	return (**uint64)(unsafe.Pointer(&frame.error))
 }
 
 // GetRepeatPict gets `AVFrame.repeat_pict` value.
@@ -594,16 +582,22 @@ func (frame *AVFrame) GetSampleRateAddr() *int32 {
 	return (*int32)(&frame.sample_rate)
 }
 
+// Deprecated: use ChLayout instead
+//
 // GetChannelLayout gets `AVFrame.channel_layout` value.
 func (frame *AVFrame) GetChannelLayout() uint64 {
 	return (uint64)(frame.channel_layout)
 }
 
+// Deprecated: use ChLayout instead
+//
 // SetChannelLayout sets `AVFrame.channel_layout` value.
 func (frame *AVFrame) SetChannelLayout(v uint64) {
 	frame.channel_layout = (C.uint64_t)(v)
 }
 
+// Deprecated: use ChLayout instead
+//
 // GetChannelLayoutAddr gets `AVFrame.channel_layout` address.
 func (frame *AVFrame) GetChannelLayoutAddr() *uint64 {
 	return (*uint64)(&frame.channel_layout)
@@ -818,16 +812,22 @@ func (frame *AVFrame) GetPktPosAddr() *int64 {
 	return (*int64)(&frame.pkt_pos)
 }
 
+// Deprecated: Use duration instead.
+//
 // GetPktDuration gets `AVFrame.pkt_duration` value.
 func (frame *AVFrame) GetPktDuration() int64 {
 	return (int64)(frame.pkt_duration)
 }
 
+// Deprecated: Use duration instead.
+//
 // SetPktDuration sets `AVFrame.pkt_duration` value.
 func (frame *AVFrame) SetPktDuration(v int64) {
 	frame.pkt_duration = (C.int64_t)(v)
 }
 
+// Deprecated: Use duration instead.
+//
 // GetPktDurationAddr gets `AVFrame.pkt_duration` address.
 func (frame *AVFrame) GetPktDurationAddr() *int64 {
 	return (*int64)(&frame.pkt_duration)
@@ -870,16 +870,22 @@ const (
 	FF_DECODE_ERROR_DECODE_SLICES      = int32(C.FF_DECODE_ERROR_DECODE_SLICES)
 )
 
+// Deprecated: use ChLayout instead
+//
 // GetChannels gets `AVFrame.channels` value.
 func (frame *AVFrame) GetChannels() int32 {
 	return (int32)(frame.channels)
 }
 
+// Deprecated: use ChLayout instead
+//
 // SetChannels sets `AVFrame.channels` value.
 func (frame *AVFrame) SetChannels(v int32) {
 	frame.channels = (C.int)(v)
 }
 
+// Deprecated: use ChLayout instead
+//
 // GetChannelsAddr gets `AVFrame.channels` address.
 func (frame *AVFrame) GetChannelsAddr() *int32 {
 	return (*int32)(&frame.channels)
@@ -898,90 +904,6 @@ func (frame *AVFrame) SetPktSize(v int32) {
 // GetPktSizeAddr gets `AVFrame.pkt_size` address.
 func (frame *AVFrame) GetPktSizeAddr() *int32 {
 	return (*int32)(&frame.pkt_size)
-}
-
-// Deprecated: No use.
-//
-// GetQscaleTable gets `AVFrame.qscale_table` value.
-func (frame *AVFrame) GetQscaleTable() *int8 {
-	return (*int8)(frame.qscale_table)
-}
-
-// Deprecated: No use.
-//
-// SetQscaleTable sets `AVFrame.qscale_table` value.
-func (frame *AVFrame) SetQscaleTable(v *int8) {
-	frame.qscale_table = (*C.int8_t)(v)
-}
-
-// Deprecated: No use.
-//
-// GetQscaleTableAddr gets `AVFrame.qscale_table` address.
-func (frame *AVFrame) GetQscaleTableAddr() **int8 {
-	return (**int8)(unsafe.Pointer(&frame.qscale_table))
-}
-
-// Deprecated: No use.
-//
-// GetQstride gets `AVFrame.qstride` value.
-func (frame *AVFrame) GetQstride() int32 {
-	return (int32)(frame.qstride)
-}
-
-// Deprecated: No use.
-//
-// SetQstride sets `AVFrame.qstride` value.
-func (frame *AVFrame) SetQstride(v int32) {
-	frame.qstride = (C.int)(v)
-}
-
-// Deprecated: No use.
-//
-// GetQstrideAddr gets `AVFrame.qstride` address.
-func (frame *AVFrame) GetQstrideAddr() *int32 {
-	return (*int32)(&frame.qstride)
-}
-
-// Deprecated: No use.
-//
-// GetQscaleType gets `AVFrame.qscaletype` value.
-func (frame *AVFrame) GetQscaleType() int32 {
-	return (int32)(frame.qscale_type)
-}
-
-// Deprecated: No use.
-//
-// SetQscaleType sets `AVFrame.qscaletype` value.
-func (frame *AVFrame) SetQscaleType(v int32) {
-	frame.qscale_type = (C.int)(v)
-}
-
-// Deprecated: No use.
-//
-// GetQscaleTypeAddr gets `AVFrame.qscaletype` address.
-func (frame *AVFrame) GetQscaleTypeAddr() *int32 {
-	return (*int32)(&frame.qscale_type)
-}
-
-// Deprecated: No use.
-//
-// GetQpTableBuf gets `AVFrame.qp_table_buf` value.
-func (frame *AVFrame) GetQpTableBuf() *AVBufferRef {
-	return (*AVBufferRef)(frame.qp_table_buf)
-}
-
-// Deprecated: No use.
-//
-// SetQpTableBuf sets `AVFrame.qp_table_buf` value.
-func (frame *AVFrame) SetQpTableBuf(v *AVBufferRef) {
-	frame.qp_table_buf = (*C.struct_AVBufferRef)(v)
-}
-
-// Deprecated: No use.
-//
-// GetQpTableBufAddr gets `AVFrame.qp_table_buf` address.
-func (frame *AVFrame) GetQpTableBufAddr() **AVBufferRef {
-	return (**AVBufferRef)(unsafe.Pointer(&frame.qp_table_buf))
 }
 
 // GetHwFramesCtx gets `AVFrame.hw_frames_ctx` value.
@@ -1089,179 +1011,34 @@ func (frame *AVFrame) GetPrivateRefAddr() **AVBufferRef {
 	return (**AVBufferRef)(unsafe.Pointer(&frame.private_ref))
 }
 
-// Deprecated: No use.
-//
-// AvFrameGetBestEffortTimestamp
-func AvFrameGetBestEffortTimestamp(frame *AVFrame) int64 {
-	return (int64)(C.av_frame_get_best_effort_timestamp((*C.struct_AVFrame)(frame)))
+// GetChLayout gets `AVFrame.ch_layout` value.
+func (frame *AVFrame) GetChLayout() AVChannelLayout {
+	return (AVChannelLayout)(frame.ch_layout)
 }
 
-// Deprecated: No use.
-//
-// AvFrameSetBestEffortTimestamp
-func AvFrameSetBestEffortTimestamp(frame *AVFrame, val int64) {
-	C.av_frame_set_best_effort_timestamp((*C.struct_AVFrame)(frame), (C.int64_t)(val))
+// SetChLayout sets `AVFrame.ch_layout` value.
+func (frame *AVFrame) SetChLayout(v AVChannelLayout) {
+	frame.ch_layout = (C.struct_AVChannelLayout)(v)
 }
 
-// Deprecated: No use.
-//
-// AvFrameGetPktDuration
-func AvFrameGetPktDuration(frame *AVFrame) int64 {
-	return (int64)(C.av_frame_get_pkt_duration((*C.struct_AVFrame)(frame)))
+// GetChLayoutAddr gets `AVFrame.ch_layout` address.
+func (frame *AVFrame) GetChLayoutAddr() *AVChannelLayout {
+	return (*AVChannelLayout)(&frame.ch_layout)
 }
 
-// Deprecated: No use.
-//
-// AvFrameSetPktDuration
-func AvFrameSetPktDuration(frame *AVFrame, val int64) {
-	C.av_frame_set_pkt_duration((*C.struct_AVFrame)(frame), (C.int64_t)(val))
+// GetDuration gets `AVFrame.duration` value.
+func (frame *AVFrame) GetDuration() int64 {
+	return (int64)(frame.duration)
 }
 
-// Deprecated: No use.
-//
-// AvFrameGetPktPos
-func AvFrameGetPktPos(frame *AVFrame) int64 {
-	return (int64)(C.av_frame_get_pkt_pos((*C.struct_AVFrame)(frame)))
+// SetDuration sets `AVFrame.duration` value.
+func (frame *AVFrame) SetDuration(v int64) {
+	frame.duration = (C.int64_t)(v)
 }
 
-// Deprecated: No use.
-//
-// AvFrameSetPktPos
-func AvFrameSetPktPos(frame *AVFrame, val int64) {
-	C.av_frame_set_pkt_pos((*C.struct_AVFrame)(frame), (C.int64_t)(val))
-}
-
-// Deprecated: No use.
-//
-// AvFrameGetChannelLayout
-func AvFrameGetChannelLayout(frame *AVFrame) int64 {
-	return (int64)(C.av_frame_get_channel_layout((*C.struct_AVFrame)(frame)))
-}
-
-// Deprecated: No use.
-//
-// AvFrameSetChannelLayout
-func AvFrameSetChannelLayout(frame *AVFrame, val int64) {
-	C.av_frame_set_channel_layout((*C.struct_AVFrame)(frame), (C.int64_t)(val))
-}
-
-// Deprecated: No use.
-//
-// AvFrameGetChannels
-func AvFrameGetChannels(frame *AVFrame) int32 {
-	return (int32)(C.av_frame_get_channels((*C.struct_AVFrame)(frame)))
-}
-
-// Deprecated: No use.
-//
-// AvFrameSetChannels
-func AvFrameSetChannels(frame *AVFrame, val int32) {
-	C.av_frame_set_channels((*C.struct_AVFrame)(frame), (C.int)(val))
-}
-
-// Deprecated: No use.
-//
-// AvFrameGetSampleRate
-func AvFrameGetSampleRate(frame *AVFrame) int32 {
-	return (int32)(C.av_frame_get_sample_rate((*C.struct_AVFrame)(frame)))
-}
-
-// Deprecated: No use.
-//
-// AvFrameSetSampleRate
-func AvFrameSetSampleRate(frame *AVFrame, val int32) {
-	C.av_frame_set_sample_rate((*C.struct_AVFrame)(frame), (C.int)(val))
-}
-
-// Deprecated: No use.
-//
-// AvFrameGetMetadata
-func AvFrameGetMetadata(frame *AVFrame) *AVDictionary {
-	return (*AVDictionary)(C.av_frame_get_metadata((*C.struct_AVFrame)(frame)))
-}
-
-// Deprecated: No use.
-//
-// AvFrameSetMetadata
-func AvFrameSetMetadata(frame *AVFrame, val *AVDictionary) {
-	C.av_frame_set_metadata((*C.struct_AVFrame)(frame), (*C.struct_AVDictionary)(val))
-}
-
-// Deprecated: No use.
-//
-// AvFrameGetDecodeErrorFlags
-func AvFrameGetDecodeErrorFlags(frame *AVFrame) int32 {
-	return (int32)(C.av_frame_get_decode_error_flags((*C.struct_AVFrame)(frame)))
-}
-
-// Deprecated: No use.
-//
-// AvFrameSetDecodeErrorFlags
-func AvFrameSetDecodeErrorFlags(frame *AVFrame, val int32) {
-	C.av_frame_set_decode_error_flags((*C.struct_AVFrame)(frame), (C.int)(val))
-}
-
-// Deprecated: No use.
-//
-// AvFrameGetPktSize
-func AvFrameGetPktSize(frame *AVFrame) int32 {
-	return (int32)(C.av_frame_get_pkt_size((*C.struct_AVFrame)(frame)))
-}
-
-// Deprecated: No use.
-//
-// AvFrameSetPktSize
-func AvFrameSetPktSize(frame *AVFrame, val int32) {
-	C.av_frame_set_pkt_size((*C.struct_AVFrame)(frame), (C.int)(val))
-}
-
-// Deprecated: No use.
-//
-// AvFrameGetQpTable
-func AvFrameGetQpTable(frame *AVFrame, stride, _type *int32) *int8 {
-	return (*int8)(C.av_frame_get_qp_table((*C.struct_AVFrame)(frame),
-		(*C.int)(stride), (*C.int)(_type)))
-}
-
-// Deprecated: No use.
-//
-// AvFrameSetQpTable
-func AvFrameSetQpTable(frame *AVFrame, buf *AVBufferRef, stride, _type int32) int32 {
-	return (int32)(C.av_frame_set_qp_table((*C.struct_AVFrame)(frame),
-		(*C.struct_AVBufferRef)(buf), (C.int)(stride), (C.int)(_type)))
-}
-
-// Deprecated: No use.
-//
-// AvFrameGetColorspace
-func AvFrameGetColorspace(frame *AVFrame) AVColorSpace {
-	return (AVColorSpace)(C.av_frame_get_colorspace((*C.struct_AVFrame)(frame)))
-}
-
-// Deprecated: No use.
-//
-// AvFrameSetColorspace
-func AvFrameSetColorspace(frame *AVFrame, val AVColorSpace) {
-	C.av_frame_set_colorspace((*C.struct_AVFrame)(frame), (C.enum_AVColorSpace)(val))
-}
-
-// Deprecated: No use.
-//
-// AvFrameGetColorRange
-func AvFrameGetColorRange(frame *AVFrame) AVColorRange {
-	return (AVColorRange)(C.av_frame_get_color_range((*C.struct_AVFrame)(frame)))
-}
-
-// Deprecated: No use.
-//
-// AvFrameSetColorRange
-func AvFrameSetColorRange(frame *AVFrame, val AVColorRange) {
-	C.av_frame_set_color_range((*C.struct_AVFrame)(frame), (C.enum_AVColorRange)(val))
-}
-
-// AvGetColorspaceName gets the name of a colorspace.
-func AvGetColorspaceName(val AVColorSpace) string {
-	return C.GoString(C.av_get_colorspace_name((C.enum_AVColorSpace)(val)))
+// GetDurationAddr gets `AVFrame.duration` address.
+func (frame *AVFrame) GetDurationAddr() *int64 {
+	return (*int64)(&frame.duration)
 }
 
 // AvFrameAlloc allocates an AVFrame and set its fields to default values.
@@ -1328,9 +1105,9 @@ func AvFrameGetPlaneBuffer(frame *AVFrame, plane int32) *AVBufferRef {
 }
 
 // AvFrameNewSideData adds a new side data to a frame.
-func AvFrameNewSideData(frame *AVFrame, _type AVFrameSideDataType, size int32) *AVFrameSideData {
+func AvFrameNewSideData(frame *AVFrame, _type AVFrameSideDataType, size uintptr) *AVFrameSideData {
 	return (*AVFrameSideData)(C.av_frame_new_side_data((*C.struct_AVFrame)(frame),
-		(C.enum_AVFrameSideDataType)(_type), (C.int)(size)))
+		(C.enum_AVFrameSideDataType)(_type), (C.size_t)(size)))
 }
 
 // AvFrameNewSideDataFromBuf adds a new side data to a frame from an existing AVBufferRef.
@@ -1363,7 +1140,7 @@ func AvFrameApplyCropping(frame *AVFrame, flags int32) int32 {
 	return (int32)(C.av_frame_apply_cropping((*C.struct_AVFrame)(frame), (C.int)(flags)))
 }
 
-// AvFrameSideDataName returns a string identifying the side data type
+// AvFrameSideDataName returns a string identifying the side data type.
 func AvFrameSideDataName(_type AVFrameSideDataType) string {
 	return C.GoString(C.av_frame_side_data_name((C.enum_AVFrameSideDataType)(_type)))
 }

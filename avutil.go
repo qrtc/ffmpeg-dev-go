@@ -34,7 +34,7 @@ func AvutilLicense() string {
 	return C.GoString(C.avutil_license())
 }
 
-// Media Type
+// Media Type.
 type AVMediaType = C.enum_AVMediaType
 
 const (
@@ -99,6 +99,7 @@ func AvXIfNull[T any](p, x *T) *T {
 	return x
 }
 
+// AvStringIfNull
 func AvStringIfNull(p, x string) string {
 	if len(p) != 0 {
 		return p
@@ -117,6 +118,8 @@ func AvIntListLength[U, V Integer](list *U, term V) uint32 {
 	return (uint32)(C.av_int_list_length_for_size((C.uint)(elsize), (unsafe.Pointer)(list), (C.uint64_t)(term)))
 }
 
+// Deprecated: No use.
+//
 // AvFopenUtf8
 func AvFopenUtf8(path, mode string) *FILE {
 	pathPtr, pathFunc := StringCasting(path)

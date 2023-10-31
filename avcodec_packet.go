@@ -45,6 +45,7 @@ const (
 	AV_PKT_DATA_ICC_PROFILE                = AVPacketSideDataType(C.AV_PKT_DATA_ICC_PROFILE)
 	AV_PKT_DATA_DOVI_CONF                  = AVPacketSideDataType(C.AV_PKT_DATA_DOVI_CONF)
 	AV_PKT_DATA_S12M_TIMECODE              = AVPacketSideDataType(C.AV_PKT_DATA_S12M_TIMECODE)
+	AV_PKT_DATA_DYNAMIC_HDR10_PLUS         = AVPacketSideDataType(C.AV_PKT_DATA_DYNAMIC_HDR10_PLUS)
 	AV_PKT_DATA_NB                         = AVPacketSideDataType(C.AV_PKT_DATA_NB)
 )
 
@@ -72,18 +73,18 @@ func (psd *AVPacketSideData) GetDataAddr() **uint8 {
 }
 
 // GetSize gets `AVPacketSideData.size` value.
-func (psd *AVPacketSideData) GetSize() int32 {
-	return (int32)(psd.size)
+func (psd *AVPacketSideData) GetSize() uintptr {
+	return (uintptr)(psd.size)
 }
 
 // SetSize sets `AVPacketSideData.size` value.
-func (psd *AVPacketSideData) SetSize(v int32) {
-	psd.size = (C.int)(v)
+func (psd *AVPacketSideData) SetSize(v uintptr) {
+	psd.size = (C.size_t)(v)
 }
 
 // GetSizeAddr gets `AVPacketSideData.size` address.
-func (psd *AVPacketSideData) GetSizeAddr() *int32 {
-	return (*int32)(&psd.size)
+func (psd *AVPacketSideData) GetSizeAddr() *uintptr {
+	return (*uintptr)(unsafe.Pointer(&psd.size))
 }
 
 // GetType gets `AVPacketSideData.type` value.
@@ -269,25 +270,49 @@ func (pkt *AVPacket) GetPosAddr() *int64 {
 	return (*int64)(&pkt.pos)
 }
 
-// Deprecated: No use.
-//
-// GetConvergenceDuration gets `AVPacket.convergence_duration` value.
-func (pkt *AVPacket) GetConvergenceDuration() int64 {
-	return (int64)(pkt.convergence_duration)
+// GetOpaque gets `AVPacket.opaque` value.
+func (pkt *AVPacket) GetOpaque() unsafe.Pointer {
+	return pkt.opaque
 }
 
-// Deprecated: No use.
-//
-// SetConvergenceDuration sets `AVPacket.convergence_duration` value.
-func (pkt *AVPacket) SetConvergenceDuration(v int64) {
-	pkt.convergence_duration = (C.int64_t)(v)
+// SetOpaque sets `AVPacket.opaque` value.
+func (pkt *AVPacket) SetOpaque(v CVoidPointer) {
+	pkt.opaque = VoidPointer(v)
 }
 
-// Deprecated: No use.
-//
-// GetConvergenceDurationAddr gets `AVPacket.convergence_duration` address.
-func (pkt *AVPacket) GetConvergenceDurationAddr() *int64 {
-	return (*int64)(&pkt.convergence_duration)
+// GetOpaqueAddr gets `AVPacket.opaque` address.
+func (pkt *AVPacket) GetOpaqueAddr() *unsafe.Pointer {
+	return &pkt.opaque
+}
+
+// GetOpaqueRef gets `AVPacket.opaque_ref` value.
+func (pkt *AVPacket) GetOpaqueRef() *AVBufferRef {
+	return (*AVBufferRef)(pkt.opaque_ref)
+}
+
+// SetOpaqueRef sets `AVPacket.opaque_ref` value.
+func (pkt *AVPacket) SetOpaqueRef(v *AVBufferRef) {
+	pkt.opaque_ref = (*C.struct_AVBufferRef)(v)
+}
+
+// GetOpaqueRefAddr gets `AVPacket.opaque_ref` address.
+func (pkt *AVPacket) GetOpaqueRefAddr() **AVBufferRef {
+	return (**AVBufferRef)(unsafe.Pointer(&pkt.opaque_ref))
+}
+
+// GetTimeBase gets `AVPacket.time_base` value.
+func (pkt *AVPacket) GetTimeBase() AVRational {
+	return (AVRational)(pkt.time_base)
+}
+
+// SetTimeBase sets `AVPacket.time_base` value.
+func (pkt *AVPacket) SetTimeBase(v AVRational) {
+	pkt.time_base = (C.struct_AVRational)(v)
+}
+
+// GetTimeBaseAddr gets `AVPacket.time_base` address.
+func (pkt *AVPacket) GetTimeBaseAddr() *AVRational {
+	return (*AVRational)(&pkt.time_base)
 }
 
 // Deprecated: No use.
@@ -328,7 +353,7 @@ const (
 	AV_SIDE_DATA_PARAM_CHANGE_DIMENSIONS     = AVSideDataParamChangeFlags(C.AV_SIDE_DATA_PARAM_CHANGE_DIMENSIONS)
 )
 
-// AvPacketAlloc allocates an AVPacket and set its fields to default values.  The resulting
+// AvPacketAlloc allocates an AVPacket and set its fields to default values. The resulting
 // struct must be freed using AVPacketFree().
 func AvPacketAlloc() *AVPacket {
 	return (*AVPacket)(C.av_packet_alloc())
@@ -358,12 +383,12 @@ func AvNewPacket(pkt *AVPacket, size int32) int32 {
 	return (int32)(C.av_new_packet((*C.struct_AVPacket)(pkt), (C.int)(size)))
 }
 
-// AvShrinkPacket reduces packet size, correctly zeroing padding
+// AvShrinkPacket reduces packet size, correctly zeroing padding.
 func AvShrinkPacket(pkt *AVPacket, size int32) {
 	C.av_shrink_packet((*C.struct_AVPacket)(pkt), (C.int)(size))
 }
 
-// AvGrowPacket increases packet size, correctly zeroing padding
+// AvGrowPacket increases packet size, correctly zeroing padding.
 func AvGrowPacket(pkt *AVPacket, growBy int32) int32 {
 	return (int32)(C.av_grow_packet((*C.struct_AVPacket)(pkt), (C.int)(growBy)))
 }
@@ -374,38 +399,10 @@ func AvPacketFromData(pkt *AVPacket, data *uint8, size int32) int32 {
 		(*C.uint8_t)(data), (C.int)(size)))
 }
 
-// Deprecated: Use AVPacketRef() or AVPacketMakeRefcounted() instead.
-//
-// AvDupPacket
-func AvDupPacket(pkt *AVPacket) {
-	C.av_dup_packet((*C.struct_AVPacket)(pkt))
-}
-
-// Deprecated: Use AVPacketRef instead.
-//
-// AvCopyPacket copies packet, including contents
-func AvCopyPacket(dst, src *AVPacket) int32 {
-	return (int32)(C.av_copy_packet((*C.struct_AVPacket)(dst), (*C.struct_AVPacket)(src)))
-}
-
-// Deprecated: Use AVPacketCopyProps instead.
-//
-// AvCopyPacketSideData copies packet side data
-func AvCopyPacketSideData(dst, src *AVPacket) int32 {
-	return (int32)(C.av_copy_packet_side_data((*C.struct_AVPacket)(dst), (*C.struct_AVPacket)(src)))
-}
-
-// Deprecated: Use AVPacketUnref() instead.
-//
-// AvFreePacket frees a packet.
-func AvFreePacket(pkt *AVPacket) {
-	C.av_free_packet((*C.struct_AVPacket)(pkt))
-}
-
 // AvPacketNewSideData allocates new information of a packet.
-func AvPacketNewSideData(pkt *AVPacket, _type AVPacketSideDataType, size int32) *uint8 {
+func AvPacketNewSideData(pkt *AVPacket, _type AVPacketSideDataType, size uintptr) *uint8 {
 	return (*uint8)(C.av_packet_new_side_data((*C.struct_AVPacket)(pkt),
-		(C.enum_AVPacketSideDataType)(_type), (C.int)(size)))
+		(C.enum_AVPacketSideDataType)(_type), (C.size_t)(size)))
 }
 
 // AvPacketAddSideData wraps an existing array as a packet side data.
@@ -415,40 +412,26 @@ func AvPacketAddSideData(pkt *AVPacket, _type AVPacketSideDataType, data *uint8,
 }
 
 // AvPacketShrinkSideData shrinks the already allocated side data buffer.
-func AvPacketShrinkSideData(pkt *AVPacket, _type AVPacketSideDataType, size int32) int32 {
+func AvPacketShrinkSideData(pkt *AVPacket, _type AVPacketSideDataType, size uintptr) int32 {
 	return (int32)(C.av_packet_shrink_side_data((*C.struct_AVPacket)(pkt),
-		(C.enum_AVPacketSideDataType)(_type), (C.int)(size)))
+		(C.enum_AVPacketSideDataType)(_type), (C.size_t)(size)))
 }
 
 // AvPacketGetSideData gets side information from packet.
-func AvPacketGetSideData(pkt *AVPacket, _type AVPacketSideDataType, size *int32) *uint8 {
+func AvPacketGetSideData(pkt *AVPacket, _type AVPacketSideDataType, size *uintptr) *uint8 {
 	return (*uint8)(C.av_packet_get_side_data((*C.struct_AVPacket)(pkt),
-		(C.enum_AVPacketSideDataType)(_type), (*C.int)(size)))
-}
-
-// Deprecated: No use.
-//
-// AvPacketMergeSideData
-func AvPacketMergeSideData(pkt *AVPacket) int32 {
-	return (int32)(C.av_packet_merge_side_data((*C.struct_AVPacket)(pkt)))
-}
-
-// Deprecated: No use.
-//
-// AvPacketSplitSideData
-func AvPacketSplitSideData(pkt *AVPacket) int32 {
-	return (int32)(C.av_packet_split_side_data((*C.struct_AVPacket)(pkt)))
+		(C.enum_AVPacketSideDataType)(_type), (*C.size_t)(unsafe.Pointer(size))))
 }
 
 // AvPacketPackDictionary packs a dictionary for use in side_data.
-func AvPacketPackDictionary(dict *AVDictionary, size *int32) *uint8 {
+func AvPacketPackDictionary(dict *AVDictionary, size *uintptr) *uint8 {
 	return (*uint8)(C.av_packet_pack_dictionary((*C.struct_AVDictionary)(dict),
-		(*C.int)(size)))
+		(*C.size_t)(unsafe.Pointer(size))))
 }
 
 // AvPacketUnpackDictionary unpacks a dictionary from side_data.
-func AvPacketUnpackDictionary(data *uint8, size int32, dict **AVDictionary) int32 {
-	return (int32)(C.av_packet_unpack_dictionary((*C.uint8_t)(data), (C.int)(size),
+func AvPacketUnpackDictionary(data *uint8, size uintptr, dict **AVDictionary) int32 {
+	return (int32)(C.av_packet_unpack_dictionary((*C.uint8_t)(data), (C.size_t)(size),
 		(**C.struct_AVDictionary)(unsafe.Pointer(dict))))
 }
 
@@ -457,7 +440,7 @@ func AvPacketFreeSideData(pkt *AVPacket) {
 	C.av_packet_free_side_data((*C.struct_AVPacket)(pkt))
 }
 
-// AvPacketRef setups a new reference to the data described by a given packet
+// AvPacketRef setups a new reference to the data described by a given packet.
 func AvPacketRef(dst, src *AVPacket) int32 {
 	return (int32)(C.av_packet_ref((*C.struct_AVPacket)(dst), (*C.struct_AVPacket)(src)))
 }
@@ -483,7 +466,7 @@ func AvPacketMakeRefcounted(pkt *AVPacket) {
 	C.av_packet_make_refcounted((*C.struct_AVPacket)(pkt))
 }
 
-// AvPacketMakeWritable  creates a writable reference for the data described by a given packet,
+// AvPacketMakeWritable creates a writable reference for the data described by a given packet,
 // avoiding data copy if possible.
 func AvPacketMakeWritable(pkt *AVPacket) {
 	C.av_packet_make_writable((*C.struct_AVPacket)(pkt))

@@ -28,6 +28,7 @@ type AVFilmGrainParamsType = C.enum_AVFilmGrainParamsType
 const (
 	AV_FILM_GRAIN_PARAMS_NONE = AVFilmGrainParamsType(C.AV_FILM_GRAIN_PARAMS_NONE)
 	AV_FILM_GRAIN_PARAMS_AV1  = AVFilmGrainParamsType(C.AV_FILM_GRAIN_PARAMS_AV1)
+	AV_FILM_GRAIN_PARAMS_H274 = AVFilmGrainParamsType(C.AV_FILM_GRAIN_PARAMS_H274)
 )
 
 // AVFilmGrainAOMParams
@@ -308,6 +309,267 @@ func (aomp *AVFilmGrainAOMParams) SetLimitOutputRange(v int32) {
 // GetLimitOutputRangeAddr gets `AVFilmGrainAOMParams.limit_outputrange` address.
 func (aomp *AVFilmGrainAOMParams) GetLimitOutputRangeAddr() *int32 {
 	return (*int32)(&aomp.limit_output_range)
+}
+
+// AVFilmGrainH274Params
+type AVFilmGrainH274Params C.struct_AVFilmGrainH274Params
+
+// GetModelId gets `AVFilmGrainH274Params.model_id` value.
+func (h274p *AVFilmGrainH274Params) GetModelId() int32 {
+	return (int32)(h274p.model_id)
+}
+
+// SetModelId sets `AVFilmGrainH274Params.model_id` value.
+func (h274p *AVFilmGrainH274Params) SetModelId(v int32) {
+	h274p.model_id = (C.int)(v)
+}
+
+// GetModelIdAddr gets `AVFilmGrainH274Params.model_id` address.
+func (h274p *AVFilmGrainH274Params) GetModelIdAddr() *int32 {
+	return (*int32)(&h274p.model_id)
+}
+
+// GetBitDepthLuma gets `AVFilmGrainH274Params.bit_depth_luma` value.
+func (h274p *AVFilmGrainH274Params) GetBitDepthLuma() int32 {
+	return (int32)(h274p.bit_depth_luma)
+}
+
+// SetBitDepthLuma sets `AVFilmGrainH274Params.bit_depth_luma` value.
+func (h274p *AVFilmGrainH274Params) SetBitDepthLuma(v int32) {
+	h274p.bit_depth_luma = (C.int)(v)
+}
+
+// GetBitDepthLumaAddr gets `AVFilmGrainH274Params.bit_depth_luma` address.
+func (h274p *AVFilmGrainH274Params) GetBitDepthLumaAddr() *int32 {
+	return (*int32)(&h274p.bit_depth_luma)
+}
+
+// GetBitDepthChroma gets `AVFilmGrainH274Params.bit_depth_chroma` value.
+func (h274p *AVFilmGrainH274Params) GetBitDepthChroma() int32 {
+	return (int32)(h274p.bit_depth_chroma)
+}
+
+// SetBitDepthChroma sets `AVFilmGrainH274Params.bit_depth_chroma` value.
+func (h274p *AVFilmGrainH274Params) SetBitDepthChroma(v int32) {
+	h274p.bit_depth_chroma = (C.int)(v)
+}
+
+// GetBitDepthChromaAddr gets `AVFilmGrainH274Params.bit_depth_chroma` address.
+func (h274p *AVFilmGrainH274Params) GetBitDepthChromaAddr() *int32 {
+	return (*int32)(&h274p.bit_depth_chroma)
+}
+
+// GetColorRange gets `AVFilmGrainH274Params.color_range` value.
+func (h274p *AVFilmGrainH274Params) GetColorRange() AVColorRange {
+	return (AVColorRange)(h274p.color_range)
+}
+
+// SetColorRange sets `AVFilmGrainH274Params.color_range` value.
+func (h274p *AVFilmGrainH274Params) SetColorRange(v AVColorRange) {
+	h274p.color_range = (C.enum_AVColorRange)(v)
+}
+
+// GetColorRangeAddr gets `AVFilmGrainH274Params.color_range` address.
+func (h274p *AVFilmGrainH274Params) GetColorRangeAddr() *AVColorRange {
+	return (*AVColorRange)(&h274p.color_range)
+}
+
+// GetColorPrimaries gets `AVFilmGrainH274Params.color_primaries` value.
+func (h274p *AVFilmGrainH274Params) GetColorPrimaries() AVColorPrimaries {
+	return (AVColorPrimaries)(h274p.color_primaries)
+}
+
+// SetColorPrimaries sets `AVFilmGrainH274Params.color_primaries` value.
+func (h274p *AVFilmGrainH274Params) SetColorPrimaries(v AVColorPrimaries) {
+	h274p.color_primaries = (C.enum_AVColorPrimaries)(v)
+}
+
+// GetColorPrimariesAddr gets `AVFilmGrainH274Params.color_primaries` address.
+func (h274p *AVFilmGrainH274Params) GetColorPrimariesAddr() *AVColorPrimaries {
+	return (*AVColorPrimaries)(&h274p.color_primaries)
+}
+
+// GetColorTrc gets `AVFilmGrainH274Params.color_trc` value.
+func (h274p *AVFilmGrainH274Params) GetColorTrc() AVColorTransferCharacteristic {
+	return (AVColorTransferCharacteristic)(h274p.color_trc)
+}
+
+// SetColorTrc sets `AVFilmGrainH274Params.color_trc` value.
+func (h274p *AVFilmGrainH274Params) SetColorTrc(v AVColorTransferCharacteristic) {
+	h274p.color_trc = (C.enum_AVColorTransferCharacteristic)(v)
+}
+
+// GetColorTrcAddr gets `AVFilmGrainH274Params.color_trc` address.
+func (h274p *AVFilmGrainH274Params) GetColorTrcAddr() *AVColorTransferCharacteristic {
+	return (*AVColorTransferCharacteristic)(&h274p.color_trc)
+}
+
+// GetColorSpace gets `AVFilmGrainH274Params.color_space` value.
+func (h274p *AVFilmGrainH274Params) GetColorSpace() AVColorSpace {
+	return (AVColorSpace)(h274p.color_space)
+}
+
+// SetColorSpace sets `AVFilmGrainH274Params.color_space` value.
+func (h274p *AVFilmGrainH274Params) SetColorSpace(v AVColorSpace) {
+	h274p.color_space = (C.enum_AVColorSpace)(v)
+}
+
+// GetColorSpaceAddr gets `AVFilmGrainH274Params.color_space` address.
+func (h274p *AVFilmGrainH274Params) GetColorSpaceAddr() *AVColorSpace {
+	return (*AVColorSpace)(&h274p.color_space)
+}
+
+// GetBlendingModeId gets `AVFilmGrainH274Params.blending_mode_id` value.
+func (h274p *AVFilmGrainH274Params) GetBlendingModeId() int32 {
+	return (int32)(h274p.blending_mode_id)
+}
+
+// SetBlendingModeId sets `AVFilmGrainH274Params.blending_mode_id` value.
+func (h274p *AVFilmGrainH274Params) SetBlendingModeId(v int32) {
+	h274p.blending_mode_id = (C.int)(v)
+}
+
+// GetBlendingModeIdAddr gets `AVFilmGrainH274Params.blending_mode_id` address.
+func (h274p *AVFilmGrainH274Params) GetBlendingModeIdAddr() *int32 {
+	return (*int32)(&h274p.blending_mode_id)
+}
+
+// GetLog2ScaleFactor gets `AVFilmGrainH274Params.log2_scale_factor` value.
+func (h274p *AVFilmGrainH274Params) GetLog2ScaleFactor() int32 {
+	return (int32)(h274p.log2_scale_factor)
+}
+
+// SetLog2ScaleFactor sets `AVFilmGrainH274Params.log2_scale_factor` value.
+func (h274p *AVFilmGrainH274Params) SetLog2ScaleFactor(v int32) {
+	h274p.log2_scale_factor = (C.int)(v)
+}
+
+// GetLog2ScaleFactorAddr gets `AVFilmGrainH274Params.log2_scale_factor` address.
+func (h274p *AVFilmGrainH274Params) GetLog2ScaleFactorAddr() *int32 {
+	return (*int32)(&h274p.log2_scale_factor)
+}
+
+// GetComponentModelPresent gets `AVFilmGrainH274Params.component_model_present` value.
+func (h274p *AVFilmGrainH274Params) GetComponentModelPresent() []int32 {
+	return unsafe.Slice((*int32)(&h274p.component_model_present[0]), 3)
+}
+
+// SetComponentModelPresent sets `AVFilmGrainH274Params.component_model_present` value.
+func (h274p *AVFilmGrainH274Params) SetComponentModelPresent(v []int32) {
+	for i := 0; i < FFMIN(len(v), 3); i++ {
+		h274p.component_model_present[i] = (C.int)(v[i])
+	}
+}
+
+// GetComponentModelPresentAddr gets `AVFilmGrainH274Params.component_model_present` address.
+func (h274p *AVFilmGrainH274Params) GetComponentModelPresentAddr() **int32 {
+	return (**int32)(unsafe.Pointer(&h274p.component_model_present))
+}
+
+// GetNumIntensityIntervals gets `AVFilmGrainH274Params.num_intensity_intervals` value.
+func (h274p *AVFilmGrainH274Params) GetNumIntensityIntervals() []uint16 {
+	return unsafe.Slice((*uint16)(&h274p.num_intensity_intervals[0]), 3)
+}
+
+// SetNumIntensityIntervals sets `AVFilmGrainH274Params.num_intensity_intervals` value.
+func (h274p *AVFilmGrainH274Params) SetNumIntensityIntervals(v []uint16) {
+	for i := 0; i < FFMIN(len(v), 3); i++ {
+		h274p.num_intensity_intervals[i] = (C.uint16_t)(v[i])
+	}
+}
+
+// GetNumIntensityIntervalsAddr gets `AVFilmGrainH274Params.num_intensity_intervals` address.
+func (h274p *AVFilmGrainH274Params) GetNumIntensityIntervalsAddr() **uint16 {
+	return (**uint16)(unsafe.Pointer(&h274p.num_intensity_intervals))
+}
+
+// GetNumModelValues gets `AVFilmGrainH274Params.num_model_values` value.
+func (h274p *AVFilmGrainH274Params) GetNumModelValues() []uint8 {
+	return unsafe.Slice((*uint8)(&h274p.num_model_values[0]), 3)
+}
+
+// SetNumModelValues sets `AVFilmGrainH274Params.num_model_values` value.
+func (h274p *AVFilmGrainH274Params) SetNumModelValues(v []uint8) {
+	for i := 0; i < FFMIN(len(v), 3); i++ {
+		h274p.num_model_values[i] = (C.uint8_t)(v[i])
+	}
+}
+
+// GetNumModelValuesAddr gets `AVFilmGrainH274Params.num_model_values` address.
+func (h274p *AVFilmGrainH274Params) GetNumModelValuesAddr() **uint8 {
+	return (**uint8)(unsafe.Pointer(&h274p.num_model_values))
+}
+
+// GetIntensityIntervalLowerBound gets `AVFilmGrainH274Params.intensity_interval_lower_bound` value.
+func (h274p *AVFilmGrainH274Params) GetIntensityIntervalLowerBound() (v [][]uint8) {
+	for i := 0; i < 3; i++ {
+		v = append(v, unsafe.Slice((*uint8)(&h274p.intensity_interval_lower_bound[i][0]), 256))
+	}
+	return v
+}
+
+// SetIntensityIntervalLowerBound sets `AVFilmGrainH274Params.intensity_interval_lower_bound` value.
+func (h274p *AVFilmGrainH274Params) SetIntensityIntervalLowerBound(v [][]uint8) {
+	for i := 0; i < FFMIN(len(v), 3); i++ {
+		for j := 0; j < FFMIN(len(v[i]), 256); j++ {
+			h274p.intensity_interval_lower_bound[i][j] = (C.uint8_t)(v[i][j])
+		}
+	}
+}
+
+// GetIntensityIntervalLowerBoundAddr gets `AVFilmGrainH274Params.intensity_interval_lower_bound` address.
+func (h274p *AVFilmGrainH274Params) GetIntensityIntervalLowerBoundAddr() **uint8 {
+	return (**uint8)(unsafe.Pointer(&h274p.intensity_interval_lower_bound))
+}
+
+// GetIntensityIntervalUpperBound gets `AVFilmGrainH274Params.intensity_interval_upper_bound` value.
+func (h274p *AVFilmGrainH274Params) GetIntensityIntervalUpperBound() (v [][]uint8) {
+	for i := 0; i < 3; i++ {
+		v = append(v, unsafe.Slice((*uint8)(&h274p.intensity_interval_upper_bound[i][0]), 256))
+	}
+	return v
+}
+
+// SetIntensityIntervalUpperBound sets `AVFilmGrainH274Params.intensity_interval_upper_bound` value.
+func (h274p *AVFilmGrainH274Params) SetIntensityIntervalUpperBound(v [][]uint8) {
+	for i := 0; i < FFMIN(len(v), 3); i++ {
+		for j := 0; j < FFMIN(len(v[i]), 256); j++ {
+			h274p.intensity_interval_upper_bound[i][j] = (C.uint8_t)(v[i][j])
+		}
+	}
+}
+
+// GetIntensityIntervalUpperBoundAddr gets `AVFilmGrainH274Params.intensity_interval_upper_bound` address.
+func (h274p *AVFilmGrainH274Params) GetIntensityIntervalUpperBoundAddr() **uint8 {
+	return (**uint8)(unsafe.Pointer(&h274p.intensity_interval_upper_bound))
+}
+
+// GetCompModelValue gets `AVFilmGrainH274Params.comp_model_value` value.
+func (h274p *AVFilmGrainH274Params) GetCompModelValue() (v [][][]int16) {
+	for i := 0; i < 3; i++ {
+		tmp := [][]int16{}
+		for j := 0; j < 256; j++ {
+			tmp = append(tmp, unsafe.Slice((*int16)(&h274p.comp_model_value[i][j][0]), 6))
+		}
+		v = append(v, tmp)
+	}
+	return v
+}
+
+// SetCompModelValue sets `AVFilmGrainH274Params.comp_model_value` value.
+func (h274p *AVFilmGrainH274Params) SetCompModelValue(v [][][]int16) {
+	for i := 0; i < FFMIN(len(v), 3); i++ {
+		for j := 0; j < FFMIN(len(v[i]), 256); j++ {
+			for k := 0; k < FFMIN(len(v[i][j]), 6); k++ {
+				h274p.comp_model_value[i][j][k] = (C.int16_t)(v[i][j][k])
+			}
+		}
+	}
+}
+
+// GetCompModelValueAddr gets `AVFilmGrainH274Params.comp_model_value` address.
+func (h274p *AVFilmGrainH274Params) GetCompModelValueAddr() **int16 {
+	return (**int16)(unsafe.Pointer(&h274p.comp_model_value))
 }
 
 // AVFilmGrainParams

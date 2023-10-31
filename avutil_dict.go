@@ -20,6 +20,7 @@ const (
 	AV_DICT_MULTIKEY        = C.AV_DICT_MULTIKEY
 )
 
+// AVDictionaryEntry
 type AVDictionaryEntry C.struct_AVDictionaryEntry
 
 // GetKey gets `AVDictionaryEntry.key` value.
@@ -41,6 +42,12 @@ func AvDictGet(m *AVDictionary, key string, prev *AVDictionaryEntry, flags int32
 	defer keyFunc()
 	return (*AVDictionaryEntry)(C.av_dict_get((*C.struct_AVDictionary)(m),
 		(*C.char)(keyPtr), (*C.struct_AVDictionaryEntry)(prev), (C.int)(flags)))
+}
+
+// AvDictIterate iterates over a dictionary.
+func AvDictIterate(m *AVDictionary, prev *AVDictionaryEntry) *AVDictionaryEntry {
+	return (*AVDictionaryEntry)(C.av_dict_iterate((*C.struct_AVDictionary)(m),
+		(*C.struct_AVDictionaryEntry)(prev)))
 }
 
 // AvDictCount gets number of entries in dictionary.

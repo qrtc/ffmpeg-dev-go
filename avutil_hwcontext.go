@@ -31,10 +31,13 @@ const (
 	AV_HWDEVICE_TYPE_VULKAN       = AVHWDeviceType(C.AV_HWDEVICE_TYPE_VULKAN)
 )
 
+// AVHWDeviceInternal
 type AVHWDeviceInternal C.struct_AVHWDeviceInternal
 
+// AVHWDeviceContext
 type AVHWDeviceContext C.struct_AVHWDeviceContext
 
+// typedef void (*av_hw_device_context_free_func)(struct AVHWDeviceContext *ctx);
 type AVHWDeviceContextFreeFunc = C.av_hw_device_context_free_func
 
 // GetAvClass gets `AVHWDeviceContext.av_class` value.
@@ -117,10 +120,13 @@ func (dc *AVHWDeviceContext) GetUserOpaqueAddr() *unsafe.Pointer {
 	return &dc.user_opaque
 }
 
+// AVHWFramesInternal
 type AVHWFramesInternal C.struct_AVHWFramesInternal
 
+// AVHWFramesContext
 type AVHWFramesContext C.struct_AVHWFramesContext
 
+// typedef void (*av_hw_frames_context_free_func)(struct AVHWFramesContext *ctx);
 type AVHWFramesContextFreeFunc = C.av_hw_frames_context_free_func
 
 // GetAvClass gets `AVHWFramesContext.av_class` value.
@@ -393,6 +399,7 @@ func AvHWFrameTransferData(dst, src *AVFrame, flags int32) int32 {
 		(C.int)(flags)))
 }
 
+// AVHWFrameTransferDirection
 type AVHWFrameTransferDirection = C.enum_AVHWFrameTransferDirection
 
 const (
@@ -410,6 +417,7 @@ func AvHWFrameTransferGetFormats(hwframeCtx *AVBufferRef, dir AVHWFrameTransferD
 		(C.int)(flags)))
 }
 
+// AVHWFramesConstraints
 type AVHWFramesConstraints C.struct_AVHWFramesConstraints
 
 // GetValidHwFormats gets `AVHWFramesConstraints.valid_hw_formats` value.

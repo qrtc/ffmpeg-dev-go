@@ -9,6 +9,7 @@ package ffmpeg
 */
 import "C"
 
+// AVCAST5
 type AVCAST5 C.struct_AVCAST5
 
 // AvCast5Alloc allocates an AVCAST5 context.

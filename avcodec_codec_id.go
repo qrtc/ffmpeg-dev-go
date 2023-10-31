@@ -553,3 +553,23 @@ func AvCodecGetType(codecID AVCodecID) AVMediaType {
 func AvCodecGetName(codecID AVCodecID) string {
 	return C.GoString(C.avcodec_get_name((C.enum_AVCodecID)(codecID)))
 }
+
+// AvGetBitsPerSample returns codec bits per sample.
+func AvGetBitsPerSample(codecID AVCodecID) int32 {
+	return (int32)(C.av_get_bits_per_sample((C.enum_AVCodecID)(codecID)))
+}
+
+// AvGetExactBitsPerSample returns codec bits per sample.
+func AvGetExactBitsPerSample(codecID AVCodecID) int32 {
+	return (int32)(C.av_get_exact_bits_per_sample((C.enum_AVCodecID)(codecID)))
+}
+
+// AvCodecProfileName returns a name for the specified profile, if available.
+func AvCodecProfileName(codecID AVCodecID, profile int32) string {
+	return C.GoString(C.avcodec_profile_name((C.enum_AVCodecID)(codecID), (C.int)(profile)))
+}
+
+// AvGetPcmCodec returns the PCM codec associated with a sample format.
+func AvGetPcmCodec(fmt AVSampleFormat, be int32) AVCodecID {
+	return (AVCodecID)(C.av_get_pcm_codec((C.enum_AVSampleFormat)(fmt), (C.int)(be)))
+}

@@ -13,6 +13,7 @@ const (
 	AV_TIMECODE_STR_SIZE = C.AV_TIMECODE_STR_SIZE
 )
 
+// AVTimecodeFlag
 type AVTimecodeFlag = C.enum_AVTimecodeFlag
 
 const (
@@ -21,6 +22,7 @@ const (
 	AV_TIMECODE_FLAG_ALLOWNEGATIVE = AVTimecodeFlag(C.AV_TIMECODE_FLAG_ALLOWNEGATIVE)
 )
 
+// AVTimecode
 type AVTimecode C.AVTimecode
 
 // GetStart gets `AVTimecode.start` value.
@@ -151,7 +153,7 @@ func AvTimecodeInitFromString(tc *AVTimecode, rate AVRational, str string, logCt
 		(*C.char)(strPtr), VoidPointer(logCtx)))
 }
 
-// AvTimecodeCheckFrameRate checks if the timecode feature is available for the given frame rate
+// AvTimecodeCheckFrameRate checks if the timecode feature is available for the given frame rate.
 func AvTimecodeCheckFrameRate(rate AVRational) int32 {
 	return (int32)(C.av_timecode_check_frame_rate((C.struct_AVRational)(rate)))
 }

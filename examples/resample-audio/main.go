@@ -59,7 +59,8 @@ func main() {
 		srcLinesize, dstLinesize     int32
 		srcNbSamples, dstNbSamples   int32 = 1024, 0
 		maxDstNbSamples              int32
-		srcChLayout, dstChLayout     = ffmpeg.AV_CH_LAYOUT_STEREO, ffmpeg.AV_CH_LAYOUT_SURROUND
+		srcChLayout                  = ffmpeg.AV_CHANNEL_LAYOUT_STEREO()
+		dstChLayout                  = ffmpeg.AV_CHANNEL_LAYOUT_SURROUND()
 		srcSampleFmt, dstSampleFmt   = ffmpeg.AV_SAMPLE_FMT_DBL, ffmpeg.AV_SAMPLE_FMT_S16
 		swrCtx                       *ffmpeg.SwrContext
 		ret                          int32
@@ -92,11 +93,11 @@ func main() {
 	}
 
 	// set options
-	ffmpeg.AvOptSetInt(swrCtx, "in_channel_layout", srcChLayout, 0)
+	ffmpeg.AvOptSetChlayout(swrCtx, "in_chlayout", srcChLayout, 0)
 	ffmpeg.AvOptSetInt(swrCtx, "in_sample_rate", srcRate, 0)
 	ffmpeg.AvOptSetSampleFmt(swrCtx, "in_sample_fmt", srcSampleFmt, 0)
 
-	ffmpeg.AvOptSetInt(swrCtx, "out_channel_layout", dstChLayout, 0)
+	ffmpeg.AvOptSetChlayout(swrCtx, "out_chlayout", dstChLayout, 0)
 	ffmpeg.AvOptSetInt(swrCtx, "out_sample_rate", dstRate, 0)
 	ffmpeg.AvOptSetSampleFmt(swrCtx, "out_sample_fmt", dstSampleFmt, 0)
 
@@ -107,7 +108,7 @@ func main() {
 	}
 
 	// allocate source and destination samples buffers
-	srcNbChannels = ffmpeg.AvGetChannelLayoutNbChannels(srcChLayout)
+	srcNbChannels = srcChLayout.GetNbChannels()
 	if ret = ffmpeg.AvSamplesAllocArrayAndSamples(&srcData, &srcLinesize, srcNbChannels,
 		srcNbSamples, srcSampleFmt, 0); ret < 0 {
 		fmt.Fprintf(os.Stderr, "Could not allocate source samples\n")
@@ -121,7 +122,7 @@ func main() {
 	maxDstNbSamples = dstNbSamples
 
 	// buffer is going to be directly written to a rawaudio file, no alignment
-	dstNbChannels = ffmpeg.AvGetChannelLayoutNbChannels(dstChLayout)
+	dstNbChannels = dstChLayout.GetNbChannels()
 	if ret = ffmpeg.AvSamplesAllocArrayAndSamples(&dstData, &dstLinesize, dstNbChannels,
 		dstNbSamples, dstSampleFmt, 0); ret < 0 {
 		fmt.Fprintf(os.Stderr, "Could not allocate destination samples\n")
@@ -163,8 +164,8 @@ func main() {
 		goto end
 	}
 	fmt.Fprintf(os.Stderr, "Resampling succeeded. Play the output file with the command:\n"+
-		"ffplay -f %s -channel_layout %d -channels %d -ar %d %s\n",
-		_fmt, dstChLayout, dstNbChannels, dstRate, dstFilename)
+		"ffplay -f %s -channel_layout %s -channels %d -ar %d %s\n",
+		_fmt, ffmpeg.AvChannelLayoutDescribe(dstChLayout), dstNbChannels, dstRate, dstFilename)
 
 end:
 	dstFile.Close()

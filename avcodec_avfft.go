@@ -48,34 +48,6 @@ func AvFftEnd(s *FFTContext) {
 	C.av_fft_end((*C.struct_FFTContext)(s))
 }
 
-// AvMdctInit
-func AvMdctInit(nbits, inverse int32, scale float64) *FFTContext {
-	return (*FFTContext)(C.av_mdct_init((C.int)(nbits), (C.int)(inverse), (C.double)(scale)))
-}
-
-// AvImdctCalc
-func AvImdctCalc(s *FFTContext, output, input *FFTSample) {
-	C.av_imdct_calc((*C.struct_FFTContext)(s),
-		(*C.FFTSample)(output), (*C.FFTSample)(input))
-}
-
-// AvImdctHalf
-func AvImdctHalf(s *FFTContext, output, input *FFTSample) {
-	C.av_imdct_half((*C.struct_FFTContext)(s),
-		(*C.FFTSample)(output), (*C.FFTSample)(input))
-}
-
-// AvMdctCalc
-func AvMdctCalc(s *FFTContext, output, input *FFTSample) {
-	C.av_mdct_calc((*C.struct_FFTContext)(s),
-		(*C.FFTSample)(output), (*C.FFTSample)(input))
-}
-
-// AvMdctEnd
-func AvMdctEnd(s *FFTContext) {
-	C.av_mdct_end((*C.struct_FFTContext)(s))
-}
-
 // RDFTransformType
 type RDFTransformType = C.enum_RDFTransformType
 

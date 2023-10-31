@@ -23,22 +23,24 @@ const (
 	AV_CPU_FLAG_SSE3     = C.AV_CPU_FLAG_SSE3
 	AV_CPU_FLAG_SSE3SLOW = C.AV_CPU_FLAG_SSE3SLOW
 
-	AV_CPU_FLAG_SSSE3     = C.AV_CPU_FLAG_SSSE3
-	AV_CPU_FLAG_SSSE3SLOW = C.AV_CPU_FLAG_SSSE3SLOW
-	AV_CPU_FLAG_ATOM      = C.AV_CPU_FLAG_ATOM
-	AV_CPU_FLAG_SSE4      = C.AV_CPU_FLAG_SSE4
-	AV_CPU_FLAG_SSE42     = C.AV_CPU_FLAG_SSE42
-	AV_CPU_FLAG_AESNI     = C.AV_CPU_FLAG_AESNI
-	AV_CPU_FLAG_AVX       = C.AV_CPU_FLAG_AVX
-	AV_CPU_FLAG_AVXSLOW   = C.AV_CPU_FLAG_AVXSLOW
-	AV_CPU_FLAG_XOP       = C.AV_CPU_FLAG_XOP
-	AV_CPU_FLAG_FMA4      = C.AV_CPU_FLAG_FMA4
-	AV_CPU_FLAG_CMOV      = C.AV_CPU_FLAG_CMOV
-	AV_CPU_FLAG_AVX2      = C.AV_CPU_FLAG_AVX2
-	AV_CPU_FLAG_FMA3      = C.AV_CPU_FLAG_FMA3
-	AV_CPU_FLAG_BMI1      = C.AV_CPU_FLAG_BMI1
-	AV_CPU_FLAG_BMI2      = C.AV_CPU_FLAG_BMI2
-	AV_CPU_FLAG_AVX512    = C.AV_CPU_FLAG_AVX512
+	AV_CPU_FLAG_SSSE3       = C.AV_CPU_FLAG_SSSE3
+	AV_CPU_FLAG_SSSE3SLOW   = C.AV_CPU_FLAG_SSSE3SLOW
+	AV_CPU_FLAG_ATOM        = C.AV_CPU_FLAG_ATOM
+	AV_CPU_FLAG_SSE4        = C.AV_CPU_FLAG_SSE4
+	AV_CPU_FLAG_SSE42       = C.AV_CPU_FLAG_SSE42
+	AV_CPU_FLAG_AESNI       = C.AV_CPU_FLAG_AESNI
+	AV_CPU_FLAG_AVX         = C.AV_CPU_FLAG_AVX
+	AV_CPU_FLAG_AVXSLOW     = C.AV_CPU_FLAG_AVXSLOW
+	AV_CPU_FLAG_XOP         = C.AV_CPU_FLAG_XOP
+	AV_CPU_FLAG_FMA4        = C.AV_CPU_FLAG_FMA4
+	AV_CPU_FLAG_CMOV        = C.AV_CPU_FLAG_CMOV
+	AV_CPU_FLAG_AVX2        = C.AV_CPU_FLAG_AVX2
+	AV_CPU_FLAG_FMA3        = C.AV_CPU_FLAG_FMA3
+	AV_CPU_FLAG_BMI1        = C.AV_CPU_FLAG_BMI1
+	AV_CPU_FLAG_BMI2        = C.AV_CPU_FLAG_BMI2
+	AV_CPU_FLAG_AVX512      = C.AV_CPU_FLAG_AVX512
+	AV_CPU_FLAG_AVX512ICL   = C.AV_CPU_FLAG_AVX512ICL
+	AV_CPU_FLAG_SLOW_GATHER = C.AV_CPU_FLAG_SLOW_GATHER
 
 	AV_CPU_FLAG_ALTIVEC = C.AV_CPU_FLAG_ALTIVEC
 	AV_CPU_FLAG_VSX     = C.AV_CPU_FLAG_VSX
@@ -56,6 +58,17 @@ const (
 
 	AV_CPU_FLAG_MMI = C.AV_CPU_FLAG_MMI
 	AV_CPU_FLAG_MSA = C.AV_CPU_FLAG_MSA
+
+	AV_CPU_FLAG_LSX       = C.AV_CPU_FLAG_LSX
+	AV_CPU_FLAG_LASX      = C.AV_CPU_FLAG_LASX
+	AV_CPU_FLAG_RVI       = C.AV_CPU_FLAG_RVI
+	AV_CPU_FLAG_RVF       = C.AV_CPU_FLAG_RVF
+	AV_CPU_FLAG_RVD       = C.AV_CPU_FLAG_RVD
+	AV_CPU_FLAG_RVV_I32   = C.AV_CPU_FLAG_RVV_I32
+	AV_CPU_FLAG_RVV_F32   = C.AV_CPU_FLAG_RVV_F32
+	AV_CPU_FLAG_RVV_I64   = C.AV_CPU_FLAG_RVV_I64
+	AV_CPU_FLAG_RVV_F64   = C.AV_CPU_FLAG_RVV_F64
+	AV_CPU_FLAG_RVB_BASIC = C.AV_CPU_FLAG_RVB_BASIC
 )
 
 // AvGetCpuFlags returns the flags which specify extensions supported by the CPU.
@@ -68,22 +81,6 @@ func AvForceCpuFlags(flags int32) {
 	C.av_force_cpu_flags((C.int)(flags))
 }
 
-// Deprecated: Use AvForceCpuFlags() and AvGetCpuFlags() instead
-//
-// AvSetCpuFlagsMask set a mask on flags returned by AvGetCpuFlags().
-func AvSetCpuFlagsMask(mask int32) {
-	C.av_set_cpu_flags_mask((C.int)(mask))
-}
-
-// Deprecated: Use AvParseCpuCaps() when possible.
-//
-// AvParseCpuFlags parses CPU flags from a string.
-func AvParseCpuFlags(str string) int32 {
-	strPtr, strFunc := StringCasting(str)
-	defer strFunc()
-	return (int32)(C.av_parse_cpu_flags((*C.char)(strPtr)))
-}
-
 // AvParseCpuCaps parses CPU caps from a string and update the given AV_CPU_* flags based on that.
 func AvParseCpuCaps(flags *uint32, str string) int32 {
 	strPtr, strFunc := StringCasting(str)
@@ -94,6 +91,11 @@ func AvParseCpuCaps(flags *uint32, str string) int32 {
 // AvCpuCount returns the number of logical CPU cores present.
 func AvCpuCount() int32 {
 	return (int32)(C.av_cpu_count())
+}
+
+// AvCpuForceCount overrides cpu count detection and forces the specified count.
+func AvCpuForceCount(count int32) {
+	C.av_cpu_force_count((C.int)(count))
 }
 
 // AvCpuMaxAlign gets the maximum data alignment that may be required by FFmpeg.

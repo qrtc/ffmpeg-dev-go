@@ -10,6 +10,7 @@ package ffmpeg
 import "C"
 import "unsafe"
 
+// AVComponentDescriptor
 type AVComponentDescriptor C.struct_AVComponentDescriptor
 
 // GetPlane gets `AVComponentDescriptor.plane` value.
@@ -85,69 +86,6 @@ func (cd *AVComponentDescriptor) SetDepth(v int32) {
 // GetDepthAddr gets `AVComponentDescriptor.depth` address.
 func (cd *AVComponentDescriptor) GetDepthAddr() *int32 {
 	return (*int32)(&cd.depth)
-}
-
-// Deprecated: Use step instead.
-//
-// GetStepMinus1 gets `AVComponentDescriptor.step_minus1` value.
-func (cd *AVComponentDescriptor) GetStepMinus1() int32 {
-	return (int32)(cd.step_minus1)
-}
-
-// Deprecated: Use step instead.
-//
-// SetStepMinus1 sets `AVComponentDescriptor.step_minus1` value.
-func (cd *AVComponentDescriptor) SetStepMinus1(v int32) {
-	cd.step_minus1 = (C.int)(v)
-}
-
-// Deprecated: Use step instead.
-//
-// GetStepMinus1Addr gets `AVComponentDescriptor.step_minus1` address.
-func (cd *AVComponentDescriptor) GetStepMinus1Addr() *int32 {
-	return (*int32)(&cd.step_minus1)
-}
-
-// Deprecated: Use depth instead.
-//
-// GetDepthMinus1 gets `AVComponentDescriptor.depth_minus1` value.
-func (cd *AVComponentDescriptor) GetDepthMinus1() int32 {
-	return (int32)(cd.depth_minus1)
-}
-
-// Deprecated: Use depth instead.
-//
-// SetDepthMinus1 sets `AVComponentDescriptor.depth_minus1` value.
-func (cd *AVComponentDescriptor) SetDepthMinus1(v int32) {
-	cd.depth_minus1 = (C.int)(v)
-}
-
-// Deprecated: Use depth instead.
-//
-// GetDepthMinus1Addr gets `AVComponentDescriptor.depth_minus1` address.
-func (cd *AVComponentDescriptor) GetDepthMinus1Addr() *int32 {
-	return (*int32)(&cd.depth_minus1)
-}
-
-// Deprecated: Use offset instead.
-//
-// GetOffsetPlus1 gets `AVComponentDescriptor.offset_plus1` value.
-func (cd *AVComponentDescriptor) GetOffsetPlus1() int32 {
-	return (int32)(cd.offset_plus1)
-}
-
-// Deprecated: Use offset instead.
-//
-// SetOffsetPlus1 sets `AVComponentDescriptor.offset_plus1` value.
-func (cd *AVComponentDescriptor) SetOffsetPlus1(v int32) {
-	cd.offset_plus1 = (C.int)(v)
-}
-
-// Deprecated: Use offset instead.
-//
-// GetOffsetPlus1Addr gets `AVComponentDescriptor.offset_plus1` address.
-func (cd *AVComponentDescriptor) GetOffsetPlus1Addr() *int32 {
-	return (*int32)(&cd.offset_plus1)
 }
 
 // AVPixFmtDescriptor
@@ -247,10 +185,10 @@ const (
 	AV_PIX_FMT_FLAG_HWACCEL   = C.AV_PIX_FMT_FLAG_HWACCEL
 	AV_PIX_FMT_FLAG_PLANAR    = C.AV_PIX_FMT_FLAG_PLANAR
 	AV_PIX_FMT_FLAG_RGB       = C.AV_PIX_FMT_FLAG_RGB
-	AV_PIX_FMT_FLAG_PSEUDOPAL = C.AV_PIX_FMT_FLAG_PSEUDOPAL
-	AV_PIX_FMT_FLAG_ALPHA     = C.AV_PIX_FMT_FLAG_ALPHA
-	AV_PIX_FMT_FLAG_BAYER     = C.AV_PIX_FMT_FLAG_BAYER
-	AV_PIX_FMT_FLAG_FLOAT     = C.AV_PIX_FMT_FLAG_FLOAT
+
+	AV_PIX_FMT_FLAG_ALPHA = C.AV_PIX_FMT_FLAG_ALPHA
+	AV_PIX_FMT_FLAG_BAYER = C.AV_PIX_FMT_FLAG_BAYER
+	AV_PIX_FMT_FLAG_FLOAT = C.AV_PIX_FMT_FLAG_FLOAT
 )
 
 // AvGetBitsPerPixel returns the number of bits per pixel used by the pixel format
@@ -352,6 +290,17 @@ func AvChromaLocationFromName(name string) int32 {
 	namePtr, nameFunc := StringCasting(name)
 	defer nameFunc()
 	return (int32)(C.av_chroma_location_from_name((*C.char)(namePtr)))
+}
+
+// AvChromaLocationEnumToPos converts AVChromaLocation to swscale x/y chroma position.
+func AvChromaLocationEnumToPos(xpos, ypos *int32, pos AVChromaLocation) int32 {
+	return (int32)(C.av_chroma_location_enum_to_pos((*C.int)(xpos), (*C.int)(ypos),
+		(C.enum_AVChromaLocation)(pos)))
+}
+
+// AvChromaLocationPosToEnum converts swscale x/y chroma position to AVChromaLocation.
+func AvChromaLocationPosToEnum(xpos, ypos int32) AVChromaLocation {
+	return (AVChromaLocation)(C.av_chroma_location_pos_to_enum((C.int)(xpos), (C.int)(ypos)))
 }
 
 // AvGetPixFmt returns the pixel format corresponding to name.

@@ -10,27 +10,28 @@ package ffmpeg
 import "C"
 
 const (
-	AV_CODEC_CAP_DRAW_HORIZ_BAND          = C.AV_CODEC_CAP_DRAW_HORIZ_BAND
-	AV_CODEC_CAP_DR1                      = C.AV_CODEC_CAP_DR1
-	AV_CODEC_CAP_TRUNCATED                = C.AV_CODEC_CAP_TRUNCATED
-	AV_CODEC_CAP_DELAY                    = C.AV_CODEC_CAP_DELAY
-	AV_CODEC_CAP_SMALL_LAST_FRAME         = C.AV_CODEC_CAP_SMALL_LAST_FRAME
-	AV_CODEC_CAP_SUBFRAMES                = C.AV_CODEC_CAP_SUBFRAMES
-	AV_CODEC_CAP_EXPERIMENTAL             = C.AV_CODEC_CAP_EXPERIMENTAL
-	AV_CODEC_CAP_CHANNEL_CONF             = C.AV_CODEC_CAP_CHANNEL_CONF
-	AV_CODEC_CAP_FRAME_THREADS            = C.AV_CODEC_CAP_FRAME_THREADS
-	AV_CODEC_CAP_SLICE_THREADS            = C.AV_CODEC_CAP_SLICE_THREADS
-	AV_CODEC_CAP_PARAM_CHANGE             = C.AV_CODEC_CAP_PARAM_CHANGE
-	AV_CODEC_CAP_OTHER_THREADS            = C.AV_CODEC_CAP_OTHER_THREADS
-	AV_CODEC_CAP_AUTO_THREADS             = C.AV_CODEC_CAP_AUTO_THREADS
-	AV_CODEC_CAP_VARIABLE_FRAME_SIZE      = C.AV_CODEC_CAP_VARIABLE_FRAME_SIZE
-	AV_CODEC_CAP_AVOID_PROBING            = C.AV_CODEC_CAP_AVOID_PROBING
-	AV_CODEC_CAP_INTRA_ONLY               = C.AV_CODEC_CAP_INTRA_ONLY
-	AV_CODEC_CAP_LOSSLESS                 = C.AV_CODEC_CAP_LOSSLESS
+	AV_CODEC_CAP_DRAW_HORIZ_BAND = C.AV_CODEC_CAP_DRAW_HORIZ_BAND
+	AV_CODEC_CAP_DR1             = C.AV_CODEC_CAP_DR1
+
+	AV_CODEC_CAP_DELAY            = C.AV_CODEC_CAP_DELAY
+	AV_CODEC_CAP_SMALL_LAST_FRAME = C.AV_CODEC_CAP_SMALL_LAST_FRAME
+	AV_CODEC_CAP_SUBFRAMES        = C.AV_CODEC_CAP_SUBFRAMES
+	AV_CODEC_CAP_EXPERIMENTAL     = C.AV_CODEC_CAP_EXPERIMENTAL
+	AV_CODEC_CAP_CHANNEL_CONF     = C.AV_CODEC_CAP_CHANNEL_CONF
+	AV_CODEC_CAP_FRAME_THREADS    = C.AV_CODEC_CAP_FRAME_THREADS
+	AV_CODEC_CAP_SLICE_THREADS    = C.AV_CODEC_CAP_SLICE_THREADS
+	AV_CODEC_CAP_PARAM_CHANGE     = C.AV_CODEC_CAP_PARAM_CHANGE
+	AV_CODEC_CAP_OTHER_THREADS    = C.AV_CODEC_CAP_OTHER_THREADS
+
+	AV_CODEC_CAP_VARIABLE_FRAME_SIZE = C.AV_CODEC_CAP_VARIABLE_FRAME_SIZE
+	AV_CODEC_CAP_AVOID_PROBING       = C.AV_CODEC_CAP_AVOID_PROBING
+
 	AV_CODEC_CAP_HARDWARE                 = C.AV_CODEC_CAP_HARDWARE
 	AV_CODEC_CAP_HYBRID                   = C.AV_CODEC_CAP_HYBRID
 	AV_CODEC_CAP_ENCODER_REORDERED_OPAQUE = C.AV_CODEC_CAP_ENCODER_REORDERED_OPAQUE
 	AV_CODEC_CAP_ENCODER_FLUSH            = C.AV_CODEC_CAP_ENCODER_FLUSH
+
+	AV_CODEC_CAP_ENCODER_RECON_FRAME = C.AV_CODEC_CAP_ENCODER_RECON_FRAME
 )
 
 // AVProfile
@@ -102,6 +103,8 @@ func (codec *AVCodec) GetSampleFmts() []AVSampleFormat {
 	})
 }
 
+// Deprecated: Use ChLayouts instead.
+//
 // GetChannelLayouts gets `AVCodec.channel_layouts` value.
 func (codec *AVCodec) GetChannelLayouts() []uint64 {
 	return SliceTrunc((*uint64)(codec.channel_layouts), func(u uint64) bool {
@@ -124,6 +127,13 @@ func (codec *AVCodec) GetProfiles() []AVProfile {
 // GetWrapperName gets `AVCodec.wrapper_name` value.
 func (codec *AVCodec) GetWrapperName() string {
 	return C.GoString(codec.wrapper_name)
+}
+
+// GetChLayouts gets `AVCodec.ch_layouts` value.
+func (codec *AVCodec) GetChLayouts() []AVChannelLayout {
+	return SliceTrunc((*AVChannelLayout)(codec.ch_layouts), func(chl AVChannelLayout) bool {
+		return chl.GetNbChannels() == 0
+	})
 }
 
 // AvCodecIterate iterates over all registered codecs.
@@ -155,14 +165,19 @@ func AvCodecFindEncoderByName(name string) *AVCodec {
 	return (*AVCodec)(C.avcodec_find_encoder_by_name((*C.char)(namePtr)))
 }
 
-// AvCodecIsEncoder returns a non-zero number if codec is an encoder, zero otherwise
+// AvCodecIsEncoder returns a non-zero number if codec is an encoder, zero otherwise.
 func AvCodecIsEncoder(codec *AVCodec) int32 {
 	return (int32)(C.av_codec_is_encoder((*C.struct_AVCodec)(codec)))
 }
 
-// AvCodecIsDecoder returns a non-zero number if codec is an decoder, zero otherwise
+// AvCodecIsDecoder returns a non-zero number if codec is an decoder, zero otherwise.
 func AvCodecIsDecoder(codec *AVCodec) int32 {
 	return (int32)(C.av_codec_is_decoder((*C.struct_AVCodec)(codec)))
+}
+
+// AvGetProfileName returns a name for the specified profile, if available.
+func AvGetProfileName(c *AVCodec, profile int32) string {
+	return C.GoString(C.av_get_profile_name((*C.struct_AVCodec)(c), (C.int)(profile)))
 }
 
 const (

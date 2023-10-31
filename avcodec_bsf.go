@@ -46,21 +46,6 @@ func (bsfc *AVBSFContext) GetFilterAddr() **AVBitStreamFilter {
 	return (**AVBitStreamFilter)(unsafe.Pointer(&bsfc.filter))
 }
 
-// GetInternal gets `AVBSFContext.internal` value.
-func (bsfc *AVBSFContext) GetInternal() *AVBSFInternal {
-	return (*AVBSFInternal)(bsfc.internal)
-}
-
-// SetInternal sets `AVBSFContext.internal` value.
-func (bsfc *AVBSFContext) SetInternal(v *AVBSFInternal) {
-	bsfc.internal = (*C.struct_AVBSFInternal)(v)
-}
-
-// GetInternalAddr gets `AVBSFContext.internal` address.
-func (bsfc *AVBSFContext) GetInternalAddr() **AVBSFInternal {
-	return (**AVBSFInternal)(unsafe.Pointer(&bsfc.internal))
-}
-
 // GetPrivData gets `AVBSFContext.priv_data` value.
 func (bsfc *AVBSFContext) GetPrivData() unsafe.Pointer {
 	return bsfc.priv_data

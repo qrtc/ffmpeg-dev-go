@@ -228,6 +228,42 @@ func SwsScale(sctx *SwsContext, srcSlice []*uint8, srcStride []int32,
 		(**C.uint8_t)(unsafe.Pointer(&dst[0])), (*C.int)(unsafe.Pointer(&dstStride[0]))))
 }
 
+// SwsScaleFrame scales source data from src and write the output to dst.
+func SwsScaleFrame(sctx *SwsContext, dst, src *AVFrame) int32 {
+	return (int32)(C.sws_scale_frame((*C.struct_SwsContext)(sctx),
+		(*C.struct_AVFrame)(dst), (*C.struct_AVFrame)(src)))
+}
+
+// SwsFrameStart initializes the scaling process for a given pair of source/destination frames.
+func SwsFrameStart(sctx *SwsContext, dst, src *AVFrame) int32 {
+	return (int32)(C.sws_frame_start((*C.struct_SwsContext)(sctx),
+		(*C.struct_AVFrame)(dst), (*C.struct_AVFrame)(src)))
+}
+
+// SwsFrameEnd finishes the scaling process for a pair of source/destination frames.
+func SwsFrameEnd(sctx *SwsContext) {
+	C.sws_frame_end((*C.struct_SwsContext)(sctx))
+}
+
+// SwsSendSlice indicates that a horizontal slice of input data is available in the source
+// frame previously provided to SwsFrameStart().
+func SwsSendSlice(sctx *SwsContext, sliceStart, sliceHeight uint32) int32 {
+	return (int32)(C.sws_send_slice((*C.struct_SwsContext)(sctx),
+		(C.uint)(sliceStart), (C.uint)(sliceHeight)))
+}
+
+// SwsReceiveSlice requests a horizontal slice of the output data to be written into the frame
+// previously provided to SwsFrameStart().
+func SwsReceiveSlice(sctx *SwsContext, sliceStart, sliceHeight uint32) int32 {
+	return (int32)(C.sws_receive_slice((*C.struct_SwsContext)(sctx),
+		(C.uint)(sliceStart), (C.uint)(sliceHeight)))
+}
+
+// SwsReceiveSliceAlignment alignments required for output slices requested with SwsReceiveSlice().
+func SwsReceiveSliceAlignment(sctx *SwsContext) int32 {
+	return (int32)(C.sws_receive_slice_alignment((*C.struct_SwsContext)(sctx)))
+}
+
 // SwsSetColorspaceDetails
 func SwsSetColorSpaceDetails(sctx *SwsContext, invTable []int32, srcRange int32,
 	table []int32, dstRange int32, brightness, contrast, saturation int32) int32 {
@@ -278,63 +314,6 @@ func SwsScaleVec(a *SwsVector, scalar float64) {
 // SwsNormalizeVec scales all the coefficients of a so that their sum equals height.
 func SwsNormalizeVec(a *SwsVector, height float64) {
 	C.sws_normalizeVec((*C.struct_SwsVector)(a), (C.double)(height))
-}
-
-// Deprecated: No use.
-//
-// SwsGetConstVec
-func SwsGetConstVec(c float64, length int32) *SwsVector {
-	return (*SwsVector)(C.sws_getConstVec((C.double)(c), (C.int)(length)))
-}
-
-// Deprecated: No use.
-//
-// SwsGetIdentityVec
-func SwsGetIdentityVec() *SwsVector {
-	return (*SwsVector)(C.sws_getIdentityVec())
-}
-
-// Deprecated: No use.
-//
-// SwsConvVec
-func SwsConvVec(a, b *SwsVector) {
-	C.sws_convVec((*C.struct_SwsVector)(a), (*C.struct_SwsVector)(b))
-}
-
-// Deprecated: No use.
-//
-// SwsAddVec
-func SwsAddVec(a, b *SwsVector) {
-	C.sws_addVec((*C.struct_SwsVector)(a), (*C.struct_SwsVector)(b))
-}
-
-// Deprecated: No use.
-//
-// SwsSubVec
-func SwsSubVec(a, b *SwsVector) {
-	C.sws_subVec((*C.struct_SwsVector)(a), (*C.struct_SwsVector)(b))
-}
-
-// Deprecated: No use.
-//
-// SwsShiftVec
-func SwsShiftVec(a *SwsVector, shift int32) {
-	C.sws_shiftVec((*C.struct_SwsVector)(a), (C.int)(shift))
-}
-
-// Deprecated: No use.
-//
-// SwsCloneVec
-func SwsCloneVec(a *SwsVector) *SwsVector {
-	return (*SwsVector)(C.sws_cloneVec((*C.struct_SwsVector)(a)))
-}
-
-// Deprecated: No use.
-//
-// SwsPrintVec2
-func SwsPrintVec2(a *SwsVector, logCtx *AVClass, logLevel int32) {
-	C.sws_printVec2((*C.struct_SwsVector)(a),
-		(*C.struct_AVClass)(logCtx), (C.int)(logLevel))
 }
 
 // SwsFreeVec

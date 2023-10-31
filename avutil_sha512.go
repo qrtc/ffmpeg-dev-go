@@ -23,8 +23,8 @@ func AvSha512Init(context *AVSHA512, bits int32) int32 {
 }
 
 // AvSha512Update updates hash value.
-func AvSha512Update(ctx *AVSHA512, data *uint8, len uint32) {
-	C.av_sha512_update((*C.struct_AVSHA512)(ctx), (*C.uint8_t)(data), (C.uint)(len))
+func AvSha512Update(ctx *AVSHA512, data *uint8, len uintptr) {
+	C.av_sha512_update((*C.struct_AVSHA512)(ctx), (*C.uint8_t)(data), (C.size_t)(len))
 }
 
 // AvSha512Final finishes hashing and output digest value.
