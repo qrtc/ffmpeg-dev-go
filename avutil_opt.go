@@ -507,14 +507,6 @@ func AvOptChildNext(obj, prev CVoidPointer) unsafe.Pointer {
 	return C.av_opt_child_next(VoidPointer(obj), VoidPointer(prev))
 }
 
-// Deprecated: Use AvOptChildClassIterate instead.
-//
-// AvOptChildClassNext
-func AvOptChildClassNext(parent, prev *AVClass) *AVClass {
-	return (*AVClass)(C.av_opt_child_class_next((*C.struct_AVClass)(parent),
-		(*C.struct_AVClass)(prev)))
-}
-
 // AvOptChildClassIterate iterates over potential AVOptions-enabled children of parent.
 func AvOptChildClassIterate(parent *AVClass, iter CVoidPointerPointer) *AVClass {
 	return (*AVClass)(C.av_opt_child_class_iterate((*C.struct_AVClass)(parent), VoidPointerPointer(iter)))

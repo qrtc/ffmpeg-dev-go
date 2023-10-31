@@ -349,7 +349,7 @@ func convertSamples(inputData, convertedData **uint8,
 
 // Add converted input audio samples to the FIFO buffer for later processing.
 func addSamplesToFifo(fifo *ffmpeg.AVAudioFifo, convertedInputSamples **uint8, frameSize int32) int32 {
-	//  Make the FIFO as large as it needs to be to hold both,
+	// Make the FIFO as large as it needs to be to hold both,
 	// the old and the new samples.
 	if ret := ffmpeg.AvAudioFifoRealloc(fifo, ffmpeg.AvAudioFifoSize(fifo)+frameSize); ret < 0 {
 		fmt.Fprintf(os.Stderr, "Could not reallocate FIFO\n")

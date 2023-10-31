@@ -26,3 +26,13 @@ func AvMapVideotoolboxFormatFromPixfmt(pixFmt AVPixelFormat) uint32 {
 func AvMapVideotoolboxFormatFromPixfmt2(pixFmt AVPixelFormat, fullRange bool) uint32 {
 	return (uint32)(C.av_map_videotoolbox_format_from_pixfmt2((C.enum_AVPixelFormat)(pixFmt), C.bool(fullRange)))
 }
+
+// NONEED: av_map_videotoolbox_chroma_loc_from_av
+
+// NONEED: av_map_videotoolbox_color_matrix_from_av
+
+// NONEED: av_map_videotoolbox_color_primaries_from_av
+
+// NONEED: av_map_videotoolbox_color_trc_from_av
+
+// NONEED: av_vt_pixbuf_set_attachments

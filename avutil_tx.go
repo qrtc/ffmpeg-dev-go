@@ -152,7 +152,9 @@ type AvTxFn = C.av_tx_fn
 type AVTXFlags = C.enum_AVTXFlags
 
 const (
-	AV_TX_INPLACE = AVTXFlags(C.AV_TX_INPLACE)
+	AV_TX_INPLACE    = AVTXFlags(C.AV_TX_INPLACE)
+	AV_TX_UNALIGNED  = AVTXFlags(C.AV_TX_UNALIGNED)
+	AV_TX_FULL_IMDCT = AVTXFlags(C.AV_TX_FULL_IMDCT)
 )
 
 // AvTxInit initializes a transform context with the given configuration
@@ -164,7 +166,7 @@ func AvTxInit(ctx **AVTXContext, tx *AvTxFn, _type AVTXType,
 		(C.int)(inv), (C.int)(len), VoidPointer(scale), (C.uint64_t)(flags)))
 }
 
-// AvTxUninit frees a context and sets ctx to NULL, does nothing when ctx == NULL
+// AvTxUninit frees a context and sets ctx to NULL, does nothing when ctx == NULL.
 func AvTxUninit(ctx **AVTXContext) {
 	C.av_tx_uninit((**C.struct_AVTXContext)(unsafe.Pointer(ctx)))
 }

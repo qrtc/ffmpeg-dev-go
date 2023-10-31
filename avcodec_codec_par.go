@@ -477,3 +477,8 @@ func AvCodecParametersCopy(dst, src *AVCodecParameters) int32 {
 	return (int32)(C.avcodec_parameters_copy((*C.struct_AVCodecParameters)(dst),
 		(*C.struct_AVCodecParameters)(src)))
 }
+
+// AvGetAudioFrameDuration2 returns audio frame duration.
+func AvGetAudioFrameDuration2(par *AVCodecParameters, frameBytes int32) int32 {
+	return (int32)(C.av_get_audio_frame_duration2((*C.struct_AVCodecParameters)(par), (C.int)(frameBytes)))
+}

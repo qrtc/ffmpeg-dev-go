@@ -46,8 +46,8 @@ func AvHashInit(ctx *AVHashContext) {
 }
 
 // AvHashUpdate updates a hash context with additional data.
-func AvHashUpdate(ctx *AVHashContext, src *uint8, len int32) {
-	C.av_hash_update((*C.struct_AVHashContext)(ctx), (*C.uint8_t)(src), (C.int)(len))
+func AvHashUpdate(ctx *AVHashContext, src *uint8, len uintptr) {
+	C.av_hash_update((*C.struct_AVHashContext)(ctx), (*C.uint8_t)(src), (C.size_t)(len))
 }
 
 // AvHashFinal finalizes a hash context and compute the actual hash value.

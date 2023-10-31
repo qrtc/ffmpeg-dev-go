@@ -90,6 +90,15 @@ func AvImageCopyPlane(dst *uint8, dstLinesize int32, src *uint8,
 		(C.int)(bytewidth), (C.int)(height))
 }
 
+// AvImageCopyPlaneUcFrom copies image data located in uncacheable (e.g. GPU mapped) memory.
+func AvImageCopyPlaneUcFrom(dst *uint8, dstLinesize int,
+	src *uint8, srcLinesize int,
+	bytewidth int, height int32) {
+	C.av_image_copy_plane_uc_from((*C.uint8_t)(dst), (C.ptrdiff_t)(dstLinesize),
+		(*C.uint8_t)(src), (C.ptrdiff_t)(srcLinesize),
+		(C.ptrdiff_t)(bytewidth), (C.int)(height))
+}
+
 // AvImageCopy copies image in src_data to dst_data.
 func AvImageCopy(dstData []*uint8, dstLinesizes []int32, srcData []*uint8, srcLinesizes []int32,
 	pixFmt AVPixelFormat, width, height int32) {

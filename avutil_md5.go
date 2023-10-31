@@ -27,8 +27,8 @@ func AvMd5Init(ctx *AVMD5) {
 }
 
 // AvMd5Update updates hash value.
-func AvMd5Update(ctx *AVMD5, src *uint8, len int32) {
-	C.av_md5_update((*C.struct_AVMD5)(ctx), (*C.uint8_t)(src), (C.int)(len))
+func AvMd5Update(ctx *AVMD5, src *uint8, len uintptr) {
+	C.av_md5_update((*C.struct_AVMD5)(ctx), (*C.uint8_t)(src), (C.size_t)(len))
 }
 
 // AvMd5Final finishs hashing and output digest value.
@@ -37,6 +37,6 @@ func AvMd5Final(ctx *AVMD5, dst *uint8) {
 }
 
 // AvMd5Sum hashes an array of data.
-func AvMd5Sum(dst, src *uint8, len int32) {
-	C.av_md5_sum((*C.uint8_t)(dst), (*C.uint8_t)(src), (C.int)(len))
+func AvMd5Sum(dst, src *uint8, len uintptr) {
+	C.av_md5_sum((*C.uint8_t)(dst), (*C.uint8_t)(src), (C.size_t)(len))
 }

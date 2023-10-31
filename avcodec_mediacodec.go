@@ -25,7 +25,7 @@ func AvMediacodecDefaultInit(avctx *AVCodecContext, ctx *AVMediaCodecContext, su
 		(*C.struct_AVMediaCodecContext)(ctx), VoidPointer(surface)))
 }
 
-// AvMediacodecDefaultFree frees the MediaCodec context
+// AvMediacodecDefaultFree frees the MediaCodec context.
 func AvMediacodecDefaultFree(avctx *AVCodecContext) {
 	C.av_mediacodec_default_free((*C.struct_AVCodecContext)(avctx))
 }

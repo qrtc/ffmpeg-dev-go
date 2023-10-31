@@ -171,7 +171,7 @@ func processOutput(md5 *ffmpeg.AVMD5, frame *ffmpeg.AVFrame) int32 {
 		var checksum [16]uint8
 
 		ffmpeg.AvMd5Init(md5)
-		ffmpeg.AvMd5Sum(&checksum[0], &data[i][0], planeSize)
+		ffmpeg.AvMd5Sum(&checksum[0], &data[i][0], uintptr(planeSize))
 
 		fmt.Fprintf(os.Stdout, "plane %d: 0x", i)
 		for j := 0; j < len(checksum); j++ {

@@ -469,21 +469,6 @@ func (ctx *AVIOContext) GetSeekableAddr() *int32 {
 	return (*int32)(&ctx.seekable)
 }
 
-// GetMaxsize gets `AVIOContext.maxsize` value.
-func (ctx *AVIOContext) GetMaxsize() int64 {
-	return (int64)(ctx.maxsize)
-}
-
-// SetMaxsize sets `AVIOContext.maxsize` value.
-func (ctx *AVIOContext) SetMaxsize(v int64) {
-	ctx.maxsize = (C.int64_t)(v)
-}
-
-// GetMaxsizeAddr gets `AVIOContext.maxsize` address.
-func (ctx *AVIOContext) GetMaxsizeAddr() *int64 {
-	return (*int64)(&ctx.maxsize)
-}
-
 // GetDirect gets `AVIOContext.direct` value.
 func (ctx *AVIOContext) GetDirect() int32 {
 	return (int32)(ctx.direct)
@@ -514,64 +499,19 @@ func (ctx *AVIOContext) GetBytesReadAddr() *int64 {
 	return (*int64)(&ctx.bytes_read)
 }
 
-// GetSeekCount gets `AVIOContext.seek_count` value.
-func (ctx *AVIOContext) GetSeekCount() int32 {
-	return (int32)(ctx.seek_count)
+// GetBytesWritten gets `AVIOContext.bytes_written` value.
+func (ctx *AVIOContext) GetBytesWritten() int64 {
+	return (int64)(ctx.bytes_written)
 }
 
-// SetSeekCount sets `AVIOContext.seek_count` value.
-func (ctx *AVIOContext) SetSeekCount(v int32) {
-	ctx.seek_count = (C.int)(v)
+// SetBytesWritten sets `AVIOContext.bytes_written` value.
+func (ctx *AVIOContext) SetBytesWritten(v int64) {
+	ctx.bytes_written = (C.int64_t)(v)
 }
 
-// GetSeekCountAddr gets `AVIOContext.seek_count` address.
-func (ctx *AVIOContext) GetSeekCountAddr() *int32 {
-	return (*int32)(&ctx.seek_count)
-}
-
-// GetWriteoutCount gets `AVIOContext.writeout_count` value.
-func (ctx *AVIOContext) GetWriteoutCount() int32 {
-	return (int32)(ctx.writeout_count)
-}
-
-// SetWriteoutCount sets `AVIOContext.writeout_count` value.
-func (ctx *AVIOContext) SetWriteoutCount(v int32) {
-	ctx.writeout_count = (C.int)(v)
-}
-
-// GetWriteoutCountAddr gets `AVIOContext.writeout_count` address.
-func (ctx *AVIOContext) GetWriteoutCountAddr() *int32 {
-	return (*int32)(&ctx.writeout_count)
-}
-
-// GetOrigBufferSize gets `AVIOContext.orig_buffer_size` value.
-func (ctx *AVIOContext) GetOrigBufferSize() int32 {
-	return (int32)(ctx.orig_buffer_size)
-}
-
-// SetOrigBufferSize sets `AVIOContext.orig_buffer_size` value.
-func (ctx *AVIOContext) SetOrigBufferSize(v int32) {
-	ctx.orig_buffer_size = (C.int)(v)
-}
-
-// GetOrigBufferSizeAddr gets `AVIOContext.orig_buffer_size` address.
-func (ctx *AVIOContext) GetOrigBufferSizeAddr() *int32 {
-	return (*int32)(&ctx.orig_buffer_size)
-}
-
-// GetShortSeekThreshold gets `AVIOContext.short_seek_threshold` value.
-func (ctx *AVIOContext) GetShortSeekThreshold() int32 {
-	return (int32)(ctx.short_seek_threshold)
-}
-
-// SetShortSeekThreshold sets `AVIOContext.short_seek_threshold` value.
-func (ctx *AVIOContext) SetShortSeekThreshold(v int32) {
-	ctx.short_seek_threshold = (C.int)(v)
-}
-
-// GetShortSeekThresholdAddr gets `AVIOContext.short_seek_threshold` address.
-func (ctx *AVIOContext) GetShortSeekThresholdAddr() *int32 {
-	return (*int32)(&ctx.short_seek_threshold)
+// GetBytesWrittenAddr gets `AVIOContext.bytes_written` address.
+func (ctx *AVIOContext) GetBytesWrittenAddr() *int64 {
+	return (*int64)(&ctx.bytes_written)
 }
 
 // GetProtocolWhitelist gets `AVIOContext.protocol_whitelist` value.
@@ -599,46 +539,22 @@ func (ctx *AVIOContext) GetIgnoreBoundaryPointAddr() *int32 {
 	return (*int32)(&ctx.ignore_boundary_point)
 }
 
-// GetCurrentType gets `AVIOContext.currenttype` value.
-func (ctx *AVIOContext) GetCurrentType() AVIODataMarkerType {
-	return (AVIODataMarkerType)(ctx.current_type)
-}
-
-// SetCurrentType sets `AVIOContext.currenttype` value.
-func (ctx *AVIOContext) SetCurrentType(v AVIODataMarkerType) {
-	ctx.current_type = (C.enum_AVIODataMarkerType)(v)
-}
-
-// GetCurrentTypeAddr gets `AVIOContext.currenttype` address.
-func (ctx *AVIOContext) GetCurrentTypeAddr() *AVIODataMarkerType {
-	return (*AVIODataMarkerType)(&ctx.current_type)
-}
-
-// GetLastTime gets `AVIOContext.last_time` value.
-func (ctx *AVIOContext) GetLastTime() int64 {
-	return (int64)(ctx.last_time)
-}
-
-// SetLastTime sets `AVIOContext.last_time` value.
-func (ctx *AVIOContext) SetLastTime(v int64) {
-	ctx.last_time = (C.int64_t)(v)
-}
-
-// GetLastTimeAddr gets `AVIOContext.last_time` address.
-func (ctx *AVIOContext) GetLastTimeAddr() *int64 {
-	return (*int64)(&ctx.last_time)
-}
-
+// Deprecated: Use bytes_written instead.
+//
 // GetWritten gets `AVIOContext.written` value.
 func (ctx *AVIOContext) GetWritten() int64 {
 	return (int64)(ctx.written)
 }
 
+// Deprecated: Use bytes_written instead.
+//
 // SetWritten sets `AVIOContext.written` value.
 func (ctx *AVIOContext) SetWritten(v int64) {
 	ctx.written = (C.int64_t)(v)
 }
 
+// Deprecated: Use bytes_written instead.
+//
 // GetWrittenAddr gets `AVIOContext.written` address.
 func (ctx *AVIOContext) GetWrittenAddr() *int64 {
 	return (*int64)(&ctx.written)
@@ -689,22 +605,6 @@ func AvIOCheck(url string, flags int32) int32 {
 	urlPtr, urlFunc := StringCasting(url)
 	defer urlFunc()
 	return (int32)(C.avio_check((*C.char)(urlPtr), (C.int)(flags)))
-}
-
-// AvPrivIoMove moves or renames a resource.
-func AvPrivIoMove(urlSrc, urlDst string) int32 {
-	urlSrcPtr, urlSrcFunc := StringCasting(urlSrc)
-	defer urlSrcFunc()
-	urlDstPtr, urlDstFunc := StringCasting(urlDst)
-	defer urlDstFunc()
-	return (int32)(C.avpriv_io_move((*C.char)(urlSrcPtr), (*C.char)(urlDstPtr)))
-}
-
-// AvPrivIoDelete deletes a resource.
-func AvPrivIoDelete(url string) int32 {
-	urlPtr, urlFunc := StringCasting(url)
-	defer urlFunc()
-	return (int32)(C.avpriv_io_delete((*C.char)(urlPtr)))
 }
 
 // AvIOOpenDir opens directory for reading.

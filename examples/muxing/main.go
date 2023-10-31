@@ -272,7 +272,7 @@ func getAudioFrame(ost *outputStream) (frame *ffmpeg.AVFrame) {
 }
 
 // encode one audio frame and send it to the muxer
-// return 1 when encoding is finished, 0 otherwise
+// return 1 when encoding is finished, 0 otherwise.
 func writeAudioFrame(oc *ffmpeg.AVFormatContext, ost *outputStream) bool {
 	var (
 		c            *ffmpeg.AVCodecContext
@@ -401,7 +401,7 @@ func getVideoFrame(ost *outputStream) *ffmpeg.AVFrame {
 		return nil
 	}
 
-	//  when we pass a frame to the encoder, it may keep a reference to it
+	// when we pass a frame to the encoder, it may keep a reference to it
 	// internally; make sure we do not overwrite it here
 	if ffmpeg.AvFrameMakeWritable(ost.frame) < 0 {
 		panic("Make video frame writable failed")
@@ -433,8 +433,8 @@ func getVideoFrame(ost *outputStream) *ffmpeg.AVFrame {
 	return ost.frame
 }
 
-// encode one video frame and send it to the muxer
-// return 1 when encoding is finished, 0 otherwise
+// encode one video frame and send it to the muxer,
+// return 1 when encoding is finished, 0 otherwise.
 func writeVideoFrame(oc *ffmpeg.AVFormatContext, ost *outputStream) bool {
 	return writeFrame(oc, ost.enc, ost.st, getVideoFrame(ost))
 }

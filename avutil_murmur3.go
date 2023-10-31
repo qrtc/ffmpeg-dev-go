@@ -9,6 +9,7 @@ package ffmpeg
 */
 import "C"
 
+// AVMurMur3
 type AVMurMur3 C.struct_AVMurMur3
 
 // AvMurmur3Alloc allocates an AVMurMur3 hash context.
@@ -27,8 +28,8 @@ func AvMurmur3Init(c *AVMurMur3) {
 }
 
 // AvMurmur3Update updates hash context with new data.
-func AvMurmur3Update(c *AVMurMur3, src *uint8, len int32) {
-	C.av_murmur3_update((*C.struct_AVMurMur3)(c), (*C.uint8_t)(src), (C.int)(len))
+func AvMurmur3Update(c *AVMurMur3, src *uint8, len uintptr) {
+	C.av_murmur3_update((*C.struct_AVMurMur3)(c), (*C.uint8_t)(src), (C.size_t)(len))
 }
 
 // AvMurmur3Final finishes hashing and output digest value.

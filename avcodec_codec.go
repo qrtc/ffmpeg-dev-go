@@ -10,9 +10,12 @@ package ffmpeg
 import "C"
 
 const (
-	AV_CODEC_CAP_DRAW_HORIZ_BAND          = C.AV_CODEC_CAP_DRAW_HORIZ_BAND
-	AV_CODEC_CAP_DR1                      = C.AV_CODEC_CAP_DR1
-	AV_CODEC_CAP_TRUNCATED                = C.AV_CODEC_CAP_TRUNCATED
+	AV_CODEC_CAP_DRAW_HORIZ_BAND = C.AV_CODEC_CAP_DRAW_HORIZ_BAND
+	AV_CODEC_CAP_DR1             = C.AV_CODEC_CAP_DR1
+
+	// Deprecated: Use parsers to always send proper frames.
+	AV_CODEC_CAP_TRUNCATED = C.AV_CODEC_CAP_TRUNCATED
+
 	AV_CODEC_CAP_DELAY                    = C.AV_CODEC_CAP_DELAY
 	AV_CODEC_CAP_SMALL_LAST_FRAME         = C.AV_CODEC_CAP_SMALL_LAST_FRAME
 	AV_CODEC_CAP_SUBFRAMES                = C.AV_CODEC_CAP_SUBFRAMES
@@ -155,14 +158,19 @@ func AvCodecFindEncoderByName(name string) *AVCodec {
 	return (*AVCodec)(C.avcodec_find_encoder_by_name((*C.char)(namePtr)))
 }
 
-// AvCodecIsEncoder returns a non-zero number if codec is an encoder, zero otherwise
+// AvCodecIsEncoder returns a non-zero number if codec is an encoder, zero otherwise.
 func AvCodecIsEncoder(codec *AVCodec) int32 {
 	return (int32)(C.av_codec_is_encoder((*C.struct_AVCodec)(codec)))
 }
 
-// AvCodecIsDecoder returns a non-zero number if codec is an decoder, zero otherwise
+// AvCodecIsDecoder returns a non-zero number if codec is an decoder, zero otherwise.
 func AvCodecIsDecoder(codec *AVCodec) int32 {
 	return (int32)(C.av_codec_is_decoder((*C.struct_AVCodec)(codec)))
+}
+
+// AvGetProfileName returns a name for the specified profile, if available.
+func AvGetProfileName(c *AVCodec, profile int32) string {
+	return C.GoString(C.av_get_profile_name((*C.struct_AVCodec)(c), (C.int)(profile)))
 }
 
 const (

@@ -14,7 +14,7 @@ const (
 	SWR_FLAG_RESAMPLE = C.SWR_FLAG_RESAMPLE
 )
 
-// Dithering algorithms
+// Dithering algorithms.
 type SwrDitherType = C.enum_SwrDitherType
 
 const (
@@ -33,7 +33,7 @@ const (
 	SWR_DITHER_NB                     = SwrDitherType(C.SWR_DITHER_NB)
 )
 
-// Resampling Engines
+// Resampling Engines.
 type SwrEngine = C.enum_SwrEngine
 
 const (
@@ -42,7 +42,7 @@ const (
 	SWR_ENGINE_NB   = SwrEngine(C.SWR_ENGINE_NB)
 )
 
-// Resampling Filter Types
+// Resampling Filter Types.
 type SwrFilterType = C.enum_SwrFilterType
 
 const (
@@ -109,7 +109,7 @@ func SwrNextPts(s *SwrContext, pts int64) int64 {
 	return (int64)(C.swr_next_pts((*C.struct_SwrContext)(s), (C.int64_t)(pts)))
 }
 
-// SwrSetCompensation  activates resampling compensation ("soft" compensation).
+// SwrSetCompensation activates resampling compensation ("soft" compensation).
 // This function is internally called when needed in SwrNextPts().
 func SwrSetCompensation(s *SwrContext, sampleDelta, compensationDistance int32) int32 {
 	return (int32)(C.swr_set_compensation((*C.struct_SwrContext)(s),
