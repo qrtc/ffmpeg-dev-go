@@ -460,6 +460,21 @@ func (par *AVCodecParameters) GetSeekPrerollAddr() *int32 {
 	return (*int32)(&par.seek_preroll)
 }
 
+// GetChLayout gets `AVCodecContext.ch_layouts` value.
+func (par *AVCodecParameters) GetChLayout() AVChannelLayout {
+	return (AVChannelLayout)(par.ch_layout)
+}
+
+// SetChLayout sets `AVCodecContext.ch_layouts` value.
+func (par *AVCodecParameters) SetChLayout(v AVChannelLayout) {
+	par.ch_layout = (C.struct_AVChannelLayout)(v)
+}
+
+// GetChLayoutAddr gets `AVCodecContext.ch_layouts` address.
+func (par *AVCodecParameters) GetChLayoutAddr() *AVChannelLayout {
+	return (*AVChannelLayout)(&par.ch_layout)
+}
+
 // AvCodecParametersAlloc allocates a new AVCodecParameters and set its fields to default values
 // (unknown/invalid/0). The returned struct must be freed with AVCodecParametersFree().
 func AvCodecParametersAlloc() *AVCodecParameters {
@@ -476,4 +491,9 @@ func AvCodecParametersFree(par **AVCodecParameters) {
 func AvCodecParametersCopy(dst, src *AVCodecParameters) int32 {
 	return (int32)(C.avcodec_parameters_copy((*C.struct_AVCodecParameters)(dst),
 		(*C.struct_AVCodecParameters)(src)))
+}
+
+// AvGetAudioFrameDuration2 returns audio frame duration.
+func AvGetAudioFrameDuration2(par *AVCodecParameters, frameBytes int32) int32 {
+	return (int32)(C.av_get_audio_frame_duration2((*C.struct_AVCodecParameters)(par), (C.int)(frameBytes)))
 }

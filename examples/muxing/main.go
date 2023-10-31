@@ -116,17 +116,7 @@ func addStream(ost *outputStream, oc *ffmpeg.AVFormatContext, codecId ffmpeg.AVC
 				}
 			}
 		}
-		c.SetChannels(ffmpeg.AvGetChannelLayoutNbChannels(c.GetChannelLayout()))
-		c.SetChannelLayout(ffmpeg.AV_CH_LAYOUT_STEREO)
-		if len(codec.GetChannelLayouts()) > 0 {
-			c.SetChannelLayout(codec.GetChannelLayouts()[0])
-			for _, cl := range codec.GetChannelLayouts() {
-				if cl == ffmpeg.AV_CH_LAYOUT_STEREO {
-					c.SetChannelLayout(ffmpeg.AV_CH_LAYOUT_STEREO)
-				}
-			}
-		}
-		c.SetChannels(ffmpeg.AvGetChannelLayoutNbChannels(c.GetChannelLayout()))
+		ffmpeg.AvChannelLayoutCopy(c.GetChLayoutAddr(), ffmpeg.AV_CHANNEL_LAYOUT_STEREO())
 		ost.st.SetTimeBase(ffmpeg.AvMakeQ(1, c.GetSampleRate()))
 
 	case ffmpeg.AVMEDIA_TYPE_VIDEO:
@@ -170,14 +160,14 @@ func addStream(ost *outputStream, oc *ffmpeg.AVFormatContext, codecId ffmpeg.AVC
 // **************************************************************
 // audio output
 
-func allocAudioFrame(sampleFmt ffmpeg.AVSampleFormat, channelLayout uint64, sampleRate int32, nbSamples int32) (
+func allocAudioFrame(sampleFmt ffmpeg.AVSampleFormat, channelLayout *ffmpeg.AVChannelLayout, sampleRate int32, nbSamples int32) (
 	frame *ffmpeg.AVFrame) {
 	if frame = ffmpeg.AvFrameAlloc(); frame == nil {
 		panic("Error allocating an audio frame")
 	}
 
 	frame.SetFormat(sampleFmt)
-	frame.SetChannelLayout(channelLayout)
+	ffmpeg.AvChannelLayoutCopy(frame.GetChLayoutAddr(), channelLayout)
 	frame.SetSampleRate(sampleRate)
 	frame.SetNbSamples(nbSamples)
 
@@ -216,9 +206,9 @@ func openAudio(oc *ffmpeg.AVFormatContext, codec *ffmpeg.AVCodec, ost *outputStr
 	} else {
 		nbSamples = c.GetFrameSize()
 	}
-	ost.frame = allocAudioFrame(c.GetSampleFmt(), c.GetChannelLayout(),
+	ost.frame = allocAudioFrame(c.GetSampleFmt(), c.GetChLayoutAddr(),
 		c.GetSampleRate(), nbSamples)
-	ost.tmpFrame = allocAudioFrame(ffmpeg.AV_SAMPLE_FMT_S16, c.GetChannelLayout(),
+	ost.tmpFrame = allocAudioFrame(ffmpeg.AV_SAMPLE_FMT_S16, c.GetChLayoutAddr(),
 		c.GetSampleRate(), nbSamples)
 
 	// copy the stream parameters to the muxer
@@ -232,10 +222,10 @@ func openAudio(oc *ffmpeg.AVFormatContext, codec *ffmpeg.AVCodec, ost *outputStr
 	}
 
 	// set options
-	ffmpeg.AvOptSetInt(ost.swrCtx, "in_channel_count", c.GetChannels(), 0)
+	ffmpeg.AvOptSetChlayout(ost.swrCtx, "in_chlayout", c.GetChLayoutAddr(), 0)
 	ffmpeg.AvOptSetInt(ost.swrCtx, "in_sample_rate", c.GetSampleRate(), 0)
 	ffmpeg.AvOptSetSampleFmt(ost.swrCtx, "in_sample_fmt", ffmpeg.AV_SAMPLE_FMT_S16, 0)
-	ffmpeg.AvOptSetInt(ost.swrCtx, "out_channel_count", c.GetChannels(), 0)
+	ffmpeg.AvOptSetChlayout(ost.swrCtx, "out_chlayout", c.GetChLayoutAddr(), 0)
 	ffmpeg.AvOptSetInt(ost.swrCtx, "out_sample_rate", c.GetSampleRate(), 0)
 	ffmpeg.AvOptSetSampleFmt(ost.swrCtx, "out_sample_fmt", c.GetSampleFmt(), 0)
 
@@ -272,7 +262,7 @@ func getAudioFrame(ost *outputStream) (frame *ffmpeg.AVFrame) {
 }
 
 // encode one audio frame and send it to the muxer
-// return 1 when encoding is finished, 0 otherwise
+// return 1 when encoding is finished, 0 otherwise.
 func writeAudioFrame(oc *ffmpeg.AVFormatContext, ost *outputStream) bool {
 	var (
 		c            *ffmpeg.AVCodecContext
@@ -401,7 +391,7 @@ func getVideoFrame(ost *outputStream) *ffmpeg.AVFrame {
 		return nil
 	}
 
-	//  when we pass a frame to the encoder, it may keep a reference to it
+	// when we pass a frame to the encoder, it may keep a reference to it
 	// internally; make sure we do not overwrite it here
 	if ffmpeg.AvFrameMakeWritable(ost.frame) < 0 {
 		panic("Make video frame writable failed")
@@ -433,8 +423,8 @@ func getVideoFrame(ost *outputStream) *ffmpeg.AVFrame {
 	return ost.frame
 }
 
-// encode one video frame and send it to the muxer
-// return 1 when encoding is finished, 0 otherwise
+// encode one video frame and send it to the muxer,
+// return 1 when encoding is finished, 0 otherwise.
 func writeVideoFrame(oc *ffmpeg.AVFormatContext, ost *outputStream) bool {
 	return writeFrame(oc, ost.enc, ost.st, getVideoFrame(ost))
 }

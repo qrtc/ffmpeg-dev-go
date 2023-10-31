@@ -7,13 +7,12 @@ package ffmpeg
 /*
 #include <libavformat/avformat.h>
 
-typedef int (*av_format_context_open_cb)(struct AVFormatContext *s, AVIOContext **p, const char *url, int flags,
-	const AVIOInterruptCB *int_cb, AVDictionary **options);
-
 typedef int (*av_format_context_io_open_func)(struct AVFormatContext *s, AVIOContext **pb, const char *url,
 	int flags, AVDictionary **options);
 
 typedef void (*av_format_context_io_close_func)(struct AVFormatContext *s, AVIOContext *pb);
+
+typedef int (*av_format_context_io_close2_func)(struct AVFormatContext *s, AVIOContext *pb);
 
 int get_av_index_entry_flags(AVIndexEntry *ie) {
 	return ie->flags;
@@ -105,8 +104,10 @@ const (
 )
 
 const (
-	AVFMT_NOFILE        = C.AVFMT_NOFILE
-	AVFMT_NEEDNUMBER    = C.AVFMT_NEEDNUMBER
+	AVFMT_NOFILE     = C.AVFMT_NOFILE
+	AVFMT_NEEDNUMBER = C.AVFMT_NEEDNUMBER
+
+	AVFMT_EXPERIMENTAL  = C.AVFMT_EXPERIMENTAL
 	AVFMT_SHOW_IDS      = C.AVFMT_SHOW_IDS
 	AVFMT_GLOBALHEADER  = C.AVFMT_GLOBALHEADER
 	AVFMT_NOTIMESTAMPS  = C.AVFMT_NOTIMESTAMPS
@@ -373,18 +374,28 @@ const (
 	AV_DISPOSITION_CLEAN_EFFECTS    = C.AV_DISPOSITION_CLEAN_EFFECTS
 	AV_DISPOSITION_ATTACHED_PIC     = C.AV_DISPOSITION_ATTACHED_PIC
 	AV_DISPOSITION_TIMED_THUMBNAILS = C.AV_DISPOSITION_TIMED_THUMBNAILS
-)
 
-// AVStreamInternal
-type AVStreamInternal C.struct_AVStreamInternal
+	AV_DISPOSITION_NON_DIEGETIC = C.AV_DISPOSITION_NON_DIEGETIC
 
-const (
 	AV_DISPOSITION_CAPTIONS     = C.AV_DISPOSITION_CAPTIONS
 	AV_DISPOSITION_DESCRIPTIONS = C.AV_DISPOSITION_DESCRIPTIONS
 	AV_DISPOSITION_METADATA     = C.AV_DISPOSITION_METADATA
 	AV_DISPOSITION_DEPENDENT    = C.AV_DISPOSITION_DEPENDENT
 	AV_DISPOSITION_STILL_IMAGE  = C.AV_DISPOSITION_STILL_IMAGE
 )
+
+// AvDispositionFromString returns disposition flag.
+func AvDispositionFromString(disp string) int32 {
+	dispPtr, dispFunc := StringCasting(disp)
+	defer dispFunc()
+	return (int32)(C.av_disposition_from_string((*C.char)(dispPtr)))
+}
+
+// AvDispositionToString returns description corresponding to the lowest set bit in
+// disposition.
+func AvDispositionToString(disposition int32) string {
+	return C.GoString(C.av_disposition_to_string((C.int)(disposition)))
+}
 
 const (
 	AV_PTS_WRAP_IGNORE     = C.AV_PTS_WRAP_IGNORE
@@ -423,27 +434,6 @@ func (stm *AVStream) SetId(v int32) {
 // GetIdAddr gets `AVStream.id` address.
 func (stm *AVStream) GetIdAddr() *int32 {
 	return (*int32)(&stm.id)
-}
-
-// Deprecated: No use.
-//
-// GetCodec gets `AVStream.codec` value.
-func (stm *AVStream) GetCodec() *AVCodecContext {
-	return (*AVCodecContext)(stm.codec)
-}
-
-// Deprecated: No use.
-//
-// SetCodec sets `AVStream.codec` value.
-func (stm *AVStream) SetCodec(v *AVCodecContext) {
-	stm.codec = (*C.struct_AVCodecContext)(v)
-}
-
-// Deprecated: No use.
-//
-// GetCodecAddr gets `AVStream.codec` address.
-func (stm *AVStream) GetCodecAddr() **AVCodecContext {
-	return (**AVCodecContext)(unsafe.Pointer(&stm.codec))
 }
 
 // GetPrivData gets `AVStream.priv_data` value.
@@ -676,13 +666,6 @@ func (stm *AVStream) GetRFrameRateAddr() *AVRational {
 	return (*AVRational)(&stm.r_frame_rate)
 }
 
-// Deprecated: Unused.
-//
-// GetRecommendedEncoderConfiguration gets `AVStream.recommended_encoder_configuration` value.
-func (stm *AVStream) GetRecommendedEncoderConfiguration() string {
-	return C.GoString(stm.recommended_encoder_configuration)
-}
-
 // GetCodecpar gets `AVStream.codecpar` value.
 func (stm *AVStream) GetCodecpar() *AVCodecParameters {
 	return (*AVCodecParameters)(stm.codecpar)
@@ -698,34 +681,19 @@ func (stm *AVStream) GetCodecparAddr() **AVCodecParameters {
 	return (**AVCodecParameters)(unsafe.Pointer(&stm.codecpar))
 }
 
-// Deprecated: No use.
-//
-// AvStreamGetRFrameRate
-func AvStreamGetRFrameRate(s *AVStream) AVRational {
-	return (AVRational)(C.av_stream_get_r_frame_rate((*C.struct_AVStream)(s)))
+// GetPtsWrapBits gets `AVStream.pts_wrap_bits` value.
+func (stm *AVStream) GetPtsWrapBits() int32 {
+	return (int32)(stm.pts_wrap_bits)
 }
 
-// Deprecated: No use.
-//
-// AvStreamSetRFrameRate
-func AvStreamSetRFrameRate(s *AVStream, r AVRational) {
-	C.av_stream_set_r_frame_rate((*C.struct_AVStream)(s), (C.struct_AVRational)(r))
+// SetPtsWrapBits sets `AVStream.pts_wrap_bits` value.
+func (stm *AVStream) SetPtsWrapBits(v int32) {
+	stm.pts_wrap_bits = (C.int)(v)
 }
 
-// Deprecated: No use.
-//
-// AvStreamGetRecommendedEncoderConfiguration
-func AvStreamGetRecommendedEncoderConfiguration(s *AVStream) string {
-	return C.GoString(C.av_stream_get_recommended_encoder_configuration((*C.struct_AVStream)(s)))
-}
-
-// Deprecated: No use.
-//
-// AvStreamSetRecommendedEncoderConfiguration
-func AvStreamSetRecommendedEncoderConfiguration(s *AVStream, configuration string) {
-	configurationPtr, configurationFunc := StringCasting(configuration)
-	defer configurationFunc()
-	C.av_stream_set_recommended_encoder_configuration((*C.struct_AVStream)(s), (*C.char)(configurationPtr))
+// GetPtsWrapBitsAddr gets `AVStream.pts_wrap_bits` address.
+func (stm *AVStream) GetPtsWrapBitsAddr() *int32 {
+	return (*int32)(&stm.pts_wrap_bits)
 }
 
 // AvStreamGetParser
@@ -908,18 +876,18 @@ const (
 type AVChapter = C.struct_AVChapter
 
 // GetId gets `AVChapter.id` value.
-func (cpt *AVChapter) GetId() int32 {
-	return (int32)(cpt.id)
+func (cpt *AVChapter) GetId() int64 {
+	return (int64)(cpt.id)
 }
 
 // SetId sets `AVChapter.id` value.
-func (cpt *AVChapter) SetId(v int32) {
-	cpt.id = (C.int)(v)
+func (cpt *AVChapter) SetId(v int64) {
+	cpt.id = (C.int64_t)(v)
 }
 
 // GetIdAddr gets `AVChapter.id` address.
-func (cpt *AVChapter) GetIdAddr() *int32 {
-	return (*int32)(&cpt.id)
+func (cpt *AVChapter) GetIdAddr() *int64 {
+	return (*int64)(&cpt.id)
 }
 
 // GetTimeBase gets `AVChapter.time_base` value.
@@ -982,8 +950,13 @@ func (cpt *AVChapter) GetMetadataAddr() **AVDictionary {
 	return (**AVDictionary)(unsafe.Pointer(&cpt.metadata))
 }
 
+// typedef int (*av_format_control_message)(struct AVFormatContext *s, int type,
+// void *data, size_t data_size);
 type AVFormatControlMessageFunc C.av_format_control_message
 
+// typedef int (*AVOpenCallback)(struct AVFormatContext *s,
+// AVIOContext **pb, const char *url, int flags,
+// const AVIOInterruptCB *int_cb, AVDictionary **options);
 type AVOpenCallbackFunc C.AVOpenCallback
 
 // AVDurationEstimationMethod
@@ -1124,13 +1097,6 @@ func (s *AVFormatContext) GetStreamsAddr() ***AVStream {
 	return (***AVStream)(unsafe.Pointer(&s.streams))
 }
 
-// Deprecated: Use url instead.
-//
-// GetFilename gets `AVFormatContext.filename` value.
-func (s *AVFormatContext) GetFilename() string {
-	return C.GoString((*C.char)(&s.filename[0]))
-}
-
 // GetUrl gets `AVFormatContext.url` value.
 func (s *AVFormatContext) GetUrl() string {
 	return C.GoString(s.url)
@@ -1140,7 +1106,7 @@ func (s *AVFormatContext) GetUrl() string {
 func (s *AVFormatContext) SetUrl(v string) {
 	vPtr, _ := StringCasting(v)
 	if s.url != nil {
-		C.free(unsafe.Pointer(s.url))
+		FreePointer(s.url)
 	}
 	s.url = (*C.char)(vPtr)
 }
@@ -1806,21 +1772,6 @@ func (s *AVFormatContext) GetFormatWhitelist() string {
 	return C.GoString(s.format_whitelist)
 }
 
-// GetInternal gets `AVFormatContext.internal` value.
-func (s *AVFormatContext) GetInternal() *AVFormatInternal {
-	return (*AVFormatInternal)(s.internal)
-}
-
-// SetInternal sets `AVFormatContext.internal` value.
-func (s *AVFormatContext) SetInternal(v *AVFormatInternal) {
-	s.internal = (*C.struct_AVFormatInternal)(v)
-}
-
-// GetInternalAddr gets `AVFormatContext.internal` address.
-func (s *AVFormatContext) GetInternalAddr() **AVFormatInternal {
-	return (**AVFormatInternal)(unsafe.Pointer(&s.internal))
-}
-
 // GetIoRepositioned gets `AVFormatContext.io_repositioned` value.
 func (s *AVFormatContext) GetIoRepositioned() int32 {
 	return (int32)(s.io_repositioned)
@@ -1971,31 +1922,6 @@ func (s *AVFormatContext) GetDataCodecIdAddr() *AVCodecID {
 	return (*AVCodecID)(unsafe.Pointer(&s.data_codec_id))
 }
 
-// typedef int (*av_format_context_open_cb)(struct AVFormatContext *s, AVIOContext **p, const char *url, int flags,
-// const AVIOInterruptCB *int_cb, AVDictionary **options);
-type AvFormatContextOpenCb = C.av_format_context_open_cb
-
-// Deprecated: Use io_open and io_close.
-//
-// GetOpenCb gets `AVFormatContext.open_cb` value.
-func (s *AVFormatContext) GetOpenCb() AvFormatContextOpenCb {
-	return (AvFormatContextOpenCb)(s.open_cb)
-}
-
-// Deprecated: Use io_open and io_close.
-//
-// SetOpenCb sets `AVFormatContext.open_cb` value.
-func (s *AVFormatContext) SetOpenCb(v AvFormatContextOpenCb) {
-	s.open_cb = (C.av_format_context_open_cb)(v)
-}
-
-// Deprecated: Use io_open and io_close.
-//
-// GetOpenCbAddr gets `AVFormatContext.open_cb` address.
-func (s *AVFormatContext) GetOpenCbAddr() *AvFormatContextOpenCb {
-	return (*AvFormatContextOpenCb)(&s.open_cb)
-}
-
 // GetProtocolWhitelist gets `AVFormatContext.protocol_whitelist` value.
 func (s *AVFormatContext) GetProtocolWhitelist() string {
 	return C.GoString(s.protocol_whitelist)
@@ -2088,6 +2014,24 @@ func (s *AVFormatContext) GetMaxProbePacketsAddr() *int32 {
 	return (*int32)(&s.max_probe_packets)
 }
 
+// typedef int (*av_format_context_io_close2_func)(struct AVFormatContext *s, AVIOContext *pb);
+type AvFormatContextIoClose2Func = C.av_format_context_io_close2_func
+
+// GetIoClose2 gets `AVFormatContext.io_close2` value.
+func (s *AVFormatContext) GetIoClose2() AvFormatContextIoClose2Func {
+	return (AvFormatContextIoClose2Func)(s.io_close2)
+}
+
+// SetIoClose2 sets `AVFormatContext.io_close2` value.
+func (s *AVFormatContext) SetIoClose2(v AvFormatContextIoClose2Func) {
+	s.io_close2 = (C.av_format_context_io_close2_func)(v)
+}
+
+// GetIoClose2Addr gets `AVFormatContext.io_close2` address.
+func (s *AVFormatContext) GetIoClose2Addr() *AvFormatContextIoClose2Func {
+	return (*AvFormatContextIoClose2Func)(&s.io_close2)
+}
+
 const (
 	AVFMT_FLAG_GENPTS          = C.AVFMT_FLAG_GENPTS
 	AVFMT_FLAG_IGNIDX          = C.AVFMT_FLAG_IGNIDX
@@ -2100,123 +2044,18 @@ const (
 	AVFMT_FLAG_DISCARD_CORRUPT = C.AVFMT_FLAG_DISCARD_CORRUPT
 	AVFMT_FLAG_FLUSH_PACKETS   = C.AVFMT_FLAG_FLUSH_PACKETS
 	AVFMT_FLAG_BITEXACT        = C.AVFMT_FLAG_BITEXACT
-	AVFMT_FLAG_MP4A_LATM       = C.AVFMT_FLAG_MP4A_LATM
-	AVFMT_FLAG_SORT_DTS        = C.AVFMT_FLAG_SORT_DTS
-	AVFMT_FLAG_PRIV_OPT        = C.AVFMT_FLAG_PRIV_OPT
-	AVFMT_FLAG_KEEP_SIDE_DATA  = C.AVFMT_FLAG_KEEP_SIDE_DATA
-	AVFMT_FLAG_FAST_SEEK       = C.AVFMT_FLAG_FAST_SEEK
-	AVFMT_FLAG_SHORTEST        = C.AVFMT_FLAG_SHORTEST
-	AVFMT_FLAG_AUTO_BSF        = C.AVFMT_FLAG_AUTO_BSF
+
+	AVFMT_FLAG_SORT_DTS = C.AVFMT_FLAG_SORT_DTS
+	AVFMT_FLAG_PRIV_OPT = C.AVFMT_FLAG_PRIV_OPT
+
+	AVFMT_FLAG_FAST_SEEK = C.AVFMT_FLAG_FAST_SEEK
+	AVFMT_FLAG_SHORTEST  = C.AVFMT_FLAG_SHORTEST
+	AVFMT_FLAG_AUTO_BSF  = C.AVFMT_FLAG_AUTO_BSF
 )
 
 const (
 	AVFMT_EVENT_FLAG_METADATA_UPDATED = C.AVFMT_EVENT_FLAG_METADATA_UPDATED
 )
-
-// Deprecated: No use.
-//
-// AvFormatGetProbeScore
-func AvFormatGetProbeScore(s *AVFormatContext) int32 {
-	return (int32)(C.av_format_get_probe_score((*C.struct_AVFormatContext)(s)))
-}
-
-// Deprecated: No use.
-//
-// AvFormatGetVideoCodec
-func AvFormatGetVideoCodec(s *AVFormatContext) *AVCodec {
-	return (*AVCodec)(C.av_format_get_video_codec((*C.struct_AVFormatContext)(s)))
-}
-
-// Deprecated: No use.
-//
-// AvFormatSetVideoCodec
-func AvFormatSetVideoCodec(s *AVFormatContext, c *AVCodec) {
-	C.av_format_set_video_codec((*C.struct_AVFormatContext)(s), (*C.struct_AVCodec)(c))
-}
-
-// Deprecated: No use.
-//
-// AvFormatGetAudioCodec
-func AvFormatGetAudioCodec(s *AVFormatContext) *AVCodec {
-	return (*AVCodec)(C.av_format_get_audio_codec((*C.struct_AVFormatContext)(s)))
-}
-
-// Deprecated: No use.
-//
-// AvFormatSetAudioCodec
-func AvFormatSetAudioCodec(s *AVFormatContext, c *AVCodec) {
-	C.av_format_set_audio_codec((*C.struct_AVFormatContext)(s), (*C.struct_AVCodec)(c))
-}
-
-// Deprecated: No use.
-//
-// AvFormatGetSubtitleCodec
-func AvFormatGetSubtitleCodec(s *AVFormatContext) *AVCodec {
-	return (*AVCodec)(C.av_format_get_subtitle_codec((*C.struct_AVFormatContext)(s)))
-}
-
-// Deprecated: No use.
-//
-// AvFormatSetSubtitleCodec
-func AvFormatSetSubtitleCodec(s *AVFormatContext, c *AVCodec) {
-	C.av_format_set_subtitle_codec((*C.struct_AVFormatContext)(s), (*C.struct_AVCodec)(c))
-}
-
-// Deprecated: No use.
-//
-// AvFormatGetDataCodec
-func AvFormatGetDataCodec(s *AVFormatContext) *AVCodec {
-	return (*AVCodec)(C.av_format_get_data_codec((*C.struct_AVFormatContext)(s)))
-}
-
-// Deprecated: No use.
-//
-// AvFormatSetDataCodec
-func AvFormatSetDataCodec(s *AVFormatContext, c *AVCodec) {
-	C.av_format_set_data_codec((*C.struct_AVFormatContext)(s), (*C.struct_AVCodec)(c))
-}
-
-// Deprecated: No use.
-//
-// AvFormatGetOpaque
-func AvFormatGetOpaque(s *AVFormatContext) unsafe.Pointer {
-	return C.av_format_get_opaque((*C.struct_AVFormatContext)(s))
-}
-
-// Deprecated: No use.
-//
-// AvFormatSetOpaque
-func AvFormatSetOpaque(s *AVFormatContext, opaque CVoidPointer) {
-	C.av_format_set_opaque((*C.struct_AVFormatContext)(s), VoidPointer(opaque))
-}
-
-// Deprecated: No use.
-//
-// AvFormatGetControlMessageCb
-func AvFormatGetControlMessageCb(s *AVFormatContext) AVFormatControlMessageFunc {
-	return (AVFormatControlMessageFunc)(C.av_format_get_control_message_cb((*C.struct_AVFormatContext)(s)))
-}
-
-// Deprecated: No use.
-//
-// AvFormatSetControlMessageCb
-func AvFormatSetControlMessageCb(s *AVFormatContext, callback AVFormatControlMessageFunc) {
-	C.av_format_set_control_message_cb((*C.struct_AVFormatContext)(s), (C.av_format_control_message)(callback))
-}
-
-// Deprecated: No use.
-//
-// AvFormatGetOpenCb
-func AvFormatGetOpenCb(s *AVFormatContext) AVOpenCallbackFunc {
-	return (AVOpenCallbackFunc)(C.av_format_get_open_cb((*C.struct_AVFormatContext)(s)))
-}
-
-// Deprecated: No use.
-//
-// AvFormatSetOpenCb
-func AvFormatSetOpenCb(s *AVFormatContext, callback AVOpenCallbackFunc) {
-	C.av_format_set_open_cb((*C.struct_AVFormatContext)(s), (C.AVOpenCallback)(callback))
-}
 
 // AvFormatInjectGlobalSideData will cause global side data to be injected in the next packet
 // of each stream as well as after any subsequent seek.
@@ -2244,27 +2083,6 @@ func AvFormatLicense() string {
 	return C.GoString(C.avformat_license())
 }
 
-// Deprecated: No use.
-//
-// AvRegisterAll
-func AvRegisterAll() {
-	C.av_register_all()
-}
-
-// Deprecated: No use.
-//
-// AvRegisterInputFormat
-func AvRegisterInputFormat(format *AVInputFormat) {
-	C.av_register_input_format((*C.struct_AVInputFormat)(format))
-}
-
-// Deprecated: No use.
-//
-// AvRegisterOutputFormat
-func AvRegisterOutputFormat(format *AVOutputFormat) {
-	C.av_register_output_format((*C.struct_AVOutputFormat)(format))
-}
-
 // AvFormatNetworkInit does global initialization of network libraries. This is optional,
 // and not recommended anymore.
 func AvFormatNetworkInit() int32 {
@@ -2275,24 +2093,6 @@ func AvFormatNetworkInit() int32 {
 // once for each time you called avformat_network_init.
 func AvFormatNetworkDeinit() int32 {
 	return (int32)(C.avformat_network_deinit())
-}
-
-// Deprecated: No use.
-//
-// AvIformatNext returns the first registered input format if f is NULL,
-// returns the next registered input format after f if f is non-NULL,
-// or NULL if f is the last one.
-func AvIformatNext(f *AVInputFormat) *AVInputFormat {
-	return (*AVInputFormat)(C.av_iformat_next((*C.struct_AVInputFormat)(f)))
-}
-
-// Deprecated: No use.
-//
-// AvOformatNext returns the first registered output format if f is NULL,
-// returns the next registered output format after f if f is non-NULL,
-// or NULL if f is the last one.
-func AvOformatNext(f *AVOutputFormat) *AVOutputFormat {
-	return (*AVOutputFormat)(C.av_oformat_next((*C.struct_AVOutputFormat)(f)))
 }
 
 // AvMuxerIterate iterates over all registered muxers.
@@ -2321,6 +2121,11 @@ func AvFormatGetClass() *AVClass {
 	return (*AVClass)(C.avformat_get_class())
 }
 
+// AvStreamGetClass gets the AVClass for AVStream.
+func AvStreamGetClass() *AVClass {
+	return (*AVClass)(C.av_stream_get_class())
+}
+
 // AvFormatNewStream adds a new stream to a media file.
 func AvFormatNewStream(s *AVFormatContext, c *AVCodec) *AVStream {
 	return (*AVStream)(C.avformat_new_stream((*C.struct_AVFormatContext)(s), (*C.struct_AVCodec)(c)))
@@ -2333,15 +2138,15 @@ func AvStreamAddSideData(st *AVStream, _type AVPacketSideDataType, data *uint8, 
 }
 
 // AvStreamNewSideData allocates new information from stream.
-func AvStreamNewSideData(st *AVStream, _type AVPacketSideDataType, size int32) *uint8 {
+func AvStreamNewSideData(st *AVStream, _type AVPacketSideDataType, size uintptr) *uint8 {
 	return (*uint8)(C.av_stream_new_side_data((*C.struct_AVStream)(st),
-		(C.enum_AVPacketSideDataType)(_type), (C.int)(size)))
+		(C.enum_AVPacketSideDataType)(_type), (C.size_t)(size)))
 }
 
 // AvStreamGetSideData gets side information from stream.
-func AvStreamGetSideData(st *AVStream, _type AVPacketSideDataType, size *int32) *uint8 {
+func AvStreamGetSideData(st *AVStream, _type AVPacketSideDataType, size *uintptr) *uint8 {
 	return (*uint8)(C.av_stream_get_side_data((*C.struct_AVStream)(st),
-		(C.enum_AVPacketSideDataType)(_type), (*C.int)(size)))
+		(C.enum_AVPacketSideDataType)(_type), (*C.size_t)(unsafe.Pointer(size))))
 }
 
 // AvNewProgram
@@ -2396,7 +2201,7 @@ func AvProbeInputBuffer2(pb *AVIOContext, fmt **AVInputFormat,
 		(*C.char)(urlPtr), VoidPointer(logctx), (C.uint)(offset), (C.uint)(maxProbeSize)))
 }
 
-// AvProbeInputBuffer likes AvProbeInputBuffer2() but returns 0 on success
+// AvProbeInputBuffer likes AvProbeInputBuffer2() but returns 0 on success.
 func AvProbeInputBuffer(pb *AVIOContext, fmt **AVInputFormat,
 	url string, logctx CVoidPointer, offset, maxProbeSize uint32) int32 {
 	urlPtr, urlFunc := StringCasting(url)
@@ -2412,13 +2217,6 @@ func AvFormatOpenInput(ps **AVFormatContext, url string, fmt *AVInputFormat, opt
 	defer urlFunc()
 	return (int32)(C.avformat_open_input((**C.struct_AVFormatContext)(unsafe.Pointer(ps)),
 		(*C.char)(urlPtr), (*C.struct_AVInputFormat)(fmt), (**C.struct_AVDictionary)(unsafe.Pointer(options))))
-}
-
-// Deprecated: Use an AVDictionary to pass options to a demuxer.
-//
-// AvDemuxerOpen
-func AvDemuxerOpen(ic *AVFormatContext) int32 {
-	return (int32)(C.av_demuxer_open((*C.struct_AVFormatContext)(ic)))
 }
 
 // AvFormatFindStreamInfo reads packets of a media file to get stream information.
@@ -2634,6 +2432,23 @@ func AvIndexSearchTimestamp(st *AVStream, timestamp int64, flags int32) int32 {
 		(C.int64_t)(timestamp), (C.int)(flags)))
 }
 
+// AvFormatIndexGetEntriesCount gets the index entry count for the given AVStream.
+func AvFormatIndexGetEntriesCount(st *AVStream) int32 {
+	return (int32)(C.avformat_index_get_entries_count((*C.struct_AVStream)(st)))
+}
+
+// AvFormatIndexGetEntry gets the AVIndexEntry corresponding to the given index.
+func AvFormatIndexGetEntry(st *AVStream, idx int32) *AVIndexEntry {
+	return (*AVIndexEntry)(C.avformat_index_get_entry((*C.struct_AVStream)(st), (C.int)(idx)))
+}
+
+// AvFormatIndexGetEntryFromTimestamp gets the AVIndexEntry corresponding to the given timestamp.
+func AvFormatIndexGetEntryFromTimestamp(st *AVStream,
+	wantedTimestamp int64, flags int32) *AVIndexEntry {
+	return (*AVIndexEntry)(C.avformat_index_get_entry_from_timestamp((*C.struct_AVStream)(st),
+		(C.int64_t)(wantedTimestamp), (C.int)(flags)))
+}
+
 // AvAddIndexEntry add an index entry into a sorted list. Update the entry if the list
 // already contains it.
 func AvAddIndexEntry(st *AVStream, pos, timestamp int64, size, distance, flags int32) int32 {
@@ -2772,14 +2587,6 @@ func AvFormatMatchStreamSpecifier(ic *AVFormatContext, st *AVStream, spec string
 // AvFormatQueueAttachedPictures
 func AvFormatQueueAttachedPictures(ic *AVFormatContext) int32 {
 	return (int32)(C.avformat_queue_attached_pictures((*C.struct_AVFormatContext)(ic)))
-}
-
-// Deprecated: No use.
-//
-// AvApplyBitstreamFilters applies a list of bitstream filters to a packet.
-func AvApplyBitstreamFilters(codec *AVCodecContext, pkt *AVPacket, bsfc *AVBitStreamFilterContext) int32 {
-	return (int32)(C.av_apply_bitstream_filters((*C.struct_AVCodecContext)(codec),
-		(*C.struct_AVPacket)(pkt), (*C.struct_AVBitStreamFilterContext)(bsfc)))
 }
 
 // AVTimebaseSource

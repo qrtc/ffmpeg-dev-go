@@ -5,11 +5,10 @@
 package ffmpeg
 
 /*
-#include <libavfilter/version.h>
+#include <libswresample/version_major.h>
 */
 import "C"
 
 const (
-	LIBAVFILTER_VERSION_MINOR = C.LIBAVFILTER_VERSION_MINOR
-	LIBAVFILTER_VERSION_MICRO = C.LIBAVFILTER_VERSION_MICRO
+	LIBSWRESAMPLE_VERSION_MAJOR = C.LIBSWRESAMPLE_VERSION_MAJOR
 )

@@ -31,8 +31,6 @@ typedef int (*avcodec_context_execute2_func)(AVCodecContext *c2, void *arg2, int
 typedef int (*avcodec_context_internal_execute2_func)(struct AVCodecContext *c,
 	avcodec_context_execute2_func func, void *arg2, int *ret, int count);
 
-typedef int (*av_lockmgr_cb)(void **mutex, enum AVLockOp op);
-
 typedef int (*avcodec_parser_init_func)(AVCodecParserContext *s);
 
 typedef int (*avcodec_parser_parse_func)(AVCodecParserContext *s,
@@ -51,39 +49,8 @@ import (
 )
 
 const (
-	// Required number of additionally allocated bytes at the end of the input bitstream for decoding.
-	AV_INPUT_BUFFER_PADDING_SIZE = C.AV_INPUT_BUFFER_PADDING_SIZE
 	// Minimum encoding buffer size.
 	AV_INPUT_BUFFER_MIN_SIZE = C.AV_INPUT_BUFFER_MIN_SIZE
-)
-
-// AVDiscard
-type AVDiscard = C.enum_AVDiscard
-
-const (
-	AVDISCARD_NONE     = AVDiscard(C.AVDISCARD_NONE)
-	AVDISCARD_DEFAULT  = AVDiscard(C.AVDISCARD_DEFAULT)
-	AVDISCARD_NONREF   = AVDiscard(C.AVDISCARD_NONREF)
-	AVDISCARD_BIDIR    = AVDiscard(C.AVDISCARD_BIDIR)
-	AVDISCARD_NONINTRA = AVDiscard(C.AVDISCARD_NONINTRA)
-	AVDISCARD_NONKEY   = AVDiscard(C.AVDISCARD_NONKEY)
-	AVDISCARD_ALL      = AVDiscard(C.AVDISCARD_ALL)
-)
-
-// AVAudioServiceType
-type AVAudioServiceType = C.enum_AVAudioServiceType
-
-const (
-	AV_AUDIO_SERVICE_TYPE_MAIN              = AVAudioServiceType(C.AV_AUDIO_SERVICE_TYPE_MAIN)
-	AV_AUDIO_SERVICE_TYPE_EFFECTS           = AVAudioServiceType(C.AV_AUDIO_SERVICE_TYPE_EFFECTS)
-	AV_AUDIO_SERVICE_TYPE_VISUALLY_IMPAIRED = AVAudioServiceType(C.AV_AUDIO_SERVICE_TYPE_VISUALLY_IMPAIRED)
-	AV_AUDIO_SERVICE_TYPE_HEARING_IMPAIRED  = AVAudioServiceType(C.AV_AUDIO_SERVICE_TYPE_HEARING_IMPAIRED)
-	AV_AUDIO_SERVICE_TYPE_DIALOGUE          = AVAudioServiceType(C.AV_AUDIO_SERVICE_TYPE_DIALOGUE)
-	AV_AUDIO_SERVICE_TYPE_COMMENTARY        = AVAudioServiceType(C.AV_AUDIO_SERVICE_TYPE_COMMENTARY)
-	AV_AUDIO_SERVICE_TYPE_EMERGENCY         = AVAudioServiceType(C.AV_AUDIO_SERVICE_TYPE_EMERGENCY)
-	AV_AUDIO_SERVICE_TYPE_VOICE_OVER        = AVAudioServiceType(C.AV_AUDIO_SERVICE_TYPE_VOICE_OVER)
-	AV_AUDIO_SERVICE_TYPE_KARAOKE           = AVAudioServiceType(C.AV_AUDIO_SERVICE_TYPE_KARAOKE)
-	AV_AUDIO_SERVICE_TYPE_NB                = AVAudioServiceType(C.AV_AUDIO_SERVICE_TYPE_NB)
 )
 
 // RcOverride
@@ -92,18 +59,21 @@ type RcOverride C.struct_RcOverride
 // These flags can be passed in AVCodecContext.flags before initialization.
 // Note: Not everything is supported yet.
 const (
-	AV_CODEC_FLAG_UNALIGNED            = C.AV_CODEC_FLAG_UNALIGNED
-	AV_CODEC_FLAG_QSCALE               = C.AV_CODEC_FLAG_QSCALE
-	AV_CODEC_FLAG_4MV                  = C.AV_CODEC_FLAG_4MV
-	AV_CODEC_FLAG_OUTPUT_CORRUPT       = C.AV_CODEC_FLAG_OUTPUT_CORRUPT
-	AV_CODEC_FLAG_QPEL                 = C.AV_CODEC_FLAG_QPEL
-	AV_CODEC_FLAG_DROPCHANGED          = C.AV_CODEC_FLAG_DROPCHANGED
-	AV_CODEC_FLAG_PASS1                = C.AV_CODEC_FLAG_PASS1
-	AV_CODEC_FLAG_PASS2                = C.AV_CODEC_FLAG_PASS2
-	AV_CODEC_FLAG_LOOP_FILTER          = C.AV_CODEC_FLAG_LOOP_FILTER
-	AV_CODEC_FLAG_GRAY                 = C.AV_CODEC_FLAG_GRAY
-	AV_CODEC_FLAG_PSNR                 = C.AV_CODEC_FLAG_PSNR
-	AV_CODEC_FLAG_TRUNCATED            = C.AV_CODEC_FLAG_TRUNCATED
+	AV_CODEC_FLAG_UNALIGNED      = C.AV_CODEC_FLAG_UNALIGNED
+	AV_CODEC_FLAG_QSCALE         = C.AV_CODEC_FLAG_QSCALE
+	AV_CODEC_FLAG_4MV            = C.AV_CODEC_FLAG_4MV
+	AV_CODEC_FLAG_OUTPUT_CORRUPT = C.AV_CODEC_FLAG_OUTPUT_CORRUPT
+	AV_CODEC_FLAG_QPEL           = C.AV_CODEC_FLAG_QPEL
+	AV_CODEC_FLAG_DROPCHANGED    = C.AV_CODEC_FLAG_DROPCHANGED
+	AV_CODEC_FLAG_PASS1          = C.AV_CODEC_FLAG_PASS1
+	AV_CODEC_FLAG_PASS2          = C.AV_CODEC_FLAG_PASS2
+	AV_CODEC_FLAG_LOOP_FILTER    = C.AV_CODEC_FLAG_LOOP_FILTER
+	AV_CODEC_FLAG_GRAY           = C.AV_CODEC_FLAG_GRAY
+	AV_CODEC_FLAG_PSNR           = C.AV_CODEC_FLAG_PSNR
+
+	// Deprecated: Use codec parsers for packetizing input.
+	AV_CODEC_FLAG_TRUNCATED = C.AV_CODEC_FLAG_TRUNCATED
+
 	AV_CODEC_FLAG_INTERLACED_DCT       = C.AV_CODEC_FLAG_INTERLACED_DCT
 	AV_CODEC_FLAG_LOW_DELAY            = C.AV_CODEC_FLAG_LOW_DELAY
 	AV_CODEC_FLAG_GLOBAL_HEADER        = C.AV_CODEC_FLAG_GLOBAL_HEADER
@@ -131,193 +101,6 @@ const (
 	AV_CODEC_EXPORT_DATA_VIDEO_ENC_PARAMS = C.AV_CODEC_EXPORT_DATA_VIDEO_ENC_PARAMS
 	AV_CODEC_EXPORT_DATA_FILM_GRAIN       = C.AV_CODEC_EXPORT_DATA_FILM_GRAIN
 )
-
-// Pan Scan area.
-// This specifies the area which should be displayed.
-// Note there may be multiple such areas for one frame.
-type AVPanScan C.struct_AVPanScan
-
-// GetId gets `AVPanScan.id` value.
-func (psn *AVPanScan) GetId() int32 {
-	return (int32)(psn.id)
-}
-
-// SetId sets `AVPanScan.id` value.
-func (psn *AVPanScan) SetId(v int32) {
-	psn.id = (C.int)(v)
-}
-
-// GetIdAddr gets `AVPanScan.id` address.
-func (psn *AVPanScan) GetIdAddr() *int32 {
-	return (*int32)(&psn.id)
-}
-
-// GetWidth gets `AVPanScan.width` value.
-func (psn *AVPanScan) GetWidth() int32 {
-	return (int32)(psn.width)
-}
-
-// SetWidth sets `AVPanScan.width` value.
-func (psn *AVPanScan) SetWidth(v int32) {
-	psn.width = (C.int)(v)
-}
-
-// GetWidthAddr gets `AVPanScan.width` address.
-func (psn *AVPanScan) GetWidthAddr() *int32 {
-	return (*int32)(&psn.width)
-}
-
-// GetHeight gets `AVPanScan.height` value.
-func (psn *AVPanScan) GetHeight() int32 {
-	return (int32)(psn.height)
-}
-
-// SetHeight sets `AVPanScan.height` value.
-func (psn *AVPanScan) SetHeight(v int32) {
-	psn.height = (C.int)(v)
-}
-
-// GetHeightAddr gets `AVPanScan.height` address.
-func (psn *AVPanScan) GetHeightAddr() *int32 {
-	return (*int32)(&psn.height)
-}
-
-// GetPosition gets `AVPanScan.position` value.
-func (psn *AVPanScan) GetPosition() (v [][]int16) {
-	for i := 0; i < 3; i++ {
-		v = append(v, unsafe.Slice((*int16)(&psn.position[i][0]), 2))
-	}
-	return v
-}
-
-// SetPosition sets `AVPanScan.position` value.
-func (psn *AVPanScan) SetPosition(v [][]int16) {
-	for i := 0; i < FFMIN(len(v), 3); i++ {
-		for j := 0; j < FFMIN(len(v[i]), 2); j++ {
-			psn.position[i][j] = (C.int16_t)(v[i][j])
-		}
-	}
-}
-
-// GetPositionAddr gets `AVPanScan.position` address.
-func (psn *AVPanScan) GetPositionAddr() **int16 {
-	return (**int16)(unsafe.Pointer(&psn.position))
-}
-
-// This structure describes the bitrate properties of an encoded bitstream. It
-// roughly corresponds to a subset the VBV parameters for MPEG-2 or HRD
-// parameters for H.264/HEVC.
-type AVCPBProperties C.struct_AVCPBProperties
-
-// GetMaxBitrate gets `AVCPBProperties.max_bitrate` value.
-func (cpbp *AVCPBProperties) GetMaxBitrate() int32 {
-	return (int32)(cpbp.max_bitrate)
-}
-
-// SetMaxBitrate sets `AVCPBProperties.max_bitrate` value.
-func (cpbp *AVCPBProperties) SetMaxBitrate(v int32) {
-	cpbp.max_bitrate = (C.int)(v)
-}
-
-// GetMaxBitrateAddr gets `AVCPBProperties.max_bitrate` address.
-func (cpbp *AVCPBProperties) GetMaxBitrateAddr() *int32 {
-	return (*int32)(&cpbp.max_bitrate)
-}
-
-// GetMinBitrate gets `AVCPBProperties.min_bitrate` value.
-func (cpbp *AVCPBProperties) GetMinBitrate() int32 {
-	return (int32)(cpbp.min_bitrate)
-}
-
-// SetMinBitrate sets `AVCPBProperties.min_bitrate` value.
-func (cpbp *AVCPBProperties) SetMinBitrate(v int32) {
-	cpbp.min_bitrate = (C.int)(v)
-}
-
-// GetMinBitrateAddr gets `AVCPBProperties.min_bitrate` address.
-func (cpbp *AVCPBProperties) GetMinBitrateAddr() *int32 {
-	return (*int32)(&cpbp.min_bitrate)
-}
-
-// GetAvgBitrate gets `AVCPBProperties.avg_bitrate` value.
-func (cpbp *AVCPBProperties) GetAvgBitrate() int32 {
-	return (int32)(cpbp.avg_bitrate)
-}
-
-// SetAvgBitrate sets `AVCPBProperties.avg_bitrate` value.
-func (cpbp *AVCPBProperties) SetAvgBitrate(v int32) {
-	cpbp.avg_bitrate = (C.int)(v)
-}
-
-// GetAvgBitrateAddr gets `AVCPBProperties.avg_bitrate` address.
-func (cpbp *AVCPBProperties) GetAvgBitrateAddr() *int32 {
-	return (*int32)(&cpbp.avg_bitrate)
-}
-
-// GetBufferSize gets `AVCPBProperties.buffer_size` value.
-func (cpbp *AVCPBProperties) GetBufferSize() int32 {
-	return (int32)(cpbp.buffer_size)
-}
-
-// SetBufferSize sets `AVCPBProperties.buffer_size` value.
-func (cpbp *AVCPBProperties) SetBufferSize(v int32) {
-	cpbp.buffer_size = (C.int)(v)
-}
-
-// GetBufferSizeAddr gets `AVCPBProperties.buffer_size` address.
-func (cpbp *AVCPBProperties) GetBufferSizeAddr() *int32 {
-	return (*int32)(&cpbp.buffer_size)
-}
-
-// GetVbvDelay gets `AVCPBProperties.vbv_delay` value.
-func (cpbp *AVCPBProperties) GetVbvDelay() uint64 {
-	return (uint64)(cpbp.vbv_delay)
-}
-
-// SetVbvDelay sets `AVCPBProperties.vbv_delay` value.
-func (cpbp *AVCPBProperties) SetVbvDelay(v uint64) {
-	cpbp.vbv_delay = (C.uint64_t)(v)
-}
-
-// GetVbvDelayAddr gets `AVCPBProperties.vbv_delay` address.
-func (cpbp *AVCPBProperties) GetVbvDelayAddr() *uint64 {
-	return (*uint64)(&cpbp.vbv_delay)
-}
-
-// This structure supplies correlation between a packet timestamp and a wall clock
-// production time. The definition follows the Producer Reference Time ('prft')
-// as defined in ISO/IEC 14496-12
-type AVProducerReferenceTime C.struct_AVProducerReferenceTime
-
-// GetWallclock gets `AVProducerReferenceTime.wallclock` value.
-func (prt *AVProducerReferenceTime) GetWallclock() int64 {
-	return (int64)(prt.wallclock)
-}
-
-// SetWallclock sets `AVProducerReferenceTime.wallclock` value.
-func (prt *AVProducerReferenceTime) SetWallclock(v int64) {
-	prt.wallclock = (C.int64_t)(v)
-}
-
-// GetWallclockAddr gets `AVProducerReferenceTime.wallclock` address.
-func (prt *AVProducerReferenceTime) GetWallclockAddr() *int64 {
-	return (*int64)(&prt.wallclock)
-}
-
-// GetFlags gets `AVProducerReferenceTime.flags` value.
-func (prt *AVProducerReferenceTime) GetFlags() int32 {
-	return (int32)(prt.flags)
-}
-
-// SetFlags sets `AVProducerReferenceTime.flags` value.
-func (prt *AVProducerReferenceTime) SetFlags(v int32) {
-	prt.flags = (C.int)(v)
-}
-
-// GetFlagsAddr gets `AVProducerReferenceTime.flags` address.
-func (prt *AVProducerReferenceTime) GetFlagsAddr() *int32 {
-	return (*int32)(&prt.flags)
-}
 
 const (
 	AV_GET_BUFFER_FLAG_REF        = C.AV_GET_BUFFER_FLAG_REF
@@ -771,27 +554,6 @@ func (avctx *AVCodecContext) GetBQuantFactorAddr() *float32 {
 	return (*float32)(&avctx.b_quant_factor)
 }
 
-// Deprecated: Use encoder private options instead.
-//
-// GetBFrameStrategy gets `AVCodecContext.b_frame_strategy` value.
-func (avctx *AVCodecContext) GetBFrameStrategy() int32 {
-	return (int32)(avctx.b_frame_strategy)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// SetBFrameStrategy sets `AVCodecContext.b_frame_strategy` value.
-func (avctx *AVCodecContext) SetBFrameStrategy(v int32) {
-	avctx.b_frame_strategy = (C.int)(v)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// GetBFrameStrategyAddr gets `AVCodecContext.b_frame_strategy` address.
-func (avctx *AVCodecContext) GetBFrameStrategyAddr() *int32 {
-	return (*int32)(&avctx.b_frame_strategy)
-}
-
 // GetBQuantOffset gets `AVCodecContext.b_quant_offset` value.
 func (avctx *AVCodecContext) GetBQuantOffset() float32 {
 	return (float32)(avctx.b_quant_offset)
@@ -820,27 +582,6 @@ func (avctx *AVCodecContext) SetHasBFrames(v int32) {
 // GetHasBFramesAddr gets `AVCodecContext.has_b_frames` address.
 func (avctx *AVCodecContext) GetHasBFramesAddr() *int32 {
 	return (*int32)(&avctx.has_b_frames)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// GetMpegQuant gets `AVCodecContext.mpeg_quant` value.
-func (avctx *AVCodecContext) GetMpegQuant() int32 {
-	return (int32)(avctx.mpeg_quant)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// SetMpegQuant sets `AVCodecContext.mpeg_quant` value.
-func (avctx *AVCodecContext) SetMpegQuant(v int32) {
-	avctx.mpeg_quant = (C.int)(v)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// GetMpegQuantAddr gets `AVCodecContext.mpeg_quant` address.
-func (avctx *AVCodecContext) GetMpegQuantAddr() *int32 {
-	return (*int32)(&avctx.mpeg_quant)
 }
 
 // GetIQuantFactor gets `AVCodecContext.i_quant_factor` value.
@@ -962,33 +703,6 @@ func (avctx *AVCodecContext) SetSliceCount(v int32) {
 func (avctx *AVCodecContext) GetSliceCountAddr() *int32 {
 	return (*int32)(&avctx.slice_count)
 }
-
-// Deprecated: Use encoder private options instead.
-//
-// GetPredictionMethod gets `AVCodecContext.prediction_method` value.
-func (avctx *AVCodecContext) GetPredictionMethod() int32 {
-	return (int32)(avctx.prediction_method)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// SetPredictionMethod sets `AVCodecContext.prediction_method` value.
-func (avctx *AVCodecContext) SetPredictionMethod(v int32) {
-	avctx.prediction_method = (C.int)(v)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// GetPredictionMethodAddr gets `AVCodecContext.prediction_method` address.
-func (avctx *AVCodecContext) GetPredictionMethodAddr() *int32 {
-	return (*int32)(&avctx.prediction_method)
-}
-
-const (
-	FF_PRED_LEFT   = int32(C.FF_PRED_LEFT)
-	FF_PRED_PLANE  = int32(C.FF_PRED_PLANE)
-	FF_PRED_MEDIAN = int32(C.FF_PRED_MEDIAN)
-)
 
 // GetSliceOffset gets `AVCodecContext.slice_offset` value.
 func (avctx *AVCodecContext) GetSliceOffset() *int32 {
@@ -1130,27 +844,6 @@ func (avctx *AVCodecContext) GetLastPredictorCountAddr() *int32 {
 	return (*int32)(&avctx.last_predictor_count)
 }
 
-// Deprecated: Use encoder private options instead.
-//
-// GetPreMe gets `AVCodecContext.pre_me` value.
-func (avctx *AVCodecContext) GetPreMe() int32 {
-	return (int32)(avctx.pre_me)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// SetPreMe sets `AVCodecContext.pre_me` value.
-func (avctx *AVCodecContext) SetPreMe(v int32) {
-	avctx.pre_me = (C.int)(v)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// GetPreMeAddr gets `AVCodecContext.pre_me` address.
-func (avctx *AVCodecContext) GetPreMeAddr() *int32 {
-	return (*int32)(&avctx.pre_me)
-}
-
 // GetMePreCmp gets `AVCodecContext.me_pre_cmp` value.
 func (avctx *AVCodecContext) GetMePreCmp() int32 {
 	return (int32)(avctx.me_pre_cmp)
@@ -1268,48 +961,6 @@ func (avctx *AVCodecContext) GetInterMatrixAddr() **uint16 {
 	return (**uint16)(unsafe.Pointer(&avctx.inter_matrix))
 }
 
-// Deprecated: Use encoder private options instead.
-//
-// GetScenechangeThreshold gets `AVCodecContext.scenechange_threshold` value.
-func (avctx *AVCodecContext) GetScenechangeThreshold() int32 {
-	return (int32)(avctx.scenechange_threshold)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// SetScenechangeThreshold sets `AVCodecContext.scenechange_threshold` value.
-func (avctx *AVCodecContext) SetScenechangeThreshold(v int32) {
-	avctx.scenechange_threshold = (C.int)(v)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// GetScenechangeThresholdAddr gets `AVCodecContext.scenechange_threshold` address.
-func (avctx *AVCodecContext) GetScenechangeThresholdAddr() *int32 {
-	return (*int32)(&avctx.scenechange_threshold)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// GetNoiseReduction gets `AVCodecContext.noise_reduction` value.
-func (avctx *AVCodecContext) GetNoiseReduction() int32 {
-	return (int32)(avctx.noise_reduction)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// SetNoiseReduction sets `AVCodecContext.noise_reduction` value.
-func (avctx *AVCodecContext) SetNoiseReduction(v int32) {
-	avctx.noise_reduction = (C.int)(v)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// GetNoiseReductionAddr gets `AVCodecContext.noise_reduction` address.
-func (avctx *AVCodecContext) GetNoiseReductionAddr() *int32 {
-	return (*int32)(&avctx.noise_reduction)
-}
-
 // GetIntraDcPrecision gets `AVCodecContext.intra_dc_precision` value.
 func (avctx *AVCodecContext) GetIntraDcPrecision() int32 {
 	return (int32)(avctx.intra_dc_precision)
@@ -1385,27 +1036,6 @@ func (avctx *AVCodecContext) GetMbLmaxAddr() *int32 {
 	return (*int32)(&avctx.mb_lmax)
 }
 
-// Deprecated: Use encoder private options instead.
-//
-// GetMePenaltyCompensation gets `AVCodecContext.me_penalty_compensation` value.
-func (avctx *AVCodecContext) GetMePenaltyCompensation() int32 {
-	return (int32)(avctx.me_penalty_compensation)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// SetMePenaltyCompensation sets `AVCodecContext.me_penalty_compensation` value.
-func (avctx *AVCodecContext) SetMePenaltyCompensation(v int32) {
-	avctx.me_penalty_compensation = (C.int)(v)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// GetMePenaltyCompensationAddr gets `AVCodecContext.me_penalty_compensation` address.
-func (avctx *AVCodecContext) GetMePenaltyCompensationAddr() *int32 {
-	return (*int32)(&avctx.me_penalty_compensation)
-}
-
 // GetBidirRefine gets `AVCodecContext.bidir_refine` value.
 func (avctx *AVCodecContext) GetBidirRefine() int32 {
 	return (int32)(avctx.bidir_refine)
@@ -1419,27 +1049,6 @@ func (avctx *AVCodecContext) SetBidirRefine(v int32) {
 // GetBidirRefineAddr gets `AVCodecContext.bidir_refine` address.
 func (avctx *AVCodecContext) GetBidirRefineAddr() *int32 {
 	return (*int32)(&avctx.bidir_refine)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// GetBrdScale gets `AVCodecContext.brd_scale` value.
-func (avctx *AVCodecContext) GetBrdScale() int32 {
-	return (int32)(avctx.brd_scale)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// SetBrdScale sets `AVCodecContext.brd_scale` value.
-func (avctx *AVCodecContext) SetBrdScale(v int32) {
-	avctx.brd_scale = (C.int)(v)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// GetBrdScaleAddr gets `AVCodecContext.brd_scale` address.
-func (avctx *AVCodecContext) GetBrdScaleAddr() *int32 {
-	return (*int32)(&avctx.brd_scale)
 }
 
 // GetKeyintMin gets `AVCodecContext.keyint_min` value.
@@ -1472,27 +1081,6 @@ func (avctx *AVCodecContext) GetRefsAddr() *int32 {
 	return (*int32)(&avctx.refs)
 }
 
-// Deprecated: Use encoder private options instead.
-//
-// GetChromaoffset gets `AVCodecContext.chromaoffset` value.
-func (avctx *AVCodecContext) GetChromaoffset() int32 {
-	return (int32)(avctx.chromaoffset)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// SetChromaoffset sets `AVCodecContext.chromaoffset` value.
-func (avctx *AVCodecContext) SetChromaoffset(v int32) {
-	avctx.chromaoffset = (C.int)(v)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// GetChromaoffsetAddr gets `AVCodecContext.chromaoffset` address.
-func (avctx *AVCodecContext) GetChromaoffsetAddr() *int32 {
-	return (*int32)(&avctx.chromaoffset)
-}
-
 // GetMv0Threshold gets `AVCodecContext.mv0_threshold` value.
 func (avctx *AVCodecContext) GetMv0Threshold() int32 {
 	return (int32)(avctx.mv0_threshold)
@@ -1506,27 +1094,6 @@ func (avctx *AVCodecContext) SetMv0Threshold(v int32) {
 // GetMv0ThresholdAddr gets `AVCodecContext.mv0_threshold` address.
 func (avctx *AVCodecContext) GetMv0ThresholdAddr() *int32 {
 	return (*int32)(&avctx.mv0_threshold)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// GetBSensitivity gets `AVCodecContext.b_sensitivity` value.
-func (avctx *AVCodecContext) GetBSensitivity() int32 {
-	return (int32)(avctx.b_sensitivity)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// SetBSensitivity sets `AVCodecContext.b_sensitivity` value.
-func (avctx *AVCodecContext) SetBSensitivity(v int32) {
-	avctx.b_sensitivity = (C.int)(v)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// GetBSensitivityAddr gets `AVCodecContext.b_sensitivity` address.
-func (avctx *AVCodecContext) GetBSensitivityAddr() *int32 {
-	return (*int32)(&avctx.b_sensitivity)
 }
 
 // GetColorPrimaries gets `AVCodecContext.color_primaries` value.
@@ -1739,16 +1306,22 @@ func (avctx *AVCodecContext) GetCutoffAddr() *int32 {
 	return (*int32)(&avctx.cutoff)
 }
 
+// Deprecated: No use.
+//
 // GetChannelLayout gets `AVCodecContext.channel_layout` value.
 func (avctx *AVCodecContext) GetChannelLayout() uint64 {
 	return (uint64)(avctx.channel_layout)
 }
 
+// Deprecated: No use.
+//
 // SetChannelLayout sets `AVCodecContext.channel_layout` value.
 func (avctx *AVCodecContext) SetChannelLayout(v uint64) {
 	avctx.channel_layout = (C.uint64_t)(v)
 }
 
+// Deprecated: No use.
+//
 // GetChannelLayoutAddr gets `AVCodecContext.channel_layout` address.
 func (avctx *AVCodecContext) GetChannelLayoutAddr() *uint64 {
 	return (*uint64)(&avctx.channel_layout)
@@ -1815,27 +1388,6 @@ func (avctx *AVCodecContext) SetGetBuffer2(v AVCodecContextGetBuffer2Func) {
 // GetGetBuffer2Addr gets `AVCodecContext.get_buffer2` address.
 func (avctx *AVCodecContext) GetGetBuffer2Addr() *AVCodecContextGetBuffer2Func {
 	return (*AVCodecContextGetBuffer2Func)(&avctx.get_buffer2)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// GetRefcountedFrames gets `AVCodecContext.refcounted_frames` value.
-func (avctx *AVCodecContext) GetRefcountedFrames() int32 {
-	return (int32)(avctx.refcounted_frames)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// SetRefcountedFrames sets `AVCodecContext.refcounted_frames` value.
-func (avctx *AVCodecContext) SetRefcountedFrames(v int32) {
-	avctx.refcounted_frames = (C.int)(v)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// GetRefcountedFramesAddr gets `AVCodecContext.refcounted_frames` address.
-func (avctx *AVCodecContext) GetRefcountedFramesAddr() *int32 {
-	return (*int32)(&avctx.refcounted_frames)
 }
 
 // GetQcompress gets `AVCodecContext.qcompress` value.
@@ -2033,139 +1585,6 @@ func (avctx *AVCodecContext) GetRcInitialBufferOccupancyAddr() *int32 {
 	return (*int32)(&avctx.rc_initial_buffer_occupancy)
 }
 
-const (
-	FF_CODER_TYPE_VLC = int32(C.FF_CODER_TYPE_VLC)
-	FF_CODER_TYPE_AC  = int32(C.FF_CODER_TYPE_AC)
-	FF_CODER_TYPE_RAW = int32(C.FF_CODER_TYPE_RAW)
-	FF_CODER_TYPE_RLE = int32(C.FF_CODER_TYPE_RLE)
-)
-
-// Deprecated: Use encoder private options instead.
-//
-// GetCoderType gets `AVCodecContext.codertype` value.
-func (avctx *AVCodecContext) GetCoderType() int32 {
-	return (int32)(avctx.coder_type)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// SetCoderType sets `AVCodecContext.codertype` value.
-func (avctx *AVCodecContext) SetCoderType(v int32) {
-	avctx.coder_type = (C.int)(v)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// GetCoderTypeAddr gets `AVCodecContext.codertype` address.
-func (avctx *AVCodecContext) GetCoderTypeAddr() *int32 {
-	return (*int32)(&avctx.coder_type)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// GetContextModel gets `AVCodecContext.context_model` value.
-func (avctx *AVCodecContext) GetContextModel() int32 {
-	return (int32)(avctx.context_model)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// SetContextModel sets `AVCodecContext.context_model` value.
-func (avctx *AVCodecContext) SetContextModel(v int32) {
-	avctx.context_model = (C.int)(v)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// GetContextModelAddr gets `AVCodecContext.context_model` address.
-func (avctx *AVCodecContext) GetContextModelAddr() *int32 {
-	return (*int32)(&avctx.context_model)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// GetFrameSkipThreshold gets `AVCodecContext.frame_skip_threshold` value.
-func (avctx *AVCodecContext) GetFrameSkipThreshold() int32 {
-	return (int32)(avctx.frame_skip_threshold)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// SetFrameSkipThreshold sets `AVCodecContext.frame_skip_threshold` value.
-func (avctx *AVCodecContext) SetFrameSkipThreshold(v int32) {
-	avctx.frame_skip_threshold = (C.int)(v)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// GetFrameSkipThresholdAddr gets `AVCodecContext.frame_skip_threshold` address.
-func (avctx *AVCodecContext) GetFrameSkipThresholdAddr() *int32 {
-	return (*int32)(&avctx.frame_skip_threshold)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// GetFrameSkipFactor gets `AVCodecContext.frame_skip_factor` value.
-func (avctx *AVCodecContext) GetFrameSkipFactor() int32 {
-	return (int32)(avctx.frame_skip_factor)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// SetFrameSkipFactor sets `AVCodecContext.frame_skip_factor` value.
-func (avctx *AVCodecContext) SetFrameSkipFactor(v int32) {
-	avctx.frame_skip_factor = (C.int)(v)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// GetFrameSkipFactorAddr gets `AVCodecContext.frame_skip_factor` address.
-func (avctx *AVCodecContext) GetFrameSkipFactorAddr() *int32 {
-	return (*int32)(&avctx.frame_skip_factor)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// GetFrameSkipExp gets `AVCodecContext.frame_skip_exp` value.
-func (avctx *AVCodecContext) GetFrameSkipExp() int32 {
-	return (int32)(avctx.frame_skip_exp)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// SetFrameSkipExp sets `AVCodecContext.frame_skip_exp` value.
-func (avctx *AVCodecContext) SetFrameSkipExp(v int32) {
-	avctx.frame_skip_exp = (C.int)(v)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// GetFrameSkipExpAddr gets `AVCodecContext.frame_skip_exp` address.
-func (avctx *AVCodecContext) GetFrameSkipExpAddr() *int32 {
-	return (*int32)(&avctx.frame_skip_exp)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// GetFrameSkipCmp gets `AVCodecContext.frame_skip_cmp` value.
-func (avctx *AVCodecContext) GetFrameSkipCmp() int32 {
-	return (int32)(avctx.frame_skip_cmp)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// SetFrameSkipCmp sets `AVCodecContext.frame_skip_cmp` value.
-func (avctx *AVCodecContext) SetFrameSkipCmp(v int32) {
-	avctx.frame_skip_cmp = (C.int)(v)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// GetFrameSkipCmpAddr gets `AVCodecContext.frame_skip_cmp` address.
-func (avctx *AVCodecContext) GetFrameSkipCmpAddr() *int32 {
-	return (*int32)(&avctx.frame_skip_cmp)
-}
-
 // GetTrellis gets `AVCodecContext.trellis` value.
 func (avctx *AVCodecContext) GetTrellis() int32 {
 	return (int32)(avctx.trellis)
@@ -2179,305 +1598,6 @@ func (avctx *AVCodecContext) SetTrellis(v int32) {
 // GetTrellisAddr gets `AVCodecContext.trellis` address.
 func (avctx *AVCodecContext) GetTrellisAddr() *int32 {
 	return (*int32)(&avctx.trellis)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// GetMinPredictionOrder gets `AVCodecContext.min_prediction_order` value.
-func (avctx *AVCodecContext) GetMinPredictionOrder() int32 {
-	return (int32)(avctx.min_prediction_order)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// SetMinPredictionOrder sets `AVCodecContext.min_prediction_order` value.
-func (avctx *AVCodecContext) SetMinPredictionOrder(v int32) {
-	avctx.min_prediction_order = (C.int)(v)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// GetMinPredictionOrderAddr gets `AVCodecContext.min_prediction_order` address.
-func (avctx *AVCodecContext) GetMinPredictionOrderAddr() *int32 {
-	return (*int32)(&avctx.min_prediction_order)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// GetMaxPredictionOrder gets `AVCodecContext.max_prediction_order` value.
-func (avctx *AVCodecContext) GetMaxPredictionOrder() int32 {
-	return (int32)(avctx.max_prediction_order)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// SetMaxPredictionOrder sets `AVCodecContext.max_prediction_order` value.
-func (avctx *AVCodecContext) SetMaxPredictionOrder(v int32) {
-	avctx.max_prediction_order = (C.int)(v)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// GetMaxPredictionOrderAddr gets `AVCodecContext.max_prediction_order` address.
-func (avctx *AVCodecContext) GetMaxPredictionOrderAddr() *int32 {
-	return (*int32)(&avctx.max_prediction_order)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// GetTimecodeFrameStart gets `AVCodecContext.timecode_frame_start` value.
-func (avctx *AVCodecContext) GetTimecodeFrameStart() int64 {
-	return (int64)(avctx.timecode_frame_start)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// SetTimecodeFrameStart sets `AVCodecContext.timecode_frame_start` value.
-func (avctx *AVCodecContext) SetTimecodeFrameStart(v int64) {
-	avctx.timecode_frame_start = (C.int64_t)(v)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// GetTimecodeFrameStartAddr gets `AVCodecContext.timecode_frame_start` address.
-func (avctx *AVCodecContext) GetTimecodeFrameStartAddr() *int64 {
-	return (*int64)(&avctx.timecode_frame_start)
-}
-
-// Deprecated: Unused.
-//
-// typedef void (*avcodec_context_rtp_callback_func)(struct AVCodecContext *avctx, void *data, int size, int mb_nb);
-type AvCodecContextRtpCallbackFunc = C.avcodec_context_rtp_callback_func
-
-// Deprecated: Unused.
-//
-// GetRtpCallback gets `AVCodecContext.rtp_callback` value.
-func (avctx *AVCodecContext) GetRtpCallback() AvCodecContextRtpCallbackFunc {
-	return (AvCodecContextRtpCallbackFunc)(avctx.rtp_callback)
-}
-
-// Deprecated: Unused.
-//
-// SetRtpCallback sets `AVCodecContext.rtp_callback` value.
-func (avctx *AVCodecContext) SetRtpCallback(v AvCodecContextRtpCallbackFunc) {
-	avctx.rtp_callback = (C.avcodec_context_rtp_callback_func)(v)
-}
-
-// Deprecated: Unused.
-//
-// GetRtpCallbackAddr gets `AVCodecContext.rtp_callback` address.
-func (avctx *AVCodecContext) GetRtpCallbackAddr() *AvCodecContextRtpCallbackFunc {
-	return (*AvCodecContextRtpCallbackFunc)(&avctx.rtp_callback)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// GetRtpPayloadSize gets `AVCodecContext.rtp_payload_size` value.
-func (avctx *AVCodecContext) GetRtpPayloadSize() int32 {
-	return (int32)(avctx.rtp_payload_size)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// SetRtpPayloadSize sets `AVCodecContext.rtp_payload_size` value.
-func (avctx *AVCodecContext) SetRtpPayloadSize(v int32) {
-	avctx.rtp_payload_size = (C.int)(v)
-}
-
-// Deprecated: Use encoder private options instead.
-//
-// GetRtpPayloadSizeAddr gets `AVCodecContext.rtp_payload_size` address.
-func (avctx *AVCodecContext) GetRtpPayloadSizeAddr() *int32 {
-	return (*int32)(&avctx.rtp_payload_size)
-}
-
-// Deprecated: No use.
-//
-// GetMvBits gets `AVCodecContext.mv_bits` value.
-func (avctx *AVCodecContext) GetMvBits() int32 {
-	return (int32)(avctx.mv_bits)
-}
-
-// Deprecated: No use.
-//
-// SetMvBits sets `AVCodecContext.mv_bits` value.
-func (avctx *AVCodecContext) SetMvBits(v int32) {
-	avctx.mv_bits = (C.int)(v)
-}
-
-// Deprecated: No use.
-//
-// GetMvBitsAddr gets `AVCodecContext.mv_bits` address.
-func (avctx *AVCodecContext) GetMvBitsAddr() *int32 {
-	return (*int32)(&avctx.mv_bits)
-}
-
-// Deprecated: No use.
-//
-// GetHeaderBits gets `AVCodecContext.header_bits` value.
-func (avctx *AVCodecContext) GetHeaderBits() int32 {
-	return (int32)(avctx.header_bits)
-}
-
-// Deprecated: No use.
-//
-// SetHeaderBits sets `AVCodecContext.header_bits` value.
-func (avctx *AVCodecContext) SetHeaderBits(v int32) {
-	avctx.header_bits = (C.int)(v)
-}
-
-// Deprecated: No use.
-//
-// GetHeaderBitsAddr gets `AVCodecContext.header_bits` address.
-func (avctx *AVCodecContext) GetHeaderBitsAddr() *int32 {
-	return (*int32)(&avctx.header_bits)
-}
-
-// Deprecated: No use.
-//
-// GetITexBits gets `AVCodecContext.i_tex_bits` value.
-func (avctx *AVCodecContext) GetITexBits() int32 {
-	return (int32)(avctx.i_tex_bits)
-}
-
-// Deprecated: No use.
-//
-// SetITexBits sets `AVCodecContext.i_tex_bits` value.
-func (avctx *AVCodecContext) SetITexBits(v int32) {
-	avctx.i_tex_bits = (C.int)(v)
-}
-
-// Deprecated: No use.
-//
-// GetITexBitsAddr gets `AVCodecContext.i_tex_bits` address.
-func (avctx *AVCodecContext) GetITexBitsAddr() *int32 {
-	return (*int32)(&avctx.i_tex_bits)
-}
-
-// Deprecated: No use.
-//
-// GetPTexBits gets `AVCodecContext.p_tex_bits` value.
-func (avctx *AVCodecContext) GetPTexBits() int32 {
-	return (int32)(avctx.p_tex_bits)
-}
-
-// Deprecated: No use.
-//
-// SetPTexBits sets `AVCodecContext.p_tex_bits` value.
-func (avctx *AVCodecContext) SetPTexBits(v int32) {
-	avctx.p_tex_bits = (C.int)(v)
-}
-
-// Deprecated: No use.
-//
-// GetPTexBitsAddr gets `AVCodecContext.p_tex_bits` address.
-func (avctx *AVCodecContext) GetPTexBitsAddr() *int32 {
-	return (*int32)(&avctx.p_tex_bits)
-}
-
-// Deprecated: No use.
-//
-// GetICount gets `AVCodecContext.i_count` value.
-func (avctx *AVCodecContext) GetICount() int32 {
-	return (int32)(avctx.i_count)
-}
-
-// Deprecated: No use.
-//
-// SetICount sets `AVCodecContext.i_count` value.
-func (avctx *AVCodecContext) SetICount(v int32) {
-	avctx.i_count = (C.int)(v)
-}
-
-// Deprecated: No use.
-//
-// GetICountAddr gets `AVCodecContext.i_count` address.
-func (avctx *AVCodecContext) GetICountAddr() *int32 {
-	return (*int32)(&avctx.i_count)
-}
-
-// Deprecated: No use.
-//
-// GetPCount gets `AVCodecContext.p_count` value.
-func (avctx *AVCodecContext) GetPCount() int32 {
-	return (int32)(avctx.p_count)
-}
-
-// Deprecated: No use.
-//
-// SetPCount sets `AVCodecContext.p_count` value.
-func (avctx *AVCodecContext) SetPCount(v int32) {
-	avctx.p_count = (C.int)(v)
-}
-
-// Deprecated: No use.
-//
-// GetPCountAddr gets `AVCodecContext.p_count` address.
-func (avctx *AVCodecContext) GetPCountAddr() *int32 {
-	return (*int32)(&avctx.p_count)
-}
-
-// Deprecated: No use.
-//
-// GetSkipCount gets `AVCodecContext.skip_count` value.
-func (avctx *AVCodecContext) GetSkipCount() int32 {
-	return (int32)(avctx.skip_count)
-}
-
-// Deprecated: No use.
-//
-// SetSkipCount sets `AVCodecContext.skip_count` value.
-func (avctx *AVCodecContext) SetSkipCount(v int32) {
-	avctx.skip_count = (C.int)(v)
-}
-
-// Deprecated: No use.
-//
-// GetSkipCountAddr gets `AVCodecContext.skip_count` address.
-func (avctx *AVCodecContext) GetSkipCountAddr() *int32 {
-	return (*int32)(&avctx.skip_count)
-}
-
-// Deprecated: No use.
-//
-// GetMiscBits gets `AVCodecContext.misc_bits` value.
-func (avctx *AVCodecContext) GetMiscBits() int32 {
-	return (int32)(avctx.misc_bits)
-}
-
-// Deprecated: No use.
-//
-// SetMiscBits sets `AVCodecContext.misc_bits` value.
-func (avctx *AVCodecContext) SetMiscBits(v int32) {
-	avctx.misc_bits = (C.int)(v)
-}
-
-// Deprecated: No use.
-//
-// GetMiscBitsAddr gets `AVCodecContext.misc_bits` address.
-func (avctx *AVCodecContext) GetMiscBitsAddr() *int32 {
-	return (*int32)(&avctx.misc_bits)
-}
-
-// Deprecated: Unused.
-//
-// GetFrameBits gets `AVCodecContext.frame_bits` value.
-func (avctx *AVCodecContext) GetFrameBits() int32 {
-	return (int32)(avctx.frame_bits)
-}
-
-// Deprecated: Unused.
-//
-// SetFrameBits sets `AVCodecContext.frame_bits` value.
-func (avctx *AVCodecContext) SetFrameBits(v int32) {
-	avctx.frame_bits = (C.int)(v)
-}
-
-// Deprecated: Unused.
-//
-// GetFrameBitsAddr gets `AVCodecContext.frame_bits` address.
-func (avctx *AVCodecContext) GetFrameBitsAddr() *int32 {
-	return (*int32)(&avctx.frame_bits)
 }
 
 // GetStatsOut gets `AVCodecContext.stats_out` value.
@@ -2503,6 +1623,21 @@ func (avctx *AVCodecContext) SetWorkaroundBugs(v int32) {
 // GetWorkaroundBugsAddr gets `AVCodecContext.workaround_bugs` address.
 func (avctx *AVCodecContext) GetWorkaroundBugsAddr() *int32 {
 	return (*int32)(&avctx.workaround_bugs)
+}
+
+// GetChLayout gets `AVCodecContext.ch_layouts` value.
+func (avctx *AVCodecContext) GetChLayout() AVChannelLayout {
+	return (AVChannelLayout)(avctx.ch_layout)
+}
+
+// SetChLayout sets `AVCodecContext.ch_layout` value.
+func (avctx *AVCodecContext) SetChLayout(v AVChannelLayout) {
+	avctx.ch_layout = (C.struct_AVChannelLayout)(v)
+}
+
+// GetChLayoutAddr gets `AVCodecContext.ch_layouts` address.
+func (avctx *AVCodecContext) GetChLayoutAddr() *AVChannelLayout {
+	return (*AVChannelLayout)(&avctx.ch_layout)
 }
 
 const (
@@ -2789,27 +1924,6 @@ func (avctx *AVCodecContext) GetLowresAddr() *int32 {
 	return (*int32)(&avctx.lowres)
 }
 
-// Deprecated: Use the quality factor packet side data instead.
-//
-// GetCodedFrame gets `AVCodecContext.coded_frame` value.
-func (avctx *AVCodecContext) GetCodedFrame() *AVFrame {
-	return (*AVFrame)(avctx.coded_frame)
-}
-
-// Deprecated: Use the quality factor packet side data instead.
-//
-// SetCodedFrame sets `AVCodecContext.coded_frame` value.
-func (avctx *AVCodecContext) SetCodedFrame(v *AVFrame) {
-	avctx.coded_frame = (*C.struct_AVFrame)(v)
-}
-
-// Deprecated: Use the quality factor packet side data instead.
-//
-// GetCodedFrameAddr gets `AVCodecContext.coded_frame` address.
-func (avctx *AVCodecContext) GetCodedFrameAddr() **AVFrame {
-	return (**AVFrame)(unsafe.Pointer(&avctx.coded_frame))
-}
-
 // GetThreadCount gets `AVCodecContext.thread_count` value.
 func (avctx *AVCodecContext) GetThreadCount() int32 {
 	return (int32)(avctx.thread_count)
@@ -2858,27 +1972,6 @@ func (avctx *AVCodecContext) SetActiveThreadType(v int32) {
 // GetActiveThreadTypeAddr gets `AVCodecContext.active_threadtype` address.
 func (avctx *AVCodecContext) GetActiveThreadTypeAddr() *int32 {
 	return (*int32)(&avctx.active_thread_type)
-}
-
-// Deprecated: Unused.
-//
-// GetThreadSafeCallbacks gets `AVCodecContext.thread_safe_callbacks` value.
-func (avctx *AVCodecContext) GetThreadSafeCallbacks() int32 {
-	return (int32)(avctx.thread_safe_callbacks)
-}
-
-// Deprecated: Unused.
-//
-// SetThreadSafeCallbacks sets `AVCodecContext.thread_safe_callbacks` value.
-func (avctx *AVCodecContext) SetThreadSafeCallbacks(v int32) {
-	avctx.thread_safe_callbacks = (C.int)(v)
-}
-
-// Deprecated: Unused.
-//
-// GetThreadSafeCallbacksAddr gets `AVCodecContext.thread_safe_callbacks` address.
-func (avctx *AVCodecContext) GetThreadSafeCallbacksAddr() *int32 {
-	return (*int32)(&avctx.thread_safe_callbacks)
 }
 
 // typedef int (*avcodec_context_internal_execute_func)(struct AVCodecContext *c,
@@ -3161,48 +2254,6 @@ func (avctx *AVCodecContext) GetSubtitleHeaderSizeAddr() *int32 {
 	return (*int32)(&avctx.subtitle_header_size)
 }
 
-// Deprecated: No use.
-//
-// GetVbvDelay gets `AVCodecContext.vbv_delay` value.
-func (avctx *AVCodecContext) GetVbvDelay() uint64 {
-	return (uint64)(avctx.vbv_delay)
-}
-
-// Deprecated: No use.
-//
-// SetVbvDelay sets `AVCodecContext.vbv_delay` value.
-func (avctx *AVCodecContext) SetVbvDelay(v uint64) {
-	avctx.vbv_delay = (C.uint64_t)(v)
-}
-
-// Deprecated: No use.
-//
-// GetVbvDelayAddr gets `AVCodecContext.vbv_delay` address.
-func (avctx *AVCodecContext) GetVbvDelayAddr() *uint64 {
-	return (*uint64)(&avctx.vbv_delay)
-}
-
-// Deprecated: No use.
-//
-// GetSideDataOnlyPackets gets `AVCodecContext.side_data_only_packets` value.
-func (avctx *AVCodecContext) GetSideDataOnlyPackets() int32 {
-	return (int32)(avctx.side_data_only_packets)
-}
-
-// Deprecated: No use.
-//
-// SetSideDataOnlyPackets sets `AVCodecContext.side_data_only_packets` value.
-func (avctx *AVCodecContext) SetSideDataOnlyPackets(v int32) {
-	avctx.side_data_only_packets = (C.int)(v)
-}
-
-// Deprecated: No use.
-//
-// GetSideDataOnlyPacketsAddr gets `AVCodecContext.side_data_only_packets` address.
-func (avctx *AVCodecContext) GetSideDataOnlyPacketsAddr() *int32 {
-	return (*int32)(&avctx.side_data_only_packets)
-}
-
 // GetInitialPadding gets `AVCodecContext.initial_padding` value.
 func (avctx *AVCodecContext) GetInitialPadding() int32 {
 	return (int32)(avctx.initial_padding)
@@ -3395,27 +2446,6 @@ func (avctx *AVCodecContext) GetSeekPrerollAddr() *int32 {
 	return (*int32)(&avctx.seek_preroll)
 }
 
-// Deprecated: Unused.
-//
-// GetDebugMv gets `AVCodecContext.debug_mv` value.
-func (avctx *AVCodecContext) GetDebugMv() int32 {
-	return (int32)(avctx.debug_mv)
-}
-
-// Deprecated: Unused.
-//
-// SetDebugMv sets `AVCodecContext.debug_mv` value.
-func (avctx *AVCodecContext) SetDebugMv(v int32) {
-	avctx.debug_mv = (C.int)(v)
-}
-
-// Deprecated: Unused.
-//
-// GetDebugMvAddr gets `AVCodecContext.debug_mv` address.
-func (avctx *AVCodecContext) GetDebugMvAddr() *int32 {
-	return (*int32)(&avctx.debug_mv)
-}
-
 const (
 	FF_DEBUG_VIS_MV_P_FOR  = int32(C.FF_DEBUG_VIS_MV_P_FOR)
 	FF_DEBUG_VIS_MV_B_FOR  = int32(C.FF_DEBUG_VIS_MV_B_FOR)
@@ -3472,6 +2502,12 @@ func (avctx *AVCodecContext) GetPropertiesAddr() *uint32 {
 	return (*uint32)(&avctx.properties)
 }
 
+const (
+	FF_CODEC_PROPERTY_LOSSLESS        = uint32(C.FF_CODEC_PROPERTY_LOSSLESS)
+	FF_CODEC_PROPERTY_CLOSED_CAPTIONS = uint32(C.FF_CODEC_PROPERTY_CLOSED_CAPTIONS)
+	FF_CODEC_PROPERTY_FILM_GRAIN      = uint32(C.FF_CODEC_PROPERTY_FILM_GRAIN)
+)
+
 // GetCodedSideData gets `AVCodecContext.coded_side_data` value.
 func (avctx *AVCodecContext) GetCodedSideData() *AVPacketSideData {
 	return (*AVPacketSideData)(avctx.coded_side_data)
@@ -3517,25 +2553,26 @@ func (avctx *AVCodecContext) GetHwFramesCtxAddr() **AVBufferRef {
 	return (**AVBufferRef)(unsafe.Pointer(&avctx.hw_frames_ctx))
 }
 
+// Deprecated: Unused.
+//
 // GetSubTextFormat gets `AVCodecContext.sub_text_format` value.
 func (avctx *AVCodecContext) GetSubTextFormat() int32 {
 	return (int32)(avctx.sub_text_format)
 }
 
+// Deprecated: Unused.
+//
 // SetSubTextFormat sets `AVCodecContext.sub_text_format` value.
 func (avctx *AVCodecContext) SetSubTextFormat(v int32) {
 	avctx.sub_text_format = (C.int)(v)
 }
 
+// Deprecated: Unused.
+//
 // GetSubTextFormatAddr gets `AVCodecContext.sub_text_format` address.
 func (avctx *AVCodecContext) GetSubTextFormatAddr() *int32 {
 	return (*int32)(&avctx.sub_text_format)
 }
-
-const (
-	FF_SUB_TEXT_FMT_ASS              = int32(C.FF_SUB_TEXT_FMT_ASS)
-	FF_SUB_TEXT_FMT_ASS_WITH_TIMINGS = int32(C.FF_SUB_TEXT_FMT_ASS_WITH_TIMINGS)
-)
 
 // GetTrailingPadding gets `AVCodecContext.trailing_padding` value.
 func (avctx *AVCodecContext) GetTrailingPadding() int32 {
@@ -3691,83 +2728,6 @@ func (avctx *AVCodecContext) GetGetEncodeBufferAddr() *AVCodecContextGetEncodeBu
 	return (*AVCodecContextGetEncodeBufferFunc)(&avctx.get_encode_buffer)
 }
 
-// Deprecated: No use.
-//
-// AvCodecGetPktTimebase
-func AvCodecGetPktTimebase(avctx *AVCodecContext) AVRational {
-	return AVRational(C.av_codec_get_pkt_timebase((*C.struct_AVCodecContext)(avctx)))
-}
-
-// Deprecated: No use.
-//
-// AvCodecSetPktTimebase
-func AvCodecSetPktTimebase(avctx *AVCodecContext, r AVRational) {
-	C.av_codec_set_pkt_timebase((*C.struct_AVCodecContext)(avctx), (C.struct_AVRational)(r))
-}
-
-// Deprecated: No use.
-//
-// AvCodecGetCodecDescriptor
-func AvCodecGetCodecDescriptor(avctx *AVCodecContext) *AVCodecDescriptor {
-	return (*AVCodecDescriptor)(C.av_codec_get_codec_descriptor((*C.struct_AVCodecContext)(avctx)))
-}
-
-// Deprecated: No use.
-//
-// AvCodecSetCodecDescriptor
-func AvCodecSetCodecDescriptor(avctx *AVCodecContext, d *AVCodecDescriptor) {
-	C.av_codec_set_codec_descriptor((*C.struct_AVCodecContext)(avctx), (*C.struct_AVCodecDescriptor)(d))
-}
-
-// Deprecated: No use.
-//
-// AvCodecGetLowres
-func AvCodecGetLowres(avctx *AVCodecContext) int32 {
-	return (int32)(C.av_codec_get_lowres((*C.struct_AVCodecContext)(avctx)))
-}
-
-// Deprecated: No use.
-//
-// AvCodecSetLowres
-func AvCodecSetLowres(avctx *AVCodecContext, i int32) {
-	C.av_codec_set_lowres((*C.struct_AVCodecContext)(avctx), C.int(i))
-}
-
-// Deprecated: No use.
-//
-// AvCodecGetSeekPreroll
-func AvCodecGetSeekPreroll(avctx *AVCodecContext) int32 {
-	return (int32)(C.av_codec_get_seek_preroll((*C.struct_AVCodecContext)(avctx)))
-}
-
-// Deprecated: No use.
-//
-// AvCodecSetSeekPreroll
-func AvCodecSetSeekPreroll(avctx *AVCodecContext, i int32) {
-	C.av_codec_set_seek_preroll((*C.struct_AVCodecContext)(avctx), C.int(i))
-}
-
-// Deprecated: No use.
-//
-// AvCodecGetChromaIntraMatrix
-func AvCodecGetChromaIntraMatrix(avctx *AVCodecContext) *uint16 {
-	return (*uint16)(C.av_codec_get_chroma_intra_matrix((*C.struct_AVCodecContext)(avctx)))
-}
-
-// Deprecated: No use.
-//
-// AvCodecSetChromaIntraMatrix
-func AvCodecSetChromaIntraMatrix(avctx *AVCodecContext, t *uint16) {
-	C.av_codec_set_chroma_intra_matrix((*C.struct_AVCodecContext)(avctx), (*C.uint16_t)(t))
-}
-
-// Deprecated: No use.
-//
-// AvCodecGetMaxLowres
-func AvCodecGetMaxLowres(c *AVCodec) int32 {
-	return (int32)(C.av_codec_get_max_lowres((*C.struct_AVCodec)(c)))
-}
-
 // MpegEncContext
 type MpegEncContext C.struct_MpegEncContext
 
@@ -3849,52 +2809,6 @@ const (
 // AVPicture
 type AVPicture C.struct_AVPicture
 
-// Deprecated: No use.
-//
-// GetData gets `AVPicture.data` value.
-func (pct *AVPicture) GetData() []*uint8 {
-	return unsafe.Slice((**uint8)(unsafe.Pointer(&pct.data[0])), AV_NUM_DATA_POINTERS)
-}
-
-// Deprecated: No use.
-//
-// SetData sets `AVPicture.data` value.
-func (pct *AVPicture) SetData(v []*uint8) {
-	for i := 0; i < FFMIN(len(v), AV_NUM_DATA_POINTERS); i++ {
-		pct.data[i] = (*C.uint8_t)(v[i])
-	}
-}
-
-// Deprecated: No use.
-//
-// GetDataAddr gets `AVPicture.data` address.
-func (pct *AVPicture) GetDataAddr() ***uint8 {
-	return (***uint8)(unsafe.Pointer(&pct.data))
-}
-
-// Deprecated: No use.
-//
-// GetLinesize gets `AVPicture.linesize` value.
-func (pct *AVPicture) GetLinesize() []int32 {
-	return unsafe.Slice((*int32)(&pct.linesize[0]), AV_NUM_DATA_POINTERS)
-}
-
-// Deprecated: No use.
-//
-// SetLinesize sets `AVPicture.linesize` value.
-func (pct *AVPicture) SetLinesize(v []int32) {
-	for i := 0; i < FFMIN(len(v), AV_NUM_DATA_POINTERS); i++ {
-		pct.linesize[i] = (C.int)(v[i])
-	}
-}
-
-// Deprecated: No use.
-//
-// GetLinesizeAddr gets `AVPicture.linesize` address.
-func (pct *AVPicture) GetLinesizeAddr() **int32 {
-	return (**int32)(unsafe.Pointer(&pct.linesize))
-}
-
 // AVSubtitleType
 type AVSubtitleType = C.enum_AVSubtitleType
 
@@ -3905,7 +2819,9 @@ const (
 	SUBTITLE_ASS    = AVSubtitleType(C.SUBTITLE_ASS)
 )
 
-const AV_SUBTITLE_FLAG_FORCED = C.AV_SUBTITLE_FLAG_FORCED
+const (
+	AV_SUBTITLE_FLAG_FORCED = C.AV_SUBTITLE_FLAG_FORCED
+)
 
 // AVSubtitleRect
 type AVSubtitleRect C.struct_AVSubtitleRect
@@ -3983,27 +2899,6 @@ func (sbtr *AVSubtitleRect) SetNbColors(v int32) {
 // GetNbColorsAddr gets `AVSubtitleRect.nb_colors` address.
 func (sbtr *AVSubtitleRect) GetNbColorsAddr() *int32 {
 	return (*int32)(&sbtr.nb_colors)
-}
-
-// Deprecated: Unused.
-//
-// GetPict gets `AVSubtitleRect.pict` value.
-func (sbtr *AVSubtitleRect) GetPict() AVPicture {
-	return (AVPicture)(sbtr.pict)
-}
-
-// Deprecated: Unused.
-//
-// SetPict sets `AVSubtitleRect.pict` value.
-func (sbtr *AVSubtitleRect) SetPict(v AVPicture) {
-	sbtr.pict = (C.struct_AVPicture)(v)
-}
-
-// Deprecated: Unused.
-//
-// GetPictAddr gets `AVSubtitleRect.pict` address.
-func (sbtr *AVSubtitleRect) GetPictAddr() *AVPicture {
-	return (*AVPicture)(&sbtr.pict)
 }
 
 // GetData gets `AVSubtitleRect.data` value.
@@ -4176,15 +3071,6 @@ func (sbt *AVSubtitle) GetPtsAddr() *int64 {
 	return (*int64)(&sbt.pts)
 }
 
-// Deprecated: No use.
-//
-// AvCodecNext returns the first registered codec if c is NULL,
-// returns the next registered codec after c if c is non-NULL,
-// or NULL if c is the last one.
-func AvCodecNext(c *AVCodec) *AVCodec {
-	return (*AVCodec)(C.av_codec_next((*C.struct_AVCodec)(c)))
-}
-
 // AvCodecVersion returns the LIBAVCODEC_VERSION_INT constant.
 func AvCodecVersion() uint32 {
 	return (uint32)(C.avcodec_version())
@@ -4193,20 +3079,6 @@ func AvCodecVersion() uint32 {
 // AvCodecConfiguration returns the libavcodec build-time configuration.
 func AvCodecConfiguration() string {
 	return C.GoString(C.avcodec_configuration())
-}
-
-// Deprecated: Calling this function is unnecessary.
-//
-// AvCodecRegister
-func AvCodecRegister(c *AVCodec) {
-	C.avcodec_register((*C.struct_AVCodec)(c))
-}
-
-// Deprecated: Calling this function is unnecessary.
-//
-// AvCodecRegisterAll
-func AvCodecRegisterAll() {
-	C.avcodec_register_all()
 }
 
 // AvCodecAllocContext3 allocates an AVCodecContext and set its fields to default values.
@@ -4219,12 +3091,6 @@ func AvCodecAllocContext3(c *AVCodec) *AVCodecContext {
 // and write NULL to the provided pointer.
 func AvCodecFreeContext(avctx **AVCodecContext) {
 	C.avcodec_free_context((**C.struct_AVCodecContext)(unsafe.Pointer(avctx)))
-}
-
-// Deprecated: No use.
-func AvCodecGetContextDefaults3(avctx *AVCodecContext, c *AVCodec) int32 {
-	return (int32)(C.avcodec_get_context_defaults3((*C.struct_AVCodecContext)(avctx),
-		(*C.struct_AVCodec)(c)))
 }
 
 // AvCodecGetClass gets the AVClass for AVCodecContext.
@@ -4242,16 +3108,6 @@ func AvCodecGetFrameClass() *AVClass {
 // AvCodecGetSubtitleRectClass gets the AVClass for AVSubtitleRect.
 func AvCodecGetSubtitleRectClass() *AVClass {
 	return (*AVClass)(C.avcodec_get_subtitle_rect_class())
-}
-
-// Deprecated: Use an intermediate AVCodecParameters instance and the
-// AvCodecParametersFromContext() / AVCodecParametersToContext() functions.
-//
-// AvCodecCopyContext copies the settings of the source AVCodecContext into the destination
-// AVCodecContext.
-func AvCodecCopyContext(dest, src *AVCodecContext) int32 {
-	return (int32)(C.avcodec_copy_context((*C.struct_AVCodecContext)(dest),
-		(*C.struct_AVCodecContext)(src)))
 }
 
 // AvCodecParametersFromContext fills the parameters struct based on the values from the supplied codec
@@ -4290,13 +3146,13 @@ func AvSubtitleFree(s *AVSubtitle) {
 // The default callback for AVCodecContext.get_buffer2().
 func AvCodecDefaultGetBuffer2(avctx *AVCodecContext, frame *AVFrame, flags int32) int32 {
 	return (int32)(C.avcodec_default_get_buffer2((*C.struct_AVCodecContext)(avctx),
-		(*C.struct_AVFrame)(frame), C.int(flags)))
+		(*C.struct_AVFrame)(frame), (C.int)(flags)))
 }
 
 // The default callback for AVCodecContext.get_encode_buffer().
 func AvCodecDefaultGetEncodeBuffer(avctx *AVCodecContext, pkt *AVPacket, flags int32) int32 {
 	return (int32)(C.avcodec_default_get_encode_buffer((*C.struct_AVCodecContext)(avctx),
-		(*C.struct_AVPacket)(pkt), C.int(flags)))
+		(*C.struct_AVPacket)(pkt), (C.int)(flags)))
 }
 
 // AvCodecAlignDimensions modifies width and height values so that they will result in a memory
@@ -4321,23 +3177,7 @@ func AvCodecEnumToChromaPos(xpos, ypos *int32, pos AVChromaLocation) int32 {
 
 // AvCodecChromaPosToEnum converts swscale x/y chroma position to AVChromaLocation.
 func AvCodecChromaPosToEnum(xpos, ypos int32) AVChromaLocation {
-	return (AVChromaLocation)(C.avcodec_chroma_pos_to_enum(C.int(xpos), C.int(ypos)))
-}
-
-// Deprecated: Use AVCodecSendPacket() and AVCodecReceiveFrame().
-//
-// AvCodecDecodeAudio4 decodes the audio frame of size avpkt->size from avpkt->data into frame.
-func AvCodecDecodeAudio4(avctx *AVCodecContext, frame *AVFrame, gotFramePtr *int32, avpkt *AVPacket) int32 {
-	return (int32)(C.avcodec_decode_audio4((*C.struct_AVCodecContext)(avctx),
-		(*C.struct_AVFrame)(frame), (*C.int)(gotFramePtr), (*C.struct_AVPacket)(avpkt)))
-}
-
-// Deprecated: Use AVCodecSendPacket() and AVCodecReceiveFrame().
-//
-// AvCodecDecodeVideo2 decodes the video frame of size avpkt->size from avpkt->data into picture.
-func AvCodecDecodeVideo2(avctx *AVCodecContext, picture *AVFrame, gotPicturePtr *int32, avpkt *AVPacket) int32 {
-	return (int32)(C.avcodec_decode_video2((*C.struct_AVCodecContext)(avctx),
-		(*C.struct_AVFrame)(picture), (*C.int)(gotPicturePtr), (*C.struct_AVPacket)(avpkt)))
+	return (AVChromaLocation)(C.avcodec_chroma_pos_to_enum((C.int)(xpos), (C.int)(ypos)))
 }
 
 // AvCodecDecodeSubtitle2 decodes a subtitle message.
@@ -4677,27 +3517,6 @@ func (cpc *AVCodecParserContext) GetKeyFrameAddr() *int32 {
 	return (*int32)(&cpc.key_frame)
 }
 
-// Deprecated: Unused.
-//
-// GetConvergenceDuration gets `AVCodecParserContext.convergence_duration` value.
-func (cpc *AVCodecParserContext) GetConvergenceDuration() int64 {
-	return (int64)(cpc.convergence_duration)
-}
-
-// Deprecated: Unused.
-//
-// SetConvergenceDuration sets `AVCodecParserContext.convergence_duration` value.
-func (cpc *AVCodecParserContext) SetConvergenceDuration(v int64) {
-	cpc.convergence_duration = (C.int64_t)(v)
-}
-
-// Deprecated: Unused.
-//
-// GetConvergenceDurationAddr gets `AVCodecParserContext.convergence_duration` address.
-func (cpc *AVCodecParserContext) GetConvergenceDurationAddr() *int64 {
-	return (*int64)(&cpc.convergence_duration)
-}
-
 // GetDtsSyncPoint gets `AVCodecParserContext.dts_sync_point` value.
 func (cpc *AVCodecParserContext) GetDtsSyncPoint() int32 {
 	return (int32)(cpc.dts_sync_point)
@@ -4930,12 +3749,12 @@ type AVCodecParser C.struct_AVCodecParser
 
 // GetCodecIds gets `AVCodecParser.codec_ids` value.
 func (cp *AVCodecParser) GetCodecIds() []int32 {
-	return unsafe.Slice((*int32)(&cp.codec_ids[0]), 5)
+	return unsafe.Slice((*int32)(&cp.codec_ids[0]), 7)
 }
 
 // SetCodecIds sets `AVCodecParser.codec_ids` value.
 func (cp *AVCodecParser) SetCodecIds(v []int32) {
-	for i := 0; i < FFMIN(len(v), 5); i++ {
+	for i := 0; i < FFMIN(len(v), 7); i++ {
 		cp.codec_ids[i] = (C.int)(v[i])
 	}
 }
@@ -5035,44 +3854,9 @@ func (cp *AVCodecParser) GetSplitAddr() *AvcodecParserSplitFunc {
 	return (*AvcodecParserSplitFunc)(&cp.split)
 }
 
-// Deprecated: No use.
-//
-// GetNext gets `AVCodecParser.next` value.
-func (cp *AVCodecParser) GetNext() *AVCodecParser {
-	return (*AVCodecParser)(cp.next)
-}
-
-// Deprecated: No use.
-//
-// SetNext sets `AVCodecParser.next` value.
-func (cp *AVCodecParser) SetNext(v *AVCodecParser) {
-	cp.next = (*C.struct_AVCodecParser)(v)
-}
-
-// Deprecated: No use.
-//
-// GetNextAddr gets `AVCodecParser.next` address.
-func (cp *AVCodecParser) GetNextAddr() **AVCodecParser {
-	return (**AVCodecParser)(unsafe.Pointer(&cp.next))
-}
-
 // AvParserIterate iterates over all registered codec parsers.
 func AvParserIterate(p CVoidPointerPointer) *AVCodecParser {
 	return (*AVCodecParser)(C.av_parser_iterate(VoidPointerPointer(p)))
-}
-
-// Deprecated: No use.
-//
-// AvParserNext
-func AvParserNext(c *AVCodecParser) *AVCodecParser {
-	return (*AVCodecParser)(C.av_parser_next((*C.struct_AVCodecParser)(c)))
-}
-
-// Deprecated: No use.
-//
-// AvRegisterCodecParser
-func AvRegisterCodecParser(parser *AVCodecParser) {
-	C.av_register_codec_parser((*C.struct_AVCodecParser)(parser))
 }
 
 // AvParserInit
@@ -5092,39 +3876,9 @@ func AvParserParse2(s *AVCodecParserContext, avctx *AVCodecContext,
 		(C.int64_t)(pts), (C.int64_t)(dts), (C.int64_t)(pos)))
 }
 
-// Deprecated: Use DumpExtradata, RemoveExtra or ExtractExtradata bitstream filters instead.
-//
-// AvParserChange
-func AvParserChange(s *AVCodecParserContext, avctx *AVCodecContext,
-	outbuf **uint8, poutbufSize *int32,
-	buf *uint8, bufSize int32, keyframe int32) int32 {
-	return (int32)(C.av_parser_change((*C.AVCodecParserContext)(s),
-		(*C.struct_AVCodecContext)(avctx),
-		(**C.uint8_t)(unsafe.Pointer(outbuf)), (*C.int)(poutbufSize),
-		(*C.uint8_t)(buf), (C.int)(bufSize), (C.int)(keyframe)))
-}
-
 // AvParserClose
 func AvParserClose(s *AVCodecParserContext) {
 	C.av_parser_close((*C.AVCodecParserContext)(s))
-}
-
-// Deprecated: Use AVCodecSendFrame()/AVCodecReceivePacket() instead.
-//
-// AvCodecEncodeAudio2 encodes a frame of audio.
-func AvCodecEncodeAudio2(avctx *AVCodecContext,
-	avpkt *AVPacket, frame *AVFrame, gotPacketPtr *int32) int32 {
-	return (int32)(C.avcodec_encode_audio2((*C.struct_AVCodecContext)(avctx),
-		(*C.struct_AVPacket)(avpkt), (*C.struct_AVFrame)(frame), (*C.int)(gotPacketPtr)))
-}
-
-// Deprecated: Use AVCodecSendFrame()/AVCodecReceivePacket() instead.
-//
-// AvCodecEncodeVideo2 encodes a frame of video.
-func AvCodecEncodeVideo2(avctx *AVCodecContext,
-	avpkt *AVPacket, frame *AVFrame, gotPacketPtr *int32) int32 {
-	return (int32)(C.avcodec_encode_video2((*C.struct_AVCodecContext)(avctx),
-		(*C.struct_AVPacket)(avpkt), (*C.struct_AVFrame)(frame), (*C.int)(gotPacketPtr)))
 }
 
 // AvCodecEncodeSubtitle
@@ -5132,80 +3886,6 @@ func AvCodecEncodeSubtitle(avctx *AVCodecContext,
 	buf *uint8, bufSize int32, sub *AVSubtitle) int32 {
 	return (int32)(C.avcodec_encode_subtitle((*C.struct_AVCodecContext)(avctx),
 		(*C.uint8_t)(buf), (C.int)(bufSize), (*C.struct_AVSubtitle)(sub)))
-}
-
-// Deprecated: Unused.
-//
-// AvPictureAlloc
-func AvPictureAlloc(picture *AVPicture, pixFmt AVPixelFormat, width, height int32) int32 {
-	return (int32)(C.avpicture_alloc((*C.struct_AVPicture)(picture),
-		(C.enum_AVPixelFormat)(pixFmt), (C.int)(width), (C.int)(height)))
-}
-
-// Deprecated: Unused.
-//
-// AvPictureFree
-func AvPictureFree(picture *AVPicture) {
-	C.avpicture_free((*C.struct_AVPicture)(picture))
-}
-
-// Deprecated: Use AvImageFillArrays() instead.
-//
-// AvPictureFill
-func AvPictureFill(picture *AVPicture, ptr *uint8, pixFmt AVPixelFormat, width, height int32) int32 {
-	return (int32)(C.avpicture_fill((*C.struct_AVPicture)(picture),
-		(*C.uint8_t)(ptr), (C.enum_AVPixelFormat)(pixFmt), (C.int)(width), (C.int)(height)))
-}
-
-// Deprecated: Use AvImageCopyToBuffer() instead.
-//
-// AvPictureLayout
-func AvPictureLayout(src *AVPicture, pixFmt AVPixelFormat, width, height int32, dest *uint8, destSize int32) int32 {
-	return (int32)(C.avpicture_layout((*C.struct_AVPicture)(src),
-		(C.enum_AVPixelFormat)(pixFmt), (C.int)(width), (C.int)(height),
-		(*C.uchar)(dest), (C.int)(destSize)))
-}
-
-// Deprecated: Use AvImageGetBufferSize() instead.
-//
-// AvPictureGetSize
-func AvPictureGetSize(pixFmt AVPixelFormat, width, height int32) int32 {
-	return (int32)(C.avpicture_get_size((C.enum_AVPixelFormat)(pixFmt), (C.int)(width), (C.int)(height)))
-}
-
-// Deprecated: Use AvImageCopy() instead.
-//
-// AvPictureCopy
-func AvPictureCopy(dst, src *AVPicture, pixFmt AVPixelFormat, width, height int32) {
-	C.av_picture_copy((*C.struct_AVPicture)(dst), (*C.struct_AVPicture)(src),
-		(C.enum_AVPixelFormat)(pixFmt), (C.int)(width), (C.int)(height))
-}
-
-// Deprecated: Unused.
-//
-// AvPictureCrop
-func AvPictureCrop(dst, src *AVPicture, pixFmt AVPixelFormat, topBand, leftBand int32) int32 {
-	return (int32)(C.av_picture_crop((*C.struct_AVPicture)(dst), (*C.struct_AVPicture)(src),
-		(C.enum_AVPixelFormat)(pixFmt), (C.int)(topBand), (C.int)(leftBand)))
-}
-
-// Deprecated: Unused.
-//
-// AvPicturePad
-func AvPicturePad(dst, src *AVPicture, width, height int32, pixFmt AVPixelFormat,
-	padTop, padBottom, padLeft, padRight int32, color *int32) int32 {
-	return (int32)(C.av_picture_pad((*C.struct_AVPicture)(dst), (*C.struct_AVPicture)(src),
-		(C.int)(width), (C.int)(height), (C.enum_AVPixelFormat)(pixFmt),
-		(C.int)(padTop), (C.int)(padBottom), (C.int)(padLeft), (C.int)(padRight),
-		(*C.int)(color)))
-}
-
-// Deprecated: Use AvPixFmtGetChromaSubSample() instead.
-//
-// AvCodecGetChromaSubSample
-func AvCodecGetChromaSubSample(pixFmt AVPixelFormat, hShift, vShift *int32) {
-	C.avcodec_get_chroma_sub_sample((C.enum_AVPixelFormat)(pixFmt),
-		(*C.int)(hShift), (*C.int)(vShift))
 }
 
 // AvCodecPixFmtToCodecTag returns a value representing the fourCC code associated to the
@@ -5224,62 +3904,16 @@ func AvCodecFindBestPixFmtOfList(pixFmtList *AVPixelFormat,
 		(*C.int)(lossPtr)))
 }
 
-// Deprecated: Use AvGetPixFmtLoss() instead.
-//
-// AvCodecGetPixFmtLoss
-func AvCodecGetPixFmtLoss(dstPixFmt, srcPixFmt AVPixelFormat, hasAlpha int32) int32 {
-	return (int32)(C.avcodec_get_pix_fmt_loss((C.enum_AVPixelFormat)(dstPixFmt),
-		(C.enum_AVPixelFormat)(srcPixFmt), (C.int)(hasAlpha)))
-}
-
-// Deprecated: Use AvFindBestPixFmtOf2() instead.
-//
-// AvCodecFindBestPixFmtOf2
-func AvCodecFindBestPixFmtOf2(dstPixFmt1, dstPixFmt2, srcPixFmt AVPixelFormat,
-	hasAlpha int32, lossPtr *int32) AVPixelFormat {
-	return (AVPixelFormat)(C.avcodec_find_best_pix_fmt_of_2(
-		(C.enum_AVPixelFormat)(dstPixFmt1), (C.enum_AVPixelFormat)(dstPixFmt2),
-		(C.enum_AVPixelFormat)(srcPixFmt), (C.int)(hasAlpha), (*C.int)(lossPtr)))
-}
-
-// Deprecated: No use.
-//
-// AvCodecFindBestPixFmt2
-func AvCodecFindBestPixFmt2(dstPixFmt1, dstPixFmt2, srcPixFmt AVPixelFormat,
-	hasAlpha int32, lossPtr *int32) AVPixelFormat {
-	return (AVPixelFormat)(C.avcodec_find_best_pix_fmt2(
-		(C.enum_AVPixelFormat)(dstPixFmt1), (C.enum_AVPixelFormat)(dstPixFmt2),
-		(C.enum_AVPixelFormat)(srcPixFmt), (C.int)(hasAlpha), (*C.int)(lossPtr)))
-}
-
 // AvCodecDefaultGetFormat
 func AvCodecDefaultGetFormat(avctx *AVCodecContext, fmt *AVPixelFormat) AVPixelFormat {
 	return (AVPixelFormat)(C.avcodec_default_get_format((*C.struct_AVCodecContext)(avctx),
 		(*C.enum_AVPixelFormat)(fmt)))
 }
 
-// Deprecated: Use  AvFourccMakeString() or AvFourcc2str() instead.
-//
-// AvGetCodecTagString
-func AvGetCodecTagString(buf *int8, bufSize uintptr, codecTag uint32) int32 {
-	return (int32)(C.av_get_codec_tag_string((*C.char)(buf),
-		(C.size_t)(bufSize), (C.uint)(codecTag)))
-}
-
 // AvCodecString
 func AvCodecString(buf *int8, bufSize int32, enc *AVCodecContext, encode int32) {
 	C.avcodec_string((*C.char)(buf), (C.int)(bufSize),
 		(*C.struct_AVCodecContext)(enc), (C.int)(encode))
-}
-
-// AvGetProfileName returns a name for the specified profile, if available.
-func AvGetProfileName(c *AVCodec, profile int32) string {
-	return C.GoString(C.av_get_profile_name((*C.struct_AVCodec)(c), (C.int)(profile)))
-}
-
-// AvCodecProfileName returns a name for the specified profile, if available.
-func AvCodecProfileName(codecID AVCodecID, profile int32) string {
-	return C.GoString(C.avcodec_profile_name((C.enum_AVCodecID)(codecID), (C.int)(profile)))
 }
 
 // typedef int (*avcodec_context_execute_func)(AVCodecContext *c2, void *arg2);
@@ -5317,109 +3951,13 @@ func AvCodecFlushBuffers(avctx *AVCodecContext) {
 	C.avcodec_flush_buffers((*C.struct_AVCodecContext)(avctx))
 }
 
-// AvGetBitsPerSample returns codec bits per sample.
-func AvGetBitsPerSample(codecID AVCodecID) int32 {
-	return (int32)(C.av_get_bits_per_sample((C.enum_AVCodecID)(codecID)))
-}
-
-// AvGetPcmCodec returns the PCM codec associated with a sample format.
-func AvGetPcmCodec(fmt AVSampleFormat, be int32) AVCodecID {
-	return (AVCodecID)(C.av_get_pcm_codec((C.enum_AVSampleFormat)(fmt), (C.int)(be)))
-}
-
-// AvGetExactBitsPerSample returns codec bits per sample.
-func AvGetExactBitsPerSample(codecID AVCodecID) int32 {
-	return (int32)(C.av_get_exact_bits_per_sample((C.enum_AVCodecID)(codecID)))
-}
-
 // AvGetAudioFrameDuration returns audio frame duration.
 func AvGetAudioFrameDuration(avctx *AVCodecContext, frameBytes int32) int32 {
 	return (int32)(C.av_get_audio_frame_duration((*C.struct_AVCodecContext)(avctx), (C.int)(frameBytes)))
 }
 
-// AvGetAudioFrameDuration2 returns audio frame duration.
-func AvGetAudioFrameDuration2(par *AVCodecParameters, frameBytes int32) int32 {
-	return (int32)(C.av_get_audio_frame_duration2((*C.struct_AVCodecParameters)(par), (C.int)(frameBytes)))
-}
-
 // AVBitStreamFilterContext
 type AVBitStreamFilterContext C.struct_AVBitStreamFilterContext
-
-// GetPrivData gets `AVBitStreamFilterContext.priv_data` value.
-func (obsfc *AVBitStreamFilterContext) GetPrivData() unsafe.Pointer {
-	return obsfc.priv_data
-}
-
-// GetFilter gets `AVBitStreamFilterContext.filter` value.
-func (obsfc *AVBitStreamFilterContext) GetFilter() *AVBitStreamFilter {
-	return (*AVBitStreamFilter)(obsfc.filter)
-}
-
-// GetParser gets `AVBitStreamFilterContext.parser` value.
-func (obsfc *AVBitStreamFilterContext) GetParser() *AVCodecParserContext {
-	return (*AVCodecParserContext)(obsfc.parser)
-}
-
-// GetNext gets `AVBitStreamFilterContext.next` value.
-func (obsfc *AVBitStreamFilterContext) GetNext() *AVBitStreamFilterContext {
-	return (*AVBitStreamFilterContext)(obsfc.next)
-}
-
-// GetArgs gets `AVBitStreamFilterContext.args` value.
-func (obsfc *AVBitStreamFilterContext) GetArgs() string {
-	return C.GoString(obsfc.args)
-}
-
-// Deprecated: Use AVBSFContext instead.
-//
-// AvRegisterBitstreamFilter
-func AvRegisterBitstreamFilter(bsf *AVBitStreamFilter) {
-	C.av_register_bitstream_filter((*C.struct_AVBitStreamFilter)(bsf))
-}
-
-// Deprecated: Use AVBSFContext instead.
-//
-// AvBitstreamFilterInit
-func AvBitstreamFilterInit(name string) *AVBitStreamFilterContext {
-	namePtr, nameFunc := StringCasting(name)
-	defer nameFunc()
-	return (*AVBitStreamFilterContext)(C.av_bitstream_filter_init((*C.char)(namePtr)))
-}
-
-// Deprecated: Use AVBSFContext instead.
-//
-// AvBitstreamFilterFilter
-func AvBitstreamFilterFilter(bsfc *AVBitStreamFilterContext, avctx *AVCodecContext, args string,
-	outbuf **uint8, poutbufSize *int32,
-	buf *uint8, bufSize int32, keyframe int32) int32 {
-	argsPtr, nameFunc := StringCasting(args)
-	defer nameFunc()
-	return (int32)(C.av_bitstream_filter_filter((*C.struct_AVBitStreamFilterContext)(bsfc),
-		(*C.struct_AVCodecContext)(avctx), (*C.char)(argsPtr),
-		(**C.uint8_t)(unsafe.Pointer(outbuf)), (*C.int)(poutbufSize),
-		(*C.uint8_t)(buf), (C.int)(bufSize), (C.int)(keyframe)))
-}
-
-// Deprecated: Use AVBSFContext instead.
-//
-// AvBitstreamFilterClose
-func AvBitstreamFilterClose(bsfc *AVBitStreamFilterContext) {
-	C.av_bitstream_filter_close((*C.struct_AVBitStreamFilterContext)(bsfc))
-}
-
-// Deprecated: Use AVBSFContext instead.
-//
-// AvBitstreamFilterNext
-func AvBitstreamFilterNext(f *AVBitStreamFilter) *AVBitStreamFilter {
-	return (*AVBitStreamFilter)(C.av_bitstream_filter_next((*C.struct_AVBitStreamFilter)(f)))
-}
-
-// Deprecated: No use.
-//
-// AvBsfNext
-func AvBsfNext(opaque CVoidPointerPointer) *AVBitStreamFilter {
-	return (*AVBitStreamFilter)(C.av_bsf_next(VoidPointerPointer(opaque)))
-}
 
 // AvFastPaddedMalloc
 func AvFastPaddedMalloc(ptr CVoidPointer, size *uint32, minSize uintptr) {
@@ -5431,55 +3969,8 @@ func AvFastPaddedMallocz(ptr CVoidPointer, size *uint32, minSize uintptr) {
 	C.av_fast_padded_mallocz(VoidPointer(ptr), (*C.uint)(size), (C.size_t)(minSize))
 }
 
-// AvXiphlacing encodes extradata length to a buffer. Used by xiph codecs.
-func AvXiphlacing(s *uint8, v int32) int32 {
-	return (int32)(C.av_xiphlacing((*C.uchar)(s), (C.uint)(v)))
-}
-
-// Deprecated: No use.
-//
-// AvRegisterHwaccel
-func AvRegisterHwaccel(hwaccel *AVHWAccel) {
-	C.av_register_hwaccel((*C.struct_AVHWAccel)(hwaccel))
-}
-
-// Deprecated: No use.
-//
-// AvHwaccelNext returns the first registered hardware accelerator if hwaccel is NULL,
-// returns the next registered hardware accelerator after hwaccelif hwaccel is non-NULL,
-// or NULL if hwaccel is the last one.
-func AvHwaccelNext(hwaccel *AVHWAccel) *AVHWAccel {
-	return (*AVHWAccel)(C.av_hwaccel_next((*C.struct_AVHWAccel)(hwaccel)))
-}
-
-// AVLockOp
-type AVLockOp = C.enum_AVLockOp
-
-const (
-	AV_LOCK_CREATE  = AVLockOp(C.AV_LOCK_CREATE)
-	AV_LOCK_OBTAIN  = AVLockOp(C.AV_LOCK_OBTAIN)
-	AV_LOCK_RELEASE = AVLockOp(C.AV_LOCK_RELEASE)
-	AV_LOCK_DESTROY = AVLockOp(C.AV_LOCK_DESTROY)
-)
-
-// typedef int (*av_lockmgr_cb)(void **mutex, enum AVLockOp op);
-type AVLockmgrCb C.av_lockmgr_cb
-
-// Deprecated: No use.
-//
-// AvLockmgrRegister
-func AvLockmgrRegister(cb AVLockmgrCb) int32 {
-	return (int32)(C.av_lockmgr_register((C.av_lockmgr_cb)(cb)))
-}
-
 // A positive value if s is open,
 // 0 otherwise.
 func AvCodecIsOpen(avctx *AVCodecContext) int32 {
 	return (int32)(C.avcodec_is_open((*C.struct_AVCodecContext)(avctx)))
-}
-
-// AvCpbPropertiesAlloc allocates a CPB properties structure and initialize its fields to default
-// values.
-func AvCpbPropertiesAlloc(size *uintptr) *AVCPBProperties {
-	return (*AVCPBProperties)(C.av_cpb_properties_alloc((*C.size_t)(unsafe.Pointer(size))))
 }

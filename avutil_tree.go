@@ -14,6 +14,7 @@ typedef int (*av_tree_enu_func)(void *opaque, void *elem);
 import "C"
 import "unsafe"
 
+// AVTreeNode
 type AVTreeNode C.struct_AVTreeNode
 
 // typedef int (*av_tree_cmp_func)(void *opaque, void *elem);

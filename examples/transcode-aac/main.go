@@ -134,8 +134,7 @@ func openOutputFile(filename string, inputCodecContext *ffmpeg.AVCodecContext) (
 
 	// Set the basic encoder parameters.
 	// The input file's sample rate is used to avoid a sample rate conversion.
-	avctx.SetChannels(OUTPUT_CHANNELS)
-	avctx.SetChannelLayout(uint64(ffmpeg.AvGetDefaultChannelLayout(OUTPUT_CHANNELS)))
+	ffmpeg.AvChannelLayoutDefault(avctx.GetChLayoutAddr(), OUTPUT_CHANNELS)
 	avctx.SetSampleRate(inputCodecContext.GetSampleRate())
 	avctx.SetSampleFmt(outputCodec.GetSampleFmts()[0])
 	avctx.SetBitRate(OUTPUT_BIT_RATE)
@@ -207,14 +206,14 @@ func initResampler(inputCodecContext, outputCodecContext *ffmpeg.AVCodecContext)
 	// Default channel layouts based on the number of channels
 	// are assumed for simplicity (they are sometimes not detected
 	// properly by the demuxer and/or decoder).
-	if resampleContext = ffmpeg.SwrAllocSetOpts(nil,
-		ffmpeg.AvGetDefaultChannelLayout(outputCodecContext.GetChannels()),
+	if ret = ffmpeg.SwrAllocSetOpts2(&resampleContext,
+		outputCodecContext.GetChLayoutAddr(),
 		outputCodecContext.GetSampleFmt(),
 		outputCodecContext.GetSampleRate(),
-		ffmpeg.AvGetDefaultChannelLayout(inputCodecContext.GetChannels()),
+		inputCodecContext.GetChLayoutAddr(),
 		inputCodecContext.GetSampleFmt(),
 		inputCodecContext.GetSampleRate(),
-		0, nil); resampleContext == nil {
+		0, nil); ret < 0 {
 		fmt.Fprintf(os.Stderr, "Could not allocate resample context\n")
 		return nil, ffmpeg.AVERROR(syscall.ENOMEM)
 	}
@@ -349,7 +348,7 @@ func convertSamples(inputData, convertedData **uint8,
 
 // Add converted input audio samples to the FIFO buffer for later processing.
 func addSamplesToFifo(fifo *ffmpeg.AVAudioFifo, convertedInputSamples **uint8, frameSize int32) int32 {
-	//  Make the FIFO as large as it needs to be to hold both,
+	// Make the FIFO as large as it needs to be to hold both,
 	// the old and the new samples.
 	if ret := ffmpeg.AvAudioFifoRealloc(fifo, ffmpeg.AvAudioFifoSize(fifo)+frameSize); ret < 0 {
 		fmt.Fprintf(os.Stderr, "Could not reallocate FIFO\n")
@@ -443,7 +442,7 @@ func initOutputFrame(outputcodecContext *ffmpeg.AVCodecContext,
 	// Default channel layouts based on the number of channels
 	// are assumed for simplicity.
 	frame.SetNbSamples(frameSize)
-	frame.SetChannelLayout(outputcodecContext.GetChannelLayout())
+	ffmpeg.AvChannelLayoutCopy(frame.GetChLayoutAddr(), outputcodecContext.GetChLayoutAddr())
 	frame.SetFormat(outputcodecContext.GetSampleFmt())
 	frame.SetSampleRate(outputcodecContext.GetSampleRate())
 

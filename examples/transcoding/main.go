@@ -124,8 +124,10 @@ func openOutputFile(ifmtCtx *ffmpeg.AVFormatContext, streamCtx []streamContext,
 				encCtx.SetTimeBase(ffmpeg.AvInvQ(decCtx.GetFramerate()))
 			} else {
 				encCtx.SetSampleRate(decCtx.GetSampleRate())
-				encCtx.SetChannelLayout(decCtx.GetChannelLayout())
-				encCtx.SetChannels(ffmpeg.AvGetChannelLayoutNbChannels(encCtx.GetChannelLayout()))
+				if ret = ffmpeg.AvChannelLayoutCopy(encCtx.GetChLayoutAddr(),
+					decCtx.GetChLayoutAddr()); ret < 0 {
+					return nil, ret
+				}
 				// take first format from list of supported formats
 				encCtx.SetSampleFmt(encoder.GetSampleFmts()[0])
 				encCtx.SetTimeBase(ffmpeg.AvMakeQ(1, encCtx.GetSampleRate()))
@@ -234,13 +236,14 @@ func initFilter(fctx *filteringContext, decCtx, encCtx *ffmpeg.AVCodecContext, f
 			goto end
 		}
 
-		if decCtx.GetChannelLayout() == 0 {
-			decCtx.SetChannelLayout(uint64(ffmpeg.AvGetDefaultChannelLayout(decCtx.GetChannels())))
+		if decCtx.GetChLayoutAddr().GetOrder() == ffmpeg.AV_CHANNEL_ORDER_UNSPEC {
+			ffmpeg.AvChannelLayoutDefault(decCtx.GetChLayoutAddr(), decCtx.GetChLayoutAddr().GetNbChannels())
 		}
 
-		args = fmt.Sprintf("time_base=%d/%d:sample_rate=%d:sample_fmt=%s:channel_layout=0x%d",
+		args = fmt.Sprintf("time_base=%d/%d:sample_rate=%d:sample_fmt=%s:channel_layout=%s",
 			decCtx.GetTimeBaseAddr().GetNum(), decCtx.GetTimeBaseAddr().GetDen(), decCtx.GetSampleRate(),
-			ffmpeg.AvGetSampleFmtName(decCtx.GetSampleFmt()), decCtx.GetChannelLayout())
+			ffmpeg.AvGetSampleFmtName(decCtx.GetSampleFmt()),
+			ffmpeg.AvChannelLayoutDescribe(decCtx.GetChLayoutAddr()))
 
 		if ret = ffmpeg.AvFilterGraphCreateFilter(&buffersrcCtx, buffersrc, "in",
 			args, nil, filterGraph); ret < 0 {
@@ -260,8 +263,8 @@ func initFilter(fctx *filteringContext, decCtx, encCtx *ffmpeg.AVCodecContext, f
 			goto end
 		}
 
-		if ret = ffmpeg.AvOptSetBin(buffersinkCtx, "channel_layouts",
-			encCtx.GetChannelLayoutAddr(), unsafe.Sizeof(encCtx.GetChannelLayout()), ffmpeg.AV_OPT_SEARCH_CHILDREN); ret < 0 {
+		if ret = ffmpeg.AvOptSet(buffersinkCtx, "ch_layouts",
+			ffmpeg.AvChannelLayoutDescribe(encCtx.GetChLayoutAddr()), ffmpeg.AV_OPT_SEARCH_CHILDREN); ret < 0 {
 			ffmpeg.AvLog(nil, ffmpeg.AV_LOG_ERROR, "Cannot set output channel layout\n")
 			goto end
 		}
@@ -395,7 +398,7 @@ func filterEncodeWriteFrame(ofmtCtx *ffmpeg.AVFormatContext, streamCtx []streamC
 	)
 
 	ffmpeg.AvLog(nil, ffmpeg.AV_LOG_INFO, "Pushing decoded frame to filters\n")
-	//  push the decoded frame into the filtergraph
+	// push the decoded frame into the filtergraph
 	if ret = ffmpeg.AvBuffersrcAddFrameFlags(filter.buffersrcCtx, frame, 0); ret < 0 {
 		ffmpeg.AvLog(nil, ffmpeg.AV_LOG_ERROR, "Error while feeding the filtergraph\n")
 		return ret

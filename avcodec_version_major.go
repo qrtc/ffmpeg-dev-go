@@ -5,11 +5,10 @@
 package ffmpeg
 
 /*
-#include <libavfilter/version.h>
+#include <libavcodec/version_major.h>
 */
 import "C"
 
 const (
-	LIBAVFILTER_VERSION_MINOR = C.LIBAVFILTER_VERSION_MINOR
-	LIBAVFILTER_VERSION_MICRO = C.LIBAVFILTER_VERSION_MICRO
+	LIBAVCODEC_VERSION_MAJOR = C.LIBAVCODEC_VERSION_MAJOR
 )

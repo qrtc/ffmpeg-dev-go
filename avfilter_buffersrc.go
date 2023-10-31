@@ -144,19 +144,40 @@ func (bsrc *AVBufferSrcParameters) GetSampleRateAddr() *int32 {
 	return (*int32)(&bsrc.sample_rate)
 }
 
+// Deprecated: use ChLayout instead.
+//
 // GetChannelLayout gets `AVBufferSrcParameters.channel_layout` value.
 func (bsrc *AVBufferSrcParameters) GetChannelLayout() uint64 {
 	return (uint64)(bsrc.channel_layout)
 }
 
+// Deprecated: use ChLayout instead.
+//
 // SetChannelLayout sets `AVBufferSrcParameters.channel_layout` value.
 func (bsrc *AVBufferSrcParameters) SetChannelLayout(v uint64) {
 	bsrc.channel_layout = (C.uint64_t)(v)
 }
 
+// Deprecated: use ChLayout instead.
+//
 // GetChannelLayoutAddr gets `AVBufferSrcParameters.channel_layout` address.
 func (bsrc *AVBufferSrcParameters) GetChannelLayoutAddr() *uint64 {
 	return (*uint64)(&bsrc.channel_layout)
+}
+
+// GetChLayout gets `AVBufferSrcParameters.ch_layout` value.
+func (bsrc *AVBufferSrcParameters) GetChLayout() AVChannelLayout {
+	return (AVChannelLayout)(bsrc.ch_layout)
+}
+
+// SetChLayout sets `AVBufferSrcParameters.ch_layout` value.
+func (bsrc *AVBufferSrcParameters) SetChLayout(v AVChannelLayout) {
+	bsrc.ch_layout = (C.struct_AVChannelLayout)(v)
+}
+
+// GetChLayoutAddr gets `AVBufferSrcParameters.ch_layout` address.
+func (bsrc *AVBufferSrcParameters) GetChLayoutAddr() *AVChannelLayout {
+	return (*AVChannelLayout)(&bsrc.ch_layout)
 }
 
 // AvBuffersrcParametersAlloc allocates a new AVBufferSrcParameters instance. It should be freed by the

@@ -86,6 +86,7 @@ const (
 	AV_OPT_TYPE_COLOR          = AVOptionType(C.AV_OPT_TYPE_COLOR)
 	AV_OPT_TYPE_CHANNEL_LAYOUT = AVOptionType(C.AV_OPT_TYPE_CHANNEL_LAYOUT)
 	AV_OPT_TYPE_BOOL           = AVOptionType(C.AV_OPT_TYPE_BOOL)
+	AV_OPT_TYPE_CHLAYOUT       = AVOptionType(C.AV_OPT_TYPE_CHLAYOUT)
 )
 
 // AVOption
@@ -507,14 +508,6 @@ func AvOptChildNext(obj, prev CVoidPointer) unsafe.Pointer {
 	return C.av_opt_child_next(VoidPointer(obj), VoidPointer(prev))
 }
 
-// Deprecated: Use AvOptChildClassIterate instead.
-//
-// AvOptChildClassNext
-func AvOptChildClassNext(parent, prev *AVClass) *AVClass {
-	return (*AVClass)(C.av_opt_child_class_next((*C.struct_AVClass)(parent),
-		(*C.struct_AVClass)(prev)))
-}
-
 // AvOptChildClassIterate iterates over potential AVOptions-enabled children of parent.
 func AvOptChildClassIterate(parent *AVClass, iter CVoidPointerPointer) *AVClass {
 	return (*AVClass)(C.av_opt_child_class_iterate((*C.struct_AVClass)(parent), VoidPointerPointer(iter)))
@@ -594,12 +587,22 @@ func AvOptSetVideoRate(obj CVoidPointer, name string, val AVRational, searchFlag
 		(C.struct_AVRational)(val), (C.int)(searchFlags)))
 }
 
+// Deprecated: No use.
+//
 // AvOptSetChannelLayout
 func AvOptSetChannelLayout(obj CVoidPointer, name string, chLayout int64, searchFlags int32) int32 {
 	namePtr, nameFunc := StringCasting(name)
 	defer nameFunc()
 	return (int32)(C.av_opt_set_channel_layout(VoidPointer(obj), (*C.char)(namePtr),
 		(C.int64_t)(chLayout), (C.int)(searchFlags)))
+}
+
+// AvOptSetChlayout
+func AvOptSetChlayout(obj CVoidPointer, name string, layout *AVChannelLayout, searchFlags int32) int32 {
+	namePtr, nameFunc := StringCasting(name)
+	defer nameFunc()
+	return (int32)(C.av_opt_set_chlayout(VoidPointer(obj), (*C.char)(namePtr),
+		(*C.struct_AVChannelLayout)(layout), (C.int)(searchFlags)))
 }
 
 // AvOptSetDictVal
@@ -688,12 +691,22 @@ func AvOptGetVideoRate(obj CVoidPointer, name string, searchFlags int32, outVal 
 		(C.int)(searchFlags), (*C.struct_AVRational)(outVal)))
 }
 
+// Deprecated: No use.
+//
 // AvOptGetChannelLayout
 func AvOptGetChannelLayout(obj CVoidPointer, name string, searchFlags int32, outVal *int64) int32 {
 	namePtr, nameFunc := StringCasting(name)
 	defer nameFunc()
 	return (int32)(C.av_opt_get_channel_layout(VoidPointer(obj), (*C.char)(namePtr),
 		(C.int)(searchFlags), (*C.int64_t)(outVal)))
+}
+
+// AvOptGetChlayout
+func AvOptGetChlayout(obj CVoidPointer, name string, searchFlags int32, layout *AVChannelLayout) int32 {
+	namePtr, nameFunc := StringCasting(name)
+	defer nameFunc()
+	return (int32)(C.av_opt_get_chlayout(VoidPointer(obj), (*C.char)(namePtr),
+		(C.int)(searchFlags), (*C.struct_AVChannelLayout)(layout)))
 }
 
 // AvOptGetDictVal

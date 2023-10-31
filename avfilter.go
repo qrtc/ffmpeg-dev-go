@@ -34,6 +34,8 @@ type AVFilterFormats C.struct_AVFilterFormats
 // AVFilterChannelLayouts
 type AVFilterChannelLayouts C.struct_AVFilterChannelLayouts
 
+// Deprecated: Use AvfilterFilterPadCount() instead.
+//
 // AvFilterPadCount gets the number of elements in a NULL-terminated array of AVFilterPads (e.g.
 // AvFilter.inputs/outputs).
 func AvFilterPadCount(pads *AVFilterPad) int32 {
@@ -54,6 +56,7 @@ const (
 	AVFILTER_FLAG_DYNAMIC_INPUTS            = C.AVFILTER_FLAG_DYNAMIC_INPUTS
 	AVFILTER_FLAG_DYNAMIC_OUTPUTS           = C.AVFILTER_FLAG_DYNAMIC_OUTPUTS
 	AVFILTER_FLAG_SLICE_THREADS             = C.AVFILTER_FLAG_SLICE_THREADS
+	AVFILTER_FLAG_METADATA_ONLY             = C.AVFILTER_FLAG_METADATA_ONLY
 	AVFILTER_FLAG_SUPPORT_TIMELINE_GENERIC  = C.AVFILTER_FLAG_SUPPORT_TIMELINE_GENERIC
 	AVFILTER_FLAG_SUPPORT_TIMELINE_INTERNAL = C.AVFILTER_FLAG_SUPPORT_TIMELINE_INTERNAL
 	AVFILTER_FLAG_SUPPORT_TIMELINE          = C.AVFILTER_FLAG_SUPPORT_TIMELINE
@@ -133,6 +136,11 @@ func (flt *AVFilter) GetFlagsAddr() *int32 {
 	return (*int32)(&flt.flags)
 }
 
+// AvfilterFilterPadCount
+func AvfilterFilterPadCount(filter *AVFilter, isOutput int32) uint32 {
+	return (uint32)(C.avfilter_filter_pad_count((*C.struct_AVFilter)(filter), (C.int)(isOutput)))
+}
+
 const (
 	AVFILTER_THREAD_SLICE = C.AVFILTER_THREAD_SLICE
 )
@@ -180,7 +188,7 @@ func (fltc *AVFilterContext) GetName() string {
 
 // SetName sets `AVFilterContext.name` value.
 func (fltc *AVFilterContext) SetName(v string) {
-	C.free(unsafe.Pointer(fltc.name))
+	FreePointer(fltc.name)
 	fltc.name, _ = StringCasting(v)
 }
 
@@ -639,16 +647,22 @@ func (fltl *AVFilterLink) GetSampleAspectRatioAddr() *AVRational {
 	return (*AVRational)(&fltl.sample_aspect_ratio)
 }
 
+// Deprecated: Use ChLayout instead.
+//
 // GetChannelLayout gets `AVFilterLink.channel_layout` value.
 func (fltl *AVFilterLink) GetChannelLayout() uint64 {
 	return (uint64)(fltl.channel_layout)
 }
 
+// Deprecated: Use ChLayout instead.
+//
 // SetChannelLayout sets `AVFilterLink.channel_layout` value.
 func (fltl *AVFilterLink) SetChannelLayout(v uint64) {
 	fltl.channel_layout = (C.uint64_t)(v)
 }
 
+// Deprecated: Use ChLayout instead.
+//
 // GetChannelLayoutAddr gets `AVFilterLink.channel_layout` address.
 func (fltl *AVFilterLink) GetChannelLayoutAddr() *uint64 {
 	return (*uint64)(&fltl.channel_layout)
@@ -699,6 +713,21 @@ func (fltl *AVFilterLink) GetTimeBaseAddr() *AVRational {
 	return (*AVRational)(&fltl.time_base)
 }
 
+// GetChLayout gets `AVFilterLink.ch_layout` value.
+func (fltl *AVFilterLink) GetChLayout() AVChannelLayout {
+	return (AVChannelLayout)(fltl.ch_layout)
+}
+
+// SetChLayout sets `AVFilterLink.ch_layout` value.
+func (fltl *AVFilterLink) SetChLayout(v AVChannelLayout) {
+	fltl.ch_layout = (C.struct_AVChannelLayout)(v)
+}
+
+// GetChLayoutAddr gets `AVFilterLink.ch_layout` address.
+func (fltl *AVFilterLink) GetChLayoutAddr() *AVChannelLayout {
+	return (*AVChannelLayout)(&fltl.ch_layout)
+}
+
 // AvFilterLink links two filters together.
 func AvFilterLink(src *AVFilterContext, srcpad uint32,
 	dst *AVFilterContext, dstpad uint32) int32 {
@@ -711,20 +740,6 @@ func AvFilterLinkFree(link **AVFilterLink) {
 	C.avfilter_link_free((**C.struct_AVFilterLink)(unsafe.Pointer(link)))
 }
 
-// Deprecated: Use av_buffersink_get_channels() instead.
-//
-// AvFilterLinkGetChannels gets the number of channels of a link.
-func AvFilterLinkGetChannels(link *AVFilterLink) int32 {
-	return (int32)(C.avfilter_link_get_channels((*C.struct_AVFilterLink)(link)))
-}
-
-// Deprecated: No use.
-//
-// AvFilterLinkSetClosed sets the closed field of a link.
-func AvFilterLinkSetClosed(link *AVFilterLink, closed int32) {
-	C.avfilter_link_set_closed((*C.struct_AVFilterLink)(link), (C.int)(closed))
-}
-
 // AvFilterConfigLinks negotiates the media format, dimensions, etc of all inputs to a filter.
 func AvFilterConfigLinks(filter *AVFilterContext) int32 {
 	return (int32)(C.avfilter_config_links((*C.struct_AVFilterContext)(filter)))
@@ -735,7 +750,7 @@ const (
 	AVFILTER_CMD_FLAG_FAST = C.AVFILTER_CMD_FLAG_FAST
 )
 
-// AvFilterProcessCommand  makes the filter instance process a command.
+// AvFilterProcessCommand makes the filter instance process a command.
 // It is recommended to use AVFilterGraphSendCommand().
 func AvFilterProcessCommand(filter *AVFilterContext, cmd, arg string, resLen, flags int32) (res string, ret int32) {
 	cmdPtr, cmdFunc := StringCasting(cmd)
@@ -751,27 +766,6 @@ func AvFilterProcessCommand(filter *AVFilterContext, cmd, arg string, resLen, fl
 // AvFilterIterate iterates over all registered filters.
 func AvFilterIterate(opaque CVoidPointerPointer) *AVFilter {
 	return (*AVFilter)(C.av_filter_iterate(VoidPointerPointer(opaque)))
-}
-
-// Deprecated: No use.
-//
-// AvFilterRegisterAll initializes the filter system. Register all builtin filters.
-func AvFilterRegisterAll() {
-	C.avfilter_register_all()
-}
-
-// Deprecated: No use.
-//
-// AvFilterRegister registers a filter.
-func AvFilterRegister(filter *AVFilter) {
-	C.avfilter_register((*C.struct_AVFilter)(filter))
-}
-
-// Deprecated: No use.
-//
-// AvFilterNext iterates over all registered filters.
-func AvFilterNext(filter *AVFilter) *AVFilter {
-	return (*AVFilter)(C.avfilter_next((*C.struct_AVFilter)(filter)))
 }
 
 // AvFilterGetByName gets a filter definition matching the given name.
@@ -879,13 +873,6 @@ func (fltg *AVFilterGraph) GetNbFiltersAddr() *uint32 {
 // GetScaleSwsOpts gets `AVFilterGraph.scale_sws_opts` value.
 func (fltg *AVFilterGraph) GetScaleSwsOpts() string {
 	return C.GoString(fltg.scale_sws_opts)
-}
-
-// Deprecated: No use.
-//
-// GetResampleLavrOpts gets `AVFilterGraph.resample_lavr_opts` value.
-func (fltg *AVFilterGraph) GetResampleLavrOpts() string {
-	return C.GoString(fltg.resample_lavr_opts)
 }
 
 // GetThreadType gets `AVFilterGraph.threadtype` value.
@@ -1032,7 +1019,7 @@ func (fltio *AVFilterInOut) GetName() string {
 
 // SetName sets `AVFilterInOut.name` value.
 func (fltio *AVFilterInOut) SetName(v string) {
-	C.free(unsafe.Pointer(fltio.name))
+	FreePointer(fltio.name)
 	fltio.name, _ = StringCasting(v)
 }
 

@@ -125,9 +125,17 @@ func AvBuffersinkGetChannels(ctx *AVFilterContext) int32 {
 	return (int32)(C.av_buffersink_get_channels((*C.struct_AVFilterContext)(ctx)))
 }
 
+// Deprecated: No use.
+//
 // AvBuffersinkGetChannelLayout
 func AvBuffersinkGetChannelLayout(ctx *AVFilterContext) uint64 {
 	return (uint64)(C.av_buffersink_get_channel_layout((*C.struct_AVFilterContext)(ctx)))
+}
+
+// AvBuffersinkGetChLayout
+func AvBuffersinkGetChLayout(ctx *AVFilterContext, chLayout *AVChannelLayout) int32 {
+	return (int32)(C.av_buffersink_get_ch_layout((*C.struct_AVFilterContext)(ctx),
+		(*C.struct_AVChannelLayout)(chLayout)))
 }
 
 // AvBuffersinkGetSampleRate

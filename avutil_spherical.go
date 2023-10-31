@@ -10,6 +10,7 @@ package ffmpeg
 import "C"
 import "unsafe"
 
+// AVSphericalProjection
 type AVSphericalProjection = C.enum_AVSphericalProjection
 
 const (
@@ -18,6 +19,7 @@ const (
 	AV_SPHERICAL_EQUIRECTANGULAR_TILE = AVSphericalProjection(C.AV_SPHERICAL_EQUIRECTANGULAR_TILE)
 )
 
+// AVSphericalMapping
 type AVSphericalMapping C.struct_AVSphericalMapping
 
 // GetProjection gets `AVSphericalMapping.projection` value.

@@ -14,7 +14,7 @@ const (
 	SWR_FLAG_RESAMPLE = C.SWR_FLAG_RESAMPLE
 )
 
-// Dithering algorithms
+// Dithering algorithms.
 type SwrDitherType = C.enum_SwrDitherType
 
 const (
@@ -33,7 +33,7 @@ const (
 	SWR_DITHER_NB                     = SwrDitherType(C.SWR_DITHER_NB)
 )
 
-// Resampling Engines
+// Resampling Engines.
 type SwrEngine = C.enum_SwrEngine
 
 const (
@@ -42,7 +42,7 @@ const (
 	SWR_ENGINE_NB   = SwrEngine(C.SWR_ENGINE_NB)
 )
 
-// Resampling Filter Types
+// Resampling Filter Types.
 type SwrFilterType = C.enum_SwrFilterType
 
 const (
@@ -75,6 +75,8 @@ func SwrIsInitialized(s *SwrContext) int32 {
 	return (int32)(C.swr_is_initialized((*C.struct_SwrContext)(s)))
 }
 
+// Deprecated: Use SwrAllocSetOpts2() instead.
+//
 // SwrAllocSetOpts allocates SwrContext if needed and set/reset common parameters.
 func SwrAllocSetOpts(s *SwrContext,
 	outChLayout int64, outSampleFmt AVSampleFormat, outSampleRate int32,
@@ -83,6 +85,17 @@ func SwrAllocSetOpts(s *SwrContext,
 	return (*SwrContext)(C.swr_alloc_set_opts((*C.struct_SwrContext)(s),
 		(C.int64_t)(outChLayout), (C.enum_AVSampleFormat)(outSampleFmt), (C.int)(outSampleRate),
 		(C.int64_t)(inChLayout), (C.enum_AVSampleFormat)(inSampleFmt), (C.int)(inSampleRate),
+		(C.int)(logOffset), VoidPointer(logCtx)))
+}
+
+// SwrAllocSetOpts2 allocates SwrContext if needed and set/reset common parameters.
+func SwrAllocSetOpts2(s **SwrContext,
+	outChLayout *AVChannelLayout, outSampleFmt AVSampleFormat, outSampleRate int32,
+	inChLayout *AVChannelLayout, inSampleFmt AVSampleFormat, inSampleRate int32,
+	logOffset int32, logCtx CVoidPointer) int32 {
+	return (int32)(C.swr_alloc_set_opts2((**C.struct_SwrContext)(unsafe.Pointer(s)),
+		(*C.struct_AVChannelLayout)(outChLayout), (C.enum_AVSampleFormat)(outSampleFmt), (C.int)(outSampleRate),
+		(*C.struct_AVChannelLayout)(inChLayout), (C.enum_AVSampleFormat)(inSampleFmt), (C.int)(inSampleRate),
 		(C.int)(logOffset), VoidPointer(logCtx)))
 }
 
@@ -109,7 +122,7 @@ func SwrNextPts(s *SwrContext, pts int64) int64 {
 	return (int64)(C.swr_next_pts((*C.struct_SwrContext)(s), (C.int64_t)(pts)))
 }
 
-// SwrSetCompensation  activates resampling compensation ("soft" compensation).
+// SwrSetCompensation activates resampling compensation ("soft" compensation).
 // This function is internally called when needed in SwrNextPts().
 func SwrSetCompensation(s *SwrContext, sampleDelta, compensationDistance int32) int32 {
 	return (int32)(C.swr_set_compensation((*C.struct_SwrContext)(s),
@@ -121,6 +134,8 @@ func SwrSetChannelMapping(s *SwrContext, channelMap *int32) int32 {
 	return (int32)(C.swr_set_channel_mapping((*C.struct_SwrContext)(s), (*C.int)(channelMap)))
 }
 
+// Deprecated: Use SwrBuildMatrix2() instead.
+//
 // SwrBuildMatrix generates a channel mixing matrix.
 func SwrBuildMatrix(inLayout, outLayout uint64,
 	centerMixLevel, surroundMixLevel, lfeMixLevel float64,
@@ -130,6 +145,17 @@ func SwrBuildMatrix(inLayout, outLayout uint64,
 		(C.double)(centerMixLevel), (C.double)(surroundMixLevel), (C.double)(lfeMixLevel),
 		(C.double)(rematrixMaxval), (C.double)(rematrixVolume),
 		(*C.double)(matrix), (C.int)(stride), (C.enum_AVMatrixEncoding)(matrixEncoding), VoidPointer(logCtx)))
+}
+
+// SwrBuildMatrix2 generates a channel mixing matrix.
+func SwrBuildMatrix2(inLayout, outLayout *AVChannelLayout,
+	centerMixLevel, surroundMixLevel, lfeMixLevel float64,
+	rematrixMaxval, rematrixVolume float64,
+	matrix *float64, stride int, matrixEncoding AVMatrixEncoding, logCtx CVoidPointer) int32 {
+	return (int32)(C.swr_build_matrix2((*C.struct_AVChannelLayout)(inLayout), (*C.struct_AVChannelLayout)(outLayout),
+		(C.double)(centerMixLevel), (C.double)(surroundMixLevel), (C.double)(lfeMixLevel),
+		(C.double)(rematrixMaxval), (C.double)(rematrixVolume),
+		(*C.double)(matrix), (C.ptrdiff_t)(stride), (C.enum_AVMatrixEncoding)(matrixEncoding), VoidPointer(logCtx)))
 }
 
 // SwrSetMatrix sets a customized remix matrix.

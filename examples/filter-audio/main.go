@@ -16,11 +16,14 @@ import (
 )
 
 const (
-	INPUT_SAMPLERATE     = 48000
-	INPUT_FORMAT         = ffmpeg.AV_SAMPLE_FMT_FLTP
-	INPUT_CHANNEL_LAYOUT = ffmpeg.AV_CH_LAYOUT_5POINT0
-	VOLUME_VAL           = 0.90
-	FRAME_SIZE           = 1024
+	INPUT_SAMPLERATE = 48000
+	INPUT_FORMAT     = ffmpeg.AV_SAMPLE_FMT_FLTP
+	VOLUME_VAL       = 0.90
+	FRAME_SIZE       = 1024
+)
+
+var (
+	INPUT_CHANNEL_LAYOUT = ffmpeg.AV_CHANNEL_LAYOUT_5POINT0()
 )
 
 func initFilterGraph() (graph *ffmpeg.AVFilterGraph, src *ffmpeg.AVFilterContext, sink *ffmpeg.AVFilterContext, ret int32) {
@@ -53,8 +56,9 @@ func initFilterGraph() (graph *ffmpeg.AVFilterGraph, src *ffmpeg.AVFilterContext
 		return nil, nil, nil, ffmpeg.AVERROR(syscall.ENOMEM)
 	}
 
+	// Set the filter options through the AVOptions API.
 	ffmpeg.AvOptSet(abufferCtx, "channel_layout",
-		ffmpeg.AvGetChannelLayoutString(0, INPUT_CHANNEL_LAYOUT), ffmpeg.AV_OPT_SEARCH_CHILDREN)
+		ffmpeg.AvChannelLayoutDescribe(INPUT_CHANNEL_LAYOUT), ffmpeg.AV_OPT_SEARCH_CHILDREN)
 	ffmpeg.AvOptSet(abufferCtx, "sample_fmt",
 		ffmpeg.AvGetSampleFmtName(INPUT_FORMAT), ffmpeg.AV_OPT_SEARCH_CHILDREN)
 	ffmpeg.AvOptSetQ(abufferCtx, "time_base",
@@ -155,7 +159,7 @@ func initFilterGraph() (graph *ffmpeg.AVFilterGraph, src *ffmpeg.AVFilterContext
 // example just prints the MD5 checksum of each plane to stdout.
 func processOutput(md5 *ffmpeg.AVMD5, frame *ffmpeg.AVFrame) int32 {
 	planar := ffmpeg.AvSampleFmtIsPlanar(frame.GetFormat())
-	channels := ffmpeg.AvGetChannelLayoutNbChannels(frame.GetChannelLayout())
+	channels := frame.GetChLayoutAddr().GetNbChannels()
 	planes := channels
 	if planar == 0 {
 		planes = 1
@@ -171,7 +175,7 @@ func processOutput(md5 *ffmpeg.AVMD5, frame *ffmpeg.AVFrame) int32 {
 		var checksum [16]uint8
 
 		ffmpeg.AvMd5Init(md5)
-		ffmpeg.AvMd5Sum(&checksum[0], &data[i][0], planeSize)
+		ffmpeg.AvMd5Sum(&checksum[0], &data[i][0], uintptr(planeSize))
 
 		fmt.Fprintf(os.Stdout, "plane %d: 0x", i)
 		for j := 0; j < len(checksum); j++ {
@@ -190,7 +194,7 @@ func getInput(frame *ffmpeg.AVFrame, frameNum int32) int32 {
 	// Set up the frame properties and allocate the buffer for the data.
 	frame.SetSampleRate(INPUT_SAMPLERATE)
 	frame.SetFormat(INPUT_FORMAT)
-	frame.SetChannelLayout(INPUT_CHANNEL_LAYOUT)
+	ffmpeg.AvChannelLayoutCopy(frame.GetChLayoutAddr(), INPUT_CHANNEL_LAYOUT)
 	frame.SetNbSamples(FRAME_SIZE)
 	frame.SetPts(int64(frameNum) * FRAME_SIZE)
 

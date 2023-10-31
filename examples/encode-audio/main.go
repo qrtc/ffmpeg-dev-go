@@ -35,24 +35,27 @@ func selectSampleRate(codec *ffmpeg.AVCodec) int32 {
 }
 
 // select layout with the highest channel count
-func selectChannelLayout(codec *ffmpeg.AVCodec) uint64 {
-	var bestChLayout uint64
-	var bestNbChannels int32
-	ls := codec.GetChannelLayouts()
-	if len(ls) == 0 {
-		return ffmpeg.AV_CH_LAYOUT_STEREO
+func selectChannelLayout(codec *ffmpeg.AVCodec, dst *ffmpeg.AVChannelLayout) int32 {
+	var (
+		bestChLayout   *ffmpeg.AVChannelLayout
+		bestNbChannels int32
+	)
+
+	chls := codec.GetChLayouts()
+	if len(chls) == 0 {
+		return ffmpeg.AvChannelLayoutCopy(dst, ffmpeg.AV_CHANNEL_LAYOUT_STEREO())
 	}
 
-	for _, l := range ls {
-		nbChannels := ffmpeg.AvGetChannelLayoutNbChannels(l)
+	for i := range chls {
+		nbChannels := chls[i].GetNbChannels()
 
 		if nbChannels > bestNbChannels {
-			bestChLayout = l
+			bestChLayout = &chls[i]
 			bestNbChannels = nbChannels
 		}
 	}
 
-	return bestChLayout
+	return ffmpeg.AvChannelLayoutCopy(dst, bestChLayout)
 }
 
 func encode(ctx *ffmpeg.AVCodecContext, frame *ffmpeg.AVFrame, pkt *ffmpeg.AVPacket, output *os.File) {
@@ -111,8 +114,10 @@ func main() {
 
 	// select other audio parameters supported by the encoder
 	avctx.SetSampleRate(selectSampleRate(codec))
-	avctx.SetChannelLayout(selectChannelLayout(codec))
-	avctx.SetChannels(ffmpeg.AvGetChannelLayoutNbChannels(avctx.GetChannelLayout()))
+	if selectChannelLayout(codec, avctx.GetChLayoutAddr()) < 0 {
+		fmt.Fprintf(os.Stderr, "codec context select channel layout failed\n")
+		os.Exit(1)
+	}
 
 	// open it
 	if ffmpeg.AvCodecOpen2(avctx, codec, nil) < 0 {
@@ -141,7 +146,10 @@ func main() {
 
 	frame.SetNbSamples(avctx.GetFrameSize())
 	frame.SetFormat(avctx.GetSampleFmt())
-	frame.SetChannelLayout(avctx.GetChannelLayout())
+	if ffmpeg.AvChannelLayoutCopy(frame.GetChLayoutAddr(), avctx.GetChLayoutAddr()) < 0 {
+		fmt.Fprintf(os.Stderr, "frame copy channel layout failed\n")
+		os.Exit(1)
+	}
 
 	// allocate the data buffers
 	if ret := ffmpeg.AvFrameGetBuffer(frame, 0); ret < 0 {
