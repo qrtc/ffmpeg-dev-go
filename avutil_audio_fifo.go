@@ -9,6 +9,7 @@ package ffmpeg
 */
 import "C"
 
+// AVAudioFifo
 type AVAudioFifo C.struct_AVAudioFifo
 
 // AvAudioFifoFree frees an AVAudioFifo.

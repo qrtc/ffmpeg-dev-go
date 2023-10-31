@@ -9,6 +9,7 @@ package ffmpeg
 */
 import "C"
 
+// FFALIGN
 func FFALIGN[T Integer](x, a T) T {
 	return ((x) + (a) - 1) & ^((a) - 1)
 }

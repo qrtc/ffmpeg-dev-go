@@ -87,7 +87,7 @@ func AvD2Q(d float64, max int32) AVRational {
 // return One of the following values:
 // 1 if `q1` is nearer to `q` than `q2`
 // -1 if `q2` is nearer to `q` than `q1`
-// 0 if they have the same distance
+// 0 if they have the same distance.
 func AvNearerQ(q, q1, q2 AVRational) int32 {
 	return (int32)(C.av_nearer_q((C.struct_AVRational)(q),
 		(C.struct_AVRational)(q1), (C.struct_AVRational)(q2)))
@@ -101,11 +101,4 @@ func AvFindNearestQIdx(q AVRational, qList *AVRational) int32 {
 // AvQ2intfloat Convert an AVRational to a IEEE 32-bit `float` expressed in fixed-point format.
 func AvQ2intfloat(q AVRational) uint32 {
 	return (uint32)(C.av_q2intfloat((C.struct_AVRational)(q)))
-}
-
-// AvGcdQ returns the best rational so that a and b are multiple of it.
-// If the resulting denominator is larger than max_den, return def.
-func AvGcdQ(a, b AVRational, maxDen int32, def AVRational) AVRational {
-	return (AVRational)(C.av_gcd_q((C.struct_AVRational)(a), (C.struct_AVRational)(b),
-		(C.int)(maxDen), (C.struct_AVRational)(def)))
 }

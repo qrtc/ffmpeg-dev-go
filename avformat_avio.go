@@ -874,14 +874,6 @@ func AvIOPrintf(s *AVIOContext, _fmt string, va ...any) int32 {
 
 // NONEED: avio_print_string_array
 
-// AvIOPrint
-func AvIOPrint(s *AVIOContext, va ...any) {
-	fmtPtr, fmtFunc := StringCasting(fmt.Sprint(va...))
-	defer fmtFunc()
-	fmtArray := []*C.char{(*C.char)(fmtPtr), nil}
-	C.avio_print_string_array((*C.struct_AVIOContext)(s), &fmtArray[0])
-}
-
 // AvIOFlush forces flushing of buffered data.
 func AvIOFlush(s *AVIOContext) {
 	C.avio_flush((*C.struct_AVIOContext)(s))
@@ -1023,13 +1015,6 @@ func AvIOCloseDynBuf(s *AVIOContext, pbuffer **uint8) int32 {
 // AvIOEnumProtocols iterates through names of available protocols.
 func AvIOEnumProtocols(opaque CVoidPointerPointer, output int32) string {
 	return C.GoString(C.avio_enum_protocols(VoidPointerPointer(opaque), (C.int)(output)))
-}
-
-// AvIOProtocolGetClass gets AVClass by names of available protocols.
-func AvIOProtocolGetClass(name string) *AVClass {
-	namePtr, nameFunc := StringCasting(name)
-	defer nameFunc()
-	return (*AVClass)(C.avio_protocol_get_class((*C.char)(namePtr)))
 }
 
 // AvIOPause pauses and resumes playing - only meaningful if using a network streaming

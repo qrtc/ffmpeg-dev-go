@@ -17,10 +17,6 @@ void av_log_wrap(void *avcl, int level, char *fmt) {
 	av_log(avcl, level, fmt, NULL);
 }
 
-void av_log_once_wrap(void* avcl, int initial_level, int subsequent_level, int *state, char *fmt) {
-	av_log_once(avcl, initial_level, subsequent_level, state, fmt, NULL);
-}
-
 typedef void (*av_log_callback_func)(void*, int, const char*, va_list);
 
 */
@@ -132,22 +128,16 @@ func (cls *AVClass) GetChildNextAddr() *AvClassChildNextFunc {
 	return (*AvClassChildNextFunc)(&cls.child_next)
 }
 
-// Deprecated: No use.
-//
 // GetChildClassNext gets `AVClass.child_class_next` value.
 func (cls *AVClass) GetChildClassNext() AvClassChildClassNextFunc {
 	return (AvClassChildClassNextFunc)(cls.child_class_next)
 }
 
-// Deprecated: No use.
-//
 // SetChildClassNext sets `AVClass.child_class_next` value.
 func (cls *AVClass) SetChildClassNext(v AvClassChildClassNextFunc) {
 	cls.child_class_next = (C.av_class_child_class_next_func)(v)
 }
 
-// Deprecated: No use.
-//
 // GetChildClassNextAddr gets `AVClass.child_class_next` address.
 func (cls *AVClass) GetChildClassNextAddr() *AvClassChildClassNextFunc {
 	return (*AvClassChildClassNextFunc)(&cls.child_class_next)
@@ -188,38 +178,29 @@ func AvLog(avcl CVoidPointer, level int32, _fmt string, va ...any) {
 	C.av_log_wrap(VoidPointer(avcl), (C.int)(level), (*C.char)(strPtr))
 }
 
-// AvLogOnce sends the specified message to the log once with the initial_level and then with
-// the subsequent_level. By default, all logging messages are sent to stderr.
-// This behavior can be altered by setting a different logging callback function.
-func AvLogOnce(avcl CVoidPointer, initialLevel, subsequentLevel int32, state *int32, _fmt string, va ...any) {
-	fmtPtr, fmtFunc := StringCasting(fmt.Sprintf(_fmt, va...))
-	defer fmtFunc()
-	C.av_log_once_wrap(VoidPointer(avcl), (C.int)(initialLevel), (C.int)(subsequentLevel), (*C.int)(state), (*C.char)(fmtPtr))
-}
-
 // NONEED: av_vlog
 
-// AvLogGetLevel gets the current log level
+// AvLogGetLevel gets the current log level.
 func AvLogGetLevel() int32 {
 	return (int32)(C.av_log_get_level())
 }
 
-// AvLogSetLevel sets the log level
+// AvLogSetLevel sets the log level.
 func AvLogSetLevel(level int32) {
-	C.av_log_set_level(C.int(level))
+	C.av_log_set_level((C.int)(level))
 }
 
 // typedef void (*av_log_callback_func)(void*, int, const char*, va_list);
 type AVLogCallbackFunc = C.av_log_callback_func
 
-// AvLogSetCallback sets the logging callback
+// AvLogSetCallback sets the logging callback.
 func AvLogSetCallback(f AVLogCallbackFunc) {
 	C.av_log_set_callback(f)
 }
 
 // NONEED: av_log_default_callback
 
-// AvDefaultItemName returns the context name
+// AvDefaultItemName returns the context name.
 func AvDefaultItemName(ctx CVoidPointer) string {
 	return C.GoString(C.av_default_item_name(VoidPointer(ctx)))
 }

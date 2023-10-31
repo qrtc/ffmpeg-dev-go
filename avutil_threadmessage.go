@@ -12,6 +12,7 @@ typedef void (*av_thread_message_free_func)(void *msg);
 import "C"
 import "unsafe"
 
+// AVThreadMessageQueue
 type AVThreadMessageQueue C.struct_AVThreadMessageQueue
 
 // AVThreadMessageFlags
@@ -62,11 +63,6 @@ type AvThreadMessageFreeFunc = C.av_thread_message_free_func
 func AvThreadMessageQueueSetFreeFunc(mq *AVThreadMessageQueue, freeFunc AvThreadMessageFreeFunc) {
 	C.av_thread_message_queue_set_free_func((*C.struct_AVThreadMessageQueue)(mq),
 		(C.av_thread_message_free_func)(freeFunc))
-}
-
-// AvThreadMessageQueueNbElems returns the current number of messages in the queue.
-func AvThreadMessageQueueNbElems(mq *AVThreadMessageQueue) int32 {
-	return (int32)(C.av_thread_message_queue_nb_elems((*C.struct_AVThreadMessageQueue)(mq)))
 }
 
 // AvThreadMessageFlush flushes the message queue.

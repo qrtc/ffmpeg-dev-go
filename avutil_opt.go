@@ -247,10 +247,7 @@ const (
 
 	AV_OPT_FLAG_READONLY        = int32(C.AV_OPT_FLAG_READONLY)
 	AV_OPT_FLAG_BSF_PARAM       = int32(C.AV_OPT_FLAG_BSF_PARAM)
-	AV_OPT_FLAG_RUNTIME_PARAM   = int32(C.AV_OPT_FLAG_RUNTIME_PARAM)
 	AV_OPT_FLAG_FILTERING_PARAM = int32(C.AV_OPT_FLAG_FILTERING_PARAM)
-	AV_OPT_FLAG_DEPRECATED      = int32(C.AV_OPT_FLAG_DEPRECATED)
-	AV_OPT_FLAG_CHILD_CONSTS    = int32(C.AV_OPT_FLAG_CHILD_CONSTS)
 )
 
 // GetUnit gets `AVOption.unit` value.
@@ -507,17 +504,10 @@ func AvOptChildNext(obj, prev CVoidPointer) unsafe.Pointer {
 	return C.av_opt_child_next(VoidPointer(obj), VoidPointer(prev))
 }
 
-// Deprecated: Use AvOptChildClassIterate instead.
-//
 // AvOptChildClassNext
 func AvOptChildClassNext(parent, prev *AVClass) *AVClass {
 	return (*AVClass)(C.av_opt_child_class_next((*C.struct_AVClass)(parent),
 		(*C.struct_AVClass)(prev)))
-}
-
-// AvOptChildClassIterate iterates over potential AVOptions-enabled children of parent.
-func AvOptChildClassIterate(parent *AVClass, iter CVoidPointerPointer) *AVClass {
-	return (*AVClass)(C.av_opt_child_class_iterate((*C.struct_AVClass)(parent), VoidPointerPointer(iter)))
 }
 
 // AvOptSet

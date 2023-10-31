@@ -395,7 +395,7 @@ func filterEncodeWriteFrame(ofmtCtx *ffmpeg.AVFormatContext, streamCtx []streamC
 	)
 
 	ffmpeg.AvLog(nil, ffmpeg.AV_LOG_INFO, "Pushing decoded frame to filters\n")
-	//  push the decoded frame into the filtergraph
+	// push the decoded frame into the filtergraph
 	if ret = ffmpeg.AvBuffersrcAddFrameFlags(filter.buffersrcCtx, frame, 0); ret < 0 {
 		ffmpeg.AvLog(nil, ffmpeg.AV_LOG_ERROR, "Error while feeding the filtergraph\n")
 		return ret

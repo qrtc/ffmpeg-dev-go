@@ -383,7 +383,6 @@ const (
 	AV_DISPOSITION_DESCRIPTIONS = C.AV_DISPOSITION_DESCRIPTIONS
 	AV_DISPOSITION_METADATA     = C.AV_DISPOSITION_METADATA
 	AV_DISPOSITION_DEPENDENT    = C.AV_DISPOSITION_DEPENDENT
-	AV_DISPOSITION_STILL_IMAGE  = C.AV_DISPOSITION_STILL_IMAGE
 )
 
 const (
@@ -658,7 +657,6 @@ func (stm *AVStream) GetEventFlagsAddr() *int32 {
 
 const (
 	AVSTREAM_EVENT_FLAG_METADATA_UPDATED = int32(C.AVSTREAM_EVENT_FLAG_METADATA_UPDATED)
-	AVSTREAM_EVENT_FLAG_NEW_PACKETS      = int32(C.AVSTREAM_EVENT_FLAG_NEW_PACKETS)
 )
 
 // GetRFrameRate gets `AVStream.r_frame_rate` value.
@@ -884,21 +882,6 @@ func (pgm *AVProgram) GetPcrPidAddr() *int32 {
 	return (*int32)(&pgm.pcr_pid)
 }
 
-// GetPmtVersion gets `AVProgram.pmt_version` value.
-func (pgm *AVProgram) GetPmtVersion() int32 {
-	return (int32)(pgm.pmt_version)
-}
-
-// SetPmtVersion sets `AVProgram.pmt_version` value.
-func (pgm *AVProgram) SetPmtVersion(v int32) {
-	pgm.pmt_version = (C.int)(v)
-}
-
-// GetPmtVersionAddr gets `AVProgram.pmt_version` address.
-func (pgm *AVProgram) GetPmtVersionAddr() *int32 {
-	return (*int32)(&pgm.pmt_version)
-}
-
 const (
 	AVFMTCTX_NOHEADER   = C.AVFMTCTX_NOHEADER
 	AVFMTCTX_UNSEEKABLE = C.AVFMTCTX_UNSEEKABLE
@@ -982,8 +965,13 @@ func (cpt *AVChapter) GetMetadataAddr() **AVDictionary {
 	return (**AVDictionary)(unsafe.Pointer(&cpt.metadata))
 }
 
+// typedef int (*av_format_control_message)(struct AVFormatContext *s, int type,
+// void *data, size_t data_size);
 type AVFormatControlMessageFunc C.av_format_control_message
 
+// typedef int (*AVOpenCallback)(struct AVFormatContext *s,
+// AVIOContext **pb, const char *url, int flags,
+// const AVIOInterruptCB *int_cb, AVDictionary **options);
 type AVOpenCallbackFunc C.AVOpenCallback
 
 // AVDurationEstimationMethod
@@ -1140,7 +1128,7 @@ func (s *AVFormatContext) GetUrl() string {
 func (s *AVFormatContext) SetUrl(v string) {
 	vPtr, _ := StringCasting(v)
 	if s.url != nil {
-		C.free(unsafe.Pointer(s.url))
+		FreePointer(s.url)
 	}
 	s.url = (*C.char)(vPtr)
 }
@@ -2058,36 +2046,6 @@ func (s *AVFormatContext) GetMaxStreamsAddr() *int32 {
 	return (*int32)(&s.max_streams)
 }
 
-// GetSkipEstimateDurationFromPts gets `AVFormatContext.skip_estimate_duration_from_pts` value.
-func (s *AVFormatContext) GetSkipEstimateDurationFromPts() int32 {
-	return (int32)(s.skip_estimate_duration_from_pts)
-}
-
-// SetSkipEstimateDurationFromPts sets `AVFormatContext.skip_estimate_duration_from_pts` value.
-func (s *AVFormatContext) SetSkipEstimateDurationFromPts(v int32) {
-	s.skip_estimate_duration_from_pts = (C.int)(v)
-}
-
-// GetSkipEstimateDurationFromPtsAddr gets `AVFormatContext.skip_estimate_duration_from_pts` address.
-func (s *AVFormatContext) GetSkipEstimateDurationFromPtsAddr() *int32 {
-	return (*int32)(&s.skip_estimate_duration_from_pts)
-}
-
-// GetMaxProbePackets gets `AVFormatContext.max_probe_packets` value.
-func (s *AVFormatContext) GetMaxProbePackets() int32 {
-	return (int32)(s.max_probe_packets)
-}
-
-// SetMaxProbePackets sets `AVFormatContext.max_probe_packets` value.
-func (s *AVFormatContext) SetMaxProbePackets(v int32) {
-	s.max_probe_packets = (C.int)(v)
-}
-
-// GetMaxProbePacketsAddr gets `AVFormatContext.max_probe_packets` address.
-func (s *AVFormatContext) GetMaxProbePacketsAddr() *int32 {
-	return (*int32)(&s.max_probe_packets)
-}
-
 const (
 	AVFMT_FLAG_GENPTS          = C.AVFMT_FLAG_GENPTS
 	AVFMT_FLAG_IGNIDX          = C.AVFMT_FLAG_IGNIDX
@@ -2227,6 +2185,24 @@ func AvFormatInjectGlobalSideData(s *AVFormatContext) {
 // AvFmtCtxGetDurationEstimationMethod returns the method used to set ctx->duration.
 func AvFmtCtxGetDurationEstimationMethod(s *AVFormatContext) AVDurationEstimationMethod {
 	return (AVDurationEstimationMethod)(C.av_fmt_ctx_get_duration_estimation_method((*C.struct_AVFormatContext)(s)))
+}
+
+// AVPacketList
+type AVPacketList C.struct_AVPacketList
+
+// Getgets `AVPacketList.next` value.
+func (pl *AVPacketList) Get() *AVPacketList {
+	return (*AVPacketList)(pl.next)
+}
+
+// Set sets `AVPacketList.next` value.
+func (pl *AVPacketList) Set(v *AVPacketList) {
+	pl.next = (*C.struct_AVPacketList)(v)
+}
+
+// GetAddr gets `AVPacketList.next` address.
+func (pl *AVPacketList) GetAddr() **AVPacketList {
+	return (**AVPacketList)(unsafe.Pointer(&pl.next))
 }
 
 // AvFormatVersion returns the LIBAVFORMAT_VERSION_INT constant.
@@ -2396,7 +2372,7 @@ func AvProbeInputBuffer2(pb *AVIOContext, fmt **AVInputFormat,
 		(*C.char)(urlPtr), VoidPointer(logctx), (C.uint)(offset), (C.uint)(maxProbeSize)))
 }
 
-// AvProbeInputBuffer likes AvProbeInputBuffer2() but returns 0 on success
+// AvProbeInputBuffer likes AvProbeInputBuffer2() but returns 0 on success.
 func AvProbeInputBuffer(pb *AVIOContext, fmt **AVInputFormat,
 	url string, logctx CVoidPointer, offset, maxProbeSize uint32) int32 {
 	urlPtr, urlFunc := StringCasting(url)
@@ -2414,8 +2390,6 @@ func AvFormatOpenInput(ps **AVFormatContext, url string, fmt *AVInputFormat, opt
 		(*C.char)(urlPtr), (*C.struct_AVInputFormat)(fmt), (**C.struct_AVDictionary)(unsafe.Pointer(options))))
 }
 
-// Deprecated: Use an AVDictionary to pass options to a demuxer.
-//
 // AvDemuxerOpen
 func AvDemuxerOpen(ic *AVFormatContext) int32 {
 	return (int32)(C.av_demuxer_open((*C.struct_AVFormatContext)(ic)))

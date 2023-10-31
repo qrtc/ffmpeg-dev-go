@@ -10,6 +10,7 @@ package ffmpeg
 import "C"
 import "unsafe"
 
+// AVComponentDescriptor
 type AVComponentDescriptor C.struct_AVComponentDescriptor
 
 // GetPlane gets `AVComponentDescriptor.plane` value.
@@ -373,24 +374,6 @@ func AvGetPixFmtString(buf *int8, bufSize int32, pixFmt AVPixelFormat) string {
 		(C.enum_AVPixelFormat)(pixFmt)))
 }
 
-// AvReadImageLine2 reads a line from an image, and write the values of the
-// pixel format component c to dst.
-func AvReadImageLine2(dst CVoidPointer, data []*uint8, linesize []int,
-	desc *AVPixFmtDescriptor, x, y, c, w, readPalComponent, dstElementSize int32) {
-	if len(data) < 4 {
-		panic("data len < 4")
-	}
-	if len(linesize) < 4 {
-		panic("linesize len < 4")
-	}
-	C.av_read_image_line2(VoidPointer(dst),
-		(**C.uint8_t)(unsafe.Pointer(&data[0])),
-		(*C.int)(unsafe.Pointer(&linesize[0])),
-		(*C.struct_AVPixFmtDescriptor)(desc),
-		(C.int)(x), (C.int)(y), (C.int)(c), (C.int)(w),
-		(C.int)(readPalComponent), (C.int)(dstElementSize))
-}
-
 // AvReadImageLine reads a line from an image, and write the values of the
 // pixel format component c to dst.
 func AvReadImageLine(dst *uint16, data []*uint8, linesize []int,
@@ -407,23 +390,6 @@ func AvReadImageLine(dst *uint16, data []*uint8, linesize []int,
 		(*C.struct_AVPixFmtDescriptor)(desc),
 		(C.int)(x), (C.int)(y), (C.int)(c), (C.int)(w),
 		(C.int)(readPalComponent))
-}
-
-// AvWriteImageLine2 writes the values from src to the pixel format component c of an image line.
-func AvWriteImageLine2(src CVoidPointer, data []*uint8, linesize []int,
-	desc *AVPixFmtDescriptor, x, y, c, w, srcElementSize int32) {
-	if len(data) < 4 {
-		panic("data len < 4")
-	}
-	if len(linesize) < 4 {
-		panic("linesize len < 4")
-	}
-	C.av_write_image_line2(VoidPointer(src),
-		(**C.uint8_t)(unsafe.Pointer(&data[0])),
-		(*C.int)(unsafe.Pointer(&linesize[0])),
-		(*C.struct_AVPixFmtDescriptor)(desc),
-		(C.int)(x), (C.int)(y), (C.int)(c), (C.int)(w),
-		(C.int)(srcElementSize))
 }
 
 // AvWriteImageLine writes the values from src to the pixel format component c of an image line.

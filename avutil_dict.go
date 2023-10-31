@@ -20,6 +20,7 @@ const (
 	AV_DICT_MULTIKEY        = C.AV_DICT_MULTIKEY
 )
 
+// AVDictionaryEntry
 type AVDictionaryEntry C.struct_AVDictionaryEntry
 
 // GetKey gets `AVDictionaryEntry.key` value.

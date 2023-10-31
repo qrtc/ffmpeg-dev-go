@@ -28,13 +28,15 @@ const (
 	AV_HWDEVICE_TYPE_DRM          = AVHWDeviceType(C.AV_HWDEVICE_TYPE_DRM)
 	AV_HWDEVICE_TYPE_OPENCL       = AVHWDeviceType(C.AV_HWDEVICE_TYPE_OPENCL)
 	AV_HWDEVICE_TYPE_MEDIACODEC   = AVHWDeviceType(C.AV_HWDEVICE_TYPE_MEDIACODEC)
-	AV_HWDEVICE_TYPE_VULKAN       = AVHWDeviceType(C.AV_HWDEVICE_TYPE_VULKAN)
 )
 
+// AVHWDeviceInternal
 type AVHWDeviceInternal C.struct_AVHWDeviceInternal
 
+// AVHWDeviceContext
 type AVHWDeviceContext C.struct_AVHWDeviceContext
 
+// typedef void (*av_hw_device_context_free_func)(struct AVHWDeviceContext *ctx);
 type AVHWDeviceContextFreeFunc = C.av_hw_device_context_free_func
 
 // GetAvClass gets `AVHWDeviceContext.av_class` value.
@@ -117,10 +119,13 @@ func (dc *AVHWDeviceContext) GetUserOpaqueAddr() *unsafe.Pointer {
 	return &dc.user_opaque
 }
 
+// AVHWFramesInternal
 type AVHWFramesInternal C.struct_AVHWFramesInternal
 
+// AVHWFramesContext
 type AVHWFramesContext C.struct_AVHWFramesContext
 
+// typedef void (*av_hw_frames_context_free_func)(struct AVHWFramesContext *ctx);
 type AVHWFramesContextFreeFunc = C.av_hw_frames_context_free_func
 
 // GetAvClass gets `AVHWFramesContext.av_class` value.
@@ -358,17 +363,6 @@ func AvHWDeviceCtxCreateDerived(dstCtx **AVBufferRef, _type AVHWDeviceType,
 		(C.int)(flags)))
 }
 
-// AvHWDeviceCtxCreateDerivedOpts creates a new device of the specified type from an existing device.
-func AvHWDeviceCtxCreateDerivedOpts(dstCtx **AVBufferRef, _type AVHWDeviceType,
-	srcCtx *AVBufferRef, options *AVDictionary, flags int32) int32 {
-	return (int32)(C.av_hwdevice_ctx_create_derived_opts(
-		(**C.struct_AVBufferRef)(unsafe.Pointer(dstCtx)),
-		(C.enum_AVHWDeviceType)(_type),
-		(*C.struct_AVBufferRef)(srcCtx),
-		(*C.struct_AVDictionary)(options),
-		(C.int)(flags)))
-}
-
 // AvHWFrameCtxAlloc allocates an AVHWFramesContext tied to a given device context.
 func AvHWFrameCtxAlloc(deviceCtx *AVBufferRef) *AVBufferRef {
 	return (*AVBufferRef)(C.av_hwframe_ctx_alloc((*C.struct_AVBufferRef)(deviceCtx)))
@@ -393,6 +387,7 @@ func AvHWFrameTransferData(dst, src *AVFrame, flags int32) int32 {
 		(C.int)(flags)))
 }
 
+// AVHWFrameTransferDirection
 type AVHWFrameTransferDirection = C.enum_AVHWFrameTransferDirection
 
 const (
@@ -410,6 +405,7 @@ func AvHWFrameTransferGetFormats(hwframeCtx *AVBufferRef, dir AVHWFrameTransferD
 		(C.int)(flags)))
 }
 
+// AVHWFramesConstraints
 type AVHWFramesConstraints C.struct_AVHWFramesConstraints
 
 // GetValidHwFormats gets `AVHWFramesConstraints.valid_hw_formats` value.

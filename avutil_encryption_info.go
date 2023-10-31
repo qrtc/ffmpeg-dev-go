@@ -289,21 +289,6 @@ func (eii *AVEncryptionInitInfo) GetDataSizeAddr() *uint32 {
 	return (*uint32)(&eii.data_size)
 }
 
-// GetNext gets `AVEncryptionInitInfo.next` value.
-func (eii *AVEncryptionInitInfo) GetNext() *AVEncryptionInitInfo {
-	return (*AVEncryptionInitInfo)(eii.next)
-}
-
-// SetNext sets `AVEncryptionInitInfo.next` value.
-func (eii *AVEncryptionInitInfo) SetNext(v *AVEncryptionInitInfo) {
-	eii.next = (*C.struct_AVEncryptionInitInfo)(v)
-}
-
-// GetNextAddr gets `AVEncryptionInitInfo.next` address.
-func (eii *AVEncryptionInitInfo) GetNextAddr() **AVEncryptionInitInfo {
-	return (**AVEncryptionInitInfo)(unsafe.Pointer(&eii.next))
-}
-
 // AvEncryptionInfoAlloc allocates an AVEncryptionInfo structure and sub-pointers to hold the given
 // number of subsamples.
 func AvEncryptionInfoAlloc(subsampleCount, keyIdSize, ivSize uint32) *AVEncryptionInfo {

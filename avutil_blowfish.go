@@ -14,6 +14,7 @@ const (
 	AV_BF_ROUNDS = C.AV_BF_ROUNDS
 )
 
+// AVBlowfish
 type AVBlowfish C.struct_AVBlowfish
 
 // GetP gets `AVBlowfish.p` value.
