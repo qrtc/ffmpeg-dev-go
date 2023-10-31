@@ -9,6 +9,7 @@ package ffmpeg
 */
 import "C"
 
+// AVMurMur3
 type AVMurMur3 C.struct_AVMurMur3
 
 // AvMurmur3Alloc allocates an AVMurMur3 hash context.

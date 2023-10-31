@@ -47,9 +47,11 @@ func AvBufferAllocz(size int32) *AVBufferRef {
 	return (*AVBufferRef)(C.av_buffer_allocz((C.int)(size)))
 }
 
-const AV_BUFFER_FLAG_READONLY = C.AV_BUFFER_FLAG_READONLY
+const (
+	AV_BUFFER_FLAG_READONLY = C.AV_BUFFER_FLAG_READONLY
+)
 
-// typedef void (*av_buffer_free_func)(void *opaque, uint8_t *data)
+// typedef void (*av_buffer_free_func)(void *opaque, uint8_t *data);
 type AVBufferFreeFunc = C.av_buffer_free_func
 
 // AvBufferCreate Create an AVBuffer from an existing array.
@@ -108,15 +110,16 @@ func AvBufferReplace(dst **AVBufferRef, src *AVBufferRef) int32 {
 		(*C.struct_AVBufferRef)(src)))
 }
 
+// AVBufferPool
 type AVBufferPool C.struct_AVBufferPool
 
-// typedef AVBufferRef* (*av_buffer_pool_alloc_func)(int size)
+// typedef AVBufferRef* (*av_buffer_pool_alloc_func)(int size);
 type AVBufferPoolAllocFunc = C.av_buffer_pool_alloc_func
 
-// typedef AVBufferRef* (*av_buffer_pool_alloc2_func)(void* opaque, int size)
+// typedef AVBufferRef* (*av_buffer_pool_alloc2_func)(void* opaque, int size);
 type AVBufferPoolAlloc2Func = C.av_buffer_pool_alloc2_func
 
-// typedef void (*av_buffer_pool_free_func)(void* opaque)
+// typedef void (*av_buffer_pool_free_func)(void* opaque);
 type AVBufferPoolFreeFunc = C.av_buffer_pool_free_func
 
 // AvBufferPoolInit allocates and initializes a buffer pool.

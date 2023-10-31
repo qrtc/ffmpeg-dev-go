@@ -302,7 +302,7 @@ func main() {
 
 	if videoStream != nil {
 		fmt.Fprintf(os.Stdout, "Play the output video file with the command:\n"+
-			"ffplay -f rawvideo -pix_fmt %s -video_size %dx%d %s\n",
+			"ffplay -f rawvideo -pixel_format %s -video_size %dx%d %s\n",
 			ffmpeg.AvGetPixFmtName(videoDecCtx.GetPixFmt()),
 			videoDecCtx.GetWidth(), videoDecCtx.GetHeight(), videoDstFilename)
 	}

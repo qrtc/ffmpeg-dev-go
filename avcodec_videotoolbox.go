@@ -11,6 +11,7 @@ package ffmpeg
 */
 import "C"
 
+// AVVideotoolboxContext
 type AVVideotoolboxContext C.struct_AVVideotoolboxContext
 
 // AvVideotoolboxAllocContext allocates and initializes a Videotoolbox context.

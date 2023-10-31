@@ -199,27 +199,27 @@ func AvLogOnce(avcl CVoidPointer, initialLevel, subsequentLevel int32, state *in
 
 // NONEED: av_vlog
 
-// AvLogGetLevel gets the current log level
+// AvLogGetLevel gets the current log level.
 func AvLogGetLevel() int32 {
 	return (int32)(C.av_log_get_level())
 }
 
-// AvLogSetLevel sets the log level
+// AvLogSetLevel sets the log level.
 func AvLogSetLevel(level int32) {
-	C.av_log_set_level(C.int(level))
+	C.av_log_set_level((C.int)(level))
 }
 
 // typedef void (*av_log_callback_func)(void*, int, const char*, va_list);
 type AVLogCallbackFunc = C.av_log_callback_func
 
-// AvLogSetCallback sets the logging callback
+// AvLogSetCallback sets the logging callback.
 func AvLogSetCallback(f AVLogCallbackFunc) {
 	C.av_log_set_callback(f)
 }
 
 // NONEED: av_log_default_callback
 
-// AvDefaultItemName returns the context name
+// AvDefaultItemName returns the context name.
 func AvDefaultItemName(ctx CVoidPointer) string {
 	return C.GoString(C.av_default_item_name(VoidPointer(ctx)))
 }

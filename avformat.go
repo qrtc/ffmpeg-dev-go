@@ -982,8 +982,13 @@ func (cpt *AVChapter) GetMetadataAddr() **AVDictionary {
 	return (**AVDictionary)(unsafe.Pointer(&cpt.metadata))
 }
 
+// typedef int (*av_format_control_message)(struct AVFormatContext *s, int type,
+// void *data, size_t data_size);
 type AVFormatControlMessageFunc C.av_format_control_message
 
+// typedef int (*AVOpenCallback)(struct AVFormatContext *s,
+// AVIOContext **pb, const char *url, int flags,
+// const AVIOInterruptCB *int_cb, AVDictionary **options);
 type AVOpenCallbackFunc C.AVOpenCallback
 
 // AVDurationEstimationMethod
@@ -1140,7 +1145,7 @@ func (s *AVFormatContext) GetUrl() string {
 func (s *AVFormatContext) SetUrl(v string) {
 	vPtr, _ := StringCasting(v)
 	if s.url != nil {
-		C.free(unsafe.Pointer(s.url))
+		FreePointer(s.url)
 	}
 	s.url = (*C.char)(vPtr)
 }
@@ -2396,7 +2401,7 @@ func AvProbeInputBuffer2(pb *AVIOContext, fmt **AVInputFormat,
 		(*C.char)(urlPtr), VoidPointer(logctx), (C.uint)(offset), (C.uint)(maxProbeSize)))
 }
 
-// AvProbeInputBuffer likes AvProbeInputBuffer2() but returns 0 on success
+// AvProbeInputBuffer likes AvProbeInputBuffer2() but returns 0 on success.
 func AvProbeInputBuffer(pb *AVIOContext, fmt **AVInputFormat,
 	url string, logctx CVoidPointer, offset, maxProbeSize uint32) int32 {
 	urlPtr, urlFunc := StringCasting(url)

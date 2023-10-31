@@ -56,6 +56,7 @@ func FFUMOD[T Integer](a, b T) T {
 	return a - b*FFUDIV(a, b)
 }
 
+// FFABS
 func FFABS[T SingedInteger](a T) T {
 	if a >= 0 {
 		return a
@@ -63,6 +64,7 @@ func FFABS[T SingedInteger](a T) T {
 	return -a
 }
 
+// FFSIGNT
 func FFSIGNT[T SingedInteger](a T) T {
 	if a > 0 {
 		return 1
@@ -105,6 +107,7 @@ func FFDIFFSIGN[T Integer](x, y T) int {
 	}
 }
 
+// FFMAX
 func FFMAX[T Integer](a, b T) T {
 	if a > b {
 		return a
@@ -112,10 +115,12 @@ func FFMAX[T Integer](a, b T) T {
 	return b
 }
 
+// FFMAX3
 func FFMAX3[T Integer](a, b, c T) T {
 	return FFMAX(FFMAX(a, b), c)
 }
 
+// FFMIN
 func FFMIN[T Integer](a, b T) T {
 	if a > b {
 		return b
@@ -123,6 +128,7 @@ func FFMIN[T Integer](a, b T) T {
 	return a
 }
 
+// FFMIN3
 func FFMIN3[T Integer](a, b, c T) T {
 	return FFMIN(FFMIN(a, b), c)
 }
@@ -241,12 +247,12 @@ func AvCeilLog2C(x int32) int32 {
 	return (int32)(C.av_ceil_log2_c((C.int)(x)))
 }
 
-// AvPopcountC counts number of bits set to one in x
+// AvPopcountC counts number of bits set to one in x.
 func AvPopcountC(x uint32) int32 {
 	return (int32)(C.av_popcount_c((C.uint)(x)))
 }
 
-// AvPopcount64C counts number of bits set to one in x
+// AvPopcount64C counts number of bits set to one in x.
 func AvPopcount64C(x uint64) int32 {
 	return (int32)(C.av_popcount64_c((C.uint64_t)(x)))
 }

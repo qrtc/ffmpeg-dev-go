@@ -87,7 +87,7 @@ func AvD2Q(d float64, max int32) AVRational {
 // return One of the following values:
 // 1 if `q1` is nearer to `q` than `q2`
 // -1 if `q2` is nearer to `q` than `q1`
-// 0 if they have the same distance
+// 0 if they have the same distance.
 func AvNearerQ(q, q1, q2 AVRational) int32 {
 	return (int32)(C.av_nearer_q((C.struct_AVRational)(q),
 		(C.struct_AVRational)(q1), (C.struct_AVRational)(q2)))

@@ -12,6 +12,7 @@ typedef void (*av_thread_message_free_func)(void *msg);
 import "C"
 import "unsafe"
 
+// AVThreadMessageQueue
 type AVThreadMessageQueue C.struct_AVThreadMessageQueue
 
 // AVThreadMessageFlags

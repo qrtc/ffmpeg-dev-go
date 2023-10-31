@@ -9,6 +9,7 @@ package ffmpeg
 */
 import "C"
 
+// AVRounding
 type AVRounding = C.enum_AVRounding
 
 const (

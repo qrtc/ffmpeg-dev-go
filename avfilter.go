@@ -180,7 +180,7 @@ func (fltc *AVFilterContext) GetName() string {
 
 // SetName sets `AVFilterContext.name` value.
 func (fltc *AVFilterContext) SetName(v string) {
-	C.free(unsafe.Pointer(fltc.name))
+	FreePointer(fltc.name)
 	fltc.name, _ = StringCasting(v)
 }
 
@@ -735,7 +735,7 @@ const (
 	AVFILTER_CMD_FLAG_FAST = C.AVFILTER_CMD_FLAG_FAST
 )
 
-// AvFilterProcessCommand  makes the filter instance process a command.
+// AvFilterProcessCommand makes the filter instance process a command.
 // It is recommended to use AVFilterGraphSendCommand().
 func AvFilterProcessCommand(filter *AVFilterContext, cmd, arg string, resLen, flags int32) (res string, ret int32) {
 	cmdPtr, cmdFunc := StringCasting(cmd)
@@ -1032,7 +1032,7 @@ func (fltio *AVFilterInOut) GetName() string {
 
 // SetName sets `AVFilterInOut.name` value.
 func (fltio *AVFilterInOut) SetName(v string) {
-	C.free(unsafe.Pointer(fltio.name))
+	FreePointer(fltio.name)
 	fltio.name, _ = StringCasting(v)
 }
 
