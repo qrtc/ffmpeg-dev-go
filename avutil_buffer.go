@@ -47,9 +47,11 @@ func AvBufferAllocz(size int32) *AVBufferRef {
 	return (*AVBufferRef)(C.av_buffer_allocz((C.int)(size)))
 }
 
-const AV_BUFFER_FLAG_READONLY = C.AV_BUFFER_FLAG_READONLY
+const (
+	AV_BUFFER_FLAG_READONLY = C.AV_BUFFER_FLAG_READONLY
+)
 
-// typedef void (*av_buffer_free_func)(void *opaque, uint8_t *data)
+// typedef void (*av_buffer_free_func)(void *opaque, uint8_t *data);
 type AVBufferFreeFunc = C.av_buffer_free_func
 
 // AvBufferCreate Create an AVBuffer from an existing array.
@@ -102,21 +104,16 @@ func AvBufferRealloc(buf **AVBufferRef, size int32) int32 {
 	return (int32)(C.av_buffer_realloc((**C.struct_AVBufferRef)(unsafe.Pointer(buf)), (C.int)(size)))
 }
 
-// AvBufferReplace ensures dst refers to the same data as src.
-func AvBufferReplace(dst **AVBufferRef, src *AVBufferRef) int32 {
-	return (int32)(C.av_buffer_replace((**C.struct_AVBufferRef)(unsafe.Pointer(dst)),
-		(*C.struct_AVBufferRef)(src)))
-}
-
+// AVBufferPool
 type AVBufferPool C.struct_AVBufferPool
 
-// typedef AVBufferRef* (*av_buffer_pool_alloc_func)(int size)
+// typedef AVBufferRef* (*av_buffer_pool_alloc_func)(int size);
 type AVBufferPoolAllocFunc = C.av_buffer_pool_alloc_func
 
 // typedef AVBufferRef* (*av_buffer_pool_alloc2_func)(void* opaque, int size)
 type AVBufferPoolAlloc2Func = C.av_buffer_pool_alloc2_func
 
-// typedef void (*av_buffer_pool_free_func)(void* opaque)
+// typedef void (*av_buffer_pool_free_func)(void* opaque);
 type AVBufferPoolFreeFunc = C.av_buffer_pool_free_func
 
 // AvBufferPoolInit allocates and initializes a buffer pool.
@@ -140,9 +137,4 @@ func AvBufferPoolUninit(pool **AVBufferPool) {
 // AvBufferPoolGet allocates a new AVBuffer, reusing an old buffer from the pool when available.
 func AvBufferPoolGet(pool *AVBufferPool) *AVBufferRef {
 	return (*AVBufferRef)(C.av_buffer_pool_get((*C.struct_AVBufferPool)(pool)))
-}
-
-// AvBufferPoolBufferGetOpaque queries the original opaque parameter of an allocated buffer in the pool.
-func AvBufferPoolBufferGetOpaque(buf *AVBufferRef) unsafe.Pointer {
-	return C.av_buffer_pool_buffer_get_opaque((*C.struct_AVBufferRef)(buf))
 }

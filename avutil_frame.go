@@ -33,11 +33,6 @@ const (
 	AV_FRAME_DATA_QP_TABLE_PROPERTIES        = AVFrameSideDataType(C.AV_FRAME_DATA_QP_TABLE_PROPERTIES)
 	AV_FRAME_DATA_QP_TABLE_DATA              = AVFrameSideDataType(C.AV_FRAME_DATA_QP_TABLE_DATA)
 	AV_FRAME_DATA_S12M_TIMECODE              = AVFrameSideDataType(C.AV_FRAME_DATA_S12M_TIMECODE)
-	AV_FRAME_DATA_DYNAMIC_HDR_PLUS           = AVFrameSideDataType(C.AV_FRAME_DATA_DYNAMIC_HDR_PLUS)
-	AV_FRAME_DATA_REGIONS_OF_INTEREST        = AVFrameSideDataType(C.AV_FRAME_DATA_REGIONS_OF_INTEREST)
-	AV_FRAME_DATA_VIDEO_ENC_PARAMS           = AVFrameSideDataType(C.AV_FRAME_DATA_VIDEO_ENC_PARAMS)
-	AV_FRAME_DATA_SEI_UNREGISTERED           = AVFrameSideDataType(C.AV_FRAME_DATA_SEI_UNREGISTERED)
-	AV_FRAME_DATA_FILM_GRAIN_PARAMS          = AVFrameSideDataType(C.AV_FRAME_DATA_FILM_GRAIN_PARAMS)
 )
 
 // AVActiveFormatDescription
@@ -133,96 +128,6 @@ func (sd *AVFrameSideData) GetBufAddr() **AVBufferRef {
 
 // Structure describing a single Region Of Interest.
 type AVRegionOfInterest C.struct_AVRegionOfInterest
-
-// GetSelfSize gets `AVRegionOfInterest.self_size` value.
-func (roi *AVRegionOfInterest) GetSelfSize() uint32 {
-	return (uint32)(roi.self_size)
-}
-
-// SetSelfSize sets `AVRegionOfInterest.self_size` value.
-func (roi *AVRegionOfInterest) SetSelfSize(v uint32) {
-	roi.self_size = (C.uint32_t)(v)
-}
-
-// GetSelfSizeAddr gets `AVRegionOfInterest.self_size` address.
-func (roi *AVRegionOfInterest) GetSelfSizeAddr() *uint32 {
-	return (*uint32)(&roi.self_size)
-}
-
-// GetTop gets `AVRegionOfInterest.top` value.
-func (roi *AVRegionOfInterest) GetTop() int32 {
-	return (int32)(roi.top)
-}
-
-// SetTop sets `AVRegionOfInterest.top` value.
-func (roi *AVRegionOfInterest) SetTop(v int32) {
-	roi.top = (C.int)(v)
-}
-
-// GetTopAddr gets `AVRegionOfInterest.top` address.
-func (roi *AVRegionOfInterest) GetTopAddr() *int32 {
-	return (*int32)(&roi.top)
-}
-
-// GetBottom gets `AVRegionOfInterest.bottom` value.
-func (roi *AVRegionOfInterest) GetBottom() int32 {
-	return (int32)(roi.bottom)
-}
-
-// SetBottom sets `AVRegionOfInterest.bottom` value.
-func (roi *AVRegionOfInterest) SetBottom(v int32) {
-	roi.bottom = (C.int)(v)
-}
-
-// GetBottomAddr gets `AVRegionOfInterest.bottom` address.
-func (roi *AVRegionOfInterest) GetBottomAddr() *int32 {
-	return (*int32)(&roi.bottom)
-}
-
-// GetLeft gets `AVRegionOfInterest.left` value.
-func (roi *AVRegionOfInterest) GetLeft() int32 {
-	return (int32)(roi.left)
-}
-
-// SetLeft sets `AVRegionOfInterest.left` value.
-func (roi *AVRegionOfInterest) SetLeft(v int32) {
-	roi.left = (C.int)(v)
-}
-
-// GetLeftAddr gets `AVRegionOfInterest.left` address.
-func (roi *AVRegionOfInterest) GetLeftAddr() *int32 {
-	return (*int32)(&roi.left)
-}
-
-// GetRight gets `AVRegionOfInterest.right` value.
-func (roi *AVRegionOfInterest) GetRight() int32 {
-	return (int32)(roi.right)
-}
-
-// SetRight sets `AVRegionOfInterest.right` value.
-func (roi *AVRegionOfInterest) SetRight(v int32) {
-	roi.right = (C.int)(v)
-}
-
-// GetRightAddr gets `AVRegionOfInterest.right` address.
-func (roi *AVRegionOfInterest) GetRightAddr() *int32 {
-	return (*int32)(&roi.right)
-}
-
-// GetQoffset gets `AVRegionOfInterest.qoffset` value.
-func (roi *AVRegionOfInterest) GetQoffset() AVRational {
-	return (AVRational)(roi.qoffset)
-}
-
-// SetQoffset sets `AVRegionOfInterest.qoffset` value.
-func (roi *AVRegionOfInterest) SetQoffset(v AVRational) {
-	roi.qoffset = (C.struct_AVRational)(v)
-}
-
-// GetQoffsetAddr gets `AVRegionOfInterest.qoffset` address.
-func (roi *AVRegionOfInterest) GetQoffsetAddr() *AVRational {
-	return (*AVRational)(&roi.qoffset)
-}
 
 // AVFrame
 type AVFrame C.struct_AVFrame
@@ -864,10 +769,8 @@ func (frame *AVFrame) GetDecodeErrorFlagsAddr() *int32 {
 }
 
 const (
-	FF_DECODE_ERROR_INVALID_BITSTREAM  = int32(C.FF_DECODE_ERROR_INVALID_BITSTREAM)
-	FF_DECODE_ERROR_MISSING_REFERENCE  = int32(C.FF_DECODE_ERROR_MISSING_REFERENCE)
-	FF_DECODE_ERROR_CONCEALMENT_ACTIVE = int32(C.FF_DECODE_ERROR_CONCEALMENT_ACTIVE)
-	FF_DECODE_ERROR_DECODE_SLICES      = int32(C.FF_DECODE_ERROR_DECODE_SLICES)
+	FF_DECODE_ERROR_INVALID_BITSTREAM = int32(C.FF_DECODE_ERROR_INVALID_BITSTREAM)
+	FF_DECODE_ERROR_MISSING_REFERENCE = int32(C.FF_DECODE_ERROR_MISSING_REFERENCE)
 )
 
 // GetChannels gets `AVFrame.channels` value.
@@ -1363,7 +1266,7 @@ func AvFrameApplyCropping(frame *AVFrame, flags int32) int32 {
 	return (int32)(C.av_frame_apply_cropping((*C.struct_AVFrame)(frame), (C.int)(flags)))
 }
 
-// AvFrameSideDataName returns a string identifying the side data type
+// AvFrameSideDataName returns a string identifying the side data type.
 func AvFrameSideDataName(_type AVFrameSideDataType) string {
 	return C.GoString(C.av_frame_side_data_name((C.enum_AVFrameSideDataType)(_type)))
 }

@@ -36,11 +36,6 @@ const (
 	AV_CH_SURROUND_DIRECT_LEFT  = uint64(C.AV_CH_SURROUND_DIRECT_LEFT)
 	AV_CH_SURROUND_DIRECT_RIGHT = uint64(C.AV_CH_SURROUND_DIRECT_RIGHT)
 	AV_CH_LOW_FREQUENCY_2       = uint64(C.AV_CH_LOW_FREQUENCY_2)
-	AV_CH_TOP_SIDE_LEFT         = uint64(C.AV_CH_TOP_SIDE_LEFT)
-	AV_CH_TOP_SIDE_RIGHT        = uint64(C.AV_CH_TOP_SIDE_RIGHT)
-	AV_CH_BOTTOM_FRONT_CENTER   = uint64(C.AV_CH_BOTTOM_FRONT_CENTER)
-	AV_CH_BOTTOM_FRONT_LEFT     = uint64(C.AV_CH_BOTTOM_FRONT_LEFT)
-	AV_CH_BOTTOM_FRONT_RIGHT    = uint64(C.AV_CH_BOTTOM_FRONT_RIGHT)
 
 	AV_CH_LAYOUT_NATIVE = uint64(C.AV_CH_LAYOUT_NATIVE)
 )
@@ -74,9 +69,9 @@ const (
 	AV_CH_LAYOUT_OCTAGONAL         = uint64(C.AV_CH_LAYOUT_OCTAGONAL)
 	AV_CH_LAYOUT_HEXADECAGONAL     = uint64(C.AV_CH_LAYOUT_HEXADECAGONAL)
 	AV_CH_LAYOUT_STEREO_DOWNMIX    = uint64(C.AV_CH_LAYOUT_STEREO_DOWNMIX)
-	AV_CH_LAYOUT_22POINT2          = uint64(C.AV_CH_LAYOUT_22POINT2)
 )
 
+// AVMatrixEncoding
 type AVMatrixEncoding = C.enum_AVMatrixEncoding
 
 const (
@@ -105,7 +100,9 @@ func AvGetExtendedChannelLayout(name string, channelLayout *uint64, nbChannels *
 		(*C.uint64_t)(channelLayout), (*C.int32_t)(nbChannels)))
 }
 
-const AV_CH_LAYOUT_MAX_STRING_SIZE = 256
+const (
+	AV_CH_LAYOUT_MAX_STRING_SIZE = 256
+)
 
 // AvGetChannelLayoutString returns a description of a channel layout.
 func AvGetChannelLayoutString(nbChannels int32, channelLayout uint64) string {

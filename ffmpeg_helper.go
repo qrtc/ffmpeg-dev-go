@@ -25,6 +25,33 @@ type UnsingedInteger interface {
 	~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64 | ~uintptr
 }
 
+// CVoidPointer represents a (void*) type pointer in the C world.
+type CVoidPointer any
+
+// VoidPointer returns a unsafe.Pointer from CVoidPointer.
+func VoidPointer(a CVoidPointer) unsafe.Pointer {
+	if a == nil {
+		return nil
+	}
+	return unsafe.Pointer(reflect.ValueOf(a).Pointer())
+}
+
+// CVoidPointer represents a (void**) type pointer in the C world.
+type CVoidPointerPointer any
+
+// VoidPointerPointer returns a *unsafe.Pointer from CVoidPointerPointer.
+func VoidPointerPointer(a CVoidPointerPointer) *unsafe.Pointer {
+	if a == nil {
+		return nil
+	}
+	return (*unsafe.Pointer)(unsafe.Pointer(reflect.ValueOf(a).Pointer()))
+}
+
+// FreePointer frees memory allocated in the C world.
+func FreePointer(ptr CVoidPointer) {
+	C.free(VoidPointer(ptr))
+}
+
 const NIL = "\\'<nil>'\\"
 
 // StringCasting casts go string to c world char* with free function.
@@ -34,7 +61,7 @@ func StringCasting(s string) (allocPtr *C.char, freeFunc func()) {
 		return nil, func() {}
 	}
 	allocPtr = C.CString(s)
-	freeFunc = func() { C.free(unsafe.Pointer(allocPtr)) }
+	freeFunc = func() { FreePointer(allocPtr) }
 	return allocPtr, freeFunc
 }
 
@@ -96,28 +123,6 @@ func PointerOffset[U any, V Integer](ptr *U, offset V) *U {
 		uintptr(unsafe.Sizeof(*ptr))*(uintptr(offset))))
 }
 
-// CVoidPointer represents a (void*) type pointer in the C world.
-type CVoidPointer any
-
-// VoidPointer returns a unsafe.Pointer from CVoidPointer.
-func VoidPointer(a CVoidPointer) unsafe.Pointer {
-	if a == nil {
-		return nil
-	}
-	return unsafe.Pointer(reflect.ValueOf(a).Pointer())
-}
-
-// CVoidPointer represents a (void**) type pointer in the C world.
-type CVoidPointerPointer any
-
-// VoidPointerPointer returns a *unsafe.Pointer from CVoidPointerPointer.
-func VoidPointerPointer(a CVoidPointerPointer) *unsafe.Pointer {
-	if a == nil {
-		return nil
-	}
-	return (*unsafe.Pointer)(unsafe.Pointer(reflect.ValueOf(a).Pointer()))
-}
-
 // CondExpr is Conditional Operator like Ternary Operator in the C world.
 func CondExpr[T any](cond bool, x, y T) T {
 	if cond {
@@ -126,6 +131,7 @@ func CondExpr[T any](cond bool, x, y T) T {
 	return y
 }
 
+// PlusPlus is ++ like operator.
 func PlusPlus[T Integer](x *T) T {
 	defer func() { *x++ }()
 	return *x

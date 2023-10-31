@@ -53,9 +53,6 @@ const (
 	AV_CPU_FLAG_ARMV8   = C.AV_CPU_FLAG_ARMV8
 	AV_CPU_FLAG_VFP_VM  = C.AV_CPU_FLAG_VFP_VM
 	AV_CPU_FLAG_SETEND  = C.AV_CPU_FLAG_SETEND
-
-	AV_CPU_FLAG_MMI = C.AV_CPU_FLAG_MMI
-	AV_CPU_FLAG_MSA = C.AV_CPU_FLAG_MSA
 )
 
 // AvGetCpuFlags returns the flags which specify extensions supported by the CPU.

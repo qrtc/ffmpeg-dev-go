@@ -18,9 +18,6 @@ typedef int (*avcodec_context_get_buffer2_func)(struct AVCodecContext *s, AVFram
 
 typedef void (*avcodec_context_rtp_callback_func)(struct AVCodecContext *avctx, void *data, int size, int mb_nb);
 
-typedef int (*avcodec_context_get_encode_buffer_func)(struct AVCodecContext *s,
-	 AVPacket *pkt, int flags);
-
 typedef int (*avcodec_context_execute_func)(AVCodecContext *c2, void *arg2);
 
 typedef int (*avcodec_context_internal_execute_func)(struct AVCodecContext *c,
@@ -48,6 +45,548 @@ typedef int (*avcodec_parser_split_func)(AVCodecContext *avctx, const uint8_t *b
 import "C"
 import (
 	"unsafe"
+)
+
+// AVCodecID
+type AVCodecID = C.enum_AVCodecID
+
+const (
+	AV_CODEC_ID_NONE = AVCodecID(C.AV_CODEC_ID_NONE)
+
+	// video codecs
+	AV_CODEC_ID_MPEG1VIDEO      = AVCodecID(C.AV_CODEC_ID_MPEG1VIDEO)
+	AV_CODEC_ID_MPEG2VIDEO      = AVCodecID(C.AV_CODEC_ID_MPEG2VIDEO)
+	AV_CODEC_ID_H261            = AVCodecID(C.AV_CODEC_ID_H261)
+	AV_CODEC_ID_H263            = AVCodecID(C.AV_CODEC_ID_H263)
+	AV_CODEC_ID_RV10            = AVCodecID(C.AV_CODEC_ID_RV10)
+	AV_CODEC_ID_RV20            = AVCodecID(C.AV_CODEC_ID_RV20)
+	AV_CODEC_ID_MJPEG           = AVCodecID(C.AV_CODEC_ID_MJPEG)
+	AV_CODEC_ID_MJPEGB          = AVCodecID(C.AV_CODEC_ID_MJPEGB)
+	AV_CODEC_ID_LJPEG           = AVCodecID(C.AV_CODEC_ID_LJPEG)
+	AV_CODEC_ID_SP5X            = AVCodecID(C.AV_CODEC_ID_SP5X)
+	AV_CODEC_ID_JPEGLS          = AVCodecID(C.AV_CODEC_ID_JPEGLS)
+	AV_CODEC_ID_MPEG4           = AVCodecID(C.AV_CODEC_ID_MPEG4)
+	AV_CODEC_ID_RAWVIDEO        = AVCodecID(C.AV_CODEC_ID_RAWVIDEO)
+	AV_CODEC_ID_MSMPEG4V1       = AVCodecID(C.AV_CODEC_ID_MSMPEG4V1)
+	AV_CODEC_ID_MSMPEG4V2       = AVCodecID(C.AV_CODEC_ID_MSMPEG4V2)
+	AV_CODEC_ID_MSMPEG4V3       = AVCodecID(C.AV_CODEC_ID_MSMPEG4V3)
+	AV_CODEC_ID_WMV1            = AVCodecID(C.AV_CODEC_ID_WMV1)
+	AV_CODEC_ID_WMV2            = AVCodecID(C.AV_CODEC_ID_WMV2)
+	AV_CODEC_ID_H263P           = AVCodecID(C.AV_CODEC_ID_H263P)
+	AV_CODEC_ID_H263I           = AVCodecID(C.AV_CODEC_ID_H263I)
+	AV_CODEC_ID_FLV1            = AVCodecID(C.AV_CODEC_ID_FLV1)
+	AV_CODEC_ID_SVQ1            = AVCodecID(C.AV_CODEC_ID_SVQ1)
+	AV_CODEC_ID_SVQ3            = AVCodecID(C.AV_CODEC_ID_SVQ3)
+	AV_CODEC_ID_DVVIDEO         = AVCodecID(C.AV_CODEC_ID_DVVIDEO)
+	AV_CODEC_ID_HUFFYUV         = AVCodecID(C.AV_CODEC_ID_HUFFYUV)
+	AV_CODEC_ID_CYUV            = AVCodecID(C.AV_CODEC_ID_CYUV)
+	AV_CODEC_ID_H264            = AVCodecID(C.AV_CODEC_ID_H264)
+	AV_CODEC_ID_INDEO3          = AVCodecID(C.AV_CODEC_ID_INDEO3)
+	AV_CODEC_ID_VP3             = AVCodecID(C.AV_CODEC_ID_VP3)
+	AV_CODEC_ID_THEORA          = AVCodecID(C.AV_CODEC_ID_THEORA)
+	AV_CODEC_ID_ASV1            = AVCodecID(C.AV_CODEC_ID_ASV1)
+	AV_CODEC_ID_ASV2            = AVCodecID(C.AV_CODEC_ID_ASV2)
+	AV_CODEC_ID_FFV1            = AVCodecID(C.AV_CODEC_ID_FFV1)
+	AV_CODEC_ID_4XM             = AVCodecID(C.AV_CODEC_ID_4XM)
+	AV_CODEC_ID_VCR1            = AVCodecID(C.AV_CODEC_ID_VCR1)
+	AV_CODEC_ID_CLJR            = AVCodecID(C.AV_CODEC_ID_CLJR)
+	AV_CODEC_ID_MDEC            = AVCodecID(C.AV_CODEC_ID_MDEC)
+	AV_CODEC_ID_ROQ             = AVCodecID(C.AV_CODEC_ID_ROQ)
+	AV_CODEC_ID_INTERPLAY_VIDEO = AVCodecID(C.AV_CODEC_ID_INTERPLAY_VIDEO)
+	AV_CODEC_ID_XAN_WC3         = AVCodecID(C.AV_CODEC_ID_XAN_WC3)
+	AV_CODEC_ID_XAN_WC4         = AVCodecID(C.AV_CODEC_ID_XAN_WC4)
+	AV_CODEC_ID_RPZA            = AVCodecID(C.AV_CODEC_ID_RPZA)
+	AV_CODEC_ID_CINEPAK         = AVCodecID(C.AV_CODEC_ID_CINEPAK)
+	AV_CODEC_ID_WS_VQA          = AVCodecID(C.AV_CODEC_ID_WS_VQA)
+	AV_CODEC_ID_MSRLE           = AVCodecID(C.AV_CODEC_ID_MSRLE)
+	AV_CODEC_ID_MSVIDEO1        = AVCodecID(C.AV_CODEC_ID_MSVIDEO1)
+	AV_CODEC_ID_IDCIN           = AVCodecID(C.AV_CODEC_ID_IDCIN)
+	AV_CODEC_ID_8BPS            = AVCodecID(C.AV_CODEC_ID_8BPS)
+	AV_CODEC_ID_SMC             = AVCodecID(C.AV_CODEC_ID_SMC)
+	AV_CODEC_ID_FLIC            = AVCodecID(C.AV_CODEC_ID_FLIC)
+	AV_CODEC_ID_TRUEMOTION1     = AVCodecID(C.AV_CODEC_ID_TRUEMOTION1)
+	AV_CODEC_ID_VMDVIDEO        = AVCodecID(C.AV_CODEC_ID_VMDVIDEO)
+	AV_CODEC_ID_MSZH            = AVCodecID(C.AV_CODEC_ID_MSZH)
+	AV_CODEC_ID_ZLIB            = AVCodecID(C.AV_CODEC_ID_ZLIB)
+	AV_CODEC_ID_QTRLE           = AVCodecID(C.AV_CODEC_ID_QTRLE)
+	AV_CODEC_ID_TSCC            = AVCodecID(C.AV_CODEC_ID_TSCC)
+	AV_CODEC_ID_ULTI            = AVCodecID(C.AV_CODEC_ID_ULTI)
+	AV_CODEC_ID_QDRAW           = AVCodecID(C.AV_CODEC_ID_QDRAW)
+	AV_CODEC_ID_VIXL            = AVCodecID(C.AV_CODEC_ID_VIXL)
+	AV_CODEC_ID_QPEG            = AVCodecID(C.AV_CODEC_ID_QPEG)
+	AV_CODEC_ID_PNG             = AVCodecID(C.AV_CODEC_ID_PNG)
+	AV_CODEC_ID_PPM             = AVCodecID(C.AV_CODEC_ID_PPM)
+	AV_CODEC_ID_PBM             = AVCodecID(C.AV_CODEC_ID_PBM)
+	AV_CODEC_ID_PGM             = AVCodecID(C.AV_CODEC_ID_PGM)
+	AV_CODEC_ID_PGMYUV          = AVCodecID(C.AV_CODEC_ID_PGMYUV)
+	AV_CODEC_ID_PAM             = AVCodecID(C.AV_CODEC_ID_PAM)
+	AV_CODEC_ID_FFVHUFF         = AVCodecID(C.AV_CODEC_ID_FFVHUFF)
+	AV_CODEC_ID_RV30            = AVCodecID(C.AV_CODEC_ID_RV30)
+	AV_CODEC_ID_RV40            = AVCodecID(C.AV_CODEC_ID_RV40)
+	AV_CODEC_ID_VC1             = AVCodecID(C.AV_CODEC_ID_VC1)
+	AV_CODEC_ID_WMV3            = AVCodecID(C.AV_CODEC_ID_WMV3)
+	AV_CODEC_ID_LOCO            = AVCodecID(C.AV_CODEC_ID_LOCO)
+	AV_CODEC_ID_WNV1            = AVCodecID(C.AV_CODEC_ID_WNV1)
+	AV_CODEC_ID_AASC            = AVCodecID(C.AV_CODEC_ID_AASC)
+	AV_CODEC_ID_INDEO2          = AVCodecID(C.AV_CODEC_ID_INDEO2)
+	AV_CODEC_ID_FRAPS           = AVCodecID(C.AV_CODEC_ID_FRAPS)
+	AV_CODEC_ID_TRUEMOTION2     = AVCodecID(C.AV_CODEC_ID_TRUEMOTION2)
+	AV_CODEC_ID_BMP             = AVCodecID(C.AV_CODEC_ID_BMP)
+	AV_CODEC_ID_CSCD            = AVCodecID(C.AV_CODEC_ID_CSCD)
+	AV_CODEC_ID_MMVIDEO         = AVCodecID(C.AV_CODEC_ID_MMVIDEO)
+	AV_CODEC_ID_ZMBV            = AVCodecID(C.AV_CODEC_ID_ZMBV)
+	AV_CODEC_ID_AVS             = AVCodecID(C.AV_CODEC_ID_AVS)
+	AV_CODEC_ID_SMACKVIDEO      = AVCodecID(C.AV_CODEC_ID_SMACKVIDEO)
+	AV_CODEC_ID_NUV             = AVCodecID(C.AV_CODEC_ID_NUV)
+	AV_CODEC_ID_KMVC            = AVCodecID(C.AV_CODEC_ID_KMVC)
+	AV_CODEC_ID_FLASHSV         = AVCodecID(C.AV_CODEC_ID_FLASHSV)
+	AV_CODEC_ID_CAVS            = AVCodecID(C.AV_CODEC_ID_CAVS)
+	AV_CODEC_ID_JPEG2000        = AVCodecID(C.AV_CODEC_ID_JPEG2000)
+	AV_CODEC_ID_VMNC            = AVCodecID(C.AV_CODEC_ID_VMNC)
+	AV_CODEC_ID_VP5             = AVCodecID(C.AV_CODEC_ID_VP5)
+	AV_CODEC_ID_VP6             = AVCodecID(C.AV_CODEC_ID_VP6)
+	AV_CODEC_ID_VP6F            = AVCodecID(C.AV_CODEC_ID_VP6F)
+	AV_CODEC_ID_TARGA           = AVCodecID(C.AV_CODEC_ID_TARGA)
+	AV_CODEC_ID_DSICINVIDEO     = AVCodecID(C.AV_CODEC_ID_DSICINVIDEO)
+	AV_CODEC_ID_TIERTEXSEQVIDEO = AVCodecID(C.AV_CODEC_ID_TIERTEXSEQVIDEO)
+	AV_CODEC_ID_TIFF            = AVCodecID(C.AV_CODEC_ID_TIFF)
+	AV_CODEC_ID_GIF             = AVCodecID(C.AV_CODEC_ID_GIF)
+	AV_CODEC_ID_DXA             = AVCodecID(C.AV_CODEC_ID_DXA)
+	AV_CODEC_ID_DNXHD           = AVCodecID(C.AV_CODEC_ID_DNXHD)
+	AV_CODEC_ID_THP             = AVCodecID(C.AV_CODEC_ID_THP)
+	AV_CODEC_ID_SGI             = AVCodecID(C.AV_CODEC_ID_SGI)
+	AV_CODEC_ID_C93             = AVCodecID(C.AV_CODEC_ID_C93)
+	AV_CODEC_ID_BETHSOFTVID     = AVCodecID(C.AV_CODEC_ID_BETHSOFTVID)
+	AV_CODEC_ID_PTX             = AVCodecID(C.AV_CODEC_ID_PTX)
+	AV_CODEC_ID_TXD             = AVCodecID(C.AV_CODEC_ID_TXD)
+	AV_CODEC_ID_VP6A            = AVCodecID(C.AV_CODEC_ID_VP6A)
+	AV_CODEC_ID_AMV             = AVCodecID(C.AV_CODEC_ID_AMV)
+	AV_CODEC_ID_VB              = AVCodecID(C.AV_CODEC_ID_VB)
+	AV_CODEC_ID_PCX             = AVCodecID(C.AV_CODEC_ID_PCX)
+	AV_CODEC_ID_SUNRAST         = AVCodecID(C.AV_CODEC_ID_SUNRAST)
+	AV_CODEC_ID_INDEO4          = AVCodecID(C.AV_CODEC_ID_INDEO4)
+	AV_CODEC_ID_INDEO5          = AVCodecID(C.AV_CODEC_ID_INDEO5)
+	AV_CODEC_ID_MIMIC           = AVCodecID(C.AV_CODEC_ID_MIMIC)
+	AV_CODEC_ID_RL2             = AVCodecID(C.AV_CODEC_ID_RL2)
+	AV_CODEC_ID_ESCAPE124       = AVCodecID(C.AV_CODEC_ID_ESCAPE124)
+	AV_CODEC_ID_DIRAC           = AVCodecID(C.AV_CODEC_ID_DIRAC)
+	AV_CODEC_ID_BFI             = AVCodecID(C.AV_CODEC_ID_BFI)
+	AV_CODEC_ID_CMV             = AVCodecID(C.AV_CODEC_ID_CMV)
+	AV_CODEC_ID_MOTIONPIXELS    = AVCodecID(C.AV_CODEC_ID_MOTIONPIXELS)
+	AV_CODEC_ID_TGV             = AVCodecID(C.AV_CODEC_ID_TGV)
+	AV_CODEC_ID_TGQ             = AVCodecID(C.AV_CODEC_ID_TGQ)
+	AV_CODEC_ID_TQI             = AVCodecID(C.AV_CODEC_ID_TQI)
+	AV_CODEC_ID_AURA            = AVCodecID(C.AV_CODEC_ID_AURA)
+	AV_CODEC_ID_AURA2           = AVCodecID(C.AV_CODEC_ID_AURA2)
+	AV_CODEC_ID_V210X           = AVCodecID(C.AV_CODEC_ID_V210X)
+	AV_CODEC_ID_TMV             = AVCodecID(C.AV_CODEC_ID_TMV)
+	AV_CODEC_ID_V210            = AVCodecID(C.AV_CODEC_ID_V210)
+	AV_CODEC_ID_DPX             = AVCodecID(C.AV_CODEC_ID_DPX)
+	AV_CODEC_ID_MAD             = AVCodecID(C.AV_CODEC_ID_MAD)
+	AV_CODEC_ID_FRWU            = AVCodecID(C.AV_CODEC_ID_FRWU)
+	AV_CODEC_ID_FLASHSV2        = AVCodecID(C.AV_CODEC_ID_FLASHSV2)
+	AV_CODEC_ID_CDGRAPHICS      = AVCodecID(C.AV_CODEC_ID_CDGRAPHICS)
+	AV_CODEC_ID_R210            = AVCodecID(C.AV_CODEC_ID_R210)
+	AV_CODEC_ID_ANM             = AVCodecID(C.AV_CODEC_ID_ANM)
+	AV_CODEC_ID_BINKVIDEO       = AVCodecID(C.AV_CODEC_ID_BINKVIDEO)
+	AV_CODEC_ID_IFF_ILBM        = AVCodecID(C.AV_CODEC_ID_IFF_ILBM)
+	AV_CODEC_ID_IFF_BYTERUN1    = AVCodecID(C.AV_CODEC_ID_IFF_BYTERUN1)
+	AV_CODEC_ID_KGV1            = AVCodecID(C.AV_CODEC_ID_KGV1)
+	AV_CODEC_ID_YOP             = AVCodecID(C.AV_CODEC_ID_YOP)
+	AV_CODEC_ID_VP8             = AVCodecID(C.AV_CODEC_ID_VP8)
+	AV_CODEC_ID_PICTOR          = AVCodecID(C.AV_CODEC_ID_PICTOR)
+	AV_CODEC_ID_ANSI            = AVCodecID(C.AV_CODEC_ID_ANSI)
+	AV_CODEC_ID_A64_MULTI       = AVCodecID(C.AV_CODEC_ID_A64_MULTI)
+	AV_CODEC_ID_A64_MULTI5      = AVCodecID(C.AV_CODEC_ID_A64_MULTI5)
+	AV_CODEC_ID_R10K            = AVCodecID(C.AV_CODEC_ID_R10K)
+	AV_CODEC_ID_MXPEG           = AVCodecID(C.AV_CODEC_ID_MXPEG)
+	AV_CODEC_ID_LAGARITH        = AVCodecID(C.AV_CODEC_ID_LAGARITH)
+	AV_CODEC_ID_PRORES          = AVCodecID(C.AV_CODEC_ID_PRORES)
+	AV_CODEC_ID_JV              = AVCodecID(C.AV_CODEC_ID_JV)
+	AV_CODEC_ID_DFA             = AVCodecID(C.AV_CODEC_ID_DFA)
+	AV_CODEC_ID_WMV3IMAGE       = AVCodecID(C.AV_CODEC_ID_WMV3IMAGE)
+	AV_CODEC_ID_VC1IMAGE        = AVCodecID(C.AV_CODEC_ID_VC1IMAGE)
+	AV_CODEC_ID_UTVIDEO         = AVCodecID(C.AV_CODEC_ID_UTVIDEO)
+	AV_CODEC_ID_BMV_VIDEO       = AVCodecID(C.AV_CODEC_ID_BMV_VIDEO)
+	AV_CODEC_ID_VBLE            = AVCodecID(C.AV_CODEC_ID_VBLE)
+	AV_CODEC_ID_DXTORY          = AVCodecID(C.AV_CODEC_ID_DXTORY)
+	AV_CODEC_ID_V410            = AVCodecID(C.AV_CODEC_ID_V410)
+	AV_CODEC_ID_XWD             = AVCodecID(C.AV_CODEC_ID_XWD)
+	AV_CODEC_ID_CDXL            = AVCodecID(C.AV_CODEC_ID_CDXL)
+	AV_CODEC_ID_XBM             = AVCodecID(C.AV_CODEC_ID_XBM)
+	AV_CODEC_ID_ZEROCODEC       = AVCodecID(C.AV_CODEC_ID_ZEROCODEC)
+	AV_CODEC_ID_MSS1            = AVCodecID(C.AV_CODEC_ID_MSS1)
+	AV_CODEC_ID_MSA1            = AVCodecID(C.AV_CODEC_ID_MSA1)
+	AV_CODEC_ID_TSCC2           = AVCodecID(C.AV_CODEC_ID_TSCC2)
+	AV_CODEC_ID_MTS2            = AVCodecID(C.AV_CODEC_ID_MTS2)
+	AV_CODEC_ID_CLLC            = AVCodecID(C.AV_CODEC_ID_CLLC)
+	AV_CODEC_ID_MSS2            = AVCodecID(C.AV_CODEC_ID_MSS2)
+	AV_CODEC_ID_VP9             = AVCodecID(C.AV_CODEC_ID_VP9)
+	AV_CODEC_ID_AIC             = AVCodecID(C.AV_CODEC_ID_AIC)
+	AV_CODEC_ID_ESCAPE130       = AVCodecID(C.AV_CODEC_ID_ESCAPE130)
+	AV_CODEC_ID_G2M             = AVCodecID(C.AV_CODEC_ID_G2M)
+	AV_CODEC_ID_WEBP            = AVCodecID(C.AV_CODEC_ID_WEBP)
+	AV_CODEC_ID_HNM4_VIDEO      = AVCodecID(C.AV_CODEC_ID_HNM4_VIDEO)
+	AV_CODEC_ID_HEVC            = AVCodecID(C.AV_CODEC_ID_HEVC)
+	AV_CODEC_ID_H265            = AVCodecID(C.AV_CODEC_ID_H265)
+	AV_CODEC_ID_FIC             = AVCodecID(C.AV_CODEC_ID_FIC)
+	AV_CODEC_ID_ALIAS_PIX       = AVCodecID(C.AV_CODEC_ID_ALIAS_PIX)
+	AV_CODEC_ID_BRENDER_PIX     = AVCodecID(C.AV_CODEC_ID_BRENDER_PIX)
+	AV_CODEC_ID_PAF_VIDEO       = AVCodecID(C.AV_CODEC_ID_PAF_VIDEO)
+	AV_CODEC_ID_EXR             = AVCodecID(C.AV_CODEC_ID_EXR)
+	AV_CODEC_ID_VP7             = AVCodecID(C.AV_CODEC_ID_VP7)
+	AV_CODEC_ID_SANM            = AVCodecID(C.AV_CODEC_ID_SANM)
+	AV_CODEC_ID_SGIRLE          = AVCodecID(C.AV_CODEC_ID_SGIRLE)
+	AV_CODEC_ID_MVC1            = AVCodecID(C.AV_CODEC_ID_MVC1)
+	AV_CODEC_ID_MVC2            = AVCodecID(C.AV_CODEC_ID_MVC2)
+	AV_CODEC_ID_HQX             = AVCodecID(C.AV_CODEC_ID_HQX)
+	AV_CODEC_ID_TDSC            = AVCodecID(C.AV_CODEC_ID_TDSC)
+	AV_CODEC_ID_HQ_HQA          = AVCodecID(C.AV_CODEC_ID_HQ_HQA)
+	AV_CODEC_ID_HAP             = AVCodecID(C.AV_CODEC_ID_HAP)
+	AV_CODEC_ID_DDS             = AVCodecID(C.AV_CODEC_ID_DDS)
+	AV_CODEC_ID_DXV             = AVCodecID(C.AV_CODEC_ID_DXV)
+	AV_CODEC_ID_SCREENPRESSO    = AVCodecID(C.AV_CODEC_ID_SCREENPRESSO)
+	AV_CODEC_ID_RSCC            = AVCodecID(C.AV_CODEC_ID_RSCC)
+	AV_CODEC_ID_AVS2            = AVCodecID(C.AV_CODEC_ID_AVS2)
+	AV_CODEC_ID_Y41P            = AVCodecID(C.AV_CODEC_ID_Y41P)
+	AV_CODEC_ID_AVRP            = AVCodecID(C.AV_CODEC_ID_AVRP)
+	AV_CODEC_ID_012V            = AVCodecID(C.AV_CODEC_ID_012V)
+	AV_CODEC_ID_AVUI            = AVCodecID(C.AV_CODEC_ID_AVUI)
+	AV_CODEC_ID_AYUV            = AVCodecID(C.AV_CODEC_ID_AYUV)
+	AV_CODEC_ID_TARGA_Y216      = AVCodecID(C.AV_CODEC_ID_TARGA_Y216)
+	AV_CODEC_ID_V308            = AVCodecID(C.AV_CODEC_ID_V308)
+	AV_CODEC_ID_V408            = AVCodecID(C.AV_CODEC_ID_V408)
+	AV_CODEC_ID_YUV4            = AVCodecID(C.AV_CODEC_ID_YUV4)
+	AV_CODEC_ID_AVRN            = AVCodecID(C.AV_CODEC_ID_AVRN)
+	AV_CODEC_ID_CPIA            = AVCodecID(C.AV_CODEC_ID_CPIA)
+	AV_CODEC_ID_XFACE           = AVCodecID(C.AV_CODEC_ID_XFACE)
+	AV_CODEC_ID_SNOW            = AVCodecID(C.AV_CODEC_ID_SNOW)
+	AV_CODEC_ID_SMVJPEG         = AVCodecID(C.AV_CODEC_ID_SMVJPEG)
+	AV_CODEC_ID_APNG            = AVCodecID(C.AV_CODEC_ID_APNG)
+	AV_CODEC_ID_DAALA           = AVCodecID(C.AV_CODEC_ID_DAALA)
+	AV_CODEC_ID_CFHD            = AVCodecID(C.AV_CODEC_ID_CFHD)
+	AV_CODEC_ID_TRUEMOTION2RT   = AVCodecID(C.AV_CODEC_ID_TRUEMOTION2RT)
+	AV_CODEC_ID_M101            = AVCodecID(C.AV_CODEC_ID_M101)
+	AV_CODEC_ID_MAGICYUV        = AVCodecID(C.AV_CODEC_ID_MAGICYUV)
+	AV_CODEC_ID_SHEERVIDEO      = AVCodecID(C.AV_CODEC_ID_SHEERVIDEO)
+	AV_CODEC_ID_YLC             = AVCodecID(C.AV_CODEC_ID_YLC)
+	AV_CODEC_ID_PSD             = AVCodecID(C.AV_CODEC_ID_PSD)
+	AV_CODEC_ID_PIXLET          = AVCodecID(C.AV_CODEC_ID_PIXLET)
+	AV_CODEC_ID_SPEEDHQ         = AVCodecID(C.AV_CODEC_ID_SPEEDHQ)
+	AV_CODEC_ID_FMVC            = AVCodecID(C.AV_CODEC_ID_FMVC)
+	AV_CODEC_ID_SCPR            = AVCodecID(C.AV_CODEC_ID_SCPR)
+	AV_CODEC_ID_CLEARVIDEO      = AVCodecID(C.AV_CODEC_ID_CLEARVIDEO)
+	AV_CODEC_ID_XPM             = AVCodecID(C.AV_CODEC_ID_XPM)
+	AV_CODEC_ID_AV1             = AVCodecID(C.AV_CODEC_ID_AV1)
+	AV_CODEC_ID_BITPACKED       = AVCodecID(C.AV_CODEC_ID_BITPACKED)
+	AV_CODEC_ID_MSCC            = AVCodecID(C.AV_CODEC_ID_MSCC)
+	AV_CODEC_ID_SRGC            = AVCodecID(C.AV_CODEC_ID_SRGC)
+	AV_CODEC_ID_SVG             = AVCodecID(C.AV_CODEC_ID_SVG)
+	AV_CODEC_ID_GDV             = AVCodecID(C.AV_CODEC_ID_GDV)
+	AV_CODEC_ID_FITS            = AVCodecID(C.AV_CODEC_ID_FITS)
+	AV_CODEC_ID_IMM4            = AVCodecID(C.AV_CODEC_ID_IMM4)
+	AV_CODEC_ID_PROSUMER        = AVCodecID(C.AV_CODEC_ID_PROSUMER)
+	AV_CODEC_ID_MWSC            = AVCodecID(C.AV_CODEC_ID_MWSC)
+	AV_CODEC_ID_WCMV            = AVCodecID(C.AV_CODEC_ID_WCMV)
+	AV_CODEC_ID_RASC            = AVCodecID(C.AV_CODEC_ID_RASC)
+
+	// various PCM "codecs"
+	AV_CODEC_ID_FIRST_AUDIO      = AVCodecID(C.AV_CODEC_ID_FIRST_AUDIO)
+	AV_CODEC_ID_PCM_S16LE        = AVCodecID(C.AV_CODEC_ID_PCM_S16LE)
+	AV_CODEC_ID_PCM_S16BE        = AVCodecID(C.AV_CODEC_ID_PCM_S16BE)
+	AV_CODEC_ID_PCM_U16LE        = AVCodecID(C.AV_CODEC_ID_PCM_U16LE)
+	AV_CODEC_ID_PCM_U16BE        = AVCodecID(C.AV_CODEC_ID_PCM_U16BE)
+	AV_CODEC_ID_PCM_S8           = AVCodecID(C.AV_CODEC_ID_PCM_S8)
+	AV_CODEC_ID_PCM_U8           = AVCodecID(C.AV_CODEC_ID_PCM_U8)
+	AV_CODEC_ID_PCM_MULAW        = AVCodecID(C.AV_CODEC_ID_PCM_MULAW)
+	AV_CODEC_ID_PCM_ALAW         = AVCodecID(C.AV_CODEC_ID_PCM_ALAW)
+	AV_CODEC_ID_PCM_S32LE        = AVCodecID(C.AV_CODEC_ID_PCM_S32LE)
+	AV_CODEC_ID_PCM_S32BE        = AVCodecID(C.AV_CODEC_ID_PCM_S32BE)
+	AV_CODEC_ID_PCM_U32LE        = AVCodecID(C.AV_CODEC_ID_PCM_U32LE)
+	AV_CODEC_ID_PCM_U32BE        = AVCodecID(C.AV_CODEC_ID_PCM_U32BE)
+	AV_CODEC_ID_PCM_S24LE        = AVCodecID(C.AV_CODEC_ID_PCM_S24LE)
+	AV_CODEC_ID_PCM_S24BE        = AVCodecID(C.AV_CODEC_ID_PCM_S24BE)
+	AV_CODEC_ID_PCM_U24LE        = AVCodecID(C.AV_CODEC_ID_PCM_U24LE)
+	AV_CODEC_ID_PCM_U24BE        = AVCodecID(C.AV_CODEC_ID_PCM_U24BE)
+	AV_CODEC_ID_PCM_S24DAUD      = AVCodecID(C.AV_CODEC_ID_PCM_S24DAUD)
+	AV_CODEC_ID_PCM_ZORK         = AVCodecID(C.AV_CODEC_ID_PCM_ZORK)
+	AV_CODEC_ID_PCM_S16LE_PLANAR = AVCodecID(C.AV_CODEC_ID_PCM_S16LE_PLANAR)
+	AV_CODEC_ID_PCM_DVD          = AVCodecID(C.AV_CODEC_ID_PCM_DVD)
+	AV_CODEC_ID_PCM_F32BE        = AVCodecID(C.AV_CODEC_ID_PCM_F32BE)
+	AV_CODEC_ID_PCM_F32LE        = AVCodecID(C.AV_CODEC_ID_PCM_F32LE)
+	AV_CODEC_ID_PCM_F64BE        = AVCodecID(C.AV_CODEC_ID_PCM_F64BE)
+	AV_CODEC_ID_PCM_F64LE        = AVCodecID(C.AV_CODEC_ID_PCM_F64LE)
+	AV_CODEC_ID_PCM_BLURAY       = AVCodecID(C.AV_CODEC_ID_PCM_BLURAY)
+	AV_CODEC_ID_PCM_LXF          = AVCodecID(C.AV_CODEC_ID_PCM_LXF)
+	AV_CODEC_ID_S302M            = AVCodecID(C.AV_CODEC_ID_S302M)
+	AV_CODEC_ID_PCM_S8_PLANAR    = AVCodecID(C.AV_CODEC_ID_PCM_S8_PLANAR)
+	AV_CODEC_ID_PCM_S24LE_PLANAR = AVCodecID(C.AV_CODEC_ID_PCM_S24LE_PLANAR)
+	AV_CODEC_ID_PCM_S32LE_PLANAR = AVCodecID(C.AV_CODEC_ID_PCM_S32LE_PLANAR)
+	AV_CODEC_ID_PCM_S16BE_PLANAR = AVCodecID(C.AV_CODEC_ID_PCM_S16BE_PLANAR)
+	AV_CODEC_ID_PCM_S64LE        = AVCodecID(C.AV_CODEC_ID_PCM_S64LE)
+	AV_CODEC_ID_PCM_S64BE        = AVCodecID(C.AV_CODEC_ID_PCM_S64BE)
+	AV_CODEC_ID_PCM_F16LE        = AVCodecID(C.AV_CODEC_ID_PCM_F16LE)
+	AV_CODEC_ID_PCM_F24LE        = AVCodecID(C.AV_CODEC_ID_PCM_F24LE)
+	AV_CODEC_ID_PCM_VIDC         = AVCodecID(C.AV_CODEC_ID_PCM_VIDC)
+
+	// various ADPCM codecs
+	AV_CODEC_ID_ADPCM_IMA_QT      = AVCodecID(C.AV_CODEC_ID_ADPCM_IMA_QT)
+	AV_CODEC_ID_ADPCM_IMA_WAV     = AVCodecID(C.AV_CODEC_ID_ADPCM_IMA_WAV)
+	AV_CODEC_ID_ADPCM_IMA_DK3     = AVCodecID(C.AV_CODEC_ID_ADPCM_IMA_DK3)
+	AV_CODEC_ID_ADPCM_IMA_DK4     = AVCodecID(C.AV_CODEC_ID_ADPCM_IMA_DK4)
+	AV_CODEC_ID_ADPCM_IMA_WS      = AVCodecID(C.AV_CODEC_ID_ADPCM_IMA_WS)
+	AV_CODEC_ID_ADPCM_IMA_SMJPEG  = AVCodecID(C.AV_CODEC_ID_ADPCM_IMA_SMJPEG)
+	AV_CODEC_ID_ADPCM_MS          = AVCodecID(C.AV_CODEC_ID_ADPCM_MS)
+	AV_CODEC_ID_ADPCM_4XM         = AVCodecID(C.AV_CODEC_ID_ADPCM_4XM)
+	AV_CODEC_ID_ADPCM_XA          = AVCodecID(C.AV_CODEC_ID_ADPCM_XA)
+	AV_CODEC_ID_ADPCM_ADX         = AVCodecID(C.AV_CODEC_ID_ADPCM_ADX)
+	AV_CODEC_ID_ADPCM_EA          = AVCodecID(C.AV_CODEC_ID_ADPCM_EA)
+	AV_CODEC_ID_ADPCM_G726        = AVCodecID(C.AV_CODEC_ID_ADPCM_G726)
+	AV_CODEC_ID_ADPCM_CT          = AVCodecID(C.AV_CODEC_ID_ADPCM_CT)
+	AV_CODEC_ID_ADPCM_SWF         = AVCodecID(C.AV_CODEC_ID_ADPCM_SWF)
+	AV_CODEC_ID_ADPCM_YAMAHA      = AVCodecID(C.AV_CODEC_ID_ADPCM_YAMAHA)
+	AV_CODEC_ID_ADPCM_SBPRO_4     = AVCodecID(C.AV_CODEC_ID_ADPCM_SBPRO_4)
+	AV_CODEC_ID_ADPCM_SBPRO_3     = AVCodecID(C.AV_CODEC_ID_ADPCM_SBPRO_3)
+	AV_CODEC_ID_ADPCM_SBPRO_2     = AVCodecID(C.AV_CODEC_ID_ADPCM_SBPRO_2)
+	AV_CODEC_ID_ADPCM_THP         = AVCodecID(C.AV_CODEC_ID_ADPCM_THP)
+	AV_CODEC_ID_ADPCM_IMA_AMV     = AVCodecID(C.AV_CODEC_ID_ADPCM_IMA_AMV)
+	AV_CODEC_ID_ADPCM_EA_R1       = AVCodecID(C.AV_CODEC_ID_ADPCM_EA_R1)
+	AV_CODEC_ID_ADPCM_EA_R3       = AVCodecID(C.AV_CODEC_ID_ADPCM_EA_R3)
+	AV_CODEC_ID_ADPCM_EA_R2       = AVCodecID(C.AV_CODEC_ID_ADPCM_EA_R2)
+	AV_CODEC_ID_ADPCM_IMA_EA_SEAD = AVCodecID(C.AV_CODEC_ID_ADPCM_IMA_EA_SEAD)
+	AV_CODEC_ID_ADPCM_IMA_EA_EACS = AVCodecID(C.AV_CODEC_ID_ADPCM_IMA_EA_EACS)
+	AV_CODEC_ID_ADPCM_EA_XAS      = AVCodecID(C.AV_CODEC_ID_ADPCM_EA_XAS)
+	AV_CODEC_ID_ADPCM_EA_MAXIS_XA = AVCodecID(C.AV_CODEC_ID_ADPCM_EA_MAXIS_XA)
+	AV_CODEC_ID_ADPCM_IMA_ISS     = AVCodecID(C.AV_CODEC_ID_ADPCM_IMA_ISS)
+	AV_CODEC_ID_ADPCM_G722        = AVCodecID(C.AV_CODEC_ID_ADPCM_G722)
+	AV_CODEC_ID_ADPCM_IMA_APC     = AVCodecID(C.AV_CODEC_ID_ADPCM_IMA_APC)
+	AV_CODEC_ID_ADPCM_VIMA        = AVCodecID(C.AV_CODEC_ID_ADPCM_VIMA)
+	AV_CODEC_ID_ADPCM_AFC         = AVCodecID(C.AV_CODEC_ID_ADPCM_AFC)
+	AV_CODEC_ID_ADPCM_IMA_OKI     = AVCodecID(C.AV_CODEC_ID_ADPCM_IMA_OKI)
+	AV_CODEC_ID_ADPCM_DTK         = AVCodecID(C.AV_CODEC_ID_ADPCM_DTK)
+	AV_CODEC_ID_ADPCM_IMA_RAD     = AVCodecID(C.AV_CODEC_ID_ADPCM_IMA_RAD)
+	AV_CODEC_ID_ADPCM_G726LE      = AVCodecID(C.AV_CODEC_ID_ADPCM_G726LE)
+	AV_CODEC_ID_ADPCM_THP_LE      = AVCodecID(C.AV_CODEC_ID_ADPCM_THP_LE)
+	AV_CODEC_ID_ADPCM_PSX         = AVCodecID(C.AV_CODEC_ID_ADPCM_PSX)
+	AV_CODEC_ID_ADPCM_AICA        = AVCodecID(C.AV_CODEC_ID_ADPCM_AICA)
+	AV_CODEC_ID_ADPCM_IMA_DAT4    = AVCodecID(C.AV_CODEC_ID_ADPCM_IMA_DAT4)
+	AV_CODEC_ID_ADPCM_MTAF        = AVCodecID(C.AV_CODEC_ID_ADPCM_MTAF)
+
+	// AMR
+	AV_CODEC_ID_AMR_NB = AVCodecID(C.AV_CODEC_ID_AMR_NB)
+	AV_CODEC_ID_AMR_WB = AVCodecID(C.AV_CODEC_ID_AMR_WB)
+
+	// RealAudio codecs
+	AV_CODEC_ID_RA_144 = AVCodecID(C.AV_CODEC_ID_RA_144)
+	AV_CODEC_ID_RA_288 = AVCodecID(C.AV_CODEC_ID_RA_288)
+
+	// various DPCM codecs
+	AV_CODEC_ID_ROQ_DPCM       = AVCodecID(C.AV_CODEC_ID_ROQ_DPCM)
+	AV_CODEC_ID_INTERPLAY_DPCM = AVCodecID(C.AV_CODEC_ID_INTERPLAY_DPCM)
+	AV_CODEC_ID_XAN_DPCM       = AVCodecID(C.AV_CODEC_ID_XAN_DPCM)
+	AV_CODEC_ID_SOL_DPCM       = AVCodecID(C.AV_CODEC_ID_SOL_DPCM)
+
+	AV_CODEC_ID_SDX2_DPCM    = AVCodecID(C.AV_CODEC_ID_SDX2_DPCM)
+	AV_CODEC_ID_GREMLIN_DPCM = AVCodecID(C.AV_CODEC_ID_GREMLIN_DPCM)
+
+	// audio codecs
+	AV_CODEC_ID_MP2            = AVCodecID(C.AV_CODEC_ID_MP2)
+	AV_CODEC_ID_MP3            = AVCodecID(C.AV_CODEC_ID_MP3)
+	AV_CODEC_ID_AAC            = AVCodecID(C.AV_CODEC_ID_AAC)
+	AV_CODEC_ID_AC3            = AVCodecID(C.AV_CODEC_ID_AC3)
+	AV_CODEC_ID_DTS            = AVCodecID(C.AV_CODEC_ID_DTS)
+	AV_CODEC_ID_VORBIS         = AVCodecID(C.AV_CODEC_ID_VORBIS)
+	AV_CODEC_ID_DVAUDIO        = AVCodecID(C.AV_CODEC_ID_DVAUDIO)
+	AV_CODEC_ID_WMAV1          = AVCodecID(C.AV_CODEC_ID_WMAV1)
+	AV_CODEC_ID_WMAV2          = AVCodecID(C.AV_CODEC_ID_WMAV2)
+	AV_CODEC_ID_MACE3          = AVCodecID(C.AV_CODEC_ID_MACE3)
+	AV_CODEC_ID_MACE6          = AVCodecID(C.AV_CODEC_ID_MACE6)
+	AV_CODEC_ID_VMDAUDIO       = AVCodecID(C.AV_CODEC_ID_VMDAUDIO)
+	AV_CODEC_ID_FLAC           = AVCodecID(C.AV_CODEC_ID_FLAC)
+	AV_CODEC_ID_MP3ADU         = AVCodecID(C.AV_CODEC_ID_MP3ADU)
+	AV_CODEC_ID_MP3ON4         = AVCodecID(C.AV_CODEC_ID_MP3ON4)
+	AV_CODEC_ID_SHORTEN        = AVCodecID(C.AV_CODEC_ID_SHORTEN)
+	AV_CODEC_ID_ALAC           = AVCodecID(C.AV_CODEC_ID_ALAC)
+	AV_CODEC_ID_WESTWOOD_SND1  = AVCodecID(C.AV_CODEC_ID_WESTWOOD_SND1)
+	AV_CODEC_ID_GSM            = AVCodecID(C.AV_CODEC_ID_GSM)
+	AV_CODEC_ID_QDM2           = AVCodecID(C.AV_CODEC_ID_QDM2)
+	AV_CODEC_ID_COOK           = AVCodecID(C.AV_CODEC_ID_COOK)
+	AV_CODEC_ID_TRUESPEECH     = AVCodecID(C.AV_CODEC_ID_TRUESPEECH)
+	AV_CODEC_ID_TTA            = AVCodecID(C.AV_CODEC_ID_TTA)
+	AV_CODEC_ID_SMACKAUDIO     = AVCodecID(C.AV_CODEC_ID_SMACKAUDIO)
+	AV_CODEC_ID_QCELP          = AVCodecID(C.AV_CODEC_ID_QCELP)
+	AV_CODEC_ID_WAVPACK        = AVCodecID(C.AV_CODEC_ID_WAVPACK)
+	AV_CODEC_ID_DSICINAUDIO    = AVCodecID(C.AV_CODEC_ID_DSICINAUDIO)
+	AV_CODEC_ID_IMC            = AVCodecID(C.AV_CODEC_ID_IMC)
+	AV_CODEC_ID_MUSEPACK7      = AVCodecID(C.AV_CODEC_ID_MUSEPACK7)
+	AV_CODEC_ID_MLP            = AVCodecID(C.AV_CODEC_ID_MLP)
+	AV_CODEC_ID_GSM_MS         = AVCodecID(C.AV_CODEC_ID_GSM_MS)
+	AV_CODEC_ID_ATRAC3         = AVCodecID(C.AV_CODEC_ID_ATRAC3)
+	AV_CODEC_ID_APE            = AVCodecID(C.AV_CODEC_ID_APE)
+	AV_CODEC_ID_NELLYMOSER     = AVCodecID(C.AV_CODEC_ID_NELLYMOSER)
+	AV_CODEC_ID_MUSEPACK8      = AVCodecID(C.AV_CODEC_ID_MUSEPACK8)
+	AV_CODEC_ID_SPEEX          = AVCodecID(C.AV_CODEC_ID_SPEEX)
+	AV_CODEC_ID_WMAVOICE       = AVCodecID(C.AV_CODEC_ID_WMAVOICE)
+	AV_CODEC_ID_WMAPRO         = AVCodecID(C.AV_CODEC_ID_WMAPRO)
+	AV_CODEC_ID_WMALOSSLESS    = AVCodecID(C.AV_CODEC_ID_WMALOSSLESS)
+	AV_CODEC_ID_ATRAC3P        = AVCodecID(C.AV_CODEC_ID_ATRAC3P)
+	AV_CODEC_ID_EAC3           = AVCodecID(C.AV_CODEC_ID_EAC3)
+	AV_CODEC_ID_SIPR           = AVCodecID(C.AV_CODEC_ID_SIPR)
+	AV_CODEC_ID_MP1            = AVCodecID(C.AV_CODEC_ID_MP1)
+	AV_CODEC_ID_TWINVQ         = AVCodecID(C.AV_CODEC_ID_TWINVQ)
+	AV_CODEC_ID_TRUEHD         = AVCodecID(C.AV_CODEC_ID_TRUEHD)
+	AV_CODEC_ID_MP4ALS         = AVCodecID(C.AV_CODEC_ID_MP4ALS)
+	AV_CODEC_ID_ATRAC1         = AVCodecID(C.AV_CODEC_ID_ATRAC1)
+	AV_CODEC_ID_BINKAUDIO_RDFT = AVCodecID(C.AV_CODEC_ID_BINKAUDIO_RDFT)
+	AV_CODEC_ID_BINKAUDIO_DCT  = AVCodecID(C.AV_CODEC_ID_BINKAUDIO_DCT)
+	AV_CODEC_ID_AAC_LATM       = AVCodecID(C.AV_CODEC_ID_AAC_LATM)
+	AV_CODEC_ID_QDMC           = AVCodecID(C.AV_CODEC_ID_QDMC)
+	AV_CODEC_ID_CELT           = AVCodecID(C.AV_CODEC_ID_CELT)
+	AV_CODEC_ID_G723_1         = AVCodecID(C.AV_CODEC_ID_G723_1)
+	AV_CODEC_ID_G729           = AVCodecID(C.AV_CODEC_ID_G729)
+	AV_CODEC_ID_8SVX_EXP       = AVCodecID(C.AV_CODEC_ID_8SVX_EXP)
+	AV_CODEC_ID_8SVX_FIB       = AVCodecID(C.AV_CODEC_ID_8SVX_FIB)
+	AV_CODEC_ID_BMV_AUDIO      = AVCodecID(C.AV_CODEC_ID_BMV_AUDIO)
+	AV_CODEC_ID_RALF           = AVCodecID(C.AV_CODEC_ID_RALF)
+	AV_CODEC_ID_IAC            = AVCodecID(C.AV_CODEC_ID_IAC)
+	AV_CODEC_ID_ILBC           = AVCodecID(C.AV_CODEC_ID_ILBC)
+	AV_CODEC_ID_OPUS           = AVCodecID(C.AV_CODEC_ID_OPUS)
+	AV_CODEC_ID_COMFORT_NOISE  = AVCodecID(C.AV_CODEC_ID_COMFORT_NOISE)
+	AV_CODEC_ID_TAK            = AVCodecID(C.AV_CODEC_ID_TAK)
+	AV_CODEC_ID_METASOUND      = AVCodecID(C.AV_CODEC_ID_METASOUND)
+	AV_CODEC_ID_PAF_AUDIO      = AVCodecID(C.AV_CODEC_ID_PAF_AUDIO)
+	AV_CODEC_ID_ON2AVC         = AVCodecID(C.AV_CODEC_ID_ON2AVC)
+	AV_CODEC_ID_DSS_SP         = AVCodecID(C.AV_CODEC_ID_DSS_SP)
+	AV_CODEC_ID_CODEC2         = AVCodecID(C.AV_CODEC_ID_CODEC2)
+
+	AV_CODEC_ID_FFWAVESYNTH     = AVCodecID(C.AV_CODEC_ID_FFWAVESYNTH)
+	AV_CODEC_ID_SONIC           = AVCodecID(C.AV_CODEC_ID_SONIC)
+	AV_CODEC_ID_SONIC_LS        = AVCodecID(C.AV_CODEC_ID_SONIC_LS)
+	AV_CODEC_ID_EVRC            = AVCodecID(C.AV_CODEC_ID_EVRC)
+	AV_CODEC_ID_SMV             = AVCodecID(C.AV_CODEC_ID_SMV)
+	AV_CODEC_ID_DSD_LSBF        = AVCodecID(C.AV_CODEC_ID_DSD_LSBF)
+	AV_CODEC_ID_DSD_MSBF        = AVCodecID(C.AV_CODEC_ID_DSD_MSBF)
+	AV_CODEC_ID_DSD_LSBF_PLANAR = AVCodecID(C.AV_CODEC_ID_DSD_LSBF_PLANAR)
+	AV_CODEC_ID_DSD_MSBF_PLANAR = AVCodecID(C.AV_CODEC_ID_DSD_MSBF_PLANAR)
+	AV_CODEC_ID_4GV             = AVCodecID(C.AV_CODEC_ID_4GV)
+	AV_CODEC_ID_INTERPLAY_ACM   = AVCodecID(C.AV_CODEC_ID_INTERPLAY_ACM)
+	AV_CODEC_ID_XMA1            = AVCodecID(C.AV_CODEC_ID_XMA1)
+	AV_CODEC_ID_XMA2            = AVCodecID(C.AV_CODEC_ID_XMA2)
+	AV_CODEC_ID_DST             = AVCodecID(C.AV_CODEC_ID_DST)
+	AV_CODEC_ID_ATRAC3AL        = AVCodecID(C.AV_CODEC_ID_ATRAC3AL)
+	AV_CODEC_ID_ATRAC3PAL       = AVCodecID(C.AV_CODEC_ID_ATRAC3PAL)
+	AV_CODEC_ID_DOLBY_E         = AVCodecID(C.AV_CODEC_ID_DOLBY_E)
+	AV_CODEC_ID_APTX            = AVCodecID(C.AV_CODEC_ID_APTX)
+	AV_CODEC_ID_APTX_HD         = AVCodecID(C.AV_CODEC_ID_APTX_HD)
+	AV_CODEC_ID_SBC             = AVCodecID(C.AV_CODEC_ID_SBC)
+	AV_CODEC_ID_ATRAC9          = AVCodecID(C.AV_CODEC_ID_ATRAC9)
+
+	// subtitle codecs
+	AV_CODEC_ID_FIRST_SUBTITLE    = AVCodecID(C.AV_CODEC_ID_FIRST_SUBTITLE)
+	AV_CODEC_ID_DVD_SUBTITLE      = AVCodecID(C.AV_CODEC_ID_DVD_SUBTITLE)
+	AV_CODEC_ID_DVB_SUBTITLE      = AVCodecID(C.AV_CODEC_ID_DVB_SUBTITLE)
+	AV_CODEC_ID_TEXT              = AVCodecID(C.AV_CODEC_ID_TEXT)
+	AV_CODEC_ID_XSUB              = AVCodecID(C.AV_CODEC_ID_XSUB)
+	AV_CODEC_ID_SSA               = AVCodecID(C.AV_CODEC_ID_SSA)
+	AV_CODEC_ID_MOV_TEXT          = AVCodecID(C.AV_CODEC_ID_MOV_TEXT)
+	AV_CODEC_ID_HDMV_PGS_SUBTITLE = AVCodecID(C.AV_CODEC_ID_HDMV_PGS_SUBTITLE)
+	AV_CODEC_ID_DVB_TELETEXT      = AVCodecID(C.AV_CODEC_ID_DVB_TELETEXT)
+	AV_CODEC_ID_SRT               = AVCodecID(C.AV_CODEC_ID_SRT)
+
+	AV_CODEC_ID_MICRODVD           = AVCodecID(C.AV_CODEC_ID_MICRODVD)
+	AV_CODEC_ID_EIA_608            = AVCodecID(C.AV_CODEC_ID_EIA_608)
+	AV_CODEC_ID_JACOSUB            = AVCodecID(C.AV_CODEC_ID_JACOSUB)
+	AV_CODEC_ID_SAMI               = AVCodecID(C.AV_CODEC_ID_SAMI)
+	AV_CODEC_ID_REALTEXT           = AVCodecID(C.AV_CODEC_ID_REALTEXT)
+	AV_CODEC_ID_STL                = AVCodecID(C.AV_CODEC_ID_STL)
+	AV_CODEC_ID_SUBVIEWER1         = AVCodecID(C.AV_CODEC_ID_SUBVIEWER1)
+	AV_CODEC_ID_SUBVIEWER          = AVCodecID(C.AV_CODEC_ID_SUBVIEWER)
+	AV_CODEC_ID_SUBRIP             = AVCodecID(C.AV_CODEC_ID_SUBRIP)
+	AV_CODEC_ID_WEBVTT             = AVCodecID(C.AV_CODEC_ID_WEBVTT)
+	AV_CODEC_ID_MPL2               = AVCodecID(C.AV_CODEC_ID_MPL2)
+	AV_CODEC_ID_VPLAYER            = AVCodecID(C.AV_CODEC_ID_VPLAYER)
+	AV_CODEC_ID_PJS                = AVCodecID(C.AV_CODEC_ID_PJS)
+	AV_CODEC_ID_ASS                = AVCodecID(C.AV_CODEC_ID_ASS)
+	AV_CODEC_ID_HDMV_TEXT_SUBTITLE = AVCodecID(C.AV_CODEC_ID_HDMV_TEXT_SUBTITLE)
+	AV_CODEC_ID_TTML               = AVCodecID(C.AV_CODEC_ID_TTML)
+
+	// other specific kind of codecs (generally used for attachments)
+	AV_CODEC_ID_FIRST_UNKNOWN = AVCodecID(C.AV_CODEC_ID_FIRST_UNKNOWN)
+	AV_CODEC_ID_TTF           = AVCodecID(C.AV_CODEC_ID_TTF)
+
+	AV_CODEC_ID_SCTE_35 = AVCodecID(C.AV_CODEC_ID_SCTE_35)
+
+	AV_CODEC_ID_BINTEXT   = AVCodecID(C.AV_CODEC_ID_BINTEXT)
+	AV_CODEC_ID_XBIN      = AVCodecID(C.AV_CODEC_ID_XBIN)
+	AV_CODEC_ID_IDF       = AVCodecID(C.AV_CODEC_ID_IDF)
+	AV_CODEC_ID_OTF       = AVCodecID(C.AV_CODEC_ID_OTF)
+	AV_CODEC_ID_SMPTE_KLV = AVCodecID(C.AV_CODEC_ID_SMPTE_KLV)
+	AV_CODEC_ID_DVD_NAV   = AVCodecID(C.AV_CODEC_ID_DVD_NAV)
+	AV_CODEC_ID_TIMED_ID3 = AVCodecID(C.AV_CODEC_ID_TIMED_ID3)
+	AV_CODEC_ID_BIN_DATA  = AVCodecID(C.AV_CODEC_ID_BIN_DATA)
+
+	// codec_id is not known (like AV_CODEC_ID_NONE) but lavf should attempt to identify it
+	AV_CODEC_ID_PROBE = AVCodecID(C.AV_CODEC_ID_PROBE)
+
+	// Fake codec to indicate a raw MPEG-2 TS stream (only used by libavformat)
+	AV_CODEC_ID_MPEG2TS = AVCodecID(C.AV_CODEC_ID_MPEG2TS)
+
+	// Fake codec to indicate a MPEG-4 Systems stream (only used by libavformat)
+	AV_CODEC_ID_MPEG4SYSTEMS = AVCodecID(C.AV_CODEC_ID_MPEG4SYSTEMS)
+
+	// Dummy codec for streams containing only metadata information.
+	AV_CODEC_ID_FFMETADATA = AVCodecID(C.AV_CODEC_ID_FFMETADATA)
+	// Passthrough codec, AVFrames wrapped in AVPacket.
+	AV_CODEC_ID_WRAPPED_AVFRAME = AVCodecID(C.AV_CODEC_ID_WRAPPED_AVFRAME)
+)
+
+// AVCodecDescriptor
+type AVCodecDescriptor C.struct_AVCodecDescriptor
+
+// GetId gets `AVCodecDescriptor.id` value.
+func (hwc *AVCodecDescriptor) GetId() AVCodecID {
+	return (AVCodecID)(hwc.id)
+}
+
+// GetType gets `AVCodecDescriptor.type` value.
+func (hwc *AVCodecDescriptor) GetType() AVMediaType {
+	return (AVMediaType)(hwc._type)
+}
+
+// GetName gets `AVCodecDescriptor.name` value.
+func (hwc *AVCodecDescriptor) GetName() string {
+	return C.GoString(hwc.name)
+}
+
+// GetLongName gets `AVCodecDescriptor.long_name` value.
+func (hwc *AVCodecDescriptor) GetLongName() string {
+	return C.GoString(hwc.long_name)
+}
+
+// GetProps gets `AVCodecDescriptor.props` value.
+func (hwc *AVCodecDescriptor) GetProps() int32 {
+	return (int32)(hwc.props)
+}
+
+// GetMimeTypes gets `AVCodecDescriptor.mime_types` value.
+func (hwc *AVCodecDescriptor) GetMimeTypes() (v []string) {
+	return SliceTruncString(hwc.mime_types)
+}
+
+// GetProfiles gets `AVCodecDescriptor.profiles` value.
+func (hwc *AVCodecDescriptor) GetProfiles() []AVProfile {
+	return SliceTrunc((*AVProfile)(hwc.profiles), func(ap AVProfile) bool {
+		return ap.GetProfile() == FF_PROFILE_UNKNOWN
+	})
+}
+
+const (
+	AV_CODEC_PROP_INTRA_ONLY = C.AV_CODEC_PROP_INTRA_ONLY
+	AV_CODEC_PROP_LOSSY      = C.AV_CODEC_PROP_LOSSY
+	AV_CODEC_PROP_LOSSLESS   = C.AV_CODEC_PROP_LOSSLESS
+	AV_CODEC_PROP_REORDER    = C.AV_CODEC_PROP_REORDER
+	AV_CODEC_PROP_BITMAP_SUB = C.AV_CODEC_PROP_BITMAP_SUB
+	AV_CODEC_PROP_TEXT_SUB   = C.AV_CODEC_PROP_TEXT_SUB
 )
 
 const (
@@ -97,7 +636,6 @@ const (
 	AV_CODEC_FLAG_4MV                  = C.AV_CODEC_FLAG_4MV
 	AV_CODEC_FLAG_OUTPUT_CORRUPT       = C.AV_CODEC_FLAG_OUTPUT_CORRUPT
 	AV_CODEC_FLAG_QPEL                 = C.AV_CODEC_FLAG_QPEL
-	AV_CODEC_FLAG_DROPCHANGED          = C.AV_CODEC_FLAG_DROPCHANGED
 	AV_CODEC_FLAG_PASS1                = C.AV_CODEC_FLAG_PASS1
 	AV_CODEC_FLAG_PASS2                = C.AV_CODEC_FLAG_PASS2
 	AV_CODEC_FLAG_LOOP_FILTER          = C.AV_CODEC_FLAG_LOOP_FILTER
@@ -121,15 +659,6 @@ const (
 	AV_CODEC_FLAG2_EXPORT_MVS          = C.AV_CODEC_FLAG2_EXPORT_MVS
 	AV_CODEC_FLAG2_SKIP_MANUAL         = C.AV_CODEC_FLAG2_SKIP_MANUAL
 	AV_CODEC_FLAG2_RO_FLUSH_NOOP       = C.AV_CODEC_FLAG2_RO_FLUSH_NOOP
-)
-
-// Exported side data.
-// These flags can be passed in AVCodecContext.export_side_data before initialization.
-const (
-	AV_CODEC_EXPORT_DATA_MVS              = C.AV_CODEC_EXPORT_DATA_MVS
-	AV_CODEC_EXPORT_DATA_PRFT             = C.AV_CODEC_EXPORT_DATA_PRFT
-	AV_CODEC_EXPORT_DATA_VIDEO_ENC_PARAMS = C.AV_CODEC_EXPORT_DATA_VIDEO_ENC_PARAMS
-	AV_CODEC_EXPORT_DATA_FILM_GRAIN       = C.AV_CODEC_EXPORT_DATA_FILM_GRAIN
 )
 
 // Pan Scan area.
@@ -284,44 +813,319 @@ func (cpbp *AVCPBProperties) GetVbvDelayAddr() *uint64 {
 	return (*uint64)(&cpbp.vbv_delay)
 }
 
+// AVPacketSideDataType
+type AVPacketSideDataType = C.enum_AVPacketSideDataType
+
+const (
+	AV_PKT_DATA_PALETTE                    = AVPacketSideDataType(C.AV_PKT_DATA_PALETTE)
+	AV_PKT_DATA_NEW_EXTRADATA              = AVPacketSideDataType(C.AV_PKT_DATA_NEW_EXTRADATA)
+	AV_PKT_DATA_PARAM_CHANGE               = AVPacketSideDataType(C.AV_PKT_DATA_PARAM_CHANGE)
+	AV_PKT_DATA_H263_MB_INFO               = AVPacketSideDataType(C.AV_PKT_DATA_H263_MB_INFO)
+	AV_PKT_DATA_REPLAYGAIN                 = AVPacketSideDataType(C.AV_PKT_DATA_REPLAYGAIN)
+	AV_PKT_DATA_DISPLAYMATRIX              = AVPacketSideDataType(C.AV_PKT_DATA_DISPLAYMATRIX)
+	AV_PKT_DATA_STEREO3D                   = AVPacketSideDataType(C.AV_PKT_DATA_STEREO3D)
+	AV_PKT_DATA_AUDIO_SERVICE_TYPE         = AVPacketSideDataType(C.AV_PKT_DATA_AUDIO_SERVICE_TYPE)
+	AV_PKT_DATA_QUALITY_STATS              = AVPacketSideDataType(C.AV_PKT_DATA_QUALITY_STATS)
+	AV_PKT_DATA_FALLBACK_TRACK             = AVPacketSideDataType(C.AV_PKT_DATA_FALLBACK_TRACK)
+	AV_PKT_DATA_CPB_PROPERTIES             = AVPacketSideDataType(C.AV_PKT_DATA_CPB_PROPERTIES)
+	AV_PKT_DATA_SKIP_SAMPLES               = AVPacketSideDataType(C.AV_PKT_DATA_SKIP_SAMPLES)
+	AV_PKT_DATA_JP_DUALMONO                = AVPacketSideDataType(C.AV_PKT_DATA_JP_DUALMONO)
+	AV_PKT_DATA_STRINGS_METADATA           = AVPacketSideDataType(C.AV_PKT_DATA_STRINGS_METADATA)
+	AV_PKT_DATA_SUBTITLE_POSITION          = AVPacketSideDataType(C.AV_PKT_DATA_SUBTITLE_POSITION)
+	AV_PKT_DATA_MATROSKA_BLOCKADDITIONAL   = AVPacketSideDataType(C.AV_PKT_DATA_MATROSKA_BLOCKADDITIONAL)
+	AV_PKT_DATA_WEBVTT_IDENTIFIER          = AVPacketSideDataType(C.AV_PKT_DATA_WEBVTT_IDENTIFIER)
+	AV_PKT_DATA_WEBVTT_SETTINGS            = AVPacketSideDataType(C.AV_PKT_DATA_WEBVTT_SETTINGS)
+	AV_PKT_DATA_METADATA_UPDATE            = AVPacketSideDataType(C.AV_PKT_DATA_METADATA_UPDATE)
+	AV_PKT_DATA_MPEGTS_STREAM_ID           = AVPacketSideDataType(C.AV_PKT_DATA_MPEGTS_STREAM_ID)
+	AV_PKT_DATA_MASTERING_DISPLAY_METADATA = AVPacketSideDataType(C.AV_PKT_DATA_MASTERING_DISPLAY_METADATA)
+	AV_PKT_DATA_SPHERICAL                  = AVPacketSideDataType(C.AV_PKT_DATA_SPHERICAL)
+	AV_PKT_DATA_CONTENT_LIGHT_LEVEL        = AVPacketSideDataType(C.AV_PKT_DATA_CONTENT_LIGHT_LEVEL)
+	AV_PKT_DATA_A53_CC                     = AVPacketSideDataType(C.AV_PKT_DATA_A53_CC)
+	AV_PKT_DATA_ENCRYPTION_INIT_INFO       = AVPacketSideDataType(C.AV_PKT_DATA_ENCRYPTION_INIT_INFO)
+	AV_PKT_DATA_ENCRYPTION_INFO            = AVPacketSideDataType(C.AV_PKT_DATA_ENCRYPTION_INFO)
+	AV_PKT_DATA_AFD                        = AVPacketSideDataType(C.AV_PKT_DATA_AFD)
+	AV_PKT_DATA_NB                         = AVPacketSideDataType(C.AV_PKT_DATA_NB)
+)
+
+const (
+	// Deprecated: No use.
+	AV_PKT_DATA_QUALITY_FACTOR = AVPacketSideDataType(C.AV_PKT_DATA_QUALITY_FACTOR)
+)
+
+// AVPacketSideData
+type AVPacketSideData C.struct_AVPacketSideData
+
+// GetData gets `AVPacketSideData.data` value.
+func (psd *AVPacketSideData) GetData() *uint8 {
+	return (*uint8)(psd.data)
+}
+
+// SetData sets `AVPacketSideData.data` value.
+func (psd *AVPacketSideData) SetData(v *uint8) {
+	psd.data = (*C.uint8_t)(v)
+}
+
+// GetDataAddr gets `AVPacketSideData.data` address.
+func (psd *AVPacketSideData) GetDataAddr() **uint8 {
+	return (**uint8)(unsafe.Pointer(&psd.data))
+}
+
+// GetSize gets `AVPacketSideData.size` value.
+func (psd *AVPacketSideData) GetSize() int32 {
+	return (int32)(psd.size)
+}
+
+// SetSize sets `AVPacketSideData.size` value.
+func (psd *AVPacketSideData) SetSize(v int32) {
+	psd.size = (C.int)(v)
+}
+
+// GetSizeAddr gets `AVPacketSideData.size` address.
+func (psd *AVPacketSideData) GetSizeAddr() *int32 {
+	return (*int32)(&psd.size)
+}
+
+// GetType gets `AVPacketSideData.type` value.
+func (psd *AVPacketSideData) GetType() AVPacketSideDataType {
+	return (AVPacketSideDataType)(psd._type)
+}
+
+// SetType sets `AVPacketSideData.type` value.
+func (psd *AVPacketSideData) SetType(v AVPacketSideDataType) {
+	psd._type = (C.enum_AVPacketSideDataType)(v)
+}
+
+// GetTypeAddr gets `AVPacketSideData.type` address.
+func (psd *AVPacketSideData) GetTypeAddr() *AVPacketSideDataType {
+	return (*AVPacketSideDataType)(&psd._type)
+}
+
+// AVPacket
+type AVPacket C.struct_AVPacket
+
+// GetBuf gets `AVPacket.buf` value.
+func (pkt *AVPacket) GetBuf() *AVBufferRef {
+	return (*AVBufferRef)(pkt.buf)
+}
+
+// SetBuf sets `AVPacket.buf` value.
+func (pkt *AVPacket) SetBuf(v *AVBufferRef) {
+	pkt.buf = (*C.struct_AVBufferRef)(v)
+}
+
+// GetBufAddr gets `AVPacket.buf` address.
+func (pkt *AVPacket) GetBufAddr() **AVBufferRef {
+	return (**AVBufferRef)(unsafe.Pointer(&pkt.buf))
+}
+
+// GetPts gets `AVPacket.pts` value.
+func (pkt *AVPacket) GetPts() int64 {
+	return (int64)(pkt.pts)
+}
+
+// SetPts sets `AVPacket.pts` value.
+func (pkt *AVPacket) SetPts(v int64) {
+	pkt.pts = (C.int64_t)(v)
+}
+
+// GetPtsAddr gets `AVPacket.pts` address.
+func (pkt *AVPacket) GetPtsAddr() *int64 {
+	return (*int64)(&pkt.pts)
+}
+
+// GetDts gets `AVPacket.dts` value.
+func (pkt *AVPacket) GetDts() int64 {
+	return (int64)(pkt.dts)
+}
+
+// SetDts sets `AVPacket.dts` value.
+func (pkt *AVPacket) SetDts(v int64) {
+	pkt.dts = (C.int64_t)(v)
+}
+
+// GetDtsAddr gets `AVPacket.dts` address.
+func (pkt *AVPacket) GetDtsAddr() *int64 {
+	return (*int64)(&pkt.dts)
+}
+
+// GetData gets `AVPacket.data` value.
+func (pkt *AVPacket) GetData() *uint8 {
+	return (*uint8)(pkt.data)
+}
+
+// SetData sets `AVPacket.data` value.
+func (pkt *AVPacket) SetData(v *uint8) {
+	pkt.data = (*C.uint8_t)(v)
+}
+
+// GetDataAddr gets `AVPacket.data` address.
+func (pkt *AVPacket) GetDataAddr() **uint8 {
+	return (**uint8)(unsafe.Pointer(&pkt.data))
+}
+
+// GetSize gets `AVPacket.size` value.
+func (pkt *AVPacket) GetSize() int32 {
+	return (int32)(pkt.size)
+}
+
+// SetSize sets `AVPacket.size` value.
+func (pkt *AVPacket) SetSize(v int32) {
+	pkt.size = (C.int)(v)
+}
+
+// GetSizeAddr gets `AVPacket.size` address.
+func (pkt *AVPacket) GetSizeAddr() *int32 {
+	return (*int32)(&pkt.size)
+}
+
+// GetStreamIndex gets `AVPacket.stream_index` value.
+func (pkt *AVPacket) GetStreamIndex() int32 {
+	return (int32)(pkt.stream_index)
+}
+
+// SetStreamIndex sets `AVPacket.stream_index` value.
+func (pkt *AVPacket) SetStreamIndex(v int32) {
+	pkt.stream_index = (C.int)(v)
+}
+
+// GetStreamIndexAddr gets `AVPacket.stream_index` address.
+func (pkt *AVPacket) GetStreamIndexAddr() *int32 {
+	return (*int32)(&pkt.stream_index)
+}
+
+// GetFlags gets `AVPacket.flags` value.
+func (pkt *AVPacket) GetFlags() int32 {
+	return (int32)(pkt.flags)
+}
+
+// SetFlags sets `AVPacket.flags` value.
+func (pkt *AVPacket) SetFlags(v int32) {
+	pkt.flags = (C.int)(v)
+}
+
+// GetFlagsAddr gets `AVPacket.flags` address.
+func (pkt *AVPacket) GetFlagsAddr() *int32 {
+	return (*int32)(&pkt.flags)
+}
+
+// GetSideData gets `AVPacket.side_data` value.
+func (pkt *AVPacket) GetSideData() *AVPacketSideData {
+	return (*AVPacketSideData)(pkt.side_data)
+}
+
+// SetSideData sets `AVPacket.side_data` value.
+func (pkt *AVPacket) SetSideData(v *AVPacketSideData) {
+	pkt.side_data = (*C.struct_AVPacketSideData)(v)
+}
+
+// GetSideDataAddr gets `AVPacket.side_data` address.
+func (pkt *AVPacket) GetSideDataAddr() **AVPacketSideData {
+	return (**AVPacketSideData)(unsafe.Pointer(&pkt.side_data))
+}
+
+// GetSideDataElems gets `AVPacket.side_data_elems` value.
+func (pkt *AVPacket) GetSideDataElems() int32 {
+	return (int32)(pkt.side_data_elems)
+}
+
+// SetSideDataElems sets `AVPacket.side_data_elems` value.
+func (pkt *AVPacket) SetSideDataElems(v int32) {
+	pkt.side_data_elems = (C.int)(v)
+}
+
+// GetSideDataElemsAddr gets `AVPacket.side_data_elems` address.
+func (pkt *AVPacket) GetSideDataElemsAddr() *int32 {
+	return (*int32)(&pkt.side_data_elems)
+}
+
+// GetDuration gets `AVPacket.duration` value.
+func (pkt *AVPacket) GetDuration() int64 {
+	return (int64)(pkt.duration)
+}
+
+// SetDuration sets `AVPacket.duration` value.
+func (pkt *AVPacket) SetDuration(v int64) {
+	pkt.duration = (C.int64_t)(v)
+}
+
+// GetDurationAddr gets `AVPacket.duration` address.
+func (pkt *AVPacket) GetDurationAddr() *int64 {
+	return (*int64)(&pkt.duration)
+}
+
+// GetPos gets `AVPacket.pos` value.
+func (pkt *AVPacket) GetPos() int64 {
+	return (int64)(pkt.pos)
+}
+
+// SetPos sets `AVPacket.pos` value.
+func (pkt *AVPacket) SetPos(v int64) {
+	pkt.pos = (C.int64_t)(v)
+}
+
+// GetPosAddr gets `AVPacket.pos` address.
+func (pkt *AVPacket) GetPosAddr() *int64 {
+	return (*int64)(&pkt.pos)
+}
+
+// Deprecated: No use.
+//
+// GetConvergenceDuration gets `AVPacket.convergence_duration` value.
+func (pkt *AVPacket) GetConvergenceDuration() int64 {
+	return (int64)(pkt.convergence_duration)
+}
+
+// Deprecated: No use.
+//
+// SetConvergenceDuration sets `AVPacket.convergence_duration` value.
+func (pkt *AVPacket) SetConvergenceDuration(v int64) {
+	pkt.convergence_duration = (C.int64_t)(v)
+}
+
+// Deprecated: No use.
+//
+// GetConvergenceDurationAddr gets `AVPacket.convergence_duration` address.
+func (pkt *AVPacket) GetConvergenceDurationAddr() *int64 {
+	return (*int64)(&pkt.convergence_duration)
+}
+
+const (
+	AV_PKT_FLAG_KEY        = C.AV_PKT_FLAG_KEY
+	AV_PKT_FLAG_CORRUPT    = C.AV_PKT_FLAG_CORRUPT
+	AV_PKT_FLAG_DISCARD    = C.AV_PKT_FLAG_DISCARD
+	AV_PKT_FLAG_TRUSTED    = C.AV_PKT_FLAG_TRUSTED
+	AV_PKT_FLAG_DISPOSABLE = C.AV_PKT_FLAG_DISPOSABLE
+)
+
 // This structure supplies correlation between a packet timestamp and a wall clock
 // production time. The definition follows the Producer Reference Time ('prft')
 // as defined in ISO/IEC 14496-12
 type AVProducerReferenceTime C.struct_AVProducerReferenceTime
 
-// GetWallclock gets `AVProducerReferenceTime.wallclock` value.
-func (prt *AVProducerReferenceTime) GetWallclock() int64 {
-	return (int64)(prt.wallclock)
-}
+const (
+	AV_GET_BUFFER_FLAG_REF = C.AV_GET_BUFFER_FLAG_REF
+)
 
-// SetWallclock sets `AVProducerReferenceTime.wallclock` value.
-func (prt *AVProducerReferenceTime) SetWallclock(v int64) {
-	prt.wallclock = (C.int64_t)(v)
-}
-
-// GetWallclockAddr gets `AVProducerReferenceTime.wallclock` address.
-func (prt *AVProducerReferenceTime) GetWallclockAddr() *int64 {
-	return (*int64)(&prt.wallclock)
-}
-
-// GetFlags gets `AVProducerReferenceTime.flags` value.
-func (prt *AVProducerReferenceTime) GetFlags() int32 {
-	return (int32)(prt.flags)
-}
-
-// SetFlags sets `AVProducerReferenceTime.flags` value.
-func (prt *AVProducerReferenceTime) SetFlags(v int32) {
-	prt.flags = (C.int)(v)
-}
-
-// GetFlagsAddr gets `AVProducerReferenceTime.flags` address.
-func (prt *AVProducerReferenceTime) GetFlagsAddr() *int32 {
-	return (*int32)(&prt.flags)
-}
+// AVSideDataParamChangeFlags
+type AVSideDataParamChangeFlags = C.enum_AVSideDataParamChangeFlags
 
 const (
-	AV_GET_BUFFER_FLAG_REF        = C.AV_GET_BUFFER_FLAG_REF
-	AV_GET_ENCODE_BUFFER_FLAG_REF = C.AV_GET_ENCODE_BUFFER_FLAG_REF
+	AV_SIDE_DATA_PARAM_CHANGE_CHANNEL_COUNT  = AVSideDataParamChangeFlags(C.AV_SIDE_DATA_PARAM_CHANGE_CHANNEL_COUNT)
+	AV_SIDE_DATA_PARAM_CHANGE_CHANNEL_LAYOUT = AVSideDataParamChangeFlags(C.AV_SIDE_DATA_PARAM_CHANGE_CHANNEL_LAYOUT)
+	AV_SIDE_DATA_PARAM_CHANGE_SAMPLE_RATE    = AVSideDataParamChangeFlags(C.AV_SIDE_DATA_PARAM_CHANGE_SAMPLE_RATE)
+	AV_SIDE_DATA_PARAM_CHANGE_DIMENSIONS     = AVSideDataParamChangeFlags(C.AV_SIDE_DATA_PARAM_CHANGE_DIMENSIONS)
+)
+
+// AVFieldOrder
+type AVFieldOrder = C.enum_AVFieldOrder
+
+const (
+	AV_FIELD_UNKNOWN     = AVFieldOrder(C.AV_FIELD_UNKNOWN)
+	AV_FIELD_PROGRESSIVE = AVFieldOrder(C.AV_FIELD_PROGRESSIVE)
+	AV_FIELD_TT          = AVFieldOrder(C.AV_FIELD_TT)
+	AV_FIELD_BB          = AVFieldOrder(C.AV_FIELD_BB)
+	AV_FIELD_TB          = AVFieldOrder(C.AV_FIELD_TB)
+	AV_FIELD_BT          = AVFieldOrder(C.AV_FIELD_BT)
 )
 
 // AvCodecContext is main external API structure.
@@ -2860,22 +3664,16 @@ func (avctx *AVCodecContext) GetActiveThreadTypeAddr() *int32 {
 	return (*int32)(&avctx.active_thread_type)
 }
 
-// Deprecated: Unused.
-//
 // GetThreadSafeCallbacks gets `AVCodecContext.thread_safe_callbacks` value.
 func (avctx *AVCodecContext) GetThreadSafeCallbacks() int32 {
 	return (int32)(avctx.thread_safe_callbacks)
 }
 
-// Deprecated: Unused.
-//
 // SetThreadSafeCallbacks sets `AVCodecContext.thread_safe_callbacks` value.
 func (avctx *AVCodecContext) SetThreadSafeCallbacks(v int32) {
 	avctx.thread_safe_callbacks = (C.int)(v)
 }
 
-// Deprecated: Unused.
-//
 // GetThreadSafeCallbacksAddr gets `AVCodecContext.thread_safe_callbacks` address.
 func (avctx *AVCodecContext) GetThreadSafeCallbacksAddr() *int32 {
 	return (*int32)(&avctx.thread_safe_callbacks)
@@ -3042,9 +3840,6 @@ const (
 	FF_PROFILE_HEVC_MAIN_STILL_PICTURE = int32(C.FF_PROFILE_HEVC_MAIN_STILL_PICTURE)
 	FF_PROFILE_HEVC_REXT               = int32(C.FF_PROFILE_HEVC_REXT)
 
-	FF_PROFILE_VVC_MAIN_10     = int32(C.FF_PROFILE_VVC_MAIN_10)
-	FF_PROFILE_VVC_MAIN_10_444 = int32(C.FF_PROFILE_VVC_MAIN_10_444)
-
 	FF_PROFILE_AV1_MAIN         = int32(C.FF_PROFILE_AV1_MAIN)
 	FF_PROFILE_AV1_HIGH         = int32(C.FF_PROFILE_AV1_HIGH)
 	FF_PROFILE_AV1_PROFESSIONAL = int32(C.FF_PROFILE_AV1_PROFESSIONAL)
@@ -3056,19 +3851,6 @@ const (
 	FF_PROFILE_MJPEG_JPEG_LS                         = int32(C.FF_PROFILE_MJPEG_JPEG_LS)
 
 	FF_PROFILE_SBC_MSBC = int32(C.FF_PROFILE_SBC_MSBC)
-
-	FF_PROFILE_PRORES_PROXY    = int32(C.FF_PROFILE_PRORES_PROXY)
-	FF_PROFILE_PRORES_LT       = int32(C.FF_PROFILE_PRORES_LT)
-	FF_PROFILE_PRORES_STANDARD = int32(C.FF_PROFILE_PRORES_STANDARD)
-	FF_PROFILE_PRORES_HQ       = int32(C.FF_PROFILE_PRORES_HQ)
-	FF_PROFILE_PRORES_4444     = int32(C.FF_PROFILE_PRORES_4444)
-	FF_PROFILE_PRORES_XQ       = int32(C.FF_PROFILE_PRORES_XQ)
-
-	FF_PROFILE_ARIB_PROFILE_A = int32(C.FF_PROFILE_ARIB_PROFILE_A)
-	FF_PROFILE_ARIB_PROFILE_C = int32(C.FF_PROFILE_ARIB_PROFILE_C)
-
-	FF_PROFILE_KLVA_SYNC  = int32(C.FF_PROFILE_KLVA_SYNC)
-	FF_PROFILE_KLVA_ASYNC = int32(C.FF_PROFILE_KLVA_ASYNC)
 )
 
 // GetLevel gets `AVCodecContext.level` value.
@@ -3395,22 +4177,16 @@ func (avctx *AVCodecContext) GetSeekPrerollAddr() *int32 {
 	return (*int32)(&avctx.seek_preroll)
 }
 
-// Deprecated: Unused.
-//
 // GetDebugMv gets `AVCodecContext.debug_mv` value.
 func (avctx *AVCodecContext) GetDebugMv() int32 {
 	return (int32)(avctx.debug_mv)
 }
 
-// Deprecated: Unused.
-//
 // SetDebugMv sets `AVCodecContext.debug_mv` value.
 func (avctx *AVCodecContext) SetDebugMv(v int32) {
 	avctx.debug_mv = (C.int)(v)
 }
 
-// Deprecated: Unused.
-//
 // GetDebugMvAddr gets `AVCodecContext.debug_mv` address.
 func (avctx *AVCodecContext) GetDebugMvAddr() *int32 {
 	return (*int32)(&avctx.debug_mv)
@@ -3471,6 +4247,11 @@ func (avctx *AVCodecContext) SetProperties(v uint32) {
 func (avctx *AVCodecContext) GetPropertiesAddr() *uint32 {
 	return (*uint32)(&avctx.properties)
 }
+
+const (
+	FF_CODEC_PROPERTY_LOSSLESS        = uint32(C.FF_CODEC_PROPERTY_LOSSLESS)
+	FF_CODEC_PROPERTY_CLOSED_CAPTIONS = uint32(C.FF_CODEC_PROPERTY_CLOSED_CAPTIONS)
+)
 
 // GetCodedSideData gets `AVCodecContext.coded_side_data` value.
 func (avctx *AVCodecContext) GetCodedSideData() *AVPacketSideData {
@@ -3627,70 +4408,6 @@ func (avctx *AVCodecContext) GetExtraHwFramesAddr() *int32 {
 	return (*int32)(&avctx.extra_hw_frames)
 }
 
-// GetDiscardDamagedPercentage gets `AVCodecContext.discard_damaged_percentage` value.
-func (avctx *AVCodecContext) GetDiscardDamagedPercentage() int32 {
-	return (int32)(avctx.discard_damaged_percentage)
-}
-
-// SetDiscardDamagedPercentage sets `AVCodecContext.discard_damaged_percentage` value.
-func (avctx *AVCodecContext) SetDiscardDamagedPercentage(v int32) {
-	avctx.discard_damaged_percentage = (C.int)(v)
-}
-
-// GetDiscardDamagedPercentageAddr gets `AVCodecContext.discard_damaged_percentage` address.
-func (avctx *AVCodecContext) GetDiscardDamagedPercentageAddr() *int32 {
-	return (*int32)(&avctx.discard_damaged_percentage)
-}
-
-// GetMaxSamples gets `AVCodecContext.max_samples` value.
-func (avctx *AVCodecContext) GetMaxSamples() int64 {
-	return (int64)(avctx.max_samples)
-}
-
-// SetMaxSamples sets `AVCodecContext.max_samples` value.
-func (avctx *AVCodecContext) SetMaxSamples(v int64) {
-	avctx.max_samples = (C.int64_t)(v)
-}
-
-// GetMaxSamplesAddr gets `AVCodecContext.max_samples` address.
-func (avctx *AVCodecContext) GetMaxSamplesAddr() *int64 {
-	return (*int64)(&avctx.max_samples)
-}
-
-// GetExportSideData gets `AVCodecContext.export_side_data` value.
-func (avctx *AVCodecContext) GetExportSideData() int32 {
-	return (int32)(avctx.export_side_data)
-}
-
-// SetExportSideData sets `AVCodecContext.export_side_data` value.
-func (avctx *AVCodecContext) SetExportSideData(v int32) {
-	avctx.export_side_data = (C.int)(v)
-}
-
-// GetExportSideDataAddr gets `AVCodecContext.export_side_data` address.
-func (avctx *AVCodecContext) GetExportSideDataAddr() *int32 {
-	return (*int32)(&avctx.export_side_data)
-}
-
-// typedef int (*avcodec_context_get_encode_buffer_func)(struct AVCodecContext *s,
-// AvPacket *pkt, int flags);
-type AVCodecContextGetEncodeBufferFunc = C.avcodec_context_get_encode_buffer_func
-
-// GetGetEncodeBuffer gets `AVCodecContext.get_encode_buffer` value.
-func (avctx *AVCodecContext) GetGetEncodeBuffer() AVCodecContextGetEncodeBufferFunc {
-	return (AVCodecContextGetEncodeBufferFunc)(avctx.get_encode_buffer)
-}
-
-// SetGetEncodeBuffer sets `AVCodecContext.get_encode_buffer` value.
-func (avctx *AVCodecContext) SetGetEncodeBuffer(v AVCodecContextGetEncodeBufferFunc) {
-	avctx.get_encode_buffer = (C.avcodec_context_get_encode_buffer_func)(v)
-}
-
-// GetGetEncodeBufferAddr gets `AVCodecContext.get_encode_buffer` address.
-func (avctx *AVCodecContext) GetGetEncodeBufferAddr() *AVCodecContextGetEncodeBufferFunc {
-	return (*AVCodecContextGetEncodeBufferFunc)(&avctx.get_encode_buffer)
-}
-
 // Deprecated: No use.
 //
 // AvCodecGetPktTimebase
@@ -3730,7 +4447,7 @@ func AvCodecGetLowres(avctx *AVCodecContext) int32 {
 //
 // AvCodecSetLowres
 func AvCodecSetLowres(avctx *AVCodecContext, i int32) {
-	C.av_codec_set_lowres((*C.struct_AVCodecContext)(avctx), C.int(i))
+	C.av_codec_set_lowres((*C.struct_AVCodecContext)(avctx), (C.int)(i))
 }
 
 // Deprecated: No use.
@@ -3744,7 +4461,7 @@ func AvCodecGetSeekPreroll(avctx *AVCodecContext) int32 {
 //
 // AvCodecSetSeekPreroll
 func AvCodecSetSeekPreroll(avctx *AVCodecContext, i int32) {
-	C.av_codec_set_seek_preroll((*C.struct_AVCodecContext)(avctx), C.int(i))
+	C.av_codec_set_seek_preroll((*C.struct_AVCodecContext)(avctx), (C.int)(i))
 }
 
 // Deprecated: No use.
@@ -3768,8 +4485,239 @@ func AvCodecGetMaxLowres(c *AVCodec) int32 {
 	return (int32)(C.av_codec_get_max_lowres((*C.struct_AVCodec)(c)))
 }
 
+const (
+	AV_CODEC_CAP_DRAW_HORIZ_BAND     = C.AV_CODEC_CAP_DRAW_HORIZ_BAND
+	AV_CODEC_CAP_DR1                 = C.AV_CODEC_CAP_DR1
+	AV_CODEC_CAP_TRUNCATED           = C.AV_CODEC_CAP_TRUNCATED
+	AV_CODEC_CAP_DELAY               = C.AV_CODEC_CAP_DELAY
+	AV_CODEC_CAP_SMALL_LAST_FRAME    = C.AV_CODEC_CAP_SMALL_LAST_FRAME
+	AV_CODEC_CAP_SUBFRAMES           = C.AV_CODEC_CAP_SUBFRAMES
+	AV_CODEC_CAP_EXPERIMENTAL        = C.AV_CODEC_CAP_EXPERIMENTAL
+	AV_CODEC_CAP_CHANNEL_CONF        = C.AV_CODEC_CAP_CHANNEL_CONF
+	AV_CODEC_CAP_FRAME_THREADS       = C.AV_CODEC_CAP_FRAME_THREADS
+	AV_CODEC_CAP_SLICE_THREADS       = C.AV_CODEC_CAP_SLICE_THREADS
+	AV_CODEC_CAP_PARAM_CHANGE        = C.AV_CODEC_CAP_PARAM_CHANGE
+	AV_CODEC_CAP_AUTO_THREADS        = C.AV_CODEC_CAP_AUTO_THREADS
+	AV_CODEC_CAP_VARIABLE_FRAME_SIZE = C.AV_CODEC_CAP_VARIABLE_FRAME_SIZE
+	AV_CODEC_CAP_AVOID_PROBING       = C.AV_CODEC_CAP_AVOID_PROBING
+	AV_CODEC_CAP_INTRA_ONLY          = C.AV_CODEC_CAP_INTRA_ONLY
+	AV_CODEC_CAP_LOSSLESS            = C.AV_CODEC_CAP_LOSSLESS
+	AV_CODEC_CAP_HARDWARE            = C.AV_CODEC_CAP_HARDWARE
+	AV_CODEC_CAP_HYBRID              = C.AV_CODEC_CAP_HYBRID
+)
+
+// AVProfile
+type AVProfile C.struct_AVProfile
+
+// GetProfile gets `AVProfile.profile` value.
+func (p *AVProfile) GetProfile() int32 {
+	return (int32)(p.profile)
+}
+
+// GetName gets `AVProfile.name` value.
+func (p *AVProfile) GetName() string {
+	return C.GoString(p.name)
+}
+
+// AVCodec
+type AVCodec C.struct_AVCodec
+
+// GetName gets `AVCodec.name` value.
+func (codec *AVCodec) GetName() string {
+	return C.GoString(codec.name)
+}
+
+// GetLongName gets `AVCodec.long_name` value.
+func (codec *AVCodec) GetLongName() string {
+	return C.GoString(codec.long_name)
+}
+
+// GetType gets `AVCodec.type` value.
+func (codec *AVCodec) GetType() AVMediaType {
+	return (AVMediaType)(codec._type)
+}
+
+// GetType gets `AVCodec.id` value.
+func (codec *AVCodec) GetID() AVCodecID {
+	return (AVCodecID)(codec.id)
+}
+
+// GetCapabilities gets `AVCodec.capabilities` value.
+func (codec *AVCodec) GetCapabilities() int32 {
+	return (int32)(codec.capabilities)
+}
+
+// GetSupportedFramerates gets `AVCodec.supportedFramerates` value.
+func (codec *AVCodec) GetSupportedFramerates() []AVRational {
+	return SliceTrunc((*AVRational)(codec.supported_framerates), func(ar AVRational) bool {
+		return ar.GetNum() == 0 && ar.GetDen() == 0
+	})
+}
+
+// GetPixFmts gets `AVCodec.pix_fmts` value.
+func (codec *AVCodec) GetPixFmts() []AVPixelFormat {
+	return SliceTrunc((*AVPixelFormat)(codec.pix_fmts), func(pf AVPixelFormat) bool {
+		return pf == AV_PIX_FMT_NONE
+	})
+}
+
+// GetSupportedSamplerates gets `AVCodec.supported_samplerates` value.
+func (codec *AVCodec) GetSupportedSamplerates() []int32 {
+	return SliceTrunc((*int32)(codec.supported_samplerates), func(i int32) bool {
+		return i == 0
+	})
+}
+
+// GetSampleFmts gets `AVCodec.sample_fmts` value.
+func (codec *AVCodec) GetSampleFmts() []AVSampleFormat {
+	return SliceTrunc((*AVSampleFormat)(codec.sample_fmts), func(sf AVSampleFormat) bool {
+		return sf == AV_SAMPLE_FMT_NONE
+	})
+}
+
+// GetChannelLayouts gets `AVCodec.channel_layouts` value.
+func (codec *AVCodec) GetChannelLayouts() []uint64 {
+	return SliceTrunc((*uint64)(codec.channel_layouts), func(u uint64) bool {
+		return u == 0
+	})
+}
+
+// GetMaxLowres gets `AVCodec.max_lowres` value.
+func (codec *AVCodec) GetMaxLowres() uint8 {
+	return (uint8)(codec.max_lowres)
+}
+
+// GetProfiles gets `AVCodec.profiles` value.
+func (codec *AVCodec) GetProfiles() []AVProfile {
+	return SliceTrunc((*AVProfile)(codec.profiles), func(ap AVProfile) bool {
+		return ap.GetProfile() == FF_PROFILE_UNKNOWN
+	})
+}
+
+// GetWrapperName gets `AVCodec.wrapper_name` value.
+func (codec *AVCodec) GetWrapperName() string {
+	return C.GoString(codec.wrapper_name)
+}
+
+// AvCodecIterate iterates over all registered codecs.
+func AvCodecIterate(opaque CVoidPointerPointer) *AVCodec {
+	return (*AVCodec)(C.av_codec_iterate(VoidPointerPointer(opaque)))
+}
+
+// AvCodecFindDecoder finds a registered decoder with a matching codec ID.
+func AvCodecFindDecoder(id AVCodecID) *AVCodec {
+	return (*AVCodec)(C.avcodec_find_decoder((C.enum_AVCodecID)(id)))
+}
+
+// AvCodecFindDecoderByName finds a registered decoder with the specified name.
+func AvCodecFindDecoderByName(name string) *AVCodec {
+	namePtr, nameFunc := StringCasting(name)
+	defer nameFunc()
+	return (*AVCodec)(C.avcodec_find_decoder_by_name((*C.char)(namePtr)))
+}
+
+// AvCodecFindEncoder finds a registered encoder with a matching codec ID.
+func AvCodecFindEncoder(id AVCodecID) *AVCodec {
+	return (*AVCodec)(C.avcodec_find_encoder((C.enum_AVCodecID)(id)))
+}
+
+// AvCodecFindEncoderByName finds a registered encoder with the specified name.
+func AvCodecFindEncoderByName(name string) *AVCodec {
+	namePtr, nameFunc := StringCasting(name)
+	defer nameFunc()
+	return (*AVCodec)(C.avcodec_find_encoder_by_name((*C.char)(namePtr)))
+}
+
+// AvCodecIsEncoder returns a non-zero number if codec is an encoder, zero otherwise.
+func AvCodecIsEncoder(codec *AVCodec) int32 {
+	return (int32)(C.av_codec_is_encoder((*C.struct_AVCodec)(codec)))
+}
+
+// AvCodecIsDecoder returns a non-zero number if codec is an decoder, zero otherwise.
+func AvCodecIsDecoder(codec *AVCodec) int32 {
+	return (int32)(C.av_codec_is_decoder((*C.struct_AVCodec)(codec)))
+}
+
+// AvCodecDescriptorGet returns descriptor for given codec ID or NULL if no descriptor exists.
+func AvCodecDescriptorGet(id AVCodecID) *AVCodecDescriptor {
+	return (*AVCodecDescriptor)(C.avcodec_descriptor_get((C.enum_AVCodecID)(id)))
+}
+
+// AvCodecDescriptorNext iterates over all codec descriptors known to libavcodec.
+func AvCodecDescriptorNext(prev *AVCodecDescriptor) *AVCodecDescriptor {
+	return (*AVCodecDescriptor)(C.avcodec_descriptor_next((*C.struct_AVCodecDescriptor)(prev)))
+}
+
+// AvCodecDescriptorGetByName returns codec descriptor with the given name or NULL
+// if no such descriptor exists.
+func AvCodecDescriptorGetByName(name string) *AVCodecDescriptor {
+	namePtr, nameFunc := StringCasting(name)
+	defer nameFunc()
+	return (*AVCodecDescriptor)(C.avcodec_descriptor_get_by_name((*C.char)(namePtr)))
+}
+
+const (
+	AV_CODEC_HW_CONFIG_METHOD_HW_DEVICE_CTX = int32(C.AV_CODEC_HW_CONFIG_METHOD_HW_DEVICE_CTX)
+	AV_CODEC_HW_CONFIG_METHOD_HW_FRAMES_CTX = int32(C.AV_CODEC_HW_CONFIG_METHOD_HW_FRAMES_CTX)
+	AV_CODEC_HW_CONFIG_METHOD_INTERNAL      = int32(C.AV_CODEC_HW_CONFIG_METHOD_INTERNAL)
+	AV_CODEC_HW_CONFIG_METHOD_AD_HOC        = int32(C.AV_CODEC_HW_CONFIG_METHOD_AD_HOC)
+)
+
+// AVCodecHWConfig
+type AVCodecHWConfig C.struct_AVCodecHWConfig
+
+// GetPixFmt gets `AVCodecHWConfig.pix_fmt` value.
+func (hwc *AVCodecHWConfig) GetPixFmt() AVPixelFormat {
+	return (AVPixelFormat)(hwc.pix_fmt)
+}
+
+// SetPixFmt sets `AVCodecHWConfig.pix_fmt` value.
+func (hwc *AVCodecHWConfig) SetPixFmt(v AVPixelFormat) {
+	hwc.pix_fmt = (C.enum_AVPixelFormat)(v)
+}
+
+// GetPixFmtAddr gets `AVCodecHWConfig.pix_fmt` address.
+func (hwc *AVCodecHWConfig) GetPixFmtAddr() *AVPixelFormat {
+	return (*AVPixelFormat)(&hwc.pix_fmt)
+}
+
+// GetMethods gets `AVCodecHWConfig.methods` value.
+func (hwc *AVCodecHWConfig) GetMethods() int32 {
+	return (int32)(hwc.methods)
+}
+
+// SetMethods sets `AVCodecHWConfig.methods` value.
+func (hwc *AVCodecHWConfig) SetMethods(v int32) {
+	hwc.methods = (C.int)(v)
+}
+
+// GetMethodsAddr gets `AVCodecHWConfig.methods` address.
+func (hwc *AVCodecHWConfig) GetMethodsAddr() *int32 {
+	return (*int32)(&hwc.methods)
+}
+
+// GetDeviceType gets `AVCodecHWConfig.devicetype` value.
+func (hwc *AVCodecHWConfig) GetDeviceType() AVHWDeviceType {
+	return (AVHWDeviceType)(hwc.device_type)
+}
+
+// SetDeviceType sets `AVCodecHWConfig.devicetype` value.
+func (hwc *AVCodecHWConfig) SetDeviceType(v AVHWDeviceType) {
+	hwc.device_type = (C.enum_AVHWDeviceType)(v)
+}
+
+// GetDeviceTypeAddr gets `AVCodecHWConfig.devicetype` address.
+func (hwc *AVCodecHWConfig) GetDeviceTypeAddr() *AVHWDeviceType {
+	return (*AVHWDeviceType)(&hwc.device_type)
+}
+
 // MpegEncContext
 type MpegEncContext C.struct_MpegEncContext
+
+// AvCodecGetHwConfig retrieves supported hardware configurations for a codec.
+func AvCodecGetHwConfig[T Integer](codec *AVCodec, index T) *AVCodecHWConfig {
+	return (*AVCodecHWConfig)(C.avcodec_get_hw_config((*C.struct_AVCodec)(codec), (C.int)(index)))
+}
 
 // AVHWAccel
 type AVHWAccel C.struct_AVHWAccel
@@ -3905,7 +4853,9 @@ const (
 	SUBTITLE_ASS    = AVSubtitleType(C.SUBTITLE_ASS)
 )
 
-const AV_SUBTITLE_FLAG_FORCED = C.AV_SUBTITLE_FLAG_FORCED
+const (
+	AV_SUBTITLE_FLAG_FORCED = C.AV_SUBTITLE_FLAG_FORCED
+)
 
 // AVSubtitleRect
 type AVSubtitleRect C.struct_AVSubtitleRect
@@ -4176,6 +5126,444 @@ func (sbt *AVSubtitle) GetPtsAddr() *int64 {
 	return (*int64)(&sbt.pts)
 }
 
+// AVCodecParameters
+type AVCodecParameters C.struct_AVCodecParameters
+
+// GetCodecType gets `AVCodecParameters.codectype` value.
+func (par *AVCodecParameters) GetCodecType() AVMediaType {
+	return (AVMediaType)(par.codec_type)
+}
+
+// SetCodecType sets `AVCodecParameters.codectype` value.
+func (par *AVCodecParameters) SetCodecType(v AVMediaType) {
+	par.codec_type = (C.enum_AVMediaType)(v)
+}
+
+// GetCodecTypeAddr gets `AVCodecParameters.codectype` address.
+func (par *AVCodecParameters) GetCodecTypeAddr() *AVMediaType {
+	return (*AVMediaType)(unsafe.Pointer(&par.codec_type))
+}
+
+// GetCodecId gets `AVCodecParameters.codec_id` value.
+func (par *AVCodecParameters) GetCodecId() AVCodecID {
+	return (AVCodecID)(par.codec_id)
+}
+
+// SetCodecId sets `AVCodecParameters.codec_id` value.
+func (par *AVCodecParameters) SetCodecId(v AVCodecID) {
+	par.codec_id = (C.enum_AVCodecID)(v)
+}
+
+// GetCodecIdAddr gets `AVCodecParameters.codec_id` address.
+func (par *AVCodecParameters) GetCodecIdAddr() *AVCodecID {
+	return (*AVCodecID)(unsafe.Pointer(&par.codec_id))
+}
+
+// GetCodecTag gets `AVCodecParameters.codec_tag` value.
+func (par *AVCodecParameters) GetCodecTag() uint32 {
+	return (uint32)(par.codec_tag)
+}
+
+// SetCodecTag sets `AVCodecParameters.codec_tag` value.
+func (par *AVCodecParameters) SetCodecTag(v uint32) {
+	par.codec_tag = (C.uint)(v)
+}
+
+// GetCodecTagAddr gets `AVCodecParameters.codec_tag` address.
+func (par *AVCodecParameters) GetCodecTagAddr() *uint32 {
+	return (*uint32)(&par.codec_tag)
+}
+
+// GetExtradata gets `AVCodecParameters.extradata` value.
+func (par *AVCodecParameters) GetExtradata() *uint8 {
+	return (*uint8)(par.extradata)
+}
+
+// SetExtradata sets `AVCodecParameters.extradata` value.
+func (par *AVCodecParameters) SetExtradata(v *uint8) {
+	par.extradata = (*C.uint8_t)(v)
+}
+
+// GetExtradataAddr gets `AVCodecParameters.extradata` address.
+func (par *AVCodecParameters) GetExtradataAddr() *uint8 {
+	return (*uint8)(unsafe.Pointer(&par.extradata))
+}
+
+// GetExtradataSize gets `AVCodecParameters.extradata_size` value.
+func (par *AVCodecParameters) GetExtradataSize() int32 {
+	return (int32)(par.extradata_size)
+}
+
+// SetExtradataSize sets `AVCodecParameters.extradata_size` value.
+func (par *AVCodecParameters) SetExtradataSize(v int32) {
+	par.extradata_size = (C.int)(v)
+}
+
+// GetExtradataSizeAddr gets `AVCodecParameters.extradata_size` address.
+func (par *AVCodecParameters) GetExtradataSizeAddr() *int32 {
+	return (*int32)(&par.extradata_size)
+}
+
+// GetFormat gets `AVCodecParameters.format` value.
+func (par *AVCodecParameters) GetFormat() int32 {
+	return (int32)(par.format)
+}
+
+// SetFormat sets `AVCodecParameters.format` value.
+func (par *AVCodecParameters) SetFormat(v int32) {
+	par.format = (C.int)(v)
+}
+
+// GetFormatAddr gets `AVCodecParameters.format` address.
+func (par *AVCodecParameters) GetFormatAddr() *int32 {
+	return (*int32)(&par.format)
+}
+
+// GetBitRate gets `AVCodecParameters.bit_rate` value.
+func (par *AVCodecParameters) GetBitRate() int64 {
+	return (int64)(par.bit_rate)
+}
+
+// SetBitRate sets `AVCodecParameters.bit_rate` value.
+func (par *AVCodecParameters) SetBitRate(v int64) {
+	par.bit_rate = (C.int64_t)(v)
+}
+
+// GetBitRateAddr gets `AVCodecParameters.bit_rate` address.
+func (par *AVCodecParameters) GetBitRateAddr() *int64 {
+	return (*int64)(&par.bit_rate)
+}
+
+// GetBitsPerCodedSample gets `AVCodecParameters.bits_per_coded_sample` value.
+func (par *AVCodecParameters) GetBitsPerCodedSample() int32 {
+	return (int32)(par.bits_per_coded_sample)
+}
+
+// SetBitsPerCodedSample sets `AVCodecParameters.bits_per_coded_sample` value.
+func (par *AVCodecParameters) SetBitsPerCodedSample(v int32) {
+	par.bits_per_coded_sample = (C.int)(v)
+}
+
+// GetBitsPerCodedSampleAddr gets `AVCodecParameters.bits_per_coded_sample` address.
+func (par *AVCodecParameters) GetBitsPerCodedSampleAddr() *int32 {
+	return (*int32)(&par.bits_per_coded_sample)
+}
+
+// GetBitsPerRawSample gets `AVCodecParameters.bits_per_raw_sample` value.
+func (par *AVCodecParameters) GetBitsPerRawSample() int32 {
+	return (int32)(par.bits_per_raw_sample)
+}
+
+// SetBitsPerRawSample sets `AVCodecParameters.bits_per_raw_sample` value.
+func (par *AVCodecParameters) SetBitsPerRawSample(v int32) {
+	par.bits_per_raw_sample = (C.int)(v)
+}
+
+// GetBitsPerRawSampleAddr gets `AVCodecParameters.bits_per_raw_sample` address.
+func (par *AVCodecParameters) GetBitsPerRawSampleAddr() *int32 {
+	return (*int32)(&par.bits_per_raw_sample)
+}
+
+// GetProfile gets `AVCodecParameters.profile` value.
+func (par *AVCodecParameters) GetProfile() int32 {
+	return (int32)(par.profile)
+}
+
+// SetProfile sets `AVCodecParameters.profile` value.
+func (par *AVCodecParameters) SetProfile(v int32) {
+	par.profile = (C.int)(v)
+}
+
+// GetProfileAddr gets `AVCodecParameters.profile` address.
+func (par *AVCodecParameters) GetProfileAddr() *int32 {
+	return (*int32)(&par.profile)
+}
+
+// GetLevel gets `AVCodecParameters.level` value.
+func (par *AVCodecParameters) GetLevel() int32 {
+	return (int32)(par.level)
+}
+
+// SetLevel sets `AVCodecParameters.level` value.
+func (par *AVCodecParameters) SetLevel(v int32) {
+	par.level = (C.int)(v)
+}
+
+// GetLevelAddr gets `AVCodecParameters.level` address.
+func (par *AVCodecParameters) GetLevelAddr() *int32 {
+	return (*int32)(&par.level)
+}
+
+// GetWidth gets `AVCodecParameters.width` value.
+func (par *AVCodecParameters) GetWidth() int32 {
+	return (int32)(par.width)
+}
+
+// SetWidth sets `AVCodecParameters.width` value.
+func (par *AVCodecParameters) SetWidth(v int32) {
+	par.width = (C.int)(v)
+}
+
+// GetWidthAddr gets `AVCodecParameters.width` address.
+func (par *AVCodecParameters) GetWidthAddr() *int32 {
+	return (*int32)(&par.width)
+}
+
+// GetHeight gets `AVCodecParameters.height` value.
+func (par *AVCodecParameters) GetHeight() int32 {
+	return (int32)(par.height)
+}
+
+// SetHeight sets `AVCodecParameters.height` value.
+func (par *AVCodecParameters) SetHeight(v int32) {
+	par.height = (C.int)(v)
+}
+
+// GetHeightAddr gets `AVCodecParameters.height` address.
+func (par *AVCodecParameters) GetHeightAddr() *int32 {
+	return (*int32)(&par.height)
+}
+
+// GetSampleAspectRatio gets `AVCodecParameters.sample_aspect_ratio` value.
+func (par *AVCodecParameters) GetSampleAspectRatio() AVRational {
+	return (AVRational)(par.sample_aspect_ratio)
+}
+
+// SetSampleAspectRatio sets `AVCodecParameters.sample_aspect_ratio` value.
+func (par *AVCodecParameters) SetSampleAspectRatio(v AVRational) {
+	par.sample_aspect_ratio = (C.struct_AVRational)(v)
+}
+
+// GetSampleAspectRatioAddr gets `AVCodecParameters.sample_aspect_ratio` address.
+func (par *AVCodecParameters) GetSampleAspectRatioAddr() *AVRational {
+	return (*AVRational)(&par.sample_aspect_ratio)
+}
+
+// GetFieldOrder gets `AVCodecParameters.field_order` value.
+func (par *AVCodecParameters) GetFieldOrder() AVFieldOrder {
+	return (AVFieldOrder)(par.field_order)
+}
+
+// SetFieldOrder sets `AVCodecParameters.field_order` value.
+func (par *AVCodecParameters) SetFieldOrder(v AVFieldOrder) {
+	par.field_order = (C.enum_AVFieldOrder)(v)
+}
+
+// GetFieldOrderAddr gets `AVCodecParameters.field_order` address.
+func (par *AVCodecParameters) GetFieldOrderAddr() *AVFieldOrder {
+	return (*AVFieldOrder)(unsafe.Pointer(&par.field_order))
+}
+
+// GetColorRange gets `AVCodecParameters.colorrange` value.
+func (par *AVCodecParameters) GetColorRange() AVColorRange {
+	return (AVColorRange)(par.color_range)
+}
+
+// SetColorRange sets `AVCodecParameters.colorrange` value.
+func (par *AVCodecParameters) SetColorRange(v AVColorRange) {
+	par.color_range = (C.enum_AVColorRange)(v)
+}
+
+// GetColorRangeAddr gets `AVCodecParameters.colorrange` address.
+func (par *AVCodecParameters) GetColorRangeAddr() *AVColorRange {
+	return (*AVColorRange)(unsafe.Pointer(&par.color_range))
+}
+
+// GetColorPrimaries gets `AVCodecParameters.color_primaries` value.
+func (par *AVCodecParameters) GetColorPrimaries() AVColorPrimaries {
+	return (AVColorPrimaries)(par.color_primaries)
+}
+
+// SetColorPrimaries sets `AVCodecParameters.color_primaries` value.
+func (par *AVCodecParameters) SetColorPrimaries(v AVColorPrimaries) {
+	par.color_primaries = (C.enum_AVColorPrimaries)(v)
+}
+
+// GetColorPrimariesAddr gets `AVCodecParameters.color_primaries` address.
+func (par *AVCodecParameters) GetColorPrimariesAddr() *AVColorPrimaries {
+	return (*AVColorPrimaries)(unsafe.Pointer(&par.color_primaries))
+}
+
+// GetColorTrc gets `AVCodecParameters.color_trc` value.
+func (par *AVCodecParameters) GetColorTrc() AVColorTransferCharacteristic {
+	return (AVColorTransferCharacteristic)(par.color_trc)
+}
+
+// SetColorTrc sets `AVCodecParameters.color_trc` value.
+func (par *AVCodecParameters) SetColorTrc(v AVColorTransferCharacteristic) {
+	par.color_trc = (C.enum_AVColorTransferCharacteristic)(v)
+}
+
+// GetColorTrcAddr gets `AVCodecParameters.color_trc` address.
+func (par *AVCodecParameters) GetColorTrcAddr() *AVColorTransferCharacteristic {
+	return (*AVColorTransferCharacteristic)(unsafe.Pointer(&par.color_trc))
+}
+
+// GetColorSpace gets `AVCodecParameters.color_space` value.
+func (par *AVCodecParameters) GetColorSpace() AVColorSpace {
+	return (AVColorSpace)(par.color_space)
+}
+
+// SetColorSpace sets `AVCodecParameters.color_space` value.
+func (par *AVCodecParameters) SetColorSpace(v AVColorSpace) {
+	par.color_space = (C.enum_AVColorSpace)(v)
+}
+
+// GetColorSpaceAddr gets `AVCodecParameters.color_space` address.
+func (par *AVCodecParameters) GetColorSpaceAddr() *AVColorSpace {
+	return (*AVColorSpace)(unsafe.Pointer(&par.color_space))
+}
+
+// GetChromaLocation gets `AVCodecParameters.chroma_location` value.
+func (par *AVCodecParameters) GetChromaLocation() AVChromaLocation {
+	return (AVChromaLocation)(par.chroma_location)
+}
+
+// SetChromaLocation sets `AVCodecParameters.chroma_location` value.
+func (par *AVCodecParameters) SetChromaLocation(v AVChromaLocation) {
+	par.chroma_location = (C.enum_AVChromaLocation)(v)
+}
+
+// GetChromaLocationAddr gets `AVCodecParameters.chroma_location` address.
+func (par *AVCodecParameters) GetChromaLocationAddr() *AVChromaLocation {
+	return (*AVChromaLocation)(unsafe.Pointer(&par.chroma_location))
+}
+
+// GetVideoDelay gets `AVCodecParameters.video_delay` value.
+func (par *AVCodecParameters) GetVideoDelay() int32 {
+	return (int32)(par.video_delay)
+}
+
+// SetVideoDelay sets `AVCodecParameters.video_delay` value.
+func (par *AVCodecParameters) SetVideoDelay(v int32) {
+	par.video_delay = (C.int)(v)
+}
+
+// GetVideoDelayAddr gets `AVCodecParameters.video_delay` address.
+func (par *AVCodecParameters) GetVideoDelayAddr() *int32 {
+	return (*int32)(&par.video_delay)
+}
+
+// GetChannelLayout gets `AVCodecParameters.channel_layout` value.
+func (par *AVCodecParameters) GetChannelLayout() uint64 {
+	return (uint64)(par.channel_layout)
+}
+
+// SetChannelLayout sets `AVCodecParameters.channel_layout` value.
+func (par *AVCodecParameters) SetChannelLayout(v uint64) {
+	par.channel_layout = (C.uint64_t)(v)
+}
+
+// GetChannelLayoutAddr gets `AVCodecParameters.channel_layout` address.
+func (par *AVCodecParameters) GetChannelLayoutAddr() *uint64 {
+	return (*uint64)(&par.channel_layout)
+}
+
+// GetChannels gets `AVCodecParameters.channels` value.
+func (par *AVCodecParameters) GetChannels() int32 {
+	return (int32)(par.channels)
+}
+
+// SetChannels sets `AVCodecParameters.channels` value.
+func (par *AVCodecParameters) SetChannels(v int32) {
+	par.channels = (C.int)(v)
+}
+
+// GetChannelsAddr gets `AVCodecParameters.channels` address.
+func (par *AVCodecParameters) GetChannelsAddr() *int32 {
+	return (*int32)(&par.channels)
+}
+
+// GetSampleRate gets `AVCodecParameters.sample_rate` value.
+func (par *AVCodecParameters) GetSampleRate() int32 {
+	return (int32)(par.sample_rate)
+}
+
+// SetSampleRate sets `AVCodecParameters.sample_rate` value.
+func (par *AVCodecParameters) SetSampleRate(v int32) {
+	par.sample_rate = (C.int)(v)
+}
+
+// GetSampleRateAddr gets `AVCodecParameters.sample_rate` address.
+func (par *AVCodecParameters) GetSampleRateAddr() *int32 {
+	return (*int32)(&par.sample_rate)
+}
+
+// GetBlockAlign gets `AVCodecParameters.block_align` value.
+func (par *AVCodecParameters) GetBlockAlign() int32 {
+	return (int32)(par.block_align)
+}
+
+// SetBlockAlign sets `AVCodecParameters.block_align` value.
+func (par *AVCodecParameters) SetBlockAlign(v int32) {
+	par.block_align = (C.int)(v)
+}
+
+// GetBlockAlignAddr gets `AVCodecParameters.block_align` address.
+func (par *AVCodecParameters) GetBlockAlignAddr() *int32 {
+	return (*int32)(&par.block_align)
+}
+
+// GetFrameSize gets `AVCodecParameters.frame_size` value.
+func (par *AVCodecParameters) GetFrameSize() int32 {
+	return (int32)(par.frame_size)
+}
+
+// SetFrameSize sets `AVCodecParameters.frame_size` value.
+func (par *AVCodecParameters) SetFrameSize(v int32) {
+	par.frame_size = (C.int)(v)
+}
+
+// GetFrameSizeAddr gets `AVCodecParameters.frame_size` address.
+func (par *AVCodecParameters) GetFrameSizeAddr() *int32 {
+	return (*int32)(&par.frame_size)
+}
+
+// GetInitialPadding gets `AVCodecParameters.initial_padding` value.
+func (par *AVCodecParameters) GetInitialPadding() int32 {
+	return (int32)(par.initial_padding)
+}
+
+// SetInitialPadding sets `AVCodecParameters.initial_padding` value.
+func (par *AVCodecParameters) SetInitialPadding(v int32) {
+	par.initial_padding = (C.int)(v)
+}
+
+// GetInitialPaddingAddr gets `AVCodecParameters.initial_padding` address.
+func (par *AVCodecParameters) GetInitialPaddingAddr() *int32 {
+	return (*int32)(&par.initial_padding)
+}
+
+// GetTrailingPadding gets `AVCodecParameters.trailing_padding` value.
+func (par *AVCodecParameters) GetTrailingPadding() int32 {
+	return (int32)(par.trailing_padding)
+}
+
+// SetTrailingPadding sets `AVCodecParameters.trailing_padding` value.
+func (par *AVCodecParameters) SetTrailingPadding(v int32) {
+	par.trailing_padding = (C.int)(v)
+}
+
+// GetTrailingPaddingAddr gets `AVCodecParameters.trailing_padding` address.
+func (par *AVCodecParameters) GetTrailingPaddingAddr() *int32 {
+	return (*int32)(&par.trailing_padding)
+}
+
+// GetSeekPreroll gets `AVCodecParameters.seek_preroll` value.
+func (par *AVCodecParameters) GetSeekPreroll() int32 {
+	return (int32)(par.seek_preroll)
+}
+
+// SetSeekPreroll sets `AVCodecParameters.seek_preroll` value.
+func (par *AVCodecParameters) SetSeekPreroll(v int32) {
+	par.seek_preroll = (C.int)(v)
+}
+
+// GetSeekPrerollAddr gets `AVCodecParameters.seek_preroll` address.
+func (par *AVCodecParameters) GetSeekPrerollAddr() *int32 {
+	return (*int32)(&par.seek_preroll)
+}
+
 // Deprecated: No use.
 //
 // AvCodecNext returns the first registered codec if c is NULL,
@@ -4232,8 +5620,6 @@ func AvCodecGetClass() *AVClass {
 	return (*AVClass)(C.avcodec_get_class())
 }
 
-// Deprecated: This function should not be used.
-//
 // AvCodecGetFrameClass
 func AvCodecGetFrameClass() *AVClass {
 	return (*AVClass)(C.avcodec_get_frame_class())
@@ -4252,6 +5638,24 @@ func AvCodecGetSubtitleRectClass() *AVClass {
 func AvCodecCopyContext(dest, src *AVCodecContext) int32 {
 	return (int32)(C.avcodec_copy_context((*C.struct_AVCodecContext)(dest),
 		(*C.struct_AVCodecContext)(src)))
+}
+
+// AvCodecParametersAlloc allocates a new AVCodecParameters and set its fields to default values
+// (unknown/invalid/0). The returned struct must be freed with AVCodecParametersFree().
+func AvCodecParametersAlloc() *AVCodecParameters {
+	return (*AVCodecParameters)(C.avcodec_parameters_alloc())
+}
+
+// AvCodecParametersFree frees an AVCodecParameters instance and everything associated with it and
+// write NULL to the supplied pointer.
+func AvCodecParametersFree(par **AVCodecParameters) {
+	C.avcodec_parameters_free((**C.struct_AVCodecParameters)(unsafe.Pointer(par)))
+}
+
+// AvCodecParametersCopy copies the contents of src to dst.
+func AvCodecParametersCopy(dst, src *AVCodecParameters) int32 {
+	return (int32)(C.avcodec_parameters_copy((*C.struct_AVCodecParameters)(dst),
+		(*C.struct_AVCodecParameters)(src)))
 }
 
 // AvCodecParametersFromContext fills the parameters struct based on the values from the supplied codec
@@ -4287,16 +5691,176 @@ func AvSubtitleFree(s *AVSubtitle) {
 	C.avsubtitle_free((*C.struct_AVSubtitle)(s))
 }
 
+// AvPacketAlloc allocates an AVPacket and set its fields to default values. The resulting
+// struct must be freed using AVPacketFree().
+func AvPacketAlloc() *AVPacket {
+	return (*AVPacket)(C.av_packet_alloc())
+}
+
+// AvPacketClone creates a new packet that references the same data as src.
+func AvPacketClone(pkt *AVPacket) *AVPacket {
+	return (*AVPacket)(C.av_packet_clone((*C.struct_AVPacket)(pkt)))
+}
+
+// AvPacketFree frees the packet, if the packet is reference counted, it will be
+// unreferenced first.
+func AvPacketFree(pkt **AVPacket) {
+	C.av_packet_free((**C.struct_AVPacket)(unsafe.Pointer(pkt)))
+}
+
+// AvInitPacket initializes optional fields of a packet with default values.
+func AvInitPacket(pkt *AVPacket) {
+	C.av_init_packet((*C.struct_AVPacket)(pkt))
+}
+
+// AvNewPacket allocates the payload of a packet and initialize its fields with
+// default values.
+func AvNewPacket(pkt *AVPacket, size int32) int32 {
+	return (int32)(C.av_new_packet((*C.struct_AVPacket)(pkt), (C.int)(size)))
+}
+
+// AvShrinkPacket reduces packet size, correctly zeroing padding.
+func AvShrinkPacket(pkt *AVPacket, size int32) {
+	C.av_shrink_packet((*C.struct_AVPacket)(pkt), (C.int)(size))
+}
+
+// AvGrowPacket increases packet size, correctly zeroing padding.
+func AvGrowPacket(pkt *AVPacket, growBy int32) int32 {
+	return (int32)(C.av_grow_packet((*C.struct_AVPacket)(pkt), (C.int)(growBy)))
+}
+
+// AvPacketFromData initializes a reference-counted packet from AvMalloc()ed data.
+func AvPacketFromData(pkt *AVPacket, data *uint8, size int32) int32 {
+	return (int32)(C.av_packet_from_data((*C.struct_AVPacket)(pkt),
+		(*C.uint8_t)(data), (C.int)(size)))
+}
+
+// Deprecated: Use AVPacketRef() or AVPacketMakeRefcounted() instead.
+//
+// AvDupPacket
+func AvDupPacket(pkt *AVPacket) {
+	C.av_dup_packet((*C.struct_AVPacket)(pkt))
+}
+
+// Deprecated: Use AVPacketRef instead.
+//
+// AvCopyPacket copies packet, including contents.
+func AvCopyPacket(dst, src *AVPacket) int32 {
+	return (int32)(C.av_copy_packet((*C.struct_AVPacket)(dst), (*C.struct_AVPacket)(src)))
+}
+
+// Deprecated: Use AVPacketCopyProps instead.
+//
+// AvCopyPacketSideData copies packet side data.
+func AvCopyPacketSideData(dst, src *AVPacket) int32 {
+	return (int32)(C.av_copy_packet_side_data((*C.struct_AVPacket)(dst), (*C.struct_AVPacket)(src)))
+}
+
+// Deprecated: Use AVPacketUnref() instead.
+//
+// AvFreePacket frees a packet.
+func AvFreePacket(pkt *AVPacket) {
+	C.av_free_packet((*C.struct_AVPacket)(pkt))
+}
+
+// AvPacketNewSideData allocates new information of a packet.
+func AvPacketNewSideData(pkt *AVPacket, _type AVPacketSideDataType, size int32) *uint8 {
+	return (*uint8)(C.av_packet_new_side_data((*C.struct_AVPacket)(pkt),
+		(C.enum_AVPacketSideDataType)(_type), (C.int)(size)))
+}
+
+// AvPacketAddSideData wraps an existing array as a packet side data.
+func AvPacketAddSideData(pkt *AVPacket, _type AVPacketSideDataType, data *uint8, size uintptr) int32 {
+	return (int32)(C.av_packet_add_side_data((*C.struct_AVPacket)(pkt),
+		(C.enum_AVPacketSideDataType)(_type), (*C.uint8_t)(data), (C.size_t)(size)))
+}
+
+// AvPacketShrinkSideData shrinks the already allocated side data buffer.
+func AvPacketShrinkSideData(pkt *AVPacket, _type AVPacketSideDataType, size int32) int32 {
+	return (int32)(C.av_packet_shrink_side_data((*C.struct_AVPacket)(pkt),
+		(C.enum_AVPacketSideDataType)(_type), (C.int)(size)))
+}
+
+// AvPacketGetSideData gets side information from packet.
+func AvPacketGetSideData(pkt *AVPacket, _type AVPacketSideDataType, size *int32) *uint8 {
+	return (*uint8)(C.av_packet_get_side_data((*C.struct_AVPacket)(pkt),
+		(C.enum_AVPacketSideDataType)(_type), (*C.int)(size)))
+}
+
+// Deprecated: No use.
+//
+// AvPacketMergeSideData
+func AvPacketMergeSideData(pkt *AVPacket) int32 {
+	return (int32)(C.av_packet_merge_side_data((*C.struct_AVPacket)(pkt)))
+}
+
+// Deprecated: No use.
+//
+// AvPacketSplitSideData
+func AvPacketSplitSideData(pkt *AVPacket) int32 {
+	return (int32)(C.av_packet_split_side_data((*C.struct_AVPacket)(pkt)))
+}
+
+// AvPacketPackDictionary packs a dictionary for use in side_data.
+func AvPacketPackDictionary(dict *AVDictionary, size *int32) *uint8 {
+	return (*uint8)(C.av_packet_pack_dictionary((*C.struct_AVDictionary)(dict),
+		(*C.int)(size)))
+}
+
+// AvPacketUnpackDictionary unpacks a dictionary from side_data.
+func AvPacketUnpackDictionary(data *uint8, size int32, dict **AVDictionary) int32 {
+	return (int32)(C.av_packet_unpack_dictionary((*C.uint8_t)(data), (C.int)(size),
+		(**C.struct_AVDictionary)(unsafe.Pointer(dict))))
+}
+
+// AvPacketFreeSideData is a convenience function to free all the side data stored.
+func AvPacketFreeSideData(pkt *AVPacket) {
+	C.av_packet_free_side_data((*C.struct_AVPacket)(pkt))
+}
+
+// AvPacketRef setups a new reference to the data described by a given packet.
+func AvPacketRef(dst, src *AVPacket) int32 {
+	return (int32)(C.av_packet_ref((*C.struct_AVPacket)(dst), (*C.struct_AVPacket)(src)))
+}
+
+// AvPacketUnref unreferences the buffer referenced by the packet and reset the
+// remaining packet fields to their default values.
+func AvPacketUnref(pkt *AVPacket) {
+	C.av_packet_unref((*C.struct_AVPacket)(pkt))
+}
+
+// AvPacketMoveRef moves every field in src to dst and reset src.
+func AvPacketMoveRef(dst, src *AVPacket) {
+	C.av_packet_move_ref((*C.struct_AVPacket)(dst), (*C.struct_AVPacket)(src))
+}
+
+// AvPacketCopyProps copies only "properties" fields from src to dst.
+func AvPacketCopyProps(dst, src *AVPacket) int32 {
+	return (int32)(C.av_packet_copy_props((*C.struct_AVPacket)(dst), (*C.struct_AVPacket)(src)))
+}
+
+// AvPacketMakeRefcounted ensures the data described by a given packet is reference counted.
+func AvPacketMakeRefcounted(pkt *AVPacket) {
+	C.av_packet_make_refcounted((*C.struct_AVPacket)(pkt))
+}
+
+// AvPacketMakeWritable creates a writable reference for the data described by a given packet,
+// avoiding data copy if possible.
+func AvPacketMakeWritable(pkt *AVPacket) {
+	C.av_packet_make_writable((*C.struct_AVPacket)(pkt))
+}
+
+// AvPacketRescaleTs converts valid timing fields (timestamps / durations) in a packet from one
+// timebase to another. Timestamps with unknown values (AV_NOPTS_VALUE) will be ignored.
+func AvPacketRescaleTs(pkt *AVPacket, tbSrc, tbDst AVRational) {
+	C.av_packet_rescale_ts((*C.struct_AVPacket)(pkt),
+		(C.struct_AVRational)(tbSrc), (C.struct_AVRational)(tbDst))
+}
+
 // The default callback for AVCodecContext.get_buffer2().
 func AvCodecDefaultGetBuffer2(avctx *AVCodecContext, frame *AVFrame, flags int32) int32 {
 	return (int32)(C.avcodec_default_get_buffer2((*C.struct_AVCodecContext)(avctx),
-		(*C.struct_AVFrame)(frame), C.int(flags)))
-}
-
-// The default callback for AVCodecContext.get_encode_buffer().
-func AvCodecDefaultGetEncodeBuffer(avctx *AVCodecContext, pkt *AVPacket, flags int32) int32 {
-	return (int32)(C.avcodec_default_get_encode_buffer((*C.struct_AVCodecContext)(avctx),
-		(*C.struct_AVPacket)(pkt), C.int(flags)))
+		(*C.struct_AVFrame)(frame), (C.int)(flags)))
 }
 
 // AvCodecAlignDimensions modifies width and height values so that they will result in a memory
@@ -4321,7 +5885,7 @@ func AvCodecEnumToChromaPos(xpos, ypos *int32, pos AVChromaLocation) int32 {
 
 // AvCodecChromaPosToEnum converts swscale x/y chroma position to AVChromaLocation.
 func AvCodecChromaPosToEnum(xpos, ypos int32) AVChromaLocation {
-	return (AVChromaLocation)(C.avcodec_chroma_pos_to_enum(C.int(xpos), C.int(ypos)))
+	return (AVChromaLocation)(C.avcodec_chroma_pos_to_enum((C.int)(xpos), (C.int)(ypos)))
 }
 
 // Deprecated: Use AVCodecSendPacket() and AVCodecReceiveFrame().
@@ -5258,7 +6822,7 @@ func AvCodecDefaultGetFormat(avctx *AVCodecContext, fmt *AVPixelFormat) AVPixelF
 		(*C.enum_AVPixelFormat)(fmt)))
 }
 
-// Deprecated: Use  AvFourccMakeString() or AvFourcc2str() instead.
+// Deprecated: Use AvFourccMakeString() or AvFourcc2str() instead.
 //
 // AvGetCodecTagString
 func AvGetCodecTagString(buf *int8, bufSize uintptr, codecTag uint32) int32 {
@@ -5421,6 +6985,259 @@ func AvBsfNext(opaque CVoidPointerPointer) *AVBitStreamFilter {
 	return (*AVBitStreamFilter)(C.av_bsf_next(VoidPointerPointer(opaque)))
 }
 
+// AVBSFInternal
+type AVBSFInternal C.struct_AVBSFInternal
+
+// AVBSFContext
+type AVBSFContext C.struct_AVBSFContext
+
+// GetAvClass gets `AVBSFContext.av_class` value.
+func (bsfc *AVBSFContext) GetAvClass() *AVClass {
+	return (*AVClass)(bsfc.av_class)
+}
+
+// SetAvClass sets `AVBSFContext.av_class` value.
+func (bsfc *AVBSFContext) SetAvClass(v *AVClass) {
+	bsfc.av_class = (*C.struct_AVClass)(v)
+}
+
+// GetAvClassAddr gets `AVBSFContext.av_class` address.
+func (bsfc *AVBSFContext) GetAvClassAddr() **AVClass {
+	return (**AVClass)(unsafe.Pointer(&bsfc.av_class))
+}
+
+// GetFilter gets `AVBSFContext.filter` value.
+func (bsfc *AVBSFContext) GetFilter() *AVBitStreamFilter {
+	return (*AVBitStreamFilter)(bsfc.filter)
+}
+
+// SetFilter sets `AVBSFContext.filter` value.
+func (bsfc *AVBSFContext) SetFilter(v *AVBitStreamFilter) {
+	bsfc.filter = (*C.struct_AVBitStreamFilter)(v)
+}
+
+// GetFilterAddr gets `AVBSFContext.filter` address.
+func (bsfc *AVBSFContext) GetFilterAddr() **AVBitStreamFilter {
+	return (**AVBitStreamFilter)(unsafe.Pointer(&bsfc.filter))
+}
+
+// GetInternal gets `AVBSFContext.internal` value.
+func (bsfc *AVBSFContext) GetInternal() *AVBSFInternal {
+	return (*AVBSFInternal)(bsfc.internal)
+}
+
+// SetInternal sets `AVBSFContext.internal` value.
+func (bsfc *AVBSFContext) SetInternal(v *AVBSFInternal) {
+	bsfc.internal = (*C.struct_AVBSFInternal)(v)
+}
+
+// GetInternalAddr gets `AVBSFContext.internal` address.
+func (bsfc *AVBSFContext) GetInternalAddr() **AVBSFInternal {
+	return (**AVBSFInternal)(unsafe.Pointer(&bsfc.internal))
+}
+
+// GetPrivData gets `AVBSFContext.priv_data` value.
+func (bsfc *AVBSFContext) GetPrivData() unsafe.Pointer {
+	return bsfc.priv_data
+}
+
+// SetPrivData sets `AVBSFContext.priv_data` value.
+func (bsfc *AVBSFContext) SetPrivData(v CVoidPointer) {
+	bsfc.priv_data = VoidPointer(v)
+}
+
+// GetPrivDataAddr gets `AVBSFContext.priv_data` address.
+func (bsfc *AVBSFContext) GetPrivDataAddr() unsafe.Pointer {
+	return (unsafe.Pointer)(&bsfc.priv_data)
+}
+
+// GetParIn gets `AVBSFContext.par_in` value.
+func (bsfc *AVBSFContext) GetParIn() *AVCodecParameters {
+	return (*AVCodecParameters)(bsfc.par_in)
+}
+
+// SetParIn sets `AVBSFContext.par_in` value.
+func (bsfc *AVBSFContext) SetParIn(v *AVCodecParameters) {
+	bsfc.par_in = (*C.struct_AVCodecParameters)(v)
+}
+
+// GetParInAddr gets `AVBSFContext.par_in` address.
+func (bsfc *AVBSFContext) GetParInAddr() **AVCodecParameters {
+	return (**AVCodecParameters)(unsafe.Pointer(&bsfc.par_in))
+}
+
+// GetParOut gets `AVBSFContext.par_out` value.
+func (bsfc *AVBSFContext) GetParOut() *AVCodecParameters {
+	return (*AVCodecParameters)(bsfc.par_out)
+}
+
+// SetParOut sets `AVBSFContext.par_out` value.
+func (bsfc *AVBSFContext) SetParOut(v *AVCodecParameters) {
+	bsfc.par_out = (*C.struct_AVCodecParameters)(v)
+}
+
+// GetParOutAddr gets `AVBSFContext.par_out` address.
+func (bsfc *AVBSFContext) GetParOutAddr() **AVCodecParameters {
+	return (**AVCodecParameters)(unsafe.Pointer(&bsfc.par_out))
+}
+
+// GetTimeBaseIn gets `AVBSFContext.time_base_in` value.
+func (bsfc *AVBSFContext) GetTimeBaseIn() AVRational {
+	return (AVRational)(bsfc.time_base_in)
+}
+
+// SetTimeBaseIn sets `AVBSFContext.time_base_in` value.
+func (bsfc *AVBSFContext) SetTimeBaseIn(v AVRational) {
+	bsfc.time_base_in = (C.struct_AVRational)(v)
+}
+
+// GetTimeBaseInAddr gets `AVBSFContext.time_base_in` address.
+func (bsfc *AVBSFContext) GetTimeBaseInAddr() *AVRational {
+	return (*AVRational)(&bsfc.time_base_in)
+}
+
+// GetTimeBaseOut gets `AVBSFContext.time_base_out` value.
+func (bsfc *AVBSFContext) GetTimeBaseOut() AVRational {
+	return (AVRational)(bsfc.time_base_out)
+}
+
+// SetTimeBaseOut sets `AVBSFContext.time_base_out` value.
+func (bsfc *AVBSFContext) SetTimeBaseOut(v AVRational) {
+	bsfc.time_base_out = (C.struct_AVRational)(v)
+}
+
+// GetTimeBaseOutAddr gets `AVBSFContext.time_base_out` address.
+func (bsfc *AVBSFContext) GetTimeBaseOutAddr() *AVRational {
+	return (*AVRational)(&bsfc.time_base_out)
+}
+
+// AVBitStreamFilter
+type AVBitStreamFilter C.struct_AVBitStreamFilter
+
+// GetName gets `AVBitStreamFilter.name` value.
+func (bsf *AVBitStreamFilter) GetName() string {
+	return C.GoString(bsf.name)
+}
+
+// GetCodecIds gets `AVBitStreamFilter.codec_ids` value.
+func (bsf *AVBitStreamFilter) GetCodecIds() []AVCodecID {
+	return SliceTrunc((*AVCodecID)(bsf.codec_ids), func(ac AVCodecID) bool {
+		return ac == AV_CODEC_ID_NONE
+	})
+}
+
+// GetPrivClass gets `AVBitStreamFilter.priv_class` value.
+func (bsf *AVBitStreamFilter) GetPrivClass() *AVClass {
+	return (*AVClass)(bsf.priv_class)
+}
+
+// SetPrivClass sets `AVBitStreamFilter.priv_class` value.
+func (bsf *AVBitStreamFilter) SetPrivClass(v *AVClass) {
+	bsf.priv_class = (*C.struct_AVClass)(v)
+}
+
+// GetPrivClassAddr gets `AVBitStreamFilter.priv_class` address.
+func (bsf *AVBitStreamFilter) GetPrivClassAddr() **AVClass {
+	return (**AVClass)(unsafe.Pointer(&bsf.priv_class))
+}
+
+// AvBsfGetByName returns a bitstream filter with the specified name or NULL if no such
+// bitstream filter exists.
+func AvBsfGetByName(name string) *AVBitStreamFilter {
+	namePtr, nameFunc := StringCasting(name)
+	defer nameFunc()
+	return (*AVBitStreamFilter)(C.av_bsf_get_by_name((*C.char)(namePtr)))
+}
+
+// AvBsfIterate iterates over all registered bitstream filters.
+func AvBsfIterate(opaque CVoidPointerPointer) *AVBitStreamFilter {
+	return (*AVBitStreamFilter)(C.av_bsf_iterate(VoidPointerPointer(opaque)))
+}
+
+// AvBsfAlloc allocates a context for a given bitstream filter.
+func AvBsfAlloc(filter *AVBitStreamFilter, ctx **AVBSFContext) int32 {
+	return (int32)(C.av_bsf_alloc((*C.struct_AVBitStreamFilter)(filter),
+		(**C.struct_AVBSFContext)(unsafe.Pointer(ctx))))
+}
+
+// AvBsfInit prepares the filter for use, after all the parameters and options have been set.
+func AvBsfInit(ctx *AVBSFContext) int32 {
+	return (int32)(C.av_bsf_init((*C.struct_AVBSFContext)(ctx)))
+}
+
+// AvBsfSendPacket submits a packet for filtering.
+func AvBsfSendPacket(ctx *AVBSFContext, pkt *AVPacket) int32 {
+	return (int32)(C.av_bsf_send_packet((*C.struct_AVBSFContext)(ctx),
+		(*C.struct_AVPacket)(pkt)))
+}
+
+// AvBsfReceivePacket retrieves a filtered packet.
+func AvBsfReceivePacket(ctx *AVBSFContext, pkt *AVPacket) int32 {
+	return (int32)(C.av_bsf_receive_packet((*C.struct_AVBSFContext)(ctx),
+		(*C.struct_AVPacket)(pkt)))
+}
+
+// AvBsfFlush resets the internal bitstream filter state. Should be called e.g. when seeking.
+func AvBsfFlush(ctx *AVBSFContext) {
+	C.av_bsf_flush((*C.struct_AVBSFContext)(ctx))
+}
+
+// AvBsfFree frees a bitstream filter context.
+func AvBsfFree(ctx **AVBSFContext) {
+	C.av_bsf_free((**C.struct_AVBSFContext)(unsafe.Pointer(ctx)))
+}
+
+// AvBsfGetClass gets the AVClass for AVBSFContext.
+func AvBsfGetClass() *AVClass {
+	return (*AVClass)(C.av_bsf_get_class())
+}
+
+// AVBSFList
+type AVBSFList C.struct_AVBSFList
+
+// AvBsfListAlloc allocates empty list of bitstream filters.
+func AvBsfListAlloc() *AVBSFList {
+	return (*AVBSFList)(C.av_bsf_list_alloc())
+}
+
+// AvBsfListFree frees list of bitstream filters.
+func AvBsfListFree(lst **AVBSFList) {
+	C.av_bsf_list_free((**C.struct_AVBSFList)(unsafe.Pointer(lst)))
+}
+
+// AvBsfListAppend appends bitstream filter to the list of bitstream filters.
+func AvBsfListAppend(lst *AVBSFList, bsf *AVBSFContext) {
+	C.av_bsf_list_append((*C.struct_AVBSFList)(lst),
+		(*C.struct_AVBSFContext)(bsf))
+}
+
+// AvBsfListAppend2
+func AvBsfListAppend2(lst *AVBSFList, bsfName string, options **AVDictionary) {
+	bsfNamePtr, bsfNameFunc := StringCasting(bsfName)
+	defer bsfNameFunc()
+	C.av_bsf_list_append2((*C.struct_AVBSFList)(lst),
+		(*C.char)(bsfNamePtr), (**C.struct_AVDictionary)(unsafe.Pointer(options)))
+}
+
+// AvBsfListFinalize finalizes list of bitstream filters.
+func AvBsfListFinalize(lst **AVBSFList, bsf **AVBSFContext) int32 {
+	return (int32)(C.av_bsf_list_finalize((**C.struct_AVBSFList)(unsafe.Pointer(lst)),
+		(**C.struct_AVBSFContext)(unsafe.Pointer(bsf))))
+}
+
+// AvBsfListParseStr parses string describing list of bitstream filters and creates single
+// AvBSFContext describing the whole chain of bitstream filters.
+func AvBsfListParseStr(str string, bsf **AVBSFContext) {
+	strPtr, strFunc := StringCasting(str)
+	defer strFunc()
+	C.av_bsf_list_parse_str((*C.char)(strPtr), (**C.struct_AVBSFContext)(unsafe.Pointer(bsf)))
+}
+
+// AvBsfGetNullFilter gets null/pass-through bitstream filter.
+func AvBsfGetNullFilter(bsf **AVBSFContext) int32 {
+	return (int32)(C.av_bsf_get_null_filter((**C.struct_AVBSFContext)(unsafe.Pointer(bsf))))
+}
+
 // AvFastPaddedMalloc
 func AvFastPaddedMalloc(ptr CVoidPointer, size *uint32, minSize uintptr) {
 	C.av_fast_padded_malloc(VoidPointer(ptr), (*C.uint)(size), (C.size_t)(minSize))
@@ -5470,6 +7287,16 @@ type AVLockmgrCb C.av_lockmgr_cb
 // AvLockmgrRegister
 func AvLockmgrRegister(cb AVLockmgrCb) int32 {
 	return (int32)(C.av_lockmgr_register((C.av_lockmgr_cb)(cb)))
+}
+
+// AvCodecGetType gets the type of the given codec.
+func AvCodecGetType(codecID AVCodecID) AVMediaType {
+	return (AVMediaType)(C.avcodec_get_type((C.enum_AVCodecID)(codecID)))
+}
+
+// AvCodecGetName gets the name of a codec.
+func AvCodecGetName(codecID AVCodecID) string {
+	return C.GoString(C.avcodec_get_name((C.enum_AVCodecID)(codecID)))
 }
 
 // A positive value if s is open,

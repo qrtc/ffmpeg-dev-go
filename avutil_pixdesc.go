@@ -10,6 +10,7 @@ package ffmpeg
 import "C"
 import "unsafe"
 
+// AVComponentDescriptor
 type AVComponentDescriptor C.struct_AVComponentDescriptor
 
 // GetPlane gets `AVComponentDescriptor.plane` value.

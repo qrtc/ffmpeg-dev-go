@@ -10,7 +10,6 @@ package ffmpeg
 typedef void (*avdct_idct_func)(int16_t *block);
 typedef void (*avdct_fdct_func)(int16_t *block);
 typedef void (*avdct_get_pixels_func)(int16_t *block, const uint8_t *pixels, ptrdiff_t line_size);
-typedef void (*avdct_get_pixels_unaligned_func)(int16_t *block, const uint8_t *pixels, ptrdiff_t line_size);
 */
 import "C"
 import "unsafe"
@@ -26,9 +25,6 @@ type AVDCTFdctFunc = C.avdct_fdct_func
 
 // typedef void (*avdct_get_pixels_func)(int16_t *block, const uint8_t *pixels, ptrdiff_t line_size);
 type AVDCTGetPixelsFunc = C.avdct_get_pixels_func
-
-// typedef void (*avdct_get_pixels_unaligned_func)(int16_t *block, const uint8_t *pixels, ptrdiff_t line_size);
-type AVDCTGetPixelsUnalignedFunc = C.avdct_get_pixels_unaligned_func
 
 // GetAvClass gets `AVDCT.av_class` value.
 func (dct *AVDCT) GetAvClass() *AVClass {
@@ -150,21 +146,6 @@ func (dct *AVDCT) SetBitsPerSample(v int32) {
 // GetBitsPerSampleAddr gets `AVDCT.bits_per_sample` address.
 func (dct *AVDCT) GetBitsPerSampleAddr() *int32 {
 	return (*int32)(&dct.bits_per_sample)
-}
-
-// GetGetPixelsUnaligned gets `AVDCT.get_pixels_unaligned` value.
-func (dct *AVDCT) GetGetPixelsUnaligned() AVDCTGetPixelsUnalignedFunc {
-	return (AVDCTGetPixelsUnalignedFunc)(dct.get_pixels_unaligned)
-}
-
-// SetGetPixelsUnaligned sets `AVDCT.get_pixels_unaligned` value.
-func (dct *AVDCT) SetGetPixelsUnaligned(v AVDCTGetPixelsUnalignedFunc) {
-	dct.get_pixels_unaligned = (C.avdct_get_pixels_unaligned_func)(v)
-}
-
-// GetGetPixelsUnalignedAddr gets `AVDCT.get_pixels_unaligned` address.
-func (dct *AVDCT) GetGetPixelsUnalignedAddr() *AVDCTGetPixelsUnalignedFunc {
-	return (*AVDCTGetPixelsUnalignedFunc)(&dct.get_pixels_unaligned)
 }
 
 // AvCodecDctAlloc allocates a AVDCT context.
