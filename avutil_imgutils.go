@@ -41,18 +41,6 @@ func AvImageFillLinesizes(linesizes []int32, pixFmt AVPixelFormat, width int32) 
 		(C.enum_AVPixelFormat)(pixFmt), (C.int)(width)))
 }
 
-// AvImageFillPlaneSizes fills plane sizes for an image with pixel format pix_fmt and height height.
-func AvImageFillPlaneSizes(size []uintptr, pixFmt AVPixelFormat, height int32, linesizes []int) int32 {
-	if len(size) < 4 {
-		panic("size len < 4")
-	}
-	if len(linesizes) < 4 {
-		panic("linesizes len < 4")
-	}
-	return (int32)(C.av_image_fill_plane_sizes((*C.size_t)(unsafe.Pointer(&size[0])),
-		(C.enum_AVPixelFormat)(pixFmt), (C.int)(height), (*C.ptrdiff_t)(unsafe.Pointer(&linesizes[0]))))
-}
-
 // AvImageFillPointers fills plane data pointers for an image with pixel format pix_fmt and height height.
 func AvImageFillPointers(data []*uint8, pixFmt AVPixelFormat,
 	height int32, ptr *uint8, linesizes []int32) int32 {

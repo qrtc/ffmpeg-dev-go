@@ -9,9 +9,7 @@ package ffmpeg
 */
 import "C"
 
-type AVAdler = C.AVAdler
-
 // AvAdler32Update calculates the Adler32 checksum of a buffer.
-func AvAdler32Update(adler AVAdler, buf *uint8, len uint32) AVAdler {
-	return (AVAdler)(C.av_adler32_update((C.AVAdler)(adler), (*C.uint8_t)(buf), (C.uint)(len)))
+func AvAdler32Update(adler uint32, buf *uint8, len uint32) uint32 {
+	return (uint32)(C.av_adler32_update((C.ulong)(adler), (*C.uint8_t)(buf), (C.uint)(len)))
 }

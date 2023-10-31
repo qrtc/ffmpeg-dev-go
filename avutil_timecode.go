@@ -13,6 +13,7 @@ const (
 	AV_TIMECODE_STR_SIZE = C.AV_TIMECODE_STR_SIZE
 )
 
+// AVTimecodeFlag
 type AVTimecodeFlag = C.enum_AVTimecodeFlag
 
 const (
@@ -21,6 +22,7 @@ const (
 	AV_TIMECODE_FLAG_ALLOWNEGATIVE = AVTimecodeFlag(C.AV_TIMECODE_FLAG_ALLOWNEGATIVE)
 )
 
+// AVTimecode
 type AVTimecode C.AVTimecode
 
 // GetStart gets `AVTimecode.start` value.
@@ -93,24 +95,10 @@ func AvTimecodeGetSmpteFromFramenum(tc *AVTimecode, framenum int32) uint32 {
 	return (uint32)(C.av_timecode_get_smpte_from_framenum((*C.AVTimecode)(tc), (C.int)(framenum)))
 }
 
-// AvTimecodeGetSmpte converts sei info to SMPTE 12M binary representation.
-func AvTimecodeGetSmpte(rate AVRational, drop, hh, mm, ss, ff int32) int32 {
-	return (int32)(C.av_timecode_get_smpte((C.struct_AVRational)(rate),
-		(C.int)(drop), (C.int)(hh), (C.int)(mm), (C.int)(ss), (C.int)(ff)))
-}
-
 // AvTimecodeMakeString loads timecode string in buf.
 func AvTimecodeMakeString(tc *AVTimecode, framenum int32) (buf, bufPar string) {
 	b := make([]C.char, AV_TIMECODE_STR_SIZE+1)
 	ret := C.av_timecode_make_string((*C.AVTimecode)(tc), (*C.char)(&b[0]), (C.int)(framenum))
-	return C.GoString(&b[0]), C.GoString(ret)
-}
-
-// AvTimecodeMakeSmpteTcString2 gets the timecode string from the SMPTE timecode format.
-func AvTimecodeMakeSmpteTcString2(rate AVRational, tcsmpte uint32, preventDf, skipField int32) (buf, bufPar string) {
-	b := make([]C.char, AV_TIMECODE_STR_SIZE+1)
-	ret := C.av_timecode_make_smpte_tc_string2((*C.char)(&b[0]),
-		(C.AVRational)(rate), (C.uint32_t)(tcsmpte), (C.int)(preventDf), (C.int)(skipField))
 	return C.GoString(&b[0]), C.GoString(ret)
 }
 
@@ -134,15 +122,6 @@ func AvTimecodeInit(tc *AVTimecode, rate AVRational, flags, frameStart int32, lo
 		(C.int)(flags), (C.int)(frameStart), VoidPointer(logCtx)))
 }
 
-// AvTimecodeInitFromComponents initializes a timecode struct from the passed timecode components.
-func AvTimecodeInitFromComponents(tc *AVTimecode, rate AVRational,
-	flags, hh, mm, ss, ff int32, logCtx CVoidPointer) int32 {
-	return (int32)(C.av_timecode_init_from_components((*C.AVTimecode)(tc),
-		(C.struct_AVRational)(rate), (C.int)(flags),
-		(C.int)(hh), (C.int)(mm), (C.int)(ss), (C.int)(ff),
-		VoidPointer(logCtx)))
-}
-
 // AvTimecodeInitFromString parses timecode representation (hh:mm:ss[:;.]ff).
 func AvTimecodeInitFromString(tc *AVTimecode, rate AVRational, str string, logCtx CVoidPointer) int32 {
 	strPtr, strFunc := StringCasting(str)
@@ -151,7 +130,7 @@ func AvTimecodeInitFromString(tc *AVTimecode, rate AVRational, str string, logCt
 		(*C.char)(strPtr), VoidPointer(logCtx)))
 }
 
-// AvTimecodeCheckFrameRate checks if the timecode feature is available for the given frame rate
+// AvTimecodeCheckFrameRate checks if the timecode feature is available for the given frame rate.
 func AvTimecodeCheckFrameRate(rate AVRational) int32 {
 	return (int32)(C.av_timecode_check_frame_rate((C.struct_AVRational)(rate)))
 }

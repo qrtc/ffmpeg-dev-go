@@ -56,104 +56,19 @@ func (cf *AVComplexFloat) GetImAddr() *float32 {
 // AVComplexDouble
 type AVComplexDouble C.struct_AVComplexDouble
 
-// Make new AVComplexDouble.
-func AvMakeComxDouble(re, im float64) AVComplexDouble {
-	return (AVComplexDouble)(C.struct_AVComplexDouble{
-		re: (C.double)(re),
-		im: (C.double)(im)})
-}
-
-// GetRe gets `AVComplexDouble.re` value.
-func (cd *AVComplexDouble) GetRe() float64 {
-	return (float64)(cd.re)
-}
-
-// SetRe sets `AVComplexDouble.re` value.
-func (cd *AVComplexDouble) SetRe(v float64) {
-	cd.re = (C.double)(v)
-}
-
-// GetReAddr gets `AVComplexDouble.re` address.
-func (cd *AVComplexDouble) GetReAddr() *float64 {
-	return (*float64)(&cd.re)
-}
-
-// GetIm gets `AVComplexDouble.im` value.
-func (cd *AVComplexDouble) GetIm() float64 {
-	return (float64)(cd.im)
-}
-
-// SetIm sets `AVComplexDouble.im` value.
-func (cd *AVComplexDouble) SetIm(v float64) {
-	cd.im = (C.double)(v)
-}
-
-// GetImAddr gets `AVComplexDouble.im` address.
-func (cd *AVComplexDouble) GetImAddr() *float64 {
-	return (*float64)(&cd.im)
-}
-
 // AVComplexInt32
 type AVComplexInt32 C.struct_AVComplexInt32
-
-// Make new AVComplexFloat.
-func AvMakeComxInt32(re, im int32) AVComplexInt32 {
-	return (AVComplexInt32)(C.struct_AVComplexInt32{
-		re: (C.int32_t)(re),
-		im: (C.int32_t)(im)})
-}
-
-// GetRe gets `AVComplexInt32.re` value.
-func (ci *AVComplexInt32) GetRe() int32 {
-	return (int32)(ci.re)
-}
-
-// SetRe sets `AVComplexInt32.re` value.
-func (ci *AVComplexInt32) SetRe(v int32) {
-	ci.re = (C.int32_t)(v)
-}
-
-// GetReAddr gets `AVComplexInt32.re` address.
-func (ci *AVComplexInt32) GetReAddr() *int32 {
-	return (*int32)(&ci.re)
-}
-
-// GetIm gets `AVComplexInt32.im` value.
-func (ci *AVComplexInt32) GetIm() int32 {
-	return (int32)(ci.im)
-}
-
-// SetIm sets `AVComplexInt32.im` value.
-func (ci *AVComplexInt32) SetIm(v int32) {
-	ci.im = (C.int32_t)(v)
-}
-
-// GetImAddr gets `AVComplexInt32.im` address.
-func (ci *AVComplexInt32) GetImAddr() *int32 {
-	return (*int32)(&ci.im)
-}
 
 // AVTXType
 type AVTXType = C.enum_AVTXType
 
 const (
-	AV_TX_FLOAT_FFT   = AVTXType(C.AV_TX_FLOAT_FFT)
-	AV_TX_FLOAT_MDCT  = AVTXType(C.AV_TX_FLOAT_MDCT)
-	AV_TX_DOUBLE_FFT  = AVTXType(C.AV_TX_DOUBLE_FFT)
-	AV_TX_DOUBLE_MDCT = AVTXType(C.AV_TX_DOUBLE_MDCT)
-	AV_TX_INT32_FFT   = AVTXType(C.AV_TX_INT32_FFT)
-	AV_TX_INT32_MDCT  = AVTXType(C.AV_TX_INT32_MDCT)
+	AV_TX_FLOAT_FFT  = AVTXType(C.AV_TX_FLOAT_FFT)
+	AV_TX_FLOAT_MDCT = AVTXType(C.AV_TX_FLOAT_MDCT)
 )
 
 // typedef void (*av_tx_fn)(AVTXContext *s, void *out, void *in, ptrdiff_t stride);
 type AvTxFn = C.av_tx_fn
-
-// AVTXFlags
-type AVTXFlags = C.enum_AVTXFlags
-
-const (
-	AV_TX_INPLACE = AVTXFlags(C.AV_TX_INPLACE)
-)
 
 // AvTxInit initializes a transform context with the given configuration
 // (i)MDCTs with an odd length are currently not supported.

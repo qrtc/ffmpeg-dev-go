@@ -35,9 +35,6 @@ const (
 	AV_FRAME_DATA_S12M_TIMECODE              = AVFrameSideDataType(C.AV_FRAME_DATA_S12M_TIMECODE)
 	AV_FRAME_DATA_DYNAMIC_HDR_PLUS           = AVFrameSideDataType(C.AV_FRAME_DATA_DYNAMIC_HDR_PLUS)
 	AV_FRAME_DATA_REGIONS_OF_INTEREST        = AVFrameSideDataType(C.AV_FRAME_DATA_REGIONS_OF_INTEREST)
-	AV_FRAME_DATA_VIDEO_ENC_PARAMS           = AVFrameSideDataType(C.AV_FRAME_DATA_VIDEO_ENC_PARAMS)
-	AV_FRAME_DATA_SEI_UNREGISTERED           = AVFrameSideDataType(C.AV_FRAME_DATA_SEI_UNREGISTERED)
-	AV_FRAME_DATA_FILM_GRAIN_PARAMS          = AVFrameSideDataType(C.AV_FRAME_DATA_FILM_GRAIN_PARAMS)
 )
 
 // AVActiveFormatDescription
@@ -1363,7 +1360,7 @@ func AvFrameApplyCropping(frame *AVFrame, flags int32) int32 {
 	return (int32)(C.av_frame_apply_cropping((*C.struct_AVFrame)(frame), (C.int)(flags)))
 }
 
-// AvFrameSideDataName returns a string identifying the side data type
+// AvFrameSideDataName returns a string identifying the side data type.
 func AvFrameSideDataName(_type AVFrameSideDataType) string {
 	return C.GoString(C.av_frame_side_data_name((C.enum_AVFrameSideDataType)(_type)))
 }

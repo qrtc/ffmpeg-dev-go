@@ -49,7 +49,7 @@ func AvGetSampleFmt(name string) AVSampleFormat {
 // requested planar/packed format, the format returned is the same as the
 // input.
 func AvGetAltSampleFmt(sampleFmt AVSampleFormat, planar int32) AVSampleFormat {
-	return (AVSampleFormat)(C.av_get_alt_sample_fmt((C.enum_AVSampleFormat)(sampleFmt), C.int(planar)))
+	return (AVSampleFormat)(C.av_get_alt_sample_fmt((C.enum_AVSampleFormat)(sampleFmt), (C.int)(planar)))
 }
 
 // AvGetPackedSampleFmt gets the packed alternative form of the given sample format.

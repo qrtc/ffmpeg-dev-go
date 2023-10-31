@@ -101,7 +101,7 @@ func main() {
 	}
 
 	fmt.Fprintf(os.Stderr, "Scaling succeeded. Play the output file with the command:\n"+
-		"ffplay -f rawvideo -pix_fmt %s -video_size %dx%d %s\n",
+		"ffplay -f rawvideo -pixel_format %s -video_size %dx%d %s\n",
 		ffmpeg.AvGetPixFmtName(dstPixFmt), dstW, dstH, dstFilename)
 
 end:

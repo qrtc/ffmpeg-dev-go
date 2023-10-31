@@ -36,6 +36,7 @@ const (
 	AV_STEREO3D_FLAG_INVERT = C.AV_STEREO3D_FLAG_INVERT
 )
 
+// AVStereo3D
 type AVStereo3D C.struct_AVStereo3D
 
 // GetType gets `AVStereo3D.type` value.

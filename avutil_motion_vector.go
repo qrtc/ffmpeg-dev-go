@@ -9,6 +9,7 @@ package ffmpeg
 */
 import "C"
 
+// AVMotionVector
 type AVMotionVector C.struct_AVMotionVector
 
 // GetSource gets `AVMotionVector.source` value.
