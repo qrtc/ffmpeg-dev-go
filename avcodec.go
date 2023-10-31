@@ -3472,6 +3472,11 @@ func (avctx *AVCodecContext) GetPropertiesAddr() *uint32 {
 	return (*uint32)(&avctx.properties)
 }
 
+const (
+	FF_CODEC_PROPERTY_LOSSLESS        = uint32(C.FF_CODEC_PROPERTY_LOSSLESS)
+	FF_CODEC_PROPERTY_CLOSED_CAPTIONS = uint32(C.FF_CODEC_PROPERTY_CLOSED_CAPTIONS)
+)
+
 // GetCodedSideData gets `AVCodecContext.coded_side_data` value.
 func (avctx *AVCodecContext) GetCodedSideData() *AVPacketSideData {
 	return (*AVPacketSideData)(avctx.coded_side_data)
@@ -3730,7 +3735,7 @@ func AvCodecGetLowres(avctx *AVCodecContext) int32 {
 //
 // AvCodecSetLowres
 func AvCodecSetLowres(avctx *AVCodecContext, i int32) {
-	C.av_codec_set_lowres((*C.struct_AVCodecContext)(avctx), C.int(i))
+	C.av_codec_set_lowres((*C.struct_AVCodecContext)(avctx), (C.int)(i))
 }
 
 // Deprecated: No use.
@@ -3744,7 +3749,7 @@ func AvCodecGetSeekPreroll(avctx *AVCodecContext) int32 {
 //
 // AvCodecSetSeekPreroll
 func AvCodecSetSeekPreroll(avctx *AVCodecContext, i int32) {
-	C.av_codec_set_seek_preroll((*C.struct_AVCodecContext)(avctx), C.int(i))
+	C.av_codec_set_seek_preroll((*C.struct_AVCodecContext)(avctx), (C.int)(i))
 }
 
 // Deprecated: No use.
@@ -4290,13 +4295,13 @@ func AvSubtitleFree(s *AVSubtitle) {
 // The default callback for AVCodecContext.get_buffer2().
 func AvCodecDefaultGetBuffer2(avctx *AVCodecContext, frame *AVFrame, flags int32) int32 {
 	return (int32)(C.avcodec_default_get_buffer2((*C.struct_AVCodecContext)(avctx),
-		(*C.struct_AVFrame)(frame), C.int(flags)))
+		(*C.struct_AVFrame)(frame), (C.int)(flags)))
 }
 
 // The default callback for AVCodecContext.get_encode_buffer().
 func AvCodecDefaultGetEncodeBuffer(avctx *AVCodecContext, pkt *AVPacket, flags int32) int32 {
 	return (int32)(C.avcodec_default_get_encode_buffer((*C.struct_AVCodecContext)(avctx),
-		(*C.struct_AVPacket)(pkt), C.int(flags)))
+		(*C.struct_AVPacket)(pkt), (C.int)(flags)))
 }
 
 // AvCodecAlignDimensions modifies width and height values so that they will result in a memory
@@ -4321,7 +4326,7 @@ func AvCodecEnumToChromaPos(xpos, ypos *int32, pos AVChromaLocation) int32 {
 
 // AvCodecChromaPosToEnum converts swscale x/y chroma position to AVChromaLocation.
 func AvCodecChromaPosToEnum(xpos, ypos int32) AVChromaLocation {
-	return (AVChromaLocation)(C.avcodec_chroma_pos_to_enum(C.int(xpos), C.int(ypos)))
+	return (AVChromaLocation)(C.avcodec_chroma_pos_to_enum((C.int)(xpos), (C.int)(ypos)))
 }
 
 // Deprecated: Use AVCodecSendPacket() and AVCodecReceiveFrame().

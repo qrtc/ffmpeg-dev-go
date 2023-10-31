@@ -206,7 +206,7 @@ func AvLogGetLevel() int32 {
 
 // AvLogSetLevel sets the log level
 func AvLogSetLevel(level int32) {
-	C.av_log_set_level(C.int(level))
+	C.av_log_set_level((C.int)(level))
 }
 
 // typedef void (*av_log_callback_func)(void*, int, const char*, va_list);

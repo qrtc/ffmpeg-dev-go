@@ -5,6 +5,7 @@
 package ffmpeg
 
 /*
+#include <stdlib.h>
 #include <libavutil/file.h>
 */
 import "C"
