@@ -9,6 +9,7 @@ Go bindings for FFmpeg.
 - [ ] 4.2
 - [ ] 4.3
 - [x] [4.4](https://github.com/qrtc/ffmpeg-dev-go/tree/4.4)
+- [x] [5.0](https://github.com/qrtc/ffmpeg-dev-go/tree/5.0)
 - [ ] 5.1
 - [ ] 6.0
 
