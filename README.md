@@ -7,6 +7,7 @@ Go bindings for FFmpeg.
 - [x] [5.0](https://github.com/qrtc/ffmpeg-dev-go/tree/5.0)
 - [x] [5.1](https://github.com/qrtc/ffmpeg-dev-go/tree/5.1)
 - [x] [6.0](https://github.com/qrtc/ffmpeg-dev-go/tree/6.0)
+- [ ] 6.1
 
 Reference: [https://ffmpeg.org/download.html#releases](https://ffmpeg.org/download.html#releases)
 
