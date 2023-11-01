@@ -3,14 +3,12 @@ Go bindings for FFmpeg.
 
 ## Supported FFmpeg Version
 
-- [ ] 3.4
-- [ ] 4.1
 - [ ] 4.2
 - [ ] 4.3
 - [x] [4.4](https://github.com/qrtc/ffmpeg-dev-go/tree/4.4)
 - [x] [5.0](https://github.com/qrtc/ffmpeg-dev-go/tree/5.0)
 - [x] [5.1](https://github.com/qrtc/ffmpeg-dev-go/tree/5.1)
-- [ ] 6.0
+- [x] [6.0](https://github.com/qrtc/ffmpeg-dev-go/tree/6.0)
 
 Reference: [https://ffmpeg.org/download.html#releases](https://ffmpeg.org/download.html#releases)
 
