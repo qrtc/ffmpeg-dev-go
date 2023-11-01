@@ -30,7 +30,7 @@ func AvTempfile(prefix string, logOffset int32, logCtx CVoidPointer) (filename s
 	prefixPtr, prefixFunc := StringCasting(prefix)
 	defer prefixFunc()
 	var filenamePtr *C.char
-	defer C.free(unsafe.Pointer(filenamePtr))
+	defer FreePointer(filenamePtr)
 	ret = (int32)(C.av_tempfile((*C.char)(prefixPtr),
 		(**C.char)(unsafe.Pointer(&filenamePtr)),
 		(C.int)(logOffset),

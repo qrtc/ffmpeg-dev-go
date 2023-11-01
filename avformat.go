@@ -1140,7 +1140,7 @@ func (s *AVFormatContext) GetUrl() string {
 func (s *AVFormatContext) SetUrl(v string) {
 	vPtr, _ := StringCasting(v)
 	if s.url != nil {
-		C.free(unsafe.Pointer(s.url))
+		FreePointer(s.url)
 	}
 	s.url = (*C.char)(vPtr)
 }

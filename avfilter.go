@@ -180,7 +180,7 @@ func (fltc *AVFilterContext) GetName() string {
 
 // SetName sets `AVFilterContext.name` value.
 func (fltc *AVFilterContext) SetName(v string) {
-	C.free(unsafe.Pointer(fltc.name))
+	FreePointer(fltc.name)
 	fltc.name, _ = StringCasting(v)
 }
 
@@ -1032,7 +1032,7 @@ func (fltio *AVFilterInOut) GetName() string {
 
 // SetName sets `AVFilterInOut.name` value.
 func (fltio *AVFilterInOut) SetName(v string) {
-	C.free(unsafe.Pointer(fltio.name))
+	FreePointer(fltio.name)
 	fltio.name, _ = StringCasting(v)
 }
 
