@@ -18,9 +18,6 @@ typedef int (*avcodec_context_get_buffer2_func)(struct AVCodecContext *s, AVFram
 
 typedef void (*avcodec_context_rtp_callback_func)(struct AVCodecContext *avctx, void *data, int size, int mb_nb);
 
-typedef int (*avcodec_context_get_encode_buffer_func)(struct AVCodecContext *s,
-	 AVPacket *pkt, int flags);
-
 typedef int (*avcodec_context_execute_func)(AVCodecContext *c2, void *arg2);
 
 typedef int (*avcodec_context_internal_execute_func)(struct AVCodecContext *c,
@@ -129,7 +126,6 @@ const (
 	AV_CODEC_EXPORT_DATA_MVS              = C.AV_CODEC_EXPORT_DATA_MVS
 	AV_CODEC_EXPORT_DATA_PRFT             = C.AV_CODEC_EXPORT_DATA_PRFT
 	AV_CODEC_EXPORT_DATA_VIDEO_ENC_PARAMS = C.AV_CODEC_EXPORT_DATA_VIDEO_ENC_PARAMS
-	AV_CODEC_EXPORT_DATA_FILM_GRAIN       = C.AV_CODEC_EXPORT_DATA_FILM_GRAIN
 )
 
 // Pan Scan area.
@@ -320,8 +316,7 @@ func (prt *AVProducerReferenceTime) GetFlagsAddr() *int32 {
 }
 
 const (
-	AV_GET_BUFFER_FLAG_REF        = C.AV_GET_BUFFER_FLAG_REF
-	AV_GET_ENCODE_BUFFER_FLAG_REF = C.AV_GET_ENCODE_BUFFER_FLAG_REF
+	AV_GET_BUFFER_FLAG_REF = C.AV_GET_BUFFER_FLAG_REF
 )
 
 // AvCodecContext is main external API structure.
@@ -2860,22 +2855,16 @@ func (avctx *AVCodecContext) GetActiveThreadTypeAddr() *int32 {
 	return (*int32)(&avctx.active_thread_type)
 }
 
-// Deprecated: Unused.
-//
 // GetThreadSafeCallbacks gets `AVCodecContext.thread_safe_callbacks` value.
 func (avctx *AVCodecContext) GetThreadSafeCallbacks() int32 {
 	return (int32)(avctx.thread_safe_callbacks)
 }
 
-// Deprecated: Unused.
-//
 // SetThreadSafeCallbacks sets `AVCodecContext.thread_safe_callbacks` value.
 func (avctx *AVCodecContext) SetThreadSafeCallbacks(v int32) {
 	avctx.thread_safe_callbacks = (C.int)(v)
 }
 
-// Deprecated: Unused.
-//
 // GetThreadSafeCallbacksAddr gets `AVCodecContext.thread_safe_callbacks` address.
 func (avctx *AVCodecContext) GetThreadSafeCallbacksAddr() *int32 {
 	return (*int32)(&avctx.thread_safe_callbacks)
@@ -3041,9 +3030,6 @@ const (
 	FF_PROFILE_HEVC_MAIN_10            = int32(C.FF_PROFILE_HEVC_MAIN_10)
 	FF_PROFILE_HEVC_MAIN_STILL_PICTURE = int32(C.FF_PROFILE_HEVC_MAIN_STILL_PICTURE)
 	FF_PROFILE_HEVC_REXT               = int32(C.FF_PROFILE_HEVC_REXT)
-
-	FF_PROFILE_VVC_MAIN_10     = int32(C.FF_PROFILE_VVC_MAIN_10)
-	FF_PROFILE_VVC_MAIN_10_444 = int32(C.FF_PROFILE_VVC_MAIN_10_444)
 
 	FF_PROFILE_AV1_MAIN         = int32(C.FF_PROFILE_AV1_MAIN)
 	FF_PROFILE_AV1_HIGH         = int32(C.FF_PROFILE_AV1_HIGH)
@@ -3395,22 +3381,16 @@ func (avctx *AVCodecContext) GetSeekPrerollAddr() *int32 {
 	return (*int32)(&avctx.seek_preroll)
 }
 
-// Deprecated: Unused.
-//
 // GetDebugMv gets `AVCodecContext.debug_mv` value.
 func (avctx *AVCodecContext) GetDebugMv() int32 {
 	return (int32)(avctx.debug_mv)
 }
 
-// Deprecated: Unused.
-//
 // SetDebugMv sets `AVCodecContext.debug_mv` value.
 func (avctx *AVCodecContext) SetDebugMv(v int32) {
 	avctx.debug_mv = (C.int)(v)
 }
 
-// Deprecated: Unused.
-//
 // GetDebugMvAddr gets `AVCodecContext.debug_mv` address.
 func (avctx *AVCodecContext) GetDebugMvAddr() *int32 {
 	return (*int32)(&avctx.debug_mv)
@@ -3675,25 +3655,6 @@ func (avctx *AVCodecContext) SetExportSideData(v int32) {
 // GetExportSideDataAddr gets `AVCodecContext.export_side_data` address.
 func (avctx *AVCodecContext) GetExportSideDataAddr() *int32 {
 	return (*int32)(&avctx.export_side_data)
-}
-
-// typedef int (*avcodec_context_get_encode_buffer_func)(struct AVCodecContext *s,
-// AvPacket *pkt, int flags);
-type AVCodecContextGetEncodeBufferFunc = C.avcodec_context_get_encode_buffer_func
-
-// GetGetEncodeBuffer gets `AVCodecContext.get_encode_buffer` value.
-func (avctx *AVCodecContext) GetGetEncodeBuffer() AVCodecContextGetEncodeBufferFunc {
-	return (AVCodecContextGetEncodeBufferFunc)(avctx.get_encode_buffer)
-}
-
-// SetGetEncodeBuffer sets `AVCodecContext.get_encode_buffer` value.
-func (avctx *AVCodecContext) SetGetEncodeBuffer(v AVCodecContextGetEncodeBufferFunc) {
-	avctx.get_encode_buffer = (C.avcodec_context_get_encode_buffer_func)(v)
-}
-
-// GetGetEncodeBufferAddr gets `AVCodecContext.get_encode_buffer` address.
-func (avctx *AVCodecContext) GetGetEncodeBufferAddr() *AVCodecContextGetEncodeBufferFunc {
-	return (*AVCodecContextGetEncodeBufferFunc)(&avctx.get_encode_buffer)
 }
 
 // Deprecated: No use.
@@ -4237,8 +4198,6 @@ func AvCodecGetClass() *AVClass {
 	return (*AVClass)(C.avcodec_get_class())
 }
 
-// Deprecated: This function should not be used.
-//
 // AvCodecGetFrameClass
 func AvCodecGetFrameClass() *AVClass {
 	return (*AVClass)(C.avcodec_get_frame_class())
@@ -4296,12 +4255,6 @@ func AvSubtitleFree(s *AVSubtitle) {
 func AvCodecDefaultGetBuffer2(avctx *AVCodecContext, frame *AVFrame, flags int32) int32 {
 	return (int32)(C.avcodec_default_get_buffer2((*C.struct_AVCodecContext)(avctx),
 		(*C.struct_AVFrame)(frame), (C.int)(flags)))
-}
-
-// The default callback for AVCodecContext.get_encode_buffer().
-func AvCodecDefaultGetEncodeBuffer(avctx *AVCodecContext, pkt *AVPacket, flags int32) int32 {
-	return (int32)(C.avcodec_default_get_encode_buffer((*C.struct_AVCodecContext)(avctx),
-		(*C.struct_AVPacket)(pkt), (C.int)(flags)))
 }
 
 // AvCodecAlignDimensions modifies width and height values so that they will result in a memory

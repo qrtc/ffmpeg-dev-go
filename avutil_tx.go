@@ -148,13 +148,6 @@ const (
 // typedef void (*av_tx_fn)(AVTXContext *s, void *out, void *in, ptrdiff_t stride);
 type AvTxFn = C.av_tx_fn
 
-// AVTXFlags
-type AVTXFlags = C.enum_AVTXFlags
-
-const (
-	AV_TX_INPLACE = AVTXFlags(C.AV_TX_INPLACE)
-)
-
 // AvTxInit initializes a transform context with the given configuration
 // (i)MDCTs with an odd length are currently not supported.
 func AvTxInit(ctx **AVTXContext, tx *AvTxFn, _type AVTXType,

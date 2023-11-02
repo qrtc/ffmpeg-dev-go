@@ -44,7 +44,6 @@ const (
 	AV_PKT_DATA_PRFT                       = AVPacketSideDataType(C.AV_PKT_DATA_PRFT)
 	AV_PKT_DATA_ICC_PROFILE                = AVPacketSideDataType(C.AV_PKT_DATA_ICC_PROFILE)
 	AV_PKT_DATA_DOVI_CONF                  = AVPacketSideDataType(C.AV_PKT_DATA_DOVI_CONF)
-	AV_PKT_DATA_S12M_TIMECODE              = AVPacketSideDataType(C.AV_PKT_DATA_S12M_TIMECODE)
 	AV_PKT_DATA_NB                         = AVPacketSideDataType(C.AV_PKT_DATA_NB)
 )
 
@@ -290,8 +289,6 @@ func (pkt *AVPacket) GetConvergenceDurationAddr() *int64 {
 	return (*int64)(&pkt.convergence_duration)
 }
 
-// Deprecated: No use.
-//
 // AVPacketList
 type AVPacketList C.struct_AVPacketList
 
@@ -345,8 +342,6 @@ func AvPacketFree(pkt **AVPacket) {
 	C.av_packet_free((**C.struct_AVPacket)(unsafe.Pointer(pkt)))
 }
 
-// Deprecated: No use.
-//
 // AvInitPacket initializes optional fields of a packet with default values.
 func AvInitPacket(pkt *AVPacket) {
 	C.av_init_packet((*C.struct_AVPacket)(pkt))

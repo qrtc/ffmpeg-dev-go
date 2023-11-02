@@ -471,51 +471,6 @@ func (fltc *AVFilterContext) GetExtraHwFramesAddr() *int32 {
 // AVFilterFormatsConfig
 type AVFilterFormatsConfig C.struct_AVFilterFormatsConfig
 
-// GetFormats gets `AVFilterFormatsConfig.formats` value.
-func (fltf *AVFilterFormatsConfig) GetFormats() *AVFilterFormats {
-	return (*AVFilterFormats)(fltf.formats)
-}
-
-// SetFormats sets `AVFilterFormatsConfig.formats` value.
-func (fltf *AVFilterFormatsConfig) SetFormats(v *AVFilterFormats) {
-	fltf.formats = (*C.struct_AVFilterFormats)(v)
-}
-
-// GetFormatsAddr gets `AVFilterFormatsConfig.formats` address.
-func (fltf *AVFilterFormatsConfig) GetFormatsAddr() **AVFilterFormats {
-	return (**AVFilterFormats)(unsafe.Pointer(&fltf.formats))
-}
-
-// GetSamplerates gets `AVFilterFormatsConfig.samplerates` value.
-func (fltf *AVFilterFormatsConfig) GetSamplerates() *AVFilterFormats {
-	return (*AVFilterFormats)(fltf.samplerates)
-}
-
-// SetSamplerates sets `AVFilterFormatsConfig.samplerates` value.
-func (fltf *AVFilterFormatsConfig) SetSamplerates(v *AVFilterFormats) {
-	fltf.samplerates = (*C.struct_AVFilterFormats)(v)
-}
-
-// GetSampleratesAddr gets `AVFilterFormatsConfig.samplerates` address.
-func (fltf *AVFilterFormatsConfig) GetSampleratesAddr() **AVFilterFormats {
-	return (**AVFilterFormats)(unsafe.Pointer(&fltf.samplerates))
-}
-
-// GetChannelLayouts gets `AVFilterFormatsConfig.channel_layouts` value.
-func (fltf *AVFilterFormatsConfig) GetChannelLayouts() *AVFilterChannelLayouts {
-	return (*AVFilterChannelLayouts)(fltf.channel_layouts)
-}
-
-// SetChannelLayouts sets `AVFilterFormatsConfig.channel_layouts` value.
-func (fltf *AVFilterFormatsConfig) SetChannelLayouts(v *AVFilterChannelLayouts) {
-	fltf.channel_layouts = (*C.struct_AVFilterChannelLayouts)(v)
-}
-
-// GetChannelLayoutsAddr gets `AVFilterFormatsConfig.channel_layouts` address.
-func (fltf *AVFilterFormatsConfig) GetChannelLayoutsAddr() **AVFilterChannelLayouts {
-	return (**AVFilterChannelLayouts)(unsafe.Pointer(&fltf.channel_layouts))
-}
-
 // AVFilterLink
 type AVFilterLink C.struct_AVFilterLink
 

@@ -362,8 +362,6 @@ func (dc *AVDeviceCapabilitiesQuery) GetFpsAddr() *AVRational {
 
 // NONEED: av_device_capabilities
 
-// Deprecated: No use.
-//
 // AvDeviceCapabilitiesCreate initializes capabilities probing API based on AVOption API.
 func AvDeviceCapabilitiesCreate(caps **AVDeviceCapabilitiesQuery,
 	s *AVFormatContext, deviceOptions **AVDictionary) int32 {
@@ -371,8 +369,6 @@ func AvDeviceCapabilitiesCreate(caps **AVDeviceCapabilitiesQuery,
 		(*C.struct_AVFormatContext)(s), (**C.struct_AVDictionary)(unsafe.Pointer(deviceOptions))))
 }
 
-// Deprecated: No use.
-//
 // AvDeviceCapabilitiesFree frees resources created by AvDeviceCapabilitiesCreate()
 func AvDeviceCapabilitiesFree(caps **AVDeviceCapabilitiesQuery, s *AVFormatContext) {
 	C.avdevice_capabilities_free((**C.struct_AVDeviceCapabilitiesQuery)(unsafe.Pointer(caps)),

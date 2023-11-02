@@ -257,9 +257,7 @@ const (
 	AV_PIX_FMT_Y210BE = AVPixelFormat(C.AV_PIX_FMT_Y210BE)
 	AV_PIX_FMT_Y210LE = AVPixelFormat(C.AV_PIX_FMT_Y210LE)
 
-	AV_PIX_FMT_X2RGB10LE = AVPixelFormat(C.AV_PIX_FMT_X2RGB10LE)
-	AV_PIX_FMT_X2RGB10BE = AVPixelFormat(C.AV_PIX_FMT_X2RGB10BE)
-	AV_PIX_FMT_NB        = AVPixelFormat(C.AV_PIX_FMT_NB)
+	AV_PIX_FMT_NB = AVPixelFormat(C.AV_PIX_FMT_NB)
 )
 
 const (
@@ -342,8 +340,7 @@ const (
 	AV_PIX_FMT_P010   = AVPixelFormat(C.AV_PIX_FMT_P010)
 	AV_PIX_FMT_P016   = AVPixelFormat(C.AV_PIX_FMT_P016)
 
-	AV_PIX_FMT_Y210    = AVPixelFormat(C.AV_PIX_FMT_Y210)
-	AV_PIX_FMT_X2RGB10 = AVPixelFormat(C.AV_PIX_FMT_X2RGB10)
+	AV_PIX_FMT_Y210 = AVPixelFormat(C.AV_PIX_FMT_Y210)
 )
 
 // Chromaticity coordinates of the source primaries.

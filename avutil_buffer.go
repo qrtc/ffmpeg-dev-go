@@ -102,12 +102,7 @@ func AvBufferRealloc(buf **AVBufferRef, size int32) int32 {
 	return (int32)(C.av_buffer_realloc((**C.struct_AVBufferRef)(unsafe.Pointer(buf)), (C.int)(size)))
 }
 
-// AvBufferReplace ensures dst refers to the same data as src.
-func AvBufferReplace(dst **AVBufferRef, src *AVBufferRef) int32 {
-	return (int32)(C.av_buffer_replace((**C.struct_AVBufferRef)(unsafe.Pointer(dst)),
-		(*C.struct_AVBufferRef)(src)))
-}
-
+// AVBufferPool
 type AVBufferPool C.struct_AVBufferPool
 
 // typedef AVBufferRef* (*av_buffer_pool_alloc_func)(int size)

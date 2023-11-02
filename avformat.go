@@ -658,7 +658,6 @@ func (stm *AVStream) GetEventFlagsAddr() *int32 {
 
 const (
 	AVSTREAM_EVENT_FLAG_METADATA_UPDATED = int32(C.AVSTREAM_EVENT_FLAG_METADATA_UPDATED)
-	AVSTREAM_EVENT_FLAG_NEW_PACKETS      = int32(C.AVSTREAM_EVENT_FLAG_NEW_PACKETS)
 )
 
 // GetRFrameRate gets `AVStream.r_frame_rate` value.
@@ -2414,8 +2413,6 @@ func AvFormatOpenInput(ps **AVFormatContext, url string, fmt *AVInputFormat, opt
 		(*C.char)(urlPtr), (*C.struct_AVInputFormat)(fmt), (**C.struct_AVDictionary)(unsafe.Pointer(options))))
 }
 
-// Deprecated: Use an AVDictionary to pass options to a demuxer.
-//
 // AvDemuxerOpen
 func AvDemuxerOpen(ic *AVFormatContext) int32 {
 	return (int32)(C.av_demuxer_open((*C.struct_AVFormatContext)(ic)))

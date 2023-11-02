@@ -132,22 +132,16 @@ func (cls *AVClass) GetChildNextAddr() *AvClassChildNextFunc {
 	return (*AvClassChildNextFunc)(&cls.child_next)
 }
 
-// Deprecated: No use.
-//
 // GetChildClassNext gets `AVClass.child_class_next` value.
 func (cls *AVClass) GetChildClassNext() AvClassChildClassNextFunc {
 	return (AvClassChildClassNextFunc)(cls.child_class_next)
 }
 
-// Deprecated: No use.
-//
 // SetChildClassNext sets `AVClass.child_class_next` value.
 func (cls *AVClass) SetChildClassNext(v AvClassChildClassNextFunc) {
 	cls.child_class_next = (C.av_class_child_class_next_func)(v)
 }
 
-// Deprecated: No use.
-//
 // GetChildClassNextAddr gets `AVClass.child_class_next` address.
 func (cls *AVClass) GetChildClassNextAddr() *AvClassChildClassNextFunc {
 	return (*AvClassChildClassNextFunc)(&cls.child_class_next)
