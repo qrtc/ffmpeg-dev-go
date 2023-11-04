@@ -10,6 +10,7 @@ package ffmpeg
 import "C"
 import "unsafe"
 
+// AVXTEA
 type AVXTEA C.struct_AVXTEA
 
 // GetKey gets `AVXTEA.key` value.

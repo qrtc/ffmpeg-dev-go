@@ -57,6 +57,7 @@ import "C"
 
 // NONEED: av_append_path_component
 
+// AVEscapeMode
 type AVEscapeMode = C.enum_AVEscapeMode
 
 const (

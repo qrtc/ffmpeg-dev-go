@@ -13,6 +13,7 @@ const (
 	AV_TIMECODE_STR_SIZE = C.AV_TIMECODE_STR_SIZE
 )
 
+// AVTimecodeFlag
 type AVTimecodeFlag = C.enum_AVTimecodeFlag
 
 const (
@@ -21,6 +22,7 @@ const (
 	AV_TIMECODE_FLAG_ALLOWNEGATIVE = AVTimecodeFlag(C.AV_TIMECODE_FLAG_ALLOWNEGATIVE)
 )
 
+// AVTimecode
 type AVTimecode C.AVTimecode
 
 // GetStart gets `AVTimecode.start` value.

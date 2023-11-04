@@ -9,6 +9,7 @@ package ffmpeg
 */
 import "C"
 
+// AVCAMELLIA
 type AVCAMELLIA C.struct_AVCAMELLIA
 
 // AvCamelliaAlloc allocates an AVCAMELLIA context.

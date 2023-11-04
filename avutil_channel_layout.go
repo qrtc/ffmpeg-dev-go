@@ -71,6 +71,7 @@ const (
 	AV_CH_LAYOUT_STEREO_DOWNMIX    = uint64(C.AV_CH_LAYOUT_STEREO_DOWNMIX)
 )
 
+// AVMatrixEncoding
 type AVMatrixEncoding = C.enum_AVMatrixEncoding
 
 const (

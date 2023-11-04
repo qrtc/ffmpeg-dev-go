@@ -10,6 +10,7 @@ package ffmpeg
 */
 import "C"
 
+// AVPixelutilsSadFn
 type AVPixelutilsSadFn C.av_pixelutils_sad_fn
 
 // AvPixelutilsGetSadFn gets a potentially optimized pointer to a Sum-of-absolute-differences
