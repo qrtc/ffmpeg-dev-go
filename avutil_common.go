@@ -247,12 +247,12 @@ func AvCeilLog2C(x int32) int32 {
 	return (int32)(C.av_ceil_log2_c((C.int)(x)))
 }
 
-// AvPopcountC counts number of bits set to one in x
+// AvPopcountC counts number of bits set to one in x.
 func AvPopcountC(x uint32) int32 {
 	return (int32)(C.av_popcount_c((C.uint)(x)))
 }
 
-// AvPopcount64C counts number of bits set to one in x
+// AvPopcount64C counts number of bits set to one in x.
 func AvPopcount64C(x uint64) int32 {
 	return (int32)(C.av_popcount64_c((C.uint64_t)(x)))
 }

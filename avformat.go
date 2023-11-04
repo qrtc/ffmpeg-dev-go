@@ -2400,7 +2400,7 @@ func AvProbeInputBuffer2(pb *AVIOContext, fmt **AVInputFormat,
 		(*C.char)(urlPtr), VoidPointer(logctx), (C.uint)(offset), (C.uint)(maxProbeSize)))
 }
 
-// AvProbeInputBuffer likes AvProbeInputBuffer2() but returns 0 on success
+// AvProbeInputBuffer likes AvProbeInputBuffer2() but returns 0 on success.
 func AvProbeInputBuffer(pb *AVIOContext, fmt **AVInputFormat,
 	url string, logctx CVoidPointer, offset, maxProbeSize uint32) int32 {
 	urlPtr, urlFunc := StringCasting(url)

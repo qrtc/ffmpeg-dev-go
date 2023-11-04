@@ -154,12 +154,12 @@ func AvCodecFindEncoderByName(name string) *AVCodec {
 	return (*AVCodec)(C.avcodec_find_encoder_by_name((*C.char)(namePtr)))
 }
 
-// AvCodecIsEncoder returns a non-zero number if codec is an encoder, zero otherwise
+// AvCodecIsEncoder returns a non-zero number if codec is an encoder, zero otherwise.
 func AvCodecIsEncoder(codec *AVCodec) int32 {
 	return (int32)(C.av_codec_is_encoder((*C.struct_AVCodec)(codec)))
 }
 
-// AvCodecIsDecoder returns a non-zero number if codec is an decoder, zero otherwise
+// AvCodecIsDecoder returns a non-zero number if codec is an decoder, zero otherwise.
 func AvCodecIsDecoder(codec *AVCodec) int32 {
 	return (int32)(C.av_codec_is_decoder((*C.struct_AVCodec)(codec)))
 }

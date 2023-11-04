@@ -690,7 +690,7 @@ const (
 	AVFILTER_CMD_FLAG_FAST = C.AVFILTER_CMD_FLAG_FAST
 )
 
-// AvFilterProcessCommand  makes the filter instance process a command.
+// AvFilterProcessCommand makes the filter instance process a command.
 // It is recommended to use AVFilterGraphSendCommand().
 func AvFilterProcessCommand(filter *AVFilterContext, cmd, arg string, resLen, flags int32) (res string, ret int32) {
 	cmdPtr, cmdFunc := StringCasting(cmd)

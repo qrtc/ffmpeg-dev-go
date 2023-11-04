@@ -5218,7 +5218,7 @@ func AvCodecDefaultGetFormat(avctx *AVCodecContext, fmt *AVPixelFormat) AVPixelF
 		(*C.enum_AVPixelFormat)(fmt)))
 }
 
-// Deprecated: Use  AvFourccMakeString() or AvFourcc2str() instead.
+// Deprecated: Use AvFourccMakeString() or AvFourcc2str() instead.
 //
 // AvGetCodecTagString
 func AvGetCodecTagString(buf *int8, bufSize uintptr, codecTag uint32) int32 {
