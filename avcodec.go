@@ -3871,7 +3871,9 @@ const (
 	SUBTITLE_ASS    = AVSubtitleType(C.SUBTITLE_ASS)
 )
 
-const AV_SUBTITLE_FLAG_FORCED = C.AV_SUBTITLE_FLAG_FORCED
+const (
+	AV_SUBTITLE_FLAG_FORCED = C.AV_SUBTITLE_FLAG_FORCED
+)
 
 // AVSubtitleRect
 type AVSubtitleRect C.struct_AVSubtitleRect

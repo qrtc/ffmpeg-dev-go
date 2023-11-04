@@ -47,7 +47,9 @@ func AvBufferAllocz(size int32) *AVBufferRef {
 	return (*AVBufferRef)(C.av_buffer_allocz((C.int)(size)))
 }
 
-const AV_BUFFER_FLAG_READONLY = C.AV_BUFFER_FLAG_READONLY
+const (
+	AV_BUFFER_FLAG_READONLY = C.AV_BUFFER_FLAG_READONLY
+)
 
 // typedef void (*av_buffer_free_func)(void *opaque, uint8_t *data)
 type AVBufferFreeFunc = C.av_buffer_free_func
