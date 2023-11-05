@@ -34,7 +34,7 @@ func AvutilLicense() string {
 	return C.GoString(C.avutil_license())
 }
 
-// Media Type
+// Media Type.
 type AVMediaType = C.enum_AVMediaType
 
 const (

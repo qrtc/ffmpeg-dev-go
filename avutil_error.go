@@ -27,7 +27,7 @@ func AVUNERROR(e int32) int32 {
 	return e
 }
 
-// Error handling
+// Error handling.
 const (
 	AVERROR_BSF_NOT_FOUND      = int32(C.AVERROR_BSF_NOT_FOUND)
 	AVERROR_BUG                = int32(C.AVERROR_BUG)

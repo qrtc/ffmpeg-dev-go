@@ -130,7 +130,7 @@ func AvTimecodeInitFromString(tc *AVTimecode, rate AVRational, str string, logCt
 		(*C.char)(strPtr), VoidPointer(logCtx)))
 }
 
-// AvTimecodeCheckFrameRate checks if the timecode feature is available for the given frame rate
+// AvTimecodeCheckFrameRate checks if the timecode feature is available for the given frame rate.
 func AvTimecodeCheckFrameRate(rate AVRational) int32 {
 	return (int32)(C.av_timecode_check_frame_rate((C.struct_AVRational)(rate)))
 }

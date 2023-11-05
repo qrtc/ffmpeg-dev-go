@@ -1361,7 +1361,7 @@ func AvFrameApplyCropping(frame *AVFrame, flags int32) int32 {
 	return (int32)(C.av_frame_apply_cropping((*C.struct_AVFrame)(frame), (C.int)(flags)))
 }
 
-// AvFrameSideDataName returns a string identifying the side data type
+// AvFrameSideDataName returns a string identifying the side data type.
 func AvFrameSideDataName(_type AVFrameSideDataType) string {
 	return C.GoString(C.av_frame_side_data_name((C.enum_AVFrameSideDataType)(_type)))
 }
