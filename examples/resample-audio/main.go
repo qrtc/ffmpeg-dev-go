@@ -79,7 +79,7 @@ func main() {
 	}
 	dstFilename := os.Args[1]
 
-	dstFile, err := os.OpenFile(dstFilename, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0755)
+	dstFile, err := os.OpenFile(dstFilename, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Could not open destination file %s\n", dstFilename)
 		os.Exit(1)
