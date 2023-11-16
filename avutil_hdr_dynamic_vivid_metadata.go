@@ -525,6 +525,7 @@ func AvDynamicHdrVividAlloc(size *uintptr) *AVDynamicHDRVivid {
 	return (*AVDynamicHDRVivid)(C.av_dynamic_hdr_vivid_alloc((*C.size_t)(unsafe.Pointer(size))))
 }
 
+// AvDynamicHdrVividCreateSideData allocates a complete AVDynamicHDRVivid and add it to the frame.
 func AvDynamicHdrVividCreateSideData(frame *AVFrame) *AVDynamicHDRVivid {
 	return (*AVDynamicHDRVivid)(C.av_dynamic_hdr_vivid_create_side_data((*C.struct_AVFrame)(frame)))
 }
