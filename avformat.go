@@ -602,8 +602,8 @@ func (stm *AVStream) GetAttachedPicAddr() *AVPacket {
 }
 
 // GetSideData gets `AVStream.side_data` value.
-func (stm *AVStream) GetSideData() *AVPacketSideData {
-	return (*AVPacketSideData)(stm.side_data)
+func (stm *AVStream) GetSideData() []AVPacketSideData {
+	return unsafe.Slice((*AVPacketSideData)(stm.side_data), stm.nb_side_data)
 }
 
 // SetSideData sets `AVStream.side_data` value.
@@ -763,9 +763,6 @@ func (pgm *AVProgram) GetDiscardAddr() *AVDiscard {
 
 // GetStreamIndex gets `AVProgram.stream_index` value.
 func (pgm *AVProgram) GetStreamIndex() (v []uint32) {
-	if pgm.stream_index == nil {
-		return v
-	}
 	return unsafe.Slice((*uint32)(unsafe.Pointer(pgm.stream_index)), pgm.nb_stream_indexes)
 }
 
@@ -1083,9 +1080,6 @@ func (s *AVFormatContext) GetNbStreamsAddr() *uint32 {
 
 // GetStreams gets `AVFormatContext.streams` value.
 func (s *AVFormatContext) GetStreams() (v []*AVStream) {
-	if s.streams == nil {
-		return v
-	}
 	return unsafe.Slice((**AVStream)(unsafe.Pointer(s.streams)), s.nb_streams)
 }
 
@@ -1280,9 +1274,6 @@ func (s *AVFormatContext) GetNbProgramsAddr() *uint32 {
 
 // GetPrograms gets `AVFormatContext.programs` value.
 func (s *AVFormatContext) GetPrograms() (v []*AVProgram) {
-	if s.programs == nil {
-		return v
-	}
 	return unsafe.Slice((**AVProgram)(unsafe.Pointer(s.programs)), s.nb_programs)
 }
 
@@ -1388,9 +1379,6 @@ func (s *AVFormatContext) GetNbChaptersAddr() *uint32 {
 
 // GetChapters gets `AVFormatContext.chapters` value.
 func (s *AVFormatContext) GetChapters() (v []*AVChapter) {
-	if s.chapters == nil {
-		return v
-	}
 	return unsafe.Slice((**AVChapter)(unsafe.Pointer(s.chapters)), s.nb_chapters)
 }
 
