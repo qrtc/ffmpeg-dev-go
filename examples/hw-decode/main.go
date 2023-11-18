@@ -210,7 +210,7 @@ func main() {
 	}
 
 	// open the file to dump raw data
-	outputFile, _ = os.OpenFile(os.Args[3], os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0755)
+	outputFile, _ = os.OpenFile(os.Args[3], os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
 
 	// actual decoding and dump the raw data
 	for ret >= 0 {

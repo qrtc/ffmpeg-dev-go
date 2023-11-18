@@ -628,9 +628,6 @@ func (frame *AVFrame) GetBufAddr() ***AVBufferRef {
 
 // GetExtendedBuf gets `AVFrame.extended_buf` value.
 func (frame *AVFrame) GetExtendedBuf() []*AVBufferRef {
-	if frame.extended_buf == nil {
-		return nil
-	}
 	return unsafe.Slice((**AVBufferRef)(unsafe.Pointer(frame.extended_buf)),
 		frame.nb_extended_buf)
 }
@@ -662,9 +659,6 @@ func (frame *AVFrame) GetNbExtendedBufAddr() *int32 {
 
 // GetSideData gets `AVFrame.side_data` value.
 func (frame *AVFrame) GetSideData() []*AVFrameSideData {
-	if frame.side_data == nil {
-		return nil
-	}
 	return unsafe.Slice((**AVFrameSideData)(unsafe.Pointer(frame.side_data)), frame.nb_side_data)
 }
 

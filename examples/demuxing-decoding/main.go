@@ -214,7 +214,7 @@ func main() {
 	if videoStreamIdx, videoDecCtx, ret = openCodecContext(fmtCtx, ffmpeg.AVMEDIA_TYPE_VIDEO); ret >= 0 {
 		videoStream = fmtCtx.GetStreams()[videoStreamIdx]
 
-		videoDstFile, err = os.OpenFile(videoDstFilename, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0755)
+		videoDstFile, err = os.OpenFile(videoDstFilename, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Could not open destination file %s\n", videoDstFilename)
 			ret = 1
@@ -239,7 +239,7 @@ func main() {
 	if audioStreamIdx, audioDecCtx, ret = openCodecContext(fmtCtx, ffmpeg.AVMEDIA_TYPE_AUDIO); ret >= 0 {
 		audioStream = fmtCtx.GetStreams()[audioStreamIdx]
 
-		audioDstFile, err = os.OpenFile(audioDstFilename, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0755)
+		audioDstFile, err = os.OpenFile(audioDstFilename, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Could not open destination file %s\n", audioDstFilename)
 			ret = 1
