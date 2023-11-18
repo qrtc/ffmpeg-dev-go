@@ -94,12 +94,12 @@ func main() {
 	}
 	size = width * height
 
-	fin, err = os.OpenFile(os.Args[3], os.O_RDONLY, 0666)
+	fin, err = os.OpenFile(os.Args[3], os.O_RDONLY, 0644)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Could not open %s\n", os.Args[3])
 		os.Exit(1)
 	}
-	fout, err = os.OpenFile(os.Args[4], os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0755)
+	fout, err = os.OpenFile(os.Args[4], os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Could not open %s\n", os.Args[4])
 		goto close

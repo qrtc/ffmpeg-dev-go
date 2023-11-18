@@ -393,9 +393,6 @@ type AVDeviceInfoList C.struct_AVDeviceInfoList
 
 // GetDevices gets `AVDeviceInfoList.devices` value.
 func (dcl *AVDeviceInfoList) GetDevices() []*AVDeviceInfo {
-	if dcl.devices == nil {
-		return nil
-	}
 	return unsafe.Slice((**AVDeviceInfo)(unsafe.Pointer(dcl.devices)), dcl.nb_devices)
 }
 
