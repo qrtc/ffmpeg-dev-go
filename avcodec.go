@@ -1625,7 +1625,7 @@ func (avctx *AVCodecContext) GetWorkaroundBugsAddr() *int32 {
 	return (*int32)(&avctx.workaround_bugs)
 }
 
-// GetChLayout gets `AVCodecContext.ch_layouts` value.
+// GetChLayout gets `AVCodecContext.ch_layout` value.
 func (avctx *AVCodecContext) GetChLayout() AVChannelLayout {
 	return (AVChannelLayout)(avctx.ch_layout)
 }
@@ -1635,7 +1635,7 @@ func (avctx *AVCodecContext) SetChLayout(v AVChannelLayout) {
 	avctx.ch_layout = (C.struct_AVChannelLayout)(v)
 }
 
-// GetChLayoutAddr gets `AVCodecContext.ch_layouts` address.
+// GetChLayoutAddr gets `AVCodecContext.ch_layout` address.
 func (avctx *AVCodecContext) GetChLayoutAddr() *AVChannelLayout {
 	return (*AVChannelLayout)(&avctx.ch_layout)
 }
@@ -2179,6 +2179,10 @@ func (avctx *AVCodecContext) GetLevelAddr() *int32 {
 	return (*int32)(&avctx.level)
 }
 
+const (
+	FF_LEVEL_UNKNOWN = int32(C.FF_LEVEL_UNKNOWN)
+)
+
 // GetSkipLoopFilter gets `AVCodecContext.skip_loop_filter` value.
 func (avctx *AVCodecContext) GetSkipLoopFilter() AVDiscard {
 	return (AVDiscard)(avctx.skip_loop_filter)
@@ -2509,8 +2513,8 @@ const (
 )
 
 // GetCodedSideData gets `AVCodecContext.coded_side_data` value.
-func (avctx *AVCodecContext) GetCodedSideData() *AVPacketSideData {
-	return (*AVPacketSideData)(avctx.coded_side_data)
+func (avctx *AVCodecContext) GetCodedSideData() []AVPacketSideData {
+	return unsafe.Slice((*AVPacketSideData)(avctx.coded_side_data), avctx.nb_coded_side_data)
 }
 
 // SetCodedSideData sets `AVCodecContext.coded_side_data` value.
@@ -3040,9 +3044,6 @@ func (sbt *AVSubtitle) GetNumRectsAddr() *uint32 {
 
 // GetRects gets `AVSubtitle.rects` value.
 func (sbt *AVSubtitle) GetRects() []*AVSubtitleRect {
-	if sbt.rects == nil {
-		return nil
-	}
 	return unsafe.Slice((**AVSubtitleRect)(unsafe.Pointer(sbt.rects)), sbt.num_rects)
 }
 

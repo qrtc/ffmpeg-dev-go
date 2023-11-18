@@ -460,17 +460,17 @@ func (par *AVCodecParameters) GetSeekPrerollAddr() *int32 {
 	return (*int32)(&par.seek_preroll)
 }
 
-// GetChLayout gets `AVCodecContext.ch_layouts` value.
+// GetChLayout gets `AVCodecParameters.ch_layout` value.
 func (par *AVCodecParameters) GetChLayout() AVChannelLayout {
 	return (AVChannelLayout)(par.ch_layout)
 }
 
-// SetChLayout sets `AVCodecContext.ch_layouts` value.
+// SetChLayout sets `AVCodecParameters.ch_layout` value.
 func (par *AVCodecParameters) SetChLayout(v AVChannelLayout) {
 	par.ch_layout = (C.struct_AVChannelLayout)(v)
 }
 
-// GetChLayoutAddr gets `AVCodecContext.ch_layouts` address.
+// GetChLayoutAddr gets `AVCodecParameters.ch_layout` address.
 func (par *AVCodecParameters) GetChLayoutAddr() *AVChannelLayout {
 	return (*AVChannelLayout)(&par.ch_layout)
 }

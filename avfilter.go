@@ -209,9 +209,6 @@ func (fltc *AVFilterContext) GetInputPadsAddr() **AVFilterPad {
 
 // GetInputs gets `AVFilterContext.inputs` value.
 func (fltc *AVFilterContext) GetInputs() []*AVFilterLink {
-	if fltc.inputs == nil {
-		return nil
-	}
 	return unsafe.Slice((**AVFilterLink)(unsafe.Pointer(fltc.inputs)), fltc.nb_inputs)
 }
 
@@ -257,9 +254,6 @@ func (fltc *AVFilterContext) GetOutputPadsAddr() **AVFilterPad {
 
 // GetOutputs gets `AVFilterContext.outputs` value.
 func (fltc *AVFilterContext) GetOutputs() []*AVFilterLink {
-	if fltc.outputs == nil {
-		return nil
-	}
 	return unsafe.Slice((**AVFilterLink)(unsafe.Pointer(fltc.outputs)), fltc.nb_outputs)
 }
 
@@ -839,9 +833,6 @@ func (fltg *AVFilterGraph) GetAvClassAddr() **AVClass {
 
 // GetFilters gets `AVFilterGraph.filters` value.
 func (fltg *AVFilterGraph) GetFilters() []*AVFilterContext {
-	if fltg.filters == nil {
-		return nil
-	}
 	return unsafe.Slice((**AVFilterContext)(unsafe.Pointer(fltg.filters)), fltg.nb_filters)
 }
 
