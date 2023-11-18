@@ -75,3 +75,8 @@ func AvAddStable(tsTb AVRational, ts int64, incTb AVRational, inc int64) int32 {
 	return (int32)(C.av_add_stable((C.struct_AVRational)(tsTb), (C.int64_t)(ts),
 		(C.struct_AVRational)(incTb), (C.int64_t)(inc)))
 }
+
+// AvBesselI0 is 0th order modified bessel function of the first kind.
+func AvBesselI0(x float64) float64 {
+	return (float64)(C.av_bessel_i0((C.double)(x)))
+}

@@ -284,6 +284,10 @@ const (
 	AV_CODEC_ID_WBMP            = AVCodecID(C.AV_CODEC_ID_WBMP)
 	AV_CODEC_ID_MEDIA100        = AVCodecID(C.AV_CODEC_ID_MEDIA100)
 	AV_CODEC_ID_VQC             = AVCodecID(C.AV_CODEC_ID_VQC)
+	AV_CODEC_ID_PDV             = AVCodecID(C.AV_CODEC_ID_PDV)
+	AV_CODEC_ID_EVC             = AVCodecID(C.AV_CODEC_ID_EVC)
+	AV_CODEC_ID_RTV1            = AVCodecID(C.AV_CODEC_ID_RTV1)
+	AV_CODEC_ID_VMIX            = AVCodecID(C.AV_CODEC_ID_VMIX)
 
 	// various PCM "codecs"
 	AV_CODEC_ID_FIRST_AUDIO      = AVCodecID(C.AV_CODEC_ID_FIRST_AUDIO)
@@ -500,6 +504,8 @@ const (
 	AV_CODEC_ID_FTR             = AVCodecID(C.AV_CODEC_ID_FTR)
 	AV_CODEC_ID_WAVARC          = AVCodecID(C.AV_CODEC_ID_WAVARC)
 	AV_CODEC_ID_RKA             = AVCodecID(C.AV_CODEC_ID_RKA)
+	AV_CODEC_ID_AC4             = AVCodecID(C.AV_CODEC_ID_AC4)
+	AV_CODEC_ID_OSQ             = AVCodecID(C.AV_CODEC_ID_OSQ)
 
 	// subtitle codecs
 	AV_CODEC_ID_FIRST_SUBTITLE    = AVCodecID(C.AV_CODEC_ID_FIRST_SUBTITLE)

@@ -10,18 +10,6 @@ package ffmpeg
 import "C"
 import "unsafe"
 
-// AVFieldOrder
-type AVFieldOrder = C.enum_AVFieldOrder
-
-const (
-	AV_FIELD_UNKNOWN     = AVFieldOrder(C.AV_FIELD_UNKNOWN)
-	AV_FIELD_PROGRESSIVE = AVFieldOrder(C.AV_FIELD_PROGRESSIVE)
-	AV_FIELD_TT          = AVFieldOrder(C.AV_FIELD_TT)
-	AV_FIELD_BB          = AVFieldOrder(C.AV_FIELD_BB)
-	AV_FIELD_TB          = AVFieldOrder(C.AV_FIELD_TB)
-	AV_FIELD_BT          = AVFieldOrder(C.AV_FIELD_BT)
-)
-
 // AVCodecParameters
 type AVCodecParameters C.struct_AVCodecParameters
 
@@ -473,6 +461,52 @@ func (par *AVCodecParameters) SetChLayout(v AVChannelLayout) {
 // GetChLayoutAddr gets `AVCodecContext.ch_layout` address.
 func (par *AVCodecParameters) GetChLayoutAddr() *AVChannelLayout {
 	return (*AVChannelLayout)(&par.ch_layout)
+}
+
+// GetFramerate gets `AVCodecParameters.framerate` value.
+func (par *AVCodecParameters) GetFramerate() AVRational {
+	return (AVRational)(par.framerate)
+}
+
+// SetFramerate sets `AVCodecParameters.framerate` value.
+func (par *AVCodecParameters) SetFramerate(v AVRational) {
+	par.framerate = (C.struct_AVRational)(v)
+}
+
+// GetFramerateAddr gets `AVCodecParameters.framerate` address.
+func (par *AVCodecParameters) GetFramerateAddr() *AVRational {
+	return (*AVRational)(&par.framerate)
+}
+
+// GetCodedSideData gets `AVCodecParameters.coded_side_data` value.
+func (par *AVCodecParameters) GetCodedSideData() (v []AVPacketSideData) {
+	return unsafe.Slice((*AVPacketSideData)(unsafe.Pointer(par.coded_side_data)),
+		par.nb_coded_side_data)
+}
+
+// SetCodedSideData sets `AVCodecParameters.coded_side_data` value.
+func (par *AVCodecParameters) SetCodedSideData(v *AVPacketSideData) {
+	par.coded_side_data = (*C.struct_AVPacketSideData)(v)
+}
+
+// GetCodedSideDataAddr gets `AVCodecParameters.coded_side_data` address.
+func (par *AVCodecParameters) GetCodedSideDataAddr() **AVPacketSideData {
+	return (**AVPacketSideData)(unsafe.Pointer(&par.coded_side_data))
+}
+
+// GetNbCodedSideData gets `AVCodecParameters.nb_coded_side_data` value.
+func (par *AVCodecParameters) GetNbCodedSideData() int32 {
+	return (int32)(par.nb_coded_side_data)
+}
+
+// SetNbCodedSideData sets `AVCodecParameters.nb_coded_side_data` value.
+func (par *AVCodecParameters) SetNbCodedSideData(v int32) {
+	par.nb_coded_side_data = (C.int)(v)
+}
+
+// GetNbCodedSideDataAddr gets `AVCodecParameters.nb_coded_side_data` address.
+func (par *AVCodecParameters) GetNbCodedSideDataAddr() *int32 {
+	return (*int32)(&par.nb_coded_side_data)
 }
 
 // AvCodecParametersAlloc allocates a new AVCodecParameters and set its fields to default values

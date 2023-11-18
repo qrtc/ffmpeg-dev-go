@@ -47,6 +47,7 @@ const struct AVChannelLayout av_channel_layout_5point0_back          = AV_CHANNE
 const struct AVChannelLayout av_channel_layout_5point1_back          = AV_CHANNEL_LAYOUT_5POINT1_BACK;
 const struct AVChannelLayout av_channel_layout_6point0               = AV_CHANNEL_LAYOUT_6POINT0;
 const struct AVChannelLayout av_channel_layout_6point0_front         = AV_CHANNEL_LAYOUT_6POINT0_FRONT;
+const struct AVChannelLayout av_channel_layout_3point1point2         = AV_CHANNEL_LAYOUT_3POINT1POINT2;
 const struct AVChannelLayout av_channel_layout_hexagonal             = AV_CHANNEL_LAYOUT_HEXAGONAL;
 const struct AVChannelLayout av_channel_layout_6point1               = AV_CHANNEL_LAYOUT_6POINT1;
 const struct AVChannelLayout av_channel_layout_6point1_back          = AV_CHANNEL_LAYOUT_6POINT1_BACK;
@@ -56,13 +57,18 @@ const struct AVChannelLayout av_channel_layout_7point0_front         = AV_CHANNE
 const struct AVChannelLayout av_channel_layout_7point1               = AV_CHANNEL_LAYOUT_7POINT1;
 const struct AVChannelLayout av_channel_layout_7point1_wide          = AV_CHANNEL_LAYOUT_7POINT1_WIDE;
 const struct AVChannelLayout av_channel_layout_7point1_wide_back     = AV_CHANNEL_LAYOUT_7POINT1_WIDE_BACK;
-const struct AVChannelLayout av_channel_layout_7point1_top_back      = AV_CHANNEL_LAYOUT_7POINT1_TOP_BACK;
+const struct AVChannelLayout av_channel_layout_5point1point2_back    = AV_CHANNEL_LAYOUT_5POINT1POINT2_BACK;
 const struct AVChannelLayout av_channel_layout_octagonal             = AV_CHANNEL_LAYOUT_OCTAGONAL;
 const struct AVChannelLayout av_channel_layout_cube                  = AV_CHANNEL_LAYOUT_CUBE;
+const struct AVChannelLayout av_channel_layout_5point1point4_back    = AV_CHANNEL_LAYOUT_5POINT1POINT4_BACK;
+const struct AVChannelLayout av_channel_layout_7point1point2         = AV_CHANNEL_LAYOUT_7POINT1POINT2;
+const struct AVChannelLayout av_channel_layout_7point1point4_back    = AV_CHANNEL_LAYOUT_7POINT1POINT4_BACK;
 const struct AVChannelLayout av_channel_layout_hexadecagonal         = AV_CHANNEL_LAYOUT_HEXADECAGONAL;
 const struct AVChannelLayout av_channel_layout_stereo_downmix        = AV_CHANNEL_LAYOUT_STEREO_DOWNMIX;
 const struct AVChannelLayout av_channel_layout_22point2              = AV_CHANNEL_LAYOUT_22POINT2;
 const struct AVChannelLayout av_channel_layout_ambisonic_first_order = AV_CHANNEL_LAYOUT_AMBISONIC_FIRST_ORDER;
+
+const struct AVChannelLayout av_channel_layout_7point1_top_back      = AV_CHANNEL_LAYOUT_7POINT1_TOP_BACK;
 
 */
 import "C"
@@ -159,37 +165,43 @@ const (
 )
 
 const (
-	AV_CH_LAYOUT_MONO              = uint64(C.AV_CH_LAYOUT_MONO)
-	AV_CH_LAYOUT_STEREO            = uint64(C.AV_CH_LAYOUT_STEREO)
-	AV_CH_LAYOUT_2POINT1           = uint64(C.AV_CH_LAYOUT_2POINT1)
-	AV_CH_LAYOUT_2_1               = uint64(C.AV_CH_LAYOUT_2_1)
-	AV_CH_LAYOUT_SURROUND          = uint64(C.AV_CH_LAYOUT_SURROUND)
-	AV_CH_LAYOUT_3POINT1           = uint64(C.AV_CH_LAYOUT_3POINT1)
-	AV_CH_LAYOUT_4POINT0           = uint64(C.AV_CH_LAYOUT_4POINT0)
-	AV_CH_LAYOUT_4POINT1           = uint64(C.AV_CH_LAYOUT_4POINT1)
-	AV_CH_LAYOUT_2_2               = uint64(C.AV_CH_LAYOUT_2_2)
-	AV_CH_LAYOUT_QUAD              = uint64(C.AV_CH_LAYOUT_QUAD)
-	AV_CH_LAYOUT_5POINT0           = uint64(C.AV_CH_LAYOUT_5POINT0)
-	AV_CH_LAYOUT_5POINT1           = uint64(C.AV_CH_LAYOUT_5POINT1)
-	AV_CH_LAYOUT_5POINT0_BACK      = uint64(C.AV_CH_LAYOUT_5POINT0_BACK)
-	AV_CH_LAYOUT_5POINT1_BACK      = uint64(C.AV_CH_LAYOUT_5POINT1_BACK)
-	AV_CH_LAYOUT_6POINT0           = uint64(C.AV_CH_LAYOUT_6POINT0)
-	AV_CH_LAYOUT_6POINT0_FRONT     = uint64(C.AV_CH_LAYOUT_6POINT0_FRONT)
-	AV_CH_LAYOUT_HEXAGONAL         = uint64(C.AV_CH_LAYOUT_HEXAGONAL)
-	AV_CH_LAYOUT_6POINT1           = uint64(C.AV_CH_LAYOUT_6POINT1)
-	AV_CH_LAYOUT_6POINT1_BACK      = uint64(C.AV_CH_LAYOUT_6POINT1_BACK)
-	AV_CH_LAYOUT_6POINT1_FRONT     = uint64(C.AV_CH_LAYOUT_6POINT1_FRONT)
-	AV_CH_LAYOUT_7POINT0           = uint64(C.AV_CH_LAYOUT_7POINT0)
-	AV_CH_LAYOUT_7POINT0_FRONT     = uint64(C.AV_CH_LAYOUT_7POINT0_FRONT)
-	AV_CH_LAYOUT_7POINT1           = uint64(C.AV_CH_LAYOUT_7POINT1)
-	AV_CH_LAYOUT_7POINT1_WIDE      = uint64(C.AV_CH_LAYOUT_7POINT1_WIDE)
-	AV_CH_LAYOUT_7POINT1_WIDE_BACK = uint64(C.AV_CH_LAYOUT_7POINT1_WIDE_BACK)
-	AV_CH_LAYOUT_7POINT1_TOP_BACK  = uint64(C.AV_CH_LAYOUT_7POINT1_TOP_BACK)
-	AV_CH_LAYOUT_OCTAGONAL         = uint64(C.AV_CH_LAYOUT_OCTAGONAL)
-	AV_CH_LAYOUT_CUBE              = uint64(C.AV_CH_LAYOUT_CUBE)
-	AV_CH_LAYOUT_HEXADECAGONAL     = uint64(C.AV_CH_LAYOUT_HEXADECAGONAL)
-	AV_CH_LAYOUT_STEREO_DOWNMIX    = uint64(C.AV_CH_LAYOUT_STEREO_DOWNMIX)
-	AV_CH_LAYOUT_22POINT2          = uint64(C.AV_CH_LAYOUT_22POINT2)
+	AV_CH_LAYOUT_MONO               = uint64(C.AV_CH_LAYOUT_MONO)
+	AV_CH_LAYOUT_STEREO             = uint64(C.AV_CH_LAYOUT_STEREO)
+	AV_CH_LAYOUT_2POINT1            = uint64(C.AV_CH_LAYOUT_2POINT1)
+	AV_CH_LAYOUT_2_1                = uint64(C.AV_CH_LAYOUT_2_1)
+	AV_CH_LAYOUT_SURROUND           = uint64(C.AV_CH_LAYOUT_SURROUND)
+	AV_CH_LAYOUT_3POINT1            = uint64(C.AV_CH_LAYOUT_3POINT1)
+	AV_CH_LAYOUT_4POINT0            = uint64(C.AV_CH_LAYOUT_4POINT0)
+	AV_CH_LAYOUT_4POINT1            = uint64(C.AV_CH_LAYOUT_4POINT1)
+	AV_CH_LAYOUT_2_2                = uint64(C.AV_CH_LAYOUT_2_2)
+	AV_CH_LAYOUT_QUAD               = uint64(C.AV_CH_LAYOUT_QUAD)
+	AV_CH_LAYOUT_5POINT0            = uint64(C.AV_CH_LAYOUT_5POINT0)
+	AV_CH_LAYOUT_5POINT1            = uint64(C.AV_CH_LAYOUT_5POINT1)
+	AV_CH_LAYOUT_5POINT0_BACK       = uint64(C.AV_CH_LAYOUT_5POINT0_BACK)
+	AV_CH_LAYOUT_5POINT1_BACK       = uint64(C.AV_CH_LAYOUT_5POINT1_BACK)
+	AV_CH_LAYOUT_6POINT0            = uint64(C.AV_CH_LAYOUT_6POINT0)
+	AV_CH_LAYOUT_6POINT0_FRONT      = uint64(C.AV_CH_LAYOUT_6POINT0_FRONT)
+	AV_CH_LAYOUT_HEXAGONAL          = uint64(C.AV_CH_LAYOUT_HEXAGONAL)
+	AV_CH_LAYOUT_3POINT1POINT2      = uint64(C.AV_CH_LAYOUT_3POINT1POINT2)
+	AV_CH_LAYOUT_6POINT1            = uint64(C.AV_CH_LAYOUT_6POINT1)
+	AV_CH_LAYOUT_6POINT1_BACK       = uint64(C.AV_CH_LAYOUT_6POINT1_BACK)
+	AV_CH_LAYOUT_6POINT1_FRONT      = uint64(C.AV_CH_LAYOUT_6POINT1_FRONT)
+	AV_CH_LAYOUT_7POINT0            = uint64(C.AV_CH_LAYOUT_7POINT0)
+	AV_CH_LAYOUT_7POINT0_FRONT      = uint64(C.AV_CH_LAYOUT_7POINT0_FRONT)
+	AV_CH_LAYOUT_7POINT1            = uint64(C.AV_CH_LAYOUT_7POINT1)
+	AV_CH_LAYOUT_7POINT1_WIDE       = uint64(C.AV_CH_LAYOUT_7POINT1_WIDE)
+	AV_CH_LAYOUT_7POINT1_WIDE_BACK  = uint64(C.AV_CH_LAYOUT_7POINT1_WIDE_BACK)
+	AV_CH_LAYOUT_5POINT1POINT2_BACK = uint64(C.AV_CH_LAYOUT_5POINT1POINT2_BACK)
+	AV_CH_LAYOUT_OCTAGONAL          = uint64(C.AV_CH_LAYOUT_OCTAGONAL)
+	AV_CH_LAYOUT_CUBE               = uint64(C.AV_CH_LAYOUT_CUBE)
+	AV_CH_LAYOUT_5POINT1POINT4_BACK = uint64(C.AV_CH_LAYOUT_5POINT1POINT4_BACK)
+	AV_CH_LAYOUT_7POINT1POINT2      = uint64(C.AV_CH_LAYOUT_7POINT1POINT2)
+	AV_CH_LAYOUT_7POINT1POINT4_BACK = uint64(C.AV_CH_LAYOUT_7POINT1POINT4_BACK)
+	AV_CH_LAYOUT_HEXADECAGONAL      = uint64(C.AV_CH_LAYOUT_HEXADECAGONAL)
+	AV_CH_LAYOUT_STEREO_DOWNMIX     = uint64(C.AV_CH_LAYOUT_STEREO_DOWNMIX)
+	AV_CH_LAYOUT_22POINT2           = uint64(C.AV_CH_LAYOUT_22POINT2)
+
+	AV_CH_LAYOUT_7POINT1_TOP_BACK = uint64(C.AV_CH_LAYOUT_7POINT1_TOP_BACK)
 )
 
 // AVMatrixEncoding
@@ -373,6 +385,9 @@ func AV_CHANNEL_LAYOUT_6POINT0() *AVChannelLayout {
 func AV_CHANNEL_LAYOUT_6POINT0_FRONT() *AVChannelLayout {
 	return (*AVChannelLayout)(&C.av_channel_layout_6point0_front)
 }
+func AV_CHANNEL_LAYOUT_3POINT1POINT2() *AVChannelLayout {
+	return (*AVChannelLayout)(&C.av_channel_layout_3point1point2)
+}
 func AV_CHANNEL_LAYOUT_HEXAGONAL() *AVChannelLayout {
 	return (*AVChannelLayout)(&C.av_channel_layout_hexagonal)
 }
@@ -400,14 +415,23 @@ func AV_CHANNEL_LAYOUT_7POINT1_WIDE() *AVChannelLayout {
 func AV_CHANNEL_LAYOUT_7POINT1_WIDE_BACK() *AVChannelLayout {
 	return (*AVChannelLayout)(&C.av_channel_layout_7point1_wide_back)
 }
-func AV_CHANNEL_LAYOUT_7POINT1_TOP_BACK() *AVChannelLayout {
-	return (*AVChannelLayout)(&C.av_channel_layout_7point1_top_back)
+func AV_CHANNEL_LAYOUT_5POINT1POINT2_BACK() *AVChannelLayout {
+	return (*AVChannelLayout)(&C.av_channel_layout_5point1point2_back)
 }
 func AV_CHANNEL_LAYOUT_OCTAGONAL() *AVChannelLayout {
 	return (*AVChannelLayout)(&C.av_channel_layout_octagonal)
 }
 func AV_CHANNEL_LAYOUT_CUBE() *AVChannelLayout {
 	return (*AVChannelLayout)(&C.av_channel_layout_cube)
+}
+func AV_CHANNEL_LAYOUT_5POINT1POINT4_BACK() *AVChannelLayout {
+	return (*AVChannelLayout)(&C.av_channel_layout_5point1point4_back)
+}
+func AV_CHANNEL_LAYOUT_7POINT1POINT2() *AVChannelLayout {
+	return (*AVChannelLayout)(&C.av_channel_layout_7point1point2)
+}
+func AV_CHANNEL_LAYOUT_7POINT1POINT4_BACK() *AVChannelLayout {
+	return (*AVChannelLayout)(&C.av_channel_layout_7point1point4_back)
 }
 func AV_CHANNEL_LAYOUT_HEXADECAGONAL() *AVChannelLayout {
 	return (*AVChannelLayout)(&C.av_channel_layout_hexadecagonal)
@@ -420,6 +444,10 @@ func AV_CHANNEL_LAYOUT_22POINT2() *AVChannelLayout {
 }
 func AV_CHANNEL_LAYOUT_AMBISONIC_FIRST_ORDER() *AVChannelLayout {
 	return (*AVChannelLayout)(&C.av_channel_layout_ambisonic_first_order)
+}
+
+func AV_CHANNEL_LAYOUT_7POINT1_TOP_BACK() *AVChannelLayout {
+	return (*AVChannelLayout)(&C.av_channel_layout_7point1_top_back)
 }
 
 // Deprecated: Use AvChannelLayoutFromString() instead.

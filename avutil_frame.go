@@ -345,16 +345,22 @@ func (frame *AVFrame) GetFormatAddr() *int32 {
 	return (*int32)(&frame.format)
 }
 
+// Deprecated: Use AV_FRAME_FLAG_KEY instead.
+//
 // GetKeyFrame gets `AVFrame.key_frame` value.
 func (frame *AVFrame) GetKeyFrame() int32 {
 	return (int32)(frame.key_frame)
 }
 
+// Deprecated: Use AV_FRAME_FLAG_KEY instead.
+//
 // SetKeyFrame sets `AVFrame.key_frame` value.
 func (frame *AVFrame) SetKeyFrame(v int32) {
 	frame.key_frame = (C.int)(v)
 }
 
+// Deprecated: Use AV_FRAME_FLAG_KEY instead.
+//
 // GetKeyFrameAddr gets `AVFrame.key_frame` address.
 func (frame *AVFrame) GetKeyFrameAddr() *int32 {
 	return (*int32)(&frame.key_frame)
@@ -507,61 +513,85 @@ func (frame *AVFrame) GetRepeatPictAddr() *int32 {
 	return (*int32)(&frame.repeat_pict)
 }
 
+// Deprecated: Use AV_FRAME_FLAG_INTERLACED instead.
+//
 // GetInterlacedFrame gets `AVFrame.interlaced_frame` value.
 func (frame *AVFrame) GetInterlacedFrame() int32 {
 	return (int32)(frame.interlaced_frame)
 }
 
+// Deprecated: Use AV_FRAME_FLAG_INTERLACED instead.
+//
 // SetInterlacedFrame sets `AVFrame.interlaced_frame` value.
 func (frame *AVFrame) SetInterlacedFrame(v int32) {
 	frame.interlaced_frame = (C.int)(v)
 }
 
+// Deprecated: Use AV_FRAME_FLAG_INTERLACED instead.
+//
 // GetInterlacedFrameAddr gets `AVFrame.interlaced_frame` address.
 func (frame *AVFrame) GetInterlacedFrameAddr() *int32 {
 	return (*int32)(&frame.interlaced_frame)
 }
 
+// Deprecated: Use AV_FRAME_FLAG_TOP_FIELD_FIRST instead.
+//
 // GetTopFieldFirst gets `AVFrame.top_field_first` value.
 func (frame *AVFrame) GetTopFieldFirst() int32 {
 	return (int32)(frame.top_field_first)
 }
 
+// Deprecated: Use AV_FRAME_FLAG_TOP_FIELD_FIRST instead.
+//
 // SetTopFieldFirst sets `AVFrame.top_field_first` value.
 func (frame *AVFrame) SetTopFieldFirst(v int32) {
 	frame.top_field_first = (C.int)(v)
 }
 
+// Deprecated: Use AV_FRAME_FLAG_TOP_FIELD_FIRST instead.
+//
 // GetTopFieldFirstAddr gets `AVFrame.top_field_first` address.
 func (frame *AVFrame) GetTopFieldFirstAddr() *int32 {
 	return (*int32)(&frame.top_field_first)
 }
 
+// Deprecated: no use.
+//
 // GetPaletteHasChanged gets `AVFrame.palette_has_changed` value.
 func (frame *AVFrame) GetPaletteHasChanged() int32 {
 	return (int32)(frame.palette_has_changed)
 }
 
+// Deprecated: no use.
+//
 // SetPaletteHasChanged sets `AVFrame.palette_has_changed` value.
 func (frame *AVFrame) SetPaletteHasChanged(v int32) {
 	frame.palette_has_changed = (C.int)(v)
 }
 
+// Deprecated: no use.
+//
 // GetPaletteHasChangedAddr gets `AVFrame.palette_has_changed` address.
 func (frame *AVFrame) GetPaletteHasChangedAddr() *int32 {
 	return (*int32)(&frame.palette_has_changed)
 }
 
+// Deprecated: Use AV_CODEC_FLAG_COPY_OPAQUE instead.
+//
 // GetReorderedOpaque gets `AVFrame.reordered_opaque` value.
 func (frame *AVFrame) GetReorderedOpaque() int64 {
 	return (int64)(frame.reordered_opaque)
 }
 
+// Deprecated: Use AV_CODEC_FLAG_COPY_OPAQUE instead.
+//
 // SetReorderedOpaque sets `AVFrame.reordered_opaque` value.
 func (frame *AVFrame) SetReorderedOpaque(v int64) {
 	frame.reordered_opaque = (C.int64_t)(v)
 }
 
+// Deprecated: Use AV_CODEC_FLAG_COPY_OPAQUE instead.
+//
 // GetReorderedOpaqueAddr gets `AVFrame.reordered_opaque` address.
 func (frame *AVFrame) GetReorderedOpaqueAddr() *int64 {
 	return (*int64)(&frame.reordered_opaque)
@@ -622,9 +652,6 @@ func (frame *AVFrame) GetBufAddr() ***AVBufferRef {
 
 // GetExtendedBuf gets `AVFrame.extended_buf` value.
 func (frame *AVFrame) GetExtendedBuf() []*AVBufferRef {
-	if frame.extended_buf == nil {
-		return nil
-	}
 	return unsafe.Slice((**AVBufferRef)(unsafe.Pointer(frame.extended_buf)),
 		frame.nb_extended_buf)
 }
@@ -656,9 +683,6 @@ func (frame *AVFrame) GetNbExtendedBufAddr() *int32 {
 
 // GetSideData gets `AVFrame.side_data` value.
 func (frame *AVFrame) GetSideData() []*AVFrameSideData {
-	if frame.side_data == nil {
-		return nil
-	}
 	return unsafe.Slice((**AVFrameSideData)(unsafe.Pointer(frame.side_data)), frame.nb_side_data)
 }
 
@@ -688,8 +712,11 @@ func (frame *AVFrame) GetNbSideDataAddr() *int32 {
 }
 
 const (
-	AV_FRAME_FLAG_CORRUPT = int32(C.AV_FRAME_FLAG_CORRUPT)
-	AV_FRAME_FLAG_DISCARD = int32(C.AV_FRAME_FLAG_DISCARD)
+	AV_FRAME_FLAG_CORRUPT         = int32(C.AV_FRAME_FLAG_CORRUPT)
+	AV_FRAME_FLAG_KEY             = int32(C.AV_FRAME_FLAG_KEY)
+	AV_FRAME_FLAG_DISCARD         = int32(C.AV_FRAME_FLAG_DISCARD)
+	AV_FRAME_FLAG_INTERLACED      = int32(C.AV_FRAME_FLAG_INTERLACED)
+	AV_FRAME_FLAG_TOP_FIELD_FIRST = int32(C.AV_FRAME_FLAG_TOP_FIELD_FIRST)
 )
 
 // GetFlags gets `AVFrame.flags` value.
@@ -1057,6 +1084,11 @@ func AvFrameFree(frame **AVFrame) {
 // AvFrameRef sets up a new reference to the data described by the source frame.
 func AvFrameRef(dst, src *AVFrame) int32 {
 	return (int32)(C.av_frame_ref((*C.struct_AVFrame)(dst), (*C.struct_AVFrame)(src)))
+}
+
+// AvFrameReplace ensures the destination frame refers to the same data described by the source frame.
+func AvFrameReplace(dst, src *AVFrame) int32 {
+	return (int32)(C.av_frame_replace((*C.struct_AVFrame)(dst), (*C.struct_AVFrame)(src)))
 }
 
 // AvFrameClone creates a new frame that references the same data as src.

@@ -64,7 +64,9 @@ const (
 	AV_CODEC_FLAG_4MV            = C.AV_CODEC_FLAG_4MV
 	AV_CODEC_FLAG_OUTPUT_CORRUPT = C.AV_CODEC_FLAG_OUTPUT_CORRUPT
 	AV_CODEC_FLAG_QPEL           = C.AV_CODEC_FLAG_QPEL
-	AV_CODEC_FLAG_DROPCHANGED    = C.AV_CODEC_FLAG_DROPCHANGED
+
+	// Deprecated: callers should implement this functionality in their own code.
+	AV_CODEC_FLAG_DROPCHANGED = C.AV_CODEC_FLAG_DROPCHANGED
 
 	AV_CODEC_FLAG_RECON_FRAME    = C.AV_CODEC_FLAG_RECON_FRAME
 	AV_CODEC_FLAG_COPY_OPAQUE    = C.AV_CODEC_FLAG_COPY_OPAQUE
@@ -368,16 +370,28 @@ func (avctx *AVCodecContext) GetTimeBaseAddr() *AVRational {
 	return (*AVRational)(&avctx.time_base)
 }
 
+// Deprecated:
+// - decoding: Use AVCodecDescriptor.props & AV_CODEC_PROP_FIELDS instead.
+// - encoding: Set AVCodecContext.framerate instead.
+//
 // GetTicksPerFrame gets `AVCodecContext.ticks_per_frame` value.
 func (avctx *AVCodecContext) GetTicksPerFrame() int32 {
 	return (int32)(avctx.ticks_per_frame)
 }
 
+// Deprecated:
+// - decoding: Use AVCodecDescriptor.props & AV_CODEC_PROP_FIELDS instead.
+// - encoding: Set AVCodecContext.framerate instead.
+//
 // SetTicksPerFrame sets `AVCodecContext.ticks_per_frame` value.
 func (avctx *AVCodecContext) SetTicksPerFrame(v int32) {
 	avctx.ticks_per_frame = (C.int)(v)
 }
 
+// Deprecated:
+// - decoding: Use AVCodecDescriptor.props & AV_CODEC_PROP_FIELDS instead.
+// - encoding: Set AVCodecContext.framerate instead.
+//
 // GetTicksPerFrameAddr gets `AVCodecContext.ticks_per_frame` address.
 func (avctx *AVCodecContext) GetTicksPerFrameAddr() *int32 {
 	return (*int32)(&avctx.ticks_per_frame)
@@ -2047,6 +2061,7 @@ func (avctx *AVCodecContext) GetProfileAddr() *int32 {
 	return (*int32)(&avctx.profile)
 }
 
+// Deprecated: Use AV_PROFILE_* instead.
 const (
 	FF_PROFILE_UNKNOWN  = int32(C.FF_PROFILE_UNKNOWN)
 	FF_PROFILE_RESERVED = int32(C.FF_PROFILE_RESERVED)
@@ -2069,12 +2084,18 @@ const (
 	FF_PROFILE_DNXHR_HQX = int32(C.FF_PROFILE_DNXHR_HQX)
 	FF_PROFILE_DNXHR_444 = int32(C.FF_PROFILE_DNXHR_444)
 
-	FF_PROFILE_DTS         = int32(C.FF_PROFILE_DTS)
-	FF_PROFILE_DTS_ES      = int32(C.FF_PROFILE_DTS_ES)
-	FF_PROFILE_DTS_96_24   = int32(C.FF_PROFILE_DTS_96_24)
-	FF_PROFILE_DTS_HD_HRA  = int32(C.FF_PROFILE_DTS_HD_HRA)
-	FF_PROFILE_DTS_HD_MA   = int32(C.FF_PROFILE_DTS_HD_MA)
-	FF_PROFILE_DTS_EXPRESS = int32(C.FF_PROFILE_DTS_EXPRESS)
+	FF_PROFILE_DTS              = int32(C.FF_PROFILE_DTS)
+	FF_PROFILE_DTS_ES           = int32(C.FF_PROFILE_DTS_ES)
+	FF_PROFILE_DTS_96_24        = int32(C.FF_PROFILE_DTS_96_24)
+	FF_PROFILE_DTS_HD_HRA       = int32(C.FF_PROFILE_DTS_HD_HRA)
+	FF_PROFILE_DTS_HD_MA        = int32(C.FF_PROFILE_DTS_HD_MA)
+	FF_PROFILE_DTS_EXPRESS      = int32(C.FF_PROFILE_DTS_EXPRESS)
+	FF_PROFILE_DTS_HD_MA_X      = int32(C.FF_PROFILE_DTS_HD_MA_X)
+	FF_PROFILE_DTS_HD_MA_X_IMAX = int32(C.FF_PROFILE_DTS_HD_MA_X_IMAX)
+
+	FF_PROFILE_EAC3_DDP_ATMOS = int32(C.FF_PROFILE_EAC3_DDP_ATMOS)
+
+	FF_PROFILE_TRUEHD_ATMOS = int32(C.FF_PROFILE_TRUEHD_ATMOS)
 
 	FF_PROFILE_MPEG2_422          = int32(C.FF_PROFILE_MPEG2_422)
 	FF_PROFILE_MPEG2_HIGH         = int32(C.FF_PROFILE_MPEG2_HIGH)
@@ -2139,6 +2160,7 @@ const (
 	FF_PROFILE_HEVC_MAIN_10            = int32(C.FF_PROFILE_HEVC_MAIN_10)
 	FF_PROFILE_HEVC_MAIN_STILL_PICTURE = int32(C.FF_PROFILE_HEVC_MAIN_STILL_PICTURE)
 	FF_PROFILE_HEVC_REXT               = int32(C.FF_PROFILE_HEVC_REXT)
+	FF_PROFILE_HEVC_SCC                = int32(C.FF_PROFILE_HEVC_SCC)
 
 	FF_PROFILE_VVC_MAIN_10     = int32(C.FF_PROFILE_VVC_MAIN_10)
 	FF_PROFILE_VVC_MAIN_10_444 = int32(C.FF_PROFILE_VVC_MAIN_10_444)
@@ -2167,6 +2189,9 @@ const (
 
 	FF_PROFILE_KLVA_SYNC  = int32(C.FF_PROFILE_KLVA_SYNC)
 	FF_PROFILE_KLVA_ASYNC = int32(C.FF_PROFILE_KLVA_ASYNC)
+
+	FF_PROFILE_EVC_BASELINE = int32(C.FF_PROFILE_EVC_BASELINE)
+	FF_PROFILE_EVC_MAIN     = int32(C.FF_PROFILE_EVC_MAIN)
 )
 
 // GetLevel gets `AVCodecContext.level` value.
@@ -2183,6 +2208,11 @@ func (avctx *AVCodecContext) SetLevel(v int32) {
 func (avctx *AVCodecContext) GetLevelAddr() *int32 {
 	return (*int32)(&avctx.level)
 }
+
+const (
+	// Deprecated: use AV_LEVEL_UNKOWN instead.
+	FF_LEVEL_UNKNOWN = int32(C.FF_LEVEL_UNKNOWN)
+)
 
 // GetSkipLoopFilter gets `AVCodecContext.skip_loop_filter` value.
 func (avctx *AVCodecContext) GetSkipLoopFilter() AVDiscard {
@@ -2508,8 +2538,8 @@ const (
 )
 
 // GetCodedSideData gets `AVCodecContext.coded_side_data` value.
-func (avctx *AVCodecContext) GetCodedSideData() *AVPacketSideData {
-	return (*AVPacketSideData)(avctx.coded_side_data)
+func (avctx *AVCodecContext) GetCodedSideData() []AVPacketSideData {
+	return unsafe.Slice((*AVPacketSideData)(avctx.coded_side_data), avctx.nb_coded_side_data)
 }
 
 // SetCodedSideData sets `AVCodecContext.coded_side_data` value.
@@ -3019,9 +3049,6 @@ func (sbt *AVSubtitle) GetNumRectsAddr() *uint32 {
 
 // GetRects gets `AVSubtitle.rects` value.
 func (sbt *AVSubtitle) GetRects() []*AVSubtitleRect {
-	if sbt.rects == nil {
-		return nil
-	}
 	return unsafe.Slice((**AVSubtitleRect)(unsafe.Pointer(sbt.rects)), sbt.num_rects)
 }
 

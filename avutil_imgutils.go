@@ -121,6 +121,12 @@ func AvImageCopy(dstData []*uint8, dstLinesizes []int32, srcData []*uint8, srcLi
 		(C.enum_AVPixelFormat)(pixFmt), (C.int)(width), (C.int)(height))
 }
 
+// AvImageCopy2 is wrapper around AvImageCopy()
+func AvImageCopy2(dstData []*uint8, dstLinesizes []int32, srcData []*uint8, srcLinesizes []int32,
+	pixFmt AVPixelFormat, width, height int32) {
+	AvImageCopy(dstData, dstLinesizes, srcData, srcLinesizes, pixFmt, width, height)
+}
+
 // AvImageCopyUcFrom copies image data located in uncacheable (e.g. GPU mapped) memory.
 func AvImageCopyUcFrom(dstData []*uint8, dstLinesizes []int, srcData []*uint8, srcLinesizes []int,
 	pixFmt AVPixelFormat, width, height int32) {

@@ -102,6 +102,45 @@ func (psd *AVPacketSideData) GetTypeAddr() *AVPacketSideDataType {
 	return (*AVPacketSideDataType)(&psd._type)
 }
 
+// AvPacketSideDataNew allocates a new packet side data.
+func AvPacketSideDataNew(psd **AVPacketSideData, pnbSd *int32, _type AVPacketSideDataType,
+	size uintptr, flags int32) *AVPacketSideData {
+	return (*AVPacketSideData)(C.av_packet_side_data_new((**C.struct_AVPacketSideData)(unsafe.Pointer(psd)),
+		(*C.int)(pnbSd), (C.enum_AVPacketSideDataType)(_type),
+		(C.size_t)(size), (C.int)(flags)))
+}
+
+// AvPacketSideDataAdd wraps existing data as packet side data.
+func AvPacketSideDataAdd(sd **AVPacketSideData, nbSd *int32, _type AVPacketSideDataType,
+	data CVoidPointer, size uintptr, flags int32) *AVPacketSideData {
+	return (*AVPacketSideData)(C.av_packet_side_data_add((**C.struct_AVPacketSideData)(unsafe.Pointer(sd)),
+		(*C.int)(nbSd), (C.enum_AVPacketSideDataType)(_type),
+		VoidPointer(data), (C.size_t)(size), (C.int)(flags)))
+}
+
+// AvPacketSideDataGet gets side information from a side data array.
+func AvPacketSideDataGet(sd *AVPacketSideData, nbSd int32, _type AVPacketSideDataType) *AVPacketSideData {
+	return (*AVPacketSideData)(C.av_packet_side_data_get((*C.struct_AVPacketSideData)(sd),
+		(C.int)(nbSd), (C.enum_AVPacketSideDataType)(_type)))
+}
+
+// AvPacketSideDataRemove removes side data of the given type from a side data array.
+func AvPacketSideDataRemove(sd *AVPacketSideData, nbSd *int32, _type AVPacketSideDataType) {
+	C.av_packet_side_data_remove((*C.struct_AVPacketSideData)(sd),
+		(*C.int)(nbSd), (C.enum_AVPacketSideDataType)(_type))
+}
+
+// AvPacketSideDataFree convenience function to free all the side data stored in an array, and
+// the array itself.
+func AvPacketSideDataFree(sd **AVPacketSideData, nbSd *int32) {
+	C.av_packet_side_data_free((**C.struct_AVPacketSideData)(unsafe.Pointer(sd)), (*C.int)(nbSd))
+}
+
+// AvPacketSideDataName
+func AvPacketSideDataName(_type AVPacketSideDataType) string {
+	return C.GoString(C.av_packet_side_data_name((C.enum_AVPacketSideDataType)(_type)))
+}
+
 // AVPacket
 type AVPacket C.struct_AVPacket
 

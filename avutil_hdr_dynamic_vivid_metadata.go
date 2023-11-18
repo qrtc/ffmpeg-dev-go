@@ -10,6 +10,99 @@ package ffmpeg
 import "C"
 import "unsafe"
 
+// AVHDRVivid3SplineParams
+type AVHDRVivid3SplineParams C.struct_AVHDRVivid3SplineParams
+
+// GetThMode gets `AVHDRVivid3SplineParams.th_mode` value.
+func (d3sp *AVHDRVivid3SplineParams) GetThMode() int32 {
+	return (int32)(d3sp.th_mode)
+}
+
+// SetThMode sets `AVHDRVivid3SplineParams.th_mode` value.
+func (d3sp *AVHDRVivid3SplineParams) SetThMode(v int32) {
+	d3sp.th_mode = (C.int)(v)
+}
+
+// GetThModeAddr gets `AVHDRVivid3SplineParams.th_mode` address.
+func (d3sp *AVHDRVivid3SplineParams) GetThModeAddr() *int32 {
+	return (*int32)(&d3sp.th_mode)
+}
+
+// GetThEnableMb gets `AVHDRVivid3SplineParams.th_enable_mb` value.
+func (d3sp *AVHDRVivid3SplineParams) GetThEnableMb() AVRational {
+	return (AVRational)(d3sp.th_enable_mb)
+}
+
+// SetThEnableMb sets `AVHDRVivid3SplineParams.th_enable_mb` value.
+func (d3sp *AVHDRVivid3SplineParams) SetThEnableMb(v AVRational) {
+	d3sp.th_enable_mb = (C.struct_AVRational)(v)
+}
+
+// GetThEnableMbAddr gets `AVHDRVivid3SplineParams.th_enable_mb` address.
+func (d3sp *AVHDRVivid3SplineParams) GetThEnableMbAddr() *AVRational {
+	return (*AVRational)(&d3sp.th_enable_mb)
+}
+
+// GetThEnable gets `AVHDRVivid3SplineParams.th_enable` value.
+func (d3sp *AVHDRVivid3SplineParams) GetThEnable() AVRational {
+	return (AVRational)(d3sp.th_enable)
+}
+
+// SetThEnable sets `AVHDRVivid3SplineParams.th_enable` value.
+func (d3sp *AVHDRVivid3SplineParams) SetThEnable(v AVRational) {
+	d3sp.th_enable = (C.struct_AVRational)(v)
+}
+
+// GetThEnableAddr gets `AVHDRVivid3SplineParams.th_enable` address.
+func (d3sp *AVHDRVivid3SplineParams) GetThEnableAddr() *AVRational {
+	return (*AVRational)(&d3sp.th_enable)
+}
+
+// GetThDelta1 gets `AVHDRVivid3SplineParams.th_delta1` value.
+func (d3sp *AVHDRVivid3SplineParams) GetThDelta1() AVRational {
+	return (AVRational)(d3sp.th_delta1)
+}
+
+// SetThDelta1 sets `AVHDRVivid3SplineParams.th_delta1` value.
+func (d3sp *AVHDRVivid3SplineParams) SetThDelta1(v AVRational) {
+	d3sp.th_delta1 = (C.struct_AVRational)(v)
+}
+
+// GetThDelta1Addr gets `AVHDRVivid3SplineParams.th_delta1` address.
+func (d3sp *AVHDRVivid3SplineParams) GetThDelta1Addr() *AVRational {
+	return (*AVRational)(&d3sp.th_delta1)
+}
+
+// GetThDelta2 gets `AVHDRVivid3SplineParams.th_delta2` value.
+func (d3sp *AVHDRVivid3SplineParams) GetThDelta2() AVRational {
+	return (AVRational)(d3sp.th_delta2)
+}
+
+// SetThDelta2 sets `AVHDRVivid3SplineParams.th_delta2` value.
+func (d3sp *AVHDRVivid3SplineParams) SetThDelta2(v AVRational) {
+	d3sp.th_delta2 = (C.struct_AVRational)(v)
+}
+
+// GetThDelta2Addr gets `AVHDRVivid3SplineParams.th_delta2` address.
+func (d3sp *AVHDRVivid3SplineParams) GetThDelta2Addr() *AVRational {
+	return (*AVRational)(&d3sp.th_delta2)
+}
+
+// GetEnableStrength gets `AVHDRVivid3SplineParams.enable_strength` value.
+func (d3sp *AVHDRVivid3SplineParams) GetEnableStrength() AVRational {
+	return (AVRational)(d3sp.enable_strength)
+}
+
+// SetEnableStrength sets `AVHDRVivid3SplineParams.enable_strength` value.
+func (d3sp *AVHDRVivid3SplineParams) SetEnableStrength(v AVRational) {
+	d3sp.enable_strength = (C.struct_AVRational)(v)
+}
+
+// GetEnableStrengthAddr gets `AVHDRVivid3SplineParams.enable_strength` address.
+func (d3sp *AVHDRVivid3SplineParams) GetEnableStrengthAddr() *AVRational {
+	return (*AVRational)(&d3sp.enable_strength)
+}
+
 // AVHDRVividColorToneMappingParams
 type AVHDRVividColorToneMappingParams C.struct_AVHDRVividColorToneMappingParams
 
@@ -223,94 +316,147 @@ func (ctmp *AVHDRVividColorToneMappingParams) GetThreeSplineNumAddr() *int32 {
 	return (*int32)(&ctmp.three_Spline_num)
 }
 
+// Deprecated: Use three_spline instead.
+//
 // GetThreeSplineThMode gets `AVHDRVividColorToneMappingParams.three_Spline_TH_mode` value.
 func (ctmp *AVHDRVividColorToneMappingParams) GetThreeSplineThMode() int32 {
 	return (int32)(ctmp.three_Spline_TH_mode)
 }
 
+// Deprecated: Use three_spline instead.
+//
 // SetThreeSplineThMode sets `AVHDRVividColorToneMappingParams.three_Spline_TH_mode` value.
 func (ctmp *AVHDRVividColorToneMappingParams) SetThreeSplineThMode(v int32) {
 	ctmp.three_Spline_TH_mode = (C.int)(v)
 }
 
+// Deprecated: Use three_spline instead.
+//
 // GetThreeSplineThModeAddr gets `AVHDRVividColorToneMappingParams.three_Spline_TH_mode` address.
 func (ctmp *AVHDRVividColorToneMappingParams) GetThreeSplineThModeAddr() *int32 {
 	return (*int32)(&ctmp.three_Spline_TH_mode)
 }
 
+// Deprecated: Use three_spline instead.
+//
 // GetThreeSplineThEnableMb gets `AVHDRVividColorToneMappingParams.three_Spline_TH_enable_MB` value.
 func (ctmp *AVHDRVividColorToneMappingParams) GetThreeSplineThEnableMb() AVRational {
 	return (AVRational)(ctmp.three_Spline_TH_enable_MB)
 }
 
+// Deprecated: Use three_spline instead.
+//
 // SetThreeSplineThEnableMb sets `AVHDRVividColorToneMappingParams.three_Spline_TH_enable_MB` value.
 func (ctmp *AVHDRVividColorToneMappingParams) SetThreeSplineThEnableMb(v AVRational) {
 	ctmp.three_Spline_TH_enable_MB = (C.struct_AVRational)(v)
 }
 
+// Deprecated: Use three_spline instead.
+//
 // GetThreeSplineThEnableMbAddr gets `AVHDRVividColorToneMappingParams.three_Spline_TH_enable_MB` address.
 func (ctmp *AVHDRVividColorToneMappingParams) GetThreeSplineThEnableMbAddr() *AVRational {
 	return (*AVRational)(&ctmp.three_Spline_TH_enable_MB)
 }
 
+// Deprecated: Use three_spline instead.
+//
 // GetThreeSplineThEnable gets `AVHDRVividColorToneMappingParams.three_Spline_TH_enable` value.
 func (ctmp *AVHDRVividColorToneMappingParams) GetThreeSplineThEnable() AVRational {
 	return (AVRational)(ctmp.three_Spline_TH_enable)
 }
 
+// Deprecated: Use three_spline instead.
+//
 // SetThreeSplineThEnable sets `AVHDRVividColorToneMappingParams.three_Spline_TH_enable` value.
 func (ctmp *AVHDRVividColorToneMappingParams) SetThreeSplineThEnable(v AVRational) {
 	ctmp.three_Spline_TH_enable = (C.struct_AVRational)(v)
 }
 
+// Deprecated: Use three_spline instead.
+//
 // GetThreeSplineThEnableAddr gets `AVHDRVividColorToneMappingParams.three_Spline_TH_enable` address.
 func (ctmp *AVHDRVividColorToneMappingParams) GetThreeSplineThEnableAddr() *AVRational {
 	return (*AVRational)(&ctmp.three_Spline_TH_enable)
 }
 
+// Deprecated: Use three_spline instead.
+//
 // GetThreeSplineThDelta1 gets `AVHDRVividColorToneMappingParams.three_Spline_TH_Delta1` value.
 func (ctmp *AVHDRVividColorToneMappingParams) GetThreeSplineThDelta1() AVRational {
 	return (AVRational)(ctmp.three_Spline_TH_Delta1)
 }
 
+// Deprecated: Use three_spline instead.
+//
 // SetThreeSplineThDelta1 sets `AVHDRVividColorToneMappingParams.three_Spline_TH_Delta1` value.
 func (ctmp *AVHDRVividColorToneMappingParams) SetThreeSplineThDelta1(v AVRational) {
 	ctmp.three_Spline_TH_Delta1 = (C.struct_AVRational)(v)
 }
 
+// Deprecated: Use three_spline instead.
+//
 // GetThreeSplineThDelta1Addr gets `AVHDRVividColorToneMappingParams.three_Spline_TH_Delta1` address.
 func (ctmp *AVHDRVividColorToneMappingParams) GetThreeSplineThDelta1Addr() *AVRational {
 	return (*AVRational)(&ctmp.three_Spline_TH_Delta1)
 }
 
+// Deprecated: Use three_spline instead.
+//
 // GetThreeSplineThDelta2 gets `AVHDRVividColorToneMappingParams.three_Spline_TH_Delta2` value.
 func (ctmp *AVHDRVividColorToneMappingParams) GetThreeSplineThDelta2() AVRational {
 	return (AVRational)(ctmp.three_Spline_TH_Delta2)
 }
 
+// Deprecated: Use three_spline instead.
+//
 // SetThreeSplineThDelta2 sets `AVHDRVividColorToneMappingParams.three_Spline_TH_Delta2` value.
 func (ctmp *AVHDRVividColorToneMappingParams) SetThreeSplineThDelta2(v AVRational) {
 	ctmp.three_Spline_TH_Delta2 = (C.struct_AVRational)(v)
 }
 
+// Deprecated: Use three_spline instead.
+//
 // GetThreeSplineThDelta2Addr gets `AVHDRVividColorToneMappingParams.three_Spline_TH_Delta2` address.
 func (ctmp *AVHDRVividColorToneMappingParams) GetThreeSplineThDelta2Addr() *AVRational {
 	return (*AVRational)(&ctmp.three_Spline_TH_Delta2)
 }
 
+// Deprecated: Use three_spline instead.
+//
 // GetThreeSplineEnableStrength gets `AVHDRVividColorToneMappingParams.three_Spline_enable_Strength` value.
 func (ctmp *AVHDRVividColorToneMappingParams) GetThreeSplineEnableStrength() AVRational {
 	return (AVRational)(ctmp.three_Spline_enable_Strength)
 }
 
+// Deprecated: Use three_spline instead.
+//
 // SetThreeSplineEnableStrength sets `AVHDRVividColorToneMappingParams.three_Spline_enable_Strength` value.
 func (ctmp *AVHDRVividColorToneMappingParams) SetThreeSplineEnableStrength(v AVRational) {
 	ctmp.three_Spline_enable_Strength = (C.struct_AVRational)(v)
 }
 
+// Deprecated: Use three_spline instead.
+//
 // GetThreeSplineEnableStrengthAddr gets `AVHDRVividColorToneMappingParams.three_Spline_enable_Strength` address.
 func (ctmp *AVHDRVividColorToneMappingParams) GetThreeSplineEnableStrengthAddr() *AVRational {
 	return (*AVRational)(&ctmp.three_Spline_enable_Strength)
+}
+
+// GetThreeSpline gets `AVHDRVividColorToneMappingParams.three_spline` value.
+func (ctmp *AVHDRVividColorToneMappingParams) GetThreeSpline() []AVHDRVivid3SplineParams {
+	return unsafe.Slice((*AVHDRVivid3SplineParams)(&ctmp.three_spline[0]), 2)
+}
+
+// SetThreeSpline sets `AVHDRVividColorToneMappingParams.three_spline` value.
+func (ctmp *AVHDRVividColorToneMappingParams) SetThreeSpline(v []AVHDRVivid3SplineParams) {
+	for i := 0; i < FFMIN(len(v), 2); i++ {
+		ctmp.three_spline[i] = (C.struct_AVHDRVivid3SplineParams)(v[i])
+	}
+}
+
+// GetThreeSplineAddr gets `AVHDRVividColorToneMappingParams.three_spline` address.
+func (ctmp *AVHDRVividColorToneMappingParams) GetThreeSplineAddr() **AVHDRVivid3SplineParams {
+	return (**AVHDRVivid3SplineParams)(unsafe.Pointer(&ctmp.three_spline))
 }
 
 // AVHDRVividColorTransformParams

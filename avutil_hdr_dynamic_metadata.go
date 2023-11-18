@@ -631,3 +631,19 @@ func AvDynamicHdrPlusAlloc(size *uintptr) *AVDynamicHDRPlus {
 func AvDynamicHdrPlusCreateSideData(frame *AVFrame) *AVDynamicHDRPlus {
 	return (*AVDynamicHDRPlus)(C.av_dynamic_hdr_plus_create_side_data((*C.struct_AVFrame)(frame)))
 }
+
+// AvDynamicHdrPlusFromT35 parses the user data registered ITU-T T.35 to AVbuffer (AVDynamicHDRPlus).
+func AvDynamicHdrPlusFromT35(s *AVDynamicHDRPlus, data *uint8, size uintptr) int32 {
+	return (int32)(C.av_dynamic_hdr_plus_from_t35((*C.struct_AVDynamicHDRPlus)(s),
+		(*C.uint8_t)(data), (C.size_t)(size)))
+}
+
+const (
+	AV_HDR_PLUS_MAX_PAYLOAD_SIZE = C.AV_HDR_PLUS_MAX_PAYLOAD_SIZE
+)
+
+// AvDynamicHdrPlusToT35 serializes dynamic HDR10+ metadata to a user data registered ITU-T T.35 buffer.
+func AvDynamicHdrPlusToT35(s *AVDynamicHDRPlus, data **uint8, size *uintptr) int32 {
+	return (int32)(C.av_dynamic_hdr_plus_to_t35((*C.struct_AVDynamicHDRPlus)(s),
+		(**C.uint8_t)(unsafe.Pointer(data)), (*C.size_t)(unsafe.Pointer(size))))
+}

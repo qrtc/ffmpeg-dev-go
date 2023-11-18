@@ -162,9 +162,11 @@ type AvTxFn = C.av_tx_fn
 type AVTXFlags = C.enum_AVTXFlags
 
 const (
-	AV_TX_INPLACE    = AVTXFlags(C.AV_TX_INPLACE)
-	AV_TX_UNALIGNED  = AVTXFlags(C.AV_TX_UNALIGNED)
-	AV_TX_FULL_IMDCT = AVTXFlags(C.AV_TX_FULL_IMDCT)
+	AV_TX_INPLACE           = AVTXFlags(C.AV_TX_INPLACE)
+	AV_TX_UNALIGNED         = AVTXFlags(C.AV_TX_UNALIGNED)
+	AV_TX_FULL_IMDCT        = AVTXFlags(C.AV_TX_FULL_IMDCT)
+	AV_TX_REAL_TO_REAL      = AVTXFlags(C.AV_TX_REAL_TO_REAL)
+	AV_TX_REAL_TO_IMAGINARY = AVTXFlags(C.AV_TX_REAL_TO_IMAGINARY)
 )
 
 // AvTxInit initializes a transform context with the given configuration

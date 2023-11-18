@@ -601,31 +601,43 @@ func (stm *AVStream) GetAttachedPicAddr() *AVPacket {
 	return (*AVPacket)(&stm.attached_pic)
 }
 
+// Deprecated: Use AVStream's AVCodecParameters.coded_side_data "codecpar side data" instead.
+//
 // GetSideData gets `AVStream.side_data` value.
-func (stm *AVStream) GetSideData() *AVPacketSideData {
-	return (*AVPacketSideData)(stm.side_data)
+func (stm *AVStream) GetSideData() []AVPacketSideData {
+	return unsafe.Slice((*AVPacketSideData)(stm.side_data), stm.nb_side_data)
 }
 
+// Deprecated: Use AVStream's AVCodecParameters.coded_side_data "codecpar side data" instead.
+//
 // SetSideData sets `AVStream.side_data` value.
 func (stm *AVStream) SetSideData(v *AVPacketSideData) {
 	stm.side_data = (*C.struct_AVPacketSideData)(v)
 }
 
+// Deprecated: Use AVStream's AVCodecParameters.coded_side_data "codecpar side data" instead.
+//
 // GetSideDataAddr gets `AVStream.side_data` address.
 func (stm *AVStream) GetSideDataAddr() **AVPacketSideData {
 	return (**AVPacketSideData)(unsafe.Pointer(&stm.side_data))
 }
 
+// Deprecated: Use AVStream's AVCodecParameters.nb_coded_side_data "codecpar side data" instead.
+//
 // GetNbSideData gets `AVStream.nb_side_data` value.
 func (stm *AVStream) GetNbSideData() int32 {
 	return (int32)(stm.nb_side_data)
 }
 
+// Deprecated: Use AVStream's AVCodecParameters.nb_coded_side_data "codecpar side data" instead.
+//
 // SetNbSideData sets `AVStream.nb_side_data` value.
 func (stm *AVStream) SetNbSideData(v int32) {
 	stm.nb_side_data = (C.int)(v)
 }
 
+// Deprecated: Use AVStream's AVCodecParameters.nb_coded_side_data "codecpar side data" instead.
+//
 // GetNbSideDataAddr gets `AVStream.nb_side_data` address.
 func (stm *AVStream) GetNbSideDataAddr() *int32 {
 	return (*int32)(&stm.nb_side_data)
@@ -763,9 +775,6 @@ func (pgm *AVProgram) GetDiscardAddr() *AVDiscard {
 
 // GetStreamIndex gets `AVProgram.stream_index` value.
 func (pgm *AVProgram) GetStreamIndex() (v []uint32) {
-	if pgm.stream_index == nil {
-		return v
-	}
 	return unsafe.Slice((*uint32)(unsafe.Pointer(pgm.stream_index)), pgm.nb_stream_indexes)
 }
 
@@ -1083,9 +1092,6 @@ func (s *AVFormatContext) GetNbStreamsAddr() *uint32 {
 
 // GetStreams gets `AVFormatContext.streams` value.
 func (s *AVFormatContext) GetStreams() (v []*AVStream) {
-	if s.streams == nil {
-		return v
-	}
 	return unsafe.Slice((**AVStream)(unsafe.Pointer(s.streams)), s.nb_streams)
 }
 
@@ -1280,9 +1286,6 @@ func (s *AVFormatContext) GetNbProgramsAddr() *uint32 {
 
 // GetPrograms gets `AVFormatContext.programs` value.
 func (s *AVFormatContext) GetPrograms() (v []*AVProgram) {
-	if s.programs == nil {
-		return v
-	}
 	return unsafe.Slice((**AVProgram)(unsafe.Pointer(s.programs)), s.nb_programs)
 }
 
@@ -1388,9 +1391,6 @@ func (s *AVFormatContext) GetNbChaptersAddr() *uint32 {
 
 // GetChapters gets `AVFormatContext.chapters` value.
 func (s *AVFormatContext) GetChapters() (v []*AVChapter) {
-	if s.chapters == nil {
-		return v
-	}
 	return unsafe.Slice((**AVChapter)(unsafe.Pointer(s.chapters)), s.nb_chapters)
 }
 
@@ -2056,8 +2056,9 @@ const (
 	AVFMT_FLAG_SORT_DTS = C.AVFMT_FLAG_SORT_DTS
 
 	AVFMT_FLAG_FAST_SEEK = C.AVFMT_FLAG_FAST_SEEK
-	AVFMT_FLAG_SHORTEST  = C.AVFMT_FLAG_SHORTEST
-	AVFMT_FLAG_AUTO_BSF  = C.AVFMT_FLAG_AUTO_BSF
+
+	AVFMT_FLAG_SHORTEST = C.AVFMT_FLAG_SHORTEST
+	AVFMT_FLAG_AUTO_BSF = C.AVFMT_FLAG_AUTO_BSF
 )
 
 const (
@@ -2138,18 +2139,24 @@ func AvFormatNewStream(s *AVFormatContext, c *AVCodec) *AVStream {
 	return (*AVStream)(C.avformat_new_stream((*C.struct_AVFormatContext)(s), (*C.struct_AVCodec)(c)))
 }
 
+// Deprecated: No use.
+//
 // AvStreamAddSideData wraps an existing array as stream side data.
 func AvStreamAddSideData(st *AVStream, _type AVPacketSideDataType, data *uint8, size uintptr) int32 {
 	return (int32)(C.av_stream_add_side_data((*C.struct_AVStream)(st),
 		(C.enum_AVPacketSideDataType)(_type), (*C.uint8_t)(data), (C.size_t)(size)))
 }
 
+// Deprecated: No use.
+//
 // AvStreamNewSideData allocates new information from stream.
 func AvStreamNewSideData(st *AVStream, _type AVPacketSideDataType, size uintptr) *uint8 {
 	return (*uint8)(C.av_stream_new_side_data((*C.struct_AVStream)(st),
 		(C.enum_AVPacketSideDataType)(_type), (C.size_t)(size)))
 }
 
+// Deprecated: No use.
+//
 // AvStreamGetSideData gets side information from stream.
 func AvStreamGetSideData(st *AVStream, _type AVPacketSideDataType, size *uintptr) *uint8 {
 	return (*uint8)(C.av_stream_get_side_data((*C.struct_AVStream)(st),

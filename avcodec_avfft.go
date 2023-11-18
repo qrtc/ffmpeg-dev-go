@@ -33,16 +33,22 @@ func AvFftInit(nbits, inverse int32) *FFTContext {
 	return (*FFTContext)(C.av_fft_init((C.int)(nbits), (C.int)(inverse)))
 }
 
+// Deprecated: No use.
+//
 // AvFftPermute does the permutation needed BEFORE calling FfFftCalc().
 func AvFftPermute(s *FFTContext, z *FFTComplex) {
 	C.av_fft_permute((*C.struct_FFTContext)(s), (*C.struct_FFTComplex)(z))
 }
 
+// Deprecated: No use.
+//
 // FfFftCalc does a complex FFT with the parameters defined in AvFftInit().
 func FfFftCalc(s *FFTContext, z *FFTComplex) {
 	C.av_fft_calc((*C.struct_FFTContext)(s), (*C.struct_FFTComplex)(z))
 }
 
+// Deprecated: No use.
+//
 // AvFftEnd
 func AvFftEnd(s *FFTContext) {
 	C.av_fft_end((*C.struct_FFTContext)(s))
@@ -61,17 +67,23 @@ const (
 // RDFTContext
 type RDFTContext C.struct_RDFTContext
 
+// Deprecated: No use.
+//
 // AvRdftInit
 func AvRdftInit(nbits int32, trans RDFTransformType) *RDFTContext {
 	return (*RDFTContext)(C.av_rdft_init((C.int)(nbits),
 		(C.enum_RDFTransformType)(trans)))
 }
 
+// Deprecated: No use.
+//
 // AvRdftCalc
 func AvRdftCalc(r *RDFTContext, data *FFTSample) {
 	C.av_rdft_calc((*C.struct_RDFTContext)(r), (*C.FFTSample)(data))
 }
 
+// Deprecated: No use.
+//
 // AvRdftEnd
 func AvRdftEnd(r *RDFTContext) {
 	C.av_rdft_end((*C.struct_RDFTContext)(r))
@@ -90,17 +102,23 @@ const (
 	DST_I   = DCTTransformType(C.DST_I)
 )
 
+// Deprecated: No use.
+//
 // AvDctInit
 func AvDctInit(nbits int32, _type RDFTransformType) *DCTContext {
 	return (*DCTContext)(C.av_dct_init((C.int)(nbits),
 		(C.enum_RDFTransformType)(_type)))
 }
 
+// Deprecated: No use.
+//
 // AvDctCalc
 func AvDctCalc(d *DCTContext, data *FFTSample) {
 	C.av_dct_calc((*C.struct_DCTContext)(d), (*C.FFTSample)(data))
 }
 
+// Deprecated: No use.
+//
 // AvDctEnd
 func AvDctEnd(d *DCTContext) {
 	C.av_dct_end((*C.struct_DCTContext)(d))

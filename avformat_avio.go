@@ -8,9 +8,17 @@ package ffmpeg
 #include <libavformat/avio.h>
 
 typedef int (*avio_interrupt_callback_func)(void* opaque);
+
 typedef int (*avio_context_read_packet_func)(void *opaque, uint8_t *buf, int buf_size);
 typedef int (*avio_context_write_packet_func)(void *opaque, uint8_t *buf, int buf_size);
 typedef int64_t (*avio_context_seek_func)(void *opaque, int64_t offset, int whence);
+typedef unsigned long (*avio_context_update_checksum)(unsigned long checksum,
+                        const uint8_t *buf, unsigned int size);
+typedef int (*avio_context_read_pause)(void *opaque, int pause);
+typedef int64_t (*avio_context_read_seek)(void *opaque, int stream_index,
+                        int64_t timestamp, int flags);
+typedef int (*avio_context_write_data_type)(void *opaque, uint8_t *buf, int buf_size,
+                        enum AVIODataMarkerType type, int64_t time);
 
 int avio_printf_wrap(AVIOContext *s, const char *fmt) {
 	return avio_printf(s, fmt, NULL);
@@ -265,6 +273,30 @@ const (
 // AVIOContext
 type AVIOContext C.struct_AVIOContext
 
+// typedef int (*avio_context_read_packet_func)(void *opaque, uint8_t *buf, int buf_size);
+type AVIOContextReadPacketFunc = C.avio_context_read_packet_func
+
+// typedef int (*avio_context_write_packet_func)(void *opaque, uint8_t *buf, int buf_size);
+type AVIOContextWritePacketFunc = C.avio_context_write_packet_func
+
+// typedef int64_t (*avio_context_seek_func)(void *opaque, int64_t offset, int whence);
+type AVIOContextSeekFunc = C.avio_context_seek_func
+
+// typedef unsigned long (*avio_context_update_checksum)(unsigned long checksum,
+// const uint8_t *buf, unsigned int size);
+type AVIOContextUpdateChecksum = C.avio_context_update_checksum
+
+// typedef int (*avio_context_read_pause)(void *opaque, int pause);
+type AVIOContextReadPause = C.avio_context_read_pause
+
+// typedef int64_t (*avio_context_read_seek)(void *opaque, int stream_index,
+// int64_t timestamp, int flags);
+type AVIOContextReadSeek = C.avio_context_read_seek
+
+// typedef int (*avio_context_write_data_type)(void *opaque, uint8_t *buf, int buf_size,
+// enum AVIODataMarkerType type, int64_t time);
+type AVIOContextWriteDataType = C.avio_context_write_data_type
+
 // GetAvClass gets `AVIOContext.av_class` value.
 func (ctx *AVIOContext) GetAvClass() *AVClass {
 	return (*AVClass)(ctx.av_class)
@@ -355,6 +387,51 @@ func (ctx *AVIOContext) GetOpaqueAddr() *unsafe.Pointer {
 	return (*unsafe.Pointer)(&ctx.opaque)
 }
 
+// GetReadPacket gets `AVIOContext.read_packet` value.
+func (ctx *AVIOContext) GetReadPacket() AVIOContextReadPacketFunc {
+	return (AVIOContextReadPacketFunc)(ctx.read_packet)
+}
+
+// SetReadPacket sets `AVIOContext.read_packet` value.
+func (ctx *AVIOContext) SetReadPacket(v AVIOContextReadPacketFunc) {
+	ctx.read_packet = (C.avio_context_read_packet_func)(v)
+}
+
+// GetReadPacketAddr gets `AVIOContext.read_packet` address.
+func (ctx *AVIOContext) GetReadPacketAddr() *AVIOContextReadPacketFunc {
+	return (*AVIOContextReadPacketFunc)(&ctx.read_packet)
+}
+
+// GetWritePacket gets `AVIOContext.write_packet` value.
+func (ctx *AVIOContext) GetWritePacket() AVIOContextWritePacketFunc {
+	return (AVIOContextWritePacketFunc)(ctx.write_packet)
+}
+
+// SetWritePacket sets `AVIOContext.write_packet` value.
+func (ctx *AVIOContext) SetWritePacket(v AVIOContextWritePacketFunc) {
+	ctx.write_packet = (C.avio_context_write_packet_func)(v)
+}
+
+// GetWritePacketAddr gets `AVIOContext.write_packet` address.
+func (ctx *AVIOContext) GetWritePacketAddr() *AVIOContextWritePacketFunc {
+	return (*AVIOContextWritePacketFunc)(&ctx.write_packet)
+}
+
+// GetSeek gets `AVIOContext.seek` value.
+func (ctx *AVIOContext) GetSeek() AVIOContextSeekFunc {
+	return (AVIOContextSeekFunc)(ctx.seek)
+}
+
+// SetSeek sets `AVIOContext.seek` value.
+func (ctx *AVIOContext) SetSeek(v AVIOContextSeekFunc) {
+	ctx.seek = (C.avio_context_seek_func)(v)
+}
+
+// GetSeekAddr gets `AVIOContext.seek` address.
+func (ctx *AVIOContext) GetSeekAddr() *AVIOContextSeekFunc {
+	return (*AVIOContextSeekFunc)(&ctx.seek)
+}
+
 // GetPos gets `AVIOContext.pos` value.
 func (ctx *AVIOContext) GetPos() int64 {
 	return (int64)(ctx.pos)
@@ -383,6 +460,21 @@ func (ctx *AVIOContext) SetEofReached(v int32) {
 // GetEofReachedAddr gets `AVIOContext.eof_reached` address.
 func (ctx *AVIOContext) GetEofReachedAddr() *int32 {
 	return (*int32)(&ctx.eof_reached)
+}
+
+// GetError gets `AVIOContext.error` value.
+func (ctx *AVIOContext) GetError() int32 {
+	return (int32)(ctx.error)
+}
+
+// SetError sets `AVIOContext.error` value.
+func (ctx *AVIOContext) SetError(v int32) {
+	ctx.error = (C.int)(v)
+}
+
+// GetErrorAddr gets `AVIOContext.error` address.
+func (ctx *AVIOContext) GetErrorAddr() *int32 {
+	return (*int32)(&ctx.error)
 }
 
 // GetWriteFlag gets `AVIOContext.write_flag` value.
@@ -445,19 +537,49 @@ func (ctx *AVIOContext) GetChecksumPtrAddr() **uint8 {
 	return (**uint8)(unsafe.Pointer(&ctx.checksum_ptr))
 }
 
-// GetError gets `AVIOContext.error` value.
-func (ctx *AVIOContext) GetError() int32 {
-	return (int32)(ctx.error)
+// GetUpdateChecksum gets `AVIOContext.update_checksum` value.
+func (ctx *AVIOContext) GetUpdateChecksum() AVIOContextUpdateChecksum {
+	return (AVIOContextUpdateChecksum)(ctx.update_checksum)
 }
 
-// SetError sets `AVIOContext.error` value.
-func (ctx *AVIOContext) SetError(v int32) {
-	ctx.error = (C.int)(v)
+// SetUpdateChecksum sets `AVIOContext.update_checksum` value.
+func (ctx *AVIOContext) SetUpdateChecksum(v AVIOContextUpdateChecksum) {
+	ctx.update_checksum = (C.avio_context_update_checksum)(v)
 }
 
-// GetErrorAddr gets `AVIOContext.error` address.
-func (ctx *AVIOContext) GetErrorAddr() *int32 {
-	return (*int32)(&ctx.error)
+// GetUpdateChecksumAddr gets `AVIOContext.update_checksum` address.
+func (ctx *AVIOContext) GetUpdateChecksumAddr() *AVIOContextUpdateChecksum {
+	return (*AVIOContextUpdateChecksum)(&ctx.update_checksum)
+}
+
+// GetReadPause gets `AVIOContext.read_pause` value.
+func (ctx *AVIOContext) GetReadPause() AVIOContextReadPause {
+	return (AVIOContextReadPause)(ctx.read_pause)
+}
+
+// SetReadPause sets `AVIOContext.read_pause` value.
+func (ctx *AVIOContext) SetReadPause(v AVIOContextReadPause) {
+	ctx.read_pause = (C.avio_context_read_pause)(v)
+}
+
+// GetReadPauseAddr gets `AVIOContext.read_pause` address.
+func (ctx *AVIOContext) GetReadPauseAddr() *AVIOContextReadPause {
+	return (*AVIOContextReadPause)(&ctx.read_pause)
+}
+
+// GetReadSeek gets `AVIOContext.read_seek` value.
+func (ctx *AVIOContext) GetReadSeek() AVIOContextReadSeek {
+	return (AVIOContextReadSeek)(ctx.read_seek)
+}
+
+// SetReadSeek sets `AVIOContext.read_seek` value.
+func (ctx *AVIOContext) SetReadSeek(v AVIOContextReadSeek) {
+	ctx.read_seek = (C.avio_context_read_seek)(v)
+}
+
+// GetReadSeekAddr gets `AVIOContext.read_seek` address.
+func (ctx *AVIOContext) GetReadSeekAddr() *AVIOContextReadSeek {
+	return (*AVIOContextReadSeek)(&ctx.read_seek)
 }
 
 // GetSeekable gets `AVIOContext.seekable` value.
@@ -528,6 +650,21 @@ func (ctx *AVIOContext) GetProtocolWhitelist() string {
 // GetProtocolBlacklist gets `AVIOContext.protocol_blacklist` value.
 func (ctx *AVIOContext) GetProtocolBlacklist() string {
 	return C.GoString(ctx.protocol_blacklist)
+}
+
+// GetWriteDataType gets `AVIOContext.write_data_type` value.
+func (ctx *AVIOContext) GetWriteDataType() AVIOContextWriteDataType {
+	return (AVIOContextWriteDataType)(ctx.write_data_type)
+}
+
+// SetWriteDataType sets `AVIOContext.write_data_type` value.
+func (ctx *AVIOContext) SetWriteDataType(v AVIOContextWriteDataType) {
+	ctx.write_data_type = (C.avio_context_write_data_type)(v)
+}
+
+// GetWriteDataTypeAddr gets `AVIOContext.write_data_type` address.
+func (ctx *AVIOContext) GetWriteDataTypeAddr() *AVIOContextWriteDataType {
+	return (*AVIOContextWriteDataType)(&ctx.write_data_type)
 }
 
 // GetIgnoreBoundaryPoint gets `AVIOContext.ignore_boundary_point` value.
@@ -615,15 +752,6 @@ func AvIOCloseDir(s **AVIODirContext) int32 {
 func AvIOFreeDirectoryEntry(entry **AVIODirEntry) {
 	C.avio_free_directory_entry((**C.struct_AVIODirEntry)(unsafe.Pointer(entry)))
 }
-
-// typedef int (*avio_context_read_packet_func)(void *opaque, uint8_t *buf, int buf_size);
-type AVIOContextReadPacketFunc = C.avio_context_read_packet_func
-
-// typedef int (*avio_context_write_packet_func)(void *opaque, uint8_t *buf, int buf_size);
-type AVIOContextWritePacketFunc = C.avio_context_write_packet_func
-
-// typedef int64_t (*avio_context_seek_func)(void *opaque, int64_t offset, int whence);
-type AVIOContextSeekFunc = C.avio_context_seek_func
 
 // AvIOAllocContext sllocates and initialize an AVIOContext for buffered I/O. It must be later
 // freed with AVIOContextFree().
