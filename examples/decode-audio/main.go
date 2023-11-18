@@ -103,12 +103,12 @@ func main() {
 		os.Exit(1)
 	}
 
-	f, err := os.OpenFile(filename, os.O_RDONLY, 0666)
+	f, err := os.OpenFile(filename, os.O_RDONLY, 0644)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Could not open %s\n", filename)
 		os.Exit(1)
 	}
-	outfile, err := os.OpenFile(outfilename, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0755)
+	outfile, err := os.OpenFile(outfilename, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Could not open %s\n", outfilename)
 		os.Exit(1)

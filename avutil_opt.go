@@ -343,9 +343,6 @@ type AVOptionRanges C.struct_AVOptionRanges
 
 // GetRange gets `AVOptionRanges.range` value.
 func (optrs *AVOptionRanges) GetRange() []*AVOptionRange {
-	if optrs._range == nil {
-		return nil
-	}
 	return unsafe.Slice((**AVOptionRange)(unsafe.Pointer(optrs._range)),
 		optrs.nb_components*optrs.nb_ranges)
 }

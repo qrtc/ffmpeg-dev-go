@@ -15,7 +15,7 @@ const (
 )
 
 func pgmSave(buf *uint8, wrap, xsize, ysize int32, filename string) {
-	f, _ := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0755)
+	f, _ := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
 	fmt.Fprintf(f, "P5\n%d %d\n%d\n", xsize, ysize, 255)
 	bufSlice := unsafe.Slice(buf, xsize*ysize)
 	for i := int32(0); i < ysize; i++ {
@@ -90,7 +90,7 @@ func main() {
 
 	inbuf := make([]byte, INBUF_SIZE+ffmpeg.AV_INPUT_BUFFER_PADDING_SIZE)
 
-	f, err := os.OpenFile(filename, os.O_RDONLY, 0666)
+	f, err := os.OpenFile(filename, os.O_RDONLY, 0644)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Could not open %s\n", filename)
 		os.Exit(1)
