@@ -29,6 +29,47 @@ int get_av_index_entry_size(AVIndexEntry *ie) {
 void set_av_index_entry_size(AVIndexEntry *ie, int v) {
 	ie->size = v;
 }
+
+struct AVIAMFAudioElement * get_av_stream_group_params_iamf_audio_element(AVStreamGroup *sg) {
+	return sg->params.iamf_audio_element;
+}
+
+void set_av_stream_group_params_iamf_audio_element(AVStreamGroup *sg, struct AVIAMFAudioElement *v) {
+	sg->params.iamf_audio_element = v;
+}
+
+struct AVIAMFAudioElement ** get_av_stream_group_params_iamf_audio_element_addr(AVStreamGroup *sg) {
+	return &sg->params.iamf_audio_element;
+}
+
+struct AVIAMFMixPresentation * get_av_stream_group_params_iamf_mix_presentation(AVStreamGroup *sg) {
+	return sg->params.iamf_mix_presentation;
+}
+
+void set_av_stream_group_params_iamf_mix_presentation(AVStreamGroup *sg, struct AVIAMFMixPresentation *v) {
+	sg->params.iamf_mix_presentation = v;
+}
+
+struct AVIAMFMixPresentation ** get_av_stream_group_params_iamf_mix_presentation_addr(AVStreamGroup *sg) {
+	return &sg->params.iamf_mix_presentation;
+}
+
+struct AVStreamGroupTileGrid * get_av_stream_group_params_tile_grid(AVStreamGroup *sg) {
+	return sg->params.tile_grid;
+}
+
+void set_av_stream_group_params_tile_grid(AVStreamGroup *sg, struct AVStreamGroupTileGrid *v) {
+	sg->params.tile_grid = v;
+}
+
+struct AVStreamGroupTileGrid ** get_av_stream_group_params_tile_grid_addr(AVStreamGroup *sg) {
+	return &sg->params.tile_grid;
+}
+
+void av_stream_group_tile_grid_set_offsets(AVStreamGroupTileGrid *sgtg, void *v) {
+	sgtg->offsets = v;
+}
+
 */
 import "C"
 import (
@@ -708,17 +749,368 @@ func (stm *AVStream) GetPtsWrapBitsAddr() *int32 {
 	return (*int32)(&stm.pts_wrap_bits)
 }
 
+// AVStreamGroupTileGrid
+type AVStreamGroupTileGrid C.struct_AVStreamGroupTileGrid
+
+// GetAvClass gets `AVStreamGroupTileGrid.av_class` value.
+func (sgtg *AVStreamGroupTileGrid) GetAvClass() *AVClass {
+	return (*AVClass)(sgtg.av_class)
+}
+
+// SetAvClass sets `AVStreamGroupTileGrid.av_class` value.
+func (sgtg *AVStreamGroupTileGrid) SetAvClass(v *AVClass) {
+	sgtg.av_class = (*C.struct_AVClass)(v)
+}
+
+// GetAvClassAddr gets `AVStreamGroupTileGrid.av_class` address.
+func (sgtg *AVStreamGroupTileGrid) GetAvClassAddr() **AVClass {
+	return (**AVClass)(unsafe.Pointer(&sgtg.av_class))
+}
+
+// GetNbTiles gets `AVStreamGroupTileGrid.nb_tiles` value.
+func (sgtg *AVStreamGroupTileGrid) GetNbTiles() uint32 {
+	return (uint32)(sgtg.nb_tiles)
+}
+
+// SetNbTiles sets `AVStreamGroupTileGrid.nb_tiles` value.
+func (sgtg *AVStreamGroupTileGrid) SetNbTiles(v uint32) {
+	sgtg.nb_tiles = (C.uint)(v)
+}
+
+// GetNbTilesAddr gets `AVStreamGroupTileGrid.nb_tiles` address.
+func (sgtg *AVStreamGroupTileGrid) GetNbTilesAddr() *uint32 {
+	return (*uint32)(&sgtg.nb_tiles)
+}
+
+// GetCodedWidth gets `AVStreamGroupTileGrid.coded_width` value.
+func (sgtg *AVStreamGroupTileGrid) GetCodedWidth() int32 {
+	return (int32)(sgtg.coded_width)
+}
+
+// SetCodedWidth sets `AVStreamGroupTileGrid.coded_width` value.
+func (sgtg *AVStreamGroupTileGrid) SetCodedWidth(v int32) {
+	sgtg.coded_width = (C.int)(v)
+}
+
+// GetCodedWidthAddr gets `AVStreamGroupTileGrid.coded_width` address.
+func (sgtg *AVStreamGroupTileGrid) GetCodedWidthAddr() *int32 {
+	return (*int32)(&sgtg.coded_width)
+}
+
+// GetCodedHeight gets `AVStreamGroupTileGrid.coded_height` value.
+func (sgtg *AVStreamGroupTileGrid) GetCodedHeight() int32 {
+	return (int32)(sgtg.coded_height)
+}
+
+// SetCodedHeight sets `AVStreamGroupTileGrid.coded_height` value.
+func (sgtg *AVStreamGroupTileGrid) SetCodedHeight(v int32) {
+	sgtg.coded_height = (C.int)(v)
+}
+
+// GetCodedHeightAddr gets `AVStreamGroupTileGrid.coded_height` address.
+func (sgtg *AVStreamGroupTileGrid) GetCodedHeightAddr() *int32 {
+	return (*int32)(&sgtg.coded_height)
+}
+
+// GetOffsets gets `AVStreamGroupTileGrid.offsets` value.
+func (sgtg *AVStreamGroupTileGrid) GetOffset() (v []struct {
+	Idx        uint32
+	Horizontal int32
+	Vertical   int32
+}) {
+	for i := 0; i < int(sgtg.nb_tiles); i++ {
+		o := PointerOffset(sgtg.offsets, i)
+		v = append(v, struct {
+			Idx        uint32
+			Horizontal int32
+			Vertical   int32
+		}{
+			uint32(o.idx),
+			int32(o.horizontal),
+			int32(o.vertical),
+		})
+	}
+	return v
+}
+
+// SetOffsets sets `AVStreamGroupTileGrid.offsets` value.
+func (sgtg *AVStreamGroupTileGrid) SetOffsets(v unsafe.Pointer) {
+	C.av_stream_group_tile_grid_set_offsets((*C.struct_AVStreamGroupTileGrid)(sgtg), v)
+}
+
+// GetBackground gets `AVStreamGroupTileGrid.background` value.
+func (sgtg *AVStreamGroupTileGrid) GetBackground() []uint8 {
+	return unsafe.Slice((*uint8)(&sgtg.background[0]), 4)
+}
+
+// SetBackground sets `AVStreamGroupTileGrid.background` value.
+func (sgtg *AVStreamGroupTileGrid) SetBackground(v []uint8) {
+	for i := 0; i < FFMIN(len(v), 4); i++ {
+		sgtg.background[i] = (C.uint8_t)(v[i])
+	}
+}
+
+// GetBackgroundAddr gets `AVStreamGroupTileGrid.background` address.
+func (sgtg *AVStreamGroupTileGrid) GetBackgroundAddr() **uint8 {
+	return (**uint8)(unsafe.Pointer(&sgtg.background))
+}
+
+// GetHorizontalOffset gets `AVStreamGroupTileGrid.horizontal_offset` value.
+func (sgtg *AVStreamGroupTileGrid) GetHorizontalOffset() int32 {
+	return (int32)(sgtg.horizontal_offset)
+}
+
+// SetHorizontalOffset sets `AVStreamGroupTileGrid.horizontal_offset` value.
+func (sgtg *AVStreamGroupTileGrid) SetHorizontalOffset(v int32) {
+	sgtg.horizontal_offset = (C.int)(v)
+}
+
+// GetHorizontalOffsetAddr gets `AVStreamGroupTileGrid.horizontal_offset` address.
+func (sgtg *AVStreamGroupTileGrid) GetHorizontalOffsetAddr() *int32 {
+	return (*int32)(&sgtg.horizontal_offset)
+}
+
+// GetVerticalOffset gets `AVStreamGroupTileGrid.vertical_offset` value.
+func (sgtg *AVStreamGroupTileGrid) GetVerticalOffset() int32 {
+	return (int32)(sgtg.vertical_offset)
+}
+
+// SetVerticalOffset sets `AVStreamGroupTileGrid.vertical_offset` value.
+func (sgtg *AVStreamGroupTileGrid) SetVerticalOffset(v int32) {
+	sgtg.vertical_offset = (C.int)(v)
+}
+
+// GetVerticalOffsetAddr gets `AVStreamGroupTileGrid.vertical_offset` address.
+func (sgtg *AVStreamGroupTileGrid) GetVerticalOffsetAddr() *int32 {
+	return (*int32)(&sgtg.vertical_offset)
+}
+
+// GetWidth gets `AVStreamGroupTileGrid.width` value.
+func (sgtg *AVStreamGroupTileGrid) GetWidth() int32 {
+	return (int32)(sgtg.width)
+}
+
+// SetWidth sets `AVStreamGroupTileGrid.width` value.
+func (sgtg *AVStreamGroupTileGrid) SetWidth(v int32) {
+	sgtg.width = (C.int)(v)
+}
+
+// GetWidthAddr gets `AVStreamGroupTileGrid.width` address.
+func (sgtg *AVStreamGroupTileGrid) GetWidthAddr() *int32 {
+	return (*int32)(&sgtg.width)
+}
+
+// GetHeight gets `AVStreamGroupTileGrid.height` value.
+func (sgtg *AVStreamGroupTileGrid) GetHeight() int32 {
+	return (int32)(sgtg.height)
+}
+
+// SetHeight sets `AVStreamGroupTileGrid.height` value.
+func (sgtg *AVStreamGroupTileGrid) SetHeight(v int32) {
+	sgtg.height = (C.int)(v)
+}
+
+// GetHeightAddr gets `AVStreamGroupTileGrid.height` address.
+func (sgtg *AVStreamGroupTileGrid) GetHeightAddr() *int32 {
+	return (*int32)(&sgtg.height)
+}
+
+// AVStreamGroupParamsType
+type AVStreamGroupParamsType = C.enum_AVStreamGroupParamsType
+
+const (
+	AV_STREAM_GROUP_PARAMS_NONE                  = AVStreamGroupParamsType(C.AV_STREAM_GROUP_PARAMS_NONE)
+	AV_STREAM_GROUP_PARAMS_IAMF_AUDIO_ELEMENT    = AVStreamGroupParamsType(C.AV_STREAM_GROUP_PARAMS_IAMF_AUDIO_ELEMENT)
+	AV_STREAM_GROUP_PARAMS_IAMF_MIX_PRESENTATION = AVStreamGroupParamsType(C.AV_STREAM_GROUP_PARAMS_IAMF_MIX_PRESENTATION)
+	AV_STREAM_GROUP_PARAMS_TILE_GRID             = AVStreamGroupParamsType(C.AV_STREAM_GROUP_PARAMS_TILE_GRID)
+)
+
+// AVStreamGroup
+type AVStreamGroup C.struct_AVStreamGroup
+
+// GetAvClass gets `AVStreamGroup.av_class` value.
+func (sg *AVStreamGroup) GetAvClass() *AVClass {
+	return (*AVClass)(sg.av_class)
+}
+
+// SetAvClass sets `AVStreamGroup.av_class` value.
+func (sg *AVStreamGroup) SetAvClass(v *AVClass) {
+	sg.av_class = (*C.struct_AVClass)(v)
+}
+
+// GetAvClassAddr gets `AVStreamGroup.av_class` address.
+func (sg *AVStreamGroup) GetAvClassAddr() **AVClass {
+	return (**AVClass)(unsafe.Pointer(&sg.av_class))
+}
+
+// GetPrivData gets `AVStreamGroup.priv_data` value.
+func (sg *AVStreamGroup) GetPrivData() unsafe.Pointer {
+	return unsafe.Pointer(sg.priv_data)
+}
+
+// SetPrivData sets `AVStreamGroup.priv_data` value.
+func (sg *AVStreamGroup) SetPrivData(v unsafe.Pointer) {
+	sg.priv_data = VoidPointer(v)
+}
+
+// GetPrivDataAddr gets `AVStreamGroup.priv_data` address.
+func (sg *AVStreamGroup) GetPrivDataAddr() *unsafe.Pointer {
+	return (*unsafe.Pointer)(&sg.priv_data)
+}
+
+// GetIndex gets `AVStreamGroup.index` value.
+func (sg *AVStreamGroup) GetIndex() uint32 {
+	return (uint32)(sg.index)
+}
+
+// SetIndex sets `AVStreamGroup.index` value.
+func (sg *AVStreamGroup) SetIndex(v uint32) {
+	sg.index = (C.uint)(v)
+}
+
+// GetIndexAddr gets `AVStreamGroup.index` address.
+func (sg *AVStreamGroup) GetIndexAddr() *uint32 {
+	return (*uint32)(&sg.index)
+}
+
+// GetId gets `AVStreamGroup.id` value.
+func (sg *AVStreamGroup) GetId() int64 {
+	return (int64)(sg.id)
+}
+
+// SetId sets `AVStreamGroup.id` value.
+func (sg *AVStreamGroup) SetId(v int64) {
+	sg.id = (C.int64_t)(v)
+}
+
+// GetIdAddr gets `AVStreamGroup.id` address.
+func (sg *AVStreamGroup) GetIdAddr() *int64 {
+	return (*int64)(&sg.id)
+}
+
+// GetType gets `AVStreamGroup._type` value.
+func (sg *AVStreamGroup) GetType() AVStreamGroupParamsType {
+	return (AVStreamGroupParamsType)(sg._type)
+}
+
+// SetType sets `AVStreamGroup._type` value.
+func (sg *AVStreamGroup) SetType(v AVStreamGroupParamsType) {
+	sg._type = (C.enum_AVStreamGroupParamsType)(v)
+}
+
+// GetTypeAddr gets `AVStreamGroup._type` address.
+func (sg *AVStreamGroup) GetTypeAddr() *AVStreamGroupParamsType {
+	return (*AVStreamGroupParamsType)(&sg._type)
+}
+
+// GetParamsIamfAudioElement gets `AVStreamGroup.params.iamf_audio_element` value.
+func (sg *AVStreamGroup) GetParamsIamfAudioElement() *AVIAMFAudioElement {
+	return (*AVIAMFAudioElement)(C.get_av_stream_group_params_iamf_audio_element((*C.struct_AVStreamGroup)(sg)))
+}
+
+// SetParamsIamfAudioElement sets `AVStreamGroup.params.iamf_audio_element` value.
+func (sg *AVStreamGroup) SetParamsIamfAudioElement(v *AVIAMFAudioElement) {
+	C.set_av_stream_group_params_iamf_audio_element((*C.struct_AVStreamGroup)(sg), (*C.struct_AVIAMFAudioElement)(v))
+}
+
+// GetParamsIamfAudioElementAddr gets `AVStreamGroup.params.iamf_audio_element` address.
+func (sg *AVStreamGroup) GetParamsIamfAudioElementAddr() **AVIAMFAudioElement {
+	return (**AVIAMFAudioElement)(unsafe.Pointer(C.get_av_stream_group_params_iamf_audio_element_addr((*C.struct_AVStreamGroup)(sg))))
+}
+
+// GetParamsIamfMixPresentation gets `AVStreamGroup.params.iamf_mix_presentation` value.
+func (sg *AVStreamGroup) GetParamsIamfMixPresentation() *AVIAMFMixPresentation {
+	return (*AVIAMFMixPresentation)(C.get_av_stream_group_params_iamf_mix_presentation((*C.struct_AVStreamGroup)(sg)))
+}
+
+// SetParamsIamfMixPresentation sets `AVStreamGroup.params.iamf_mix_presentation` value.
+func (sg *AVStreamGroup) SetParamsIamfMixPresentation(v *AVIAMFMixPresentation) {
+	C.set_av_stream_group_params_iamf_mix_presentation((*C.struct_AVStreamGroup)(sg), (*C.struct_AVIAMFMixPresentation)(v))
+}
+
+// GetParamsIamfMixPresentationAddr gets `AVStreamGroup.params.iamf_mix_presentation` address.
+func (sg *AVStreamGroup) GetParamsIamfMixPresentationAddr() **AVIAMFMixPresentation {
+	return (**AVIAMFMixPresentation)(unsafe.Pointer(C.get_av_stream_group_params_iamf_mix_presentation_addr((*C.struct_AVStreamGroup)(sg))))
+}
+
+// GetParamsTileGrid gets `AVStreamGroup.params.tile_grid` value.
+func (sg *AVStreamGroup) GetParamsTileGrid() *AVStreamGroupTileGrid {
+	return (*AVStreamGroupTileGrid)(C.get_av_stream_group_params_tile_grid((*C.struct_AVStreamGroup)(sg)))
+}
+
+// SetParamsTileGrid sets `AVStreamGroup.params.tile_grid` value.
+func (sg *AVStreamGroup) SetParamsTileGrid(v *AVStreamGroupTileGrid) {
+	C.set_av_stream_group_params_tile_grid((*C.struct_AVStreamGroup)(sg), (*C.struct_AVStreamGroupTileGrid)(v))
+}
+
+// GetParamsTileGridAddr gets `AVStreamGroup.params.tile_grid` address.
+func (sg *AVStreamGroup) GetParamsTileGridAddr() **AVStreamGroupTileGrid {
+	return (**AVStreamGroupTileGrid)(unsafe.Pointer(C.get_av_stream_group_params_tile_grid_addr((*C.struct_AVStreamGroup)(sg))))
+}
+
+// GetMetadata gets `AVStreamGroup.metadata` value.
+func (sg *AVStreamGroup) GetMetadata() *AVDictionary {
+	return (*AVDictionary)(sg.metadata)
+}
+
+// SetMetadata sets `AVStreamGroup.metadata` value.
+func (sg *AVStreamGroup) SetMetadata(v *AVDictionary) {
+	sg.metadata = (*C.struct_AVDictionary)(v)
+}
+
+// GetMetadataAddr gets `AVStreamGroup.metadata` address.
+func (sg *AVStreamGroup) GetMetadataAddr() **AVDictionary {
+	return (**AVDictionary)(unsafe.Pointer(&sg.metadata))
+}
+
+// GetNbStreams gets `AVStreamGroup.nb_streams` value.
+func (sg *AVStreamGroup) GetNbStreams() uint32 {
+	return (uint32)(sg.nb_streams)
+}
+
+// SetNbStreams sets `AVStreamGroup.nb_streams` value.
+func (sg *AVStreamGroup) SetNbStreams(v uint32) {
+	sg.nb_streams = (C.uint)(v)
+}
+
+// GetNbStreamsAddr gets `AVStreamGroup.nb_streams` address.
+func (sg *AVStreamGroup) GetNbStreamsAddr() *uint32 {
+	return (*uint32)(&sg.nb_streams)
+}
+
+// GetStreams gets `AVStreamGroup.streams` value.
+func (sg *AVStreamGroup) GetStreams() []*AVStream {
+	return unsafe.Slice((**AVStream)(unsafe.Pointer(sg.streams)), sg.nb_streams)
+}
+
+// SetStreams sets `AVStreamGroup.streams` value.
+func (sg *AVStreamGroup) SetStreams(v **AVStream) {
+	sg.streams = (**C.struct_AVStream)(unsafe.Pointer(v))
+}
+
+// GetStreamsAddr gets `AVStreamGroup.streams` address.
+func (sg *AVStreamGroup) GetStreamsAddr() ***AVStream {
+	return (***AVStream)(unsafe.Pointer(&sg.streams))
+}
+
+// GetDisposition gets `AVStreamGroup.disposition` value.
+func (sg *AVStreamGroup) GetDisposition() int32 {
+	return (int32)(sg.disposition)
+}
+
+// SetDisposition sets `AVStreamGroup.disposition` value.
+func (sg *AVStreamGroup) SetDisposition(v int32) {
+	sg.disposition = (C.int)(v)
+}
+
+// GetDispositionAddr gets `AVStreamGroup.disposition` address.
+func (sg *AVStreamGroup) GetDispositionAddr() *int32 {
+	return (*int32)(&sg.disposition)
+}
+
 // AvStreamGetParser
 func AvStreamGetParser(s *AVStream) *AVCodecParserContext {
 	return (*AVCodecParserContext)(C.av_stream_get_parser((*C.struct_AVStream)(s)))
-}
-
-// Deprecated: No use.
-//
-// AvStreamGetEndPts returns the pts of the last muxed packet + its duration.
-// the retuned value is undefined when used with a demuxer.
-func AvStreamGetEndPts(s *AVStream) int64 {
-	return (int64)(C.av_stream_get_end_pts((*C.struct_AVStream)(s)))
 }
 
 const (
@@ -1103,6 +1495,36 @@ func (s *AVFormatContext) SetStreams(v **AVStream) {
 // GetStreamsAddr gets `AVFormatContext.streams` address.
 func (s *AVFormatContext) GetStreamsAddr() ***AVStream {
 	return (***AVStream)(unsafe.Pointer(&s.streams))
+}
+
+// GetStreamGroups gets `AVFormatContext.stream_groups` value.
+func (s *AVFormatContext) GetStreamGroups() (v []*AVStreamGroup) {
+	return unsafe.Slice((**AVStreamGroup)(unsafe.Pointer(s.stream_groups)), s.nb_stream_groups)
+}
+
+// SetStreamGroups sets `AVFormatContext.streams` value.
+func (s *AVFormatContext) SetStreamGroups(v **AVStreamGroup) {
+	s.stream_groups = (**C.struct_AVStreamGroup)(unsafe.Pointer(v))
+}
+
+// GetStreamGroupsAddr gets `AVFormatContext.streams` address.
+func (s *AVFormatContext) GetStreamGroupsAddr() ***AVStreamGroup {
+	return (***AVStreamGroup)(unsafe.Pointer(&s.stream_groups))
+}
+
+// GetNbStreamGroups gets `AVFormatContext.nb_stream_groups` value.
+func (s *AVFormatContext) GetNbStreamGroups() uint32 {
+	return (uint32)(s.nb_stream_groups)
+}
+
+// SetNbStreamGroups sets `AVFormatContext.nb_stream_groups` value.
+func (s *AVFormatContext) SetNbStreamGroups(v uint32) {
+	s.nb_stream_groups = (C.uint)(v)
+}
+
+// GetNbStreamGroupsAddr gets `AVFormatContext.nb_stream_groups` address.
+func (s *AVFormatContext) GetNbStreamGroupsAddr() *uint32 {
+	return (*uint32)(&s.nb_stream_groups)
 }
 
 // GetUrl gets `AVFormatContext.url` value.
@@ -1569,21 +1991,6 @@ func (s *AVFormatContext) GetAvoidNegativeTsAddr() *int32 {
 	return (*int32)(&s.avoid_negative_ts)
 }
 
-// GetTsId gets `AVFormatContext.ts_id` value.
-func (s *AVFormatContext) GetTsId() int32 {
-	return (int32)(s.ts_id)
-}
-
-// SetTsId sets `AVFormatContext.ts_id` value.
-func (s *AVFormatContext) SetTsId(v int32) {
-	s.ts_id = (C.int)(v)
-}
-
-// GetTsIdAddr gets `AVFormatContext.ts_id` address.
-func (s *AVFormatContext) GetTsIdAddr() *int32 {
-	return (*int32)(&s.ts_id)
-}
-
 // GetAudioPreload gets `AVFormatContext.audio_preload` value.
 func (s *AVFormatContext) GetAudioPreload() int32 {
 	return (int32)(s.audio_preload)
@@ -1951,27 +2358,6 @@ func (s *AVFormatContext) GetIoOpenAddr() *AvFormatContextIoOpenFunc {
 	return (*AvFormatContextIoOpenFunc)(&s.io_open)
 }
 
-// Deprecated: use io_close2 intead.
-//
-// GetIoClose gets `AVFormatContext.io_close` value.
-func (s *AVFormatContext) GetIoClose() AvFormatContextIoCloseFunc {
-	return (AvFormatContextIoCloseFunc)(s.io_close)
-}
-
-// Deprecated: use io_close2 intead.
-//
-// SetIoClose sets `AVFormatContext.io_close` value.
-func (s *AVFormatContext) SetIoClose(v AvFormatContextIoCloseFunc) {
-	s.io_close = (C.av_format_context_io_close_func)(v)
-}
-
-// Deprecated: use io_close2 intead.
-//
-// GetIoCloseAddr gets `AVFormatContext.io_close` address.
-func (s *AVFormatContext) GetIoCloseAddr() *AvFormatContextIoCloseFunc {
-	return (*AvFormatContextIoCloseFunc)(&s.io_close)
-}
-
 // GetProtocolBlacklist gets `AVFormatContext.protocol_blacklist` value.
 func (s *AVFormatContext) GetProtocolBlacklist() string {
 	return C.GoString(s.protocol_blacklist)
@@ -2071,6 +2457,8 @@ func AvFormatInjectGlobalSideData(s *AVFormatContext) {
 	C.av_format_inject_global_side_data((*C.struct_AVFormatContext)(s))
 }
 
+// Deprecated: No use.
+//
 // AvFmtCtxGetDurationEstimationMethod returns the method used to set ctx->duration.
 func AvFmtCtxGetDurationEstimationMethod(s *AVFormatContext) AVDurationEstimationMethod {
 	return (AVDurationEstimationMethod)(C.av_fmt_ctx_get_duration_estimation_method((*C.struct_AVFormatContext)(s)))
@@ -2134,9 +2522,33 @@ func AvStreamGetClass() *AVClass {
 	return (*AVClass)(C.av_stream_get_class())
 }
 
+// AvStreamGroupGetClass
+func AvStreamGroupGetClass() *AVClass {
+	return (*AVClass)(C.av_stream_group_get_class())
+}
+
+// AvformatStreamGroupName
+func AvformatStreamGroupName(_type AVStreamGroupParamsType) string {
+	return C.GoString(C.avformat_stream_group_name((C.enum_AVStreamGroupParamsType)(_type)))
+}
+
+// AvformatStreamGroupCreate
+func AvformatStreamGroupCreate(s *AVFormatContext, _type AVStreamGroupParamsType, options **AVDictionary) *AVStreamGroup {
+	return (*AVStreamGroup)(C.avformat_stream_group_create(
+		(*C.struct_AVFormatContext)(s),
+		(C.enum_AVStreamGroupParamsType)(_type),
+		(**C.struct_AVDictionary)(unsafe.Pointer(options))))
+}
+
 // AvFormatNewStream adds a new stream to a media file.
 func AvFormatNewStream(s *AVFormatContext, c *AVCodec) *AVStream {
 	return (*AVStream)(C.avformat_new_stream((*C.struct_AVFormatContext)(s), (*C.struct_AVCodec)(c)))
+}
+
+// AvformatStreamGroupAddStream
+func AvformatStreamGroupAddStream(stg *AVStreamGroup, st *AVStream) int32 {
+	return (int32)(C.avformat_stream_group_add_stream((*C.struct_AVStreamGroup)(stg),
+		(*C.struct_AVStream)(st)))
 }
 
 // Deprecated: No use.

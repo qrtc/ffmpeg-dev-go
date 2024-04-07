@@ -441,48 +441,6 @@ func (frame *AVFrame) GetTimeBaseAddr() *AVRational {
 	return (*AVRational)(&frame.time_base)
 }
 
-// Deprecated: Unused.
-//
-// GetCodedPictureNumber gets `AVFrame.coded_picture_number` value.
-func (frame *AVFrame) GetCodedPictureNumber() int32 {
-	return (int32)(frame.coded_picture_number)
-}
-
-// Deprecated: Unused.
-//
-// SetCodedPictureNumber sets `AVFrame.coded_picture_number` value.
-func (frame *AVFrame) SetCodedPictureNumber(v int32) {
-	frame.coded_picture_number = (C.int)(v)
-}
-
-// Deprecated: Unused.
-//
-// GetCodedPictureNumberAddr gets `AVFrame.coded_picture_number` address.
-func (frame *AVFrame) GetCodedPictureNumberAddr() *int32 {
-	return (*int32)(&frame.coded_picture_number)
-}
-
-// Deprecated: Unused.
-//
-// GetDisplayPictureNumber gets `AVFrame.display_picture_number` value.
-func (frame *AVFrame) GetDisplayPictureNumber() int32 {
-	return (int32)(frame.display_picture_number)
-}
-
-// Deprecated: Unused.
-//
-// SetDisplayPictureNumber sets `AVFrame.display_picture_number` value.
-func (frame *AVFrame) SetDisplayPictureNumber(v int32) {
-	frame.display_picture_number = (C.int)(v)
-}
-
-// Deprecated: Unused.
-//
-// GetDisplayPictureNumberAddr gets `AVFrame.display_picture_number` address.
-func (frame *AVFrame) GetDisplayPictureNumberAddr() *int32 {
-	return (*int32)(&frame.display_picture_number)
-}
-
 // GetQuality gets `AVFrame.quality` value.
 func (frame *AVFrame) GetQuality() int32 {
 	return (int32)(frame.quality)
@@ -576,27 +534,6 @@ func (frame *AVFrame) GetPaletteHasChangedAddr() *int32 {
 	return (*int32)(&frame.palette_has_changed)
 }
 
-// Deprecated: Use AV_CODEC_FLAG_COPY_OPAQUE instead.
-//
-// GetReorderedOpaque gets `AVFrame.reordered_opaque` value.
-func (frame *AVFrame) GetReorderedOpaque() int64 {
-	return (int64)(frame.reordered_opaque)
-}
-
-// Deprecated: Use AV_CODEC_FLAG_COPY_OPAQUE instead.
-//
-// SetReorderedOpaque sets `AVFrame.reordered_opaque` value.
-func (frame *AVFrame) SetReorderedOpaque(v int64) {
-	frame.reordered_opaque = (C.int64_t)(v)
-}
-
-// Deprecated: Use AV_CODEC_FLAG_COPY_OPAQUE instead.
-//
-// GetReorderedOpaqueAddr gets `AVFrame.reordered_opaque` address.
-func (frame *AVFrame) GetReorderedOpaqueAddr() *int64 {
-	return (*int64)(&frame.reordered_opaque)
-}
-
 // GetSampleRate gets `AVFrame.sample_rate` value.
 func (frame *AVFrame) GetSampleRate() int32 {
 	return (int32)(frame.sample_rate)
@@ -610,27 +547,6 @@ func (frame *AVFrame) SetSampleRate(v int32) {
 // GetSampleRateAddr gets `AVFrame.sample_rate` address.
 func (frame *AVFrame) GetSampleRateAddr() *int32 {
 	return (*int32)(&frame.sample_rate)
-}
-
-// Deprecated: use ChLayout instead
-//
-// GetChannelLayout gets `AVFrame.channel_layout` value.
-func (frame *AVFrame) GetChannelLayout() uint64 {
-	return (uint64)(frame.channel_layout)
-}
-
-// Deprecated: use ChLayout instead
-//
-// SetChannelLayout sets `AVFrame.channel_layout` value.
-func (frame *AVFrame) SetChannelLayout(v uint64) {
-	frame.channel_layout = (C.uint64_t)(v)
-}
-
-// Deprecated: use ChLayout instead
-//
-// GetChannelLayoutAddr gets `AVFrame.channel_layout` address.
-func (frame *AVFrame) GetChannelLayoutAddr() *uint64 {
-	return (*uint64)(&frame.channel_layout)
 }
 
 // GetBuf gets `AVFrame.buf` value.
@@ -839,27 +755,6 @@ func (frame *AVFrame) GetPktPosAddr() *int64 {
 	return (*int64)(&frame.pkt_pos)
 }
 
-// Deprecated: Use duration instead.
-//
-// GetPktDuration gets `AVFrame.pkt_duration` value.
-func (frame *AVFrame) GetPktDuration() int64 {
-	return (int64)(frame.pkt_duration)
-}
-
-// Deprecated: Use duration instead.
-//
-// SetPktDuration sets `AVFrame.pkt_duration` value.
-func (frame *AVFrame) SetPktDuration(v int64) {
-	frame.pkt_duration = (C.int64_t)(v)
-}
-
-// Deprecated: Use duration instead.
-//
-// GetPktDurationAddr gets `AVFrame.pkt_duration` address.
-func (frame *AVFrame) GetPktDurationAddr() *int64 {
-	return (*int64)(&frame.pkt_duration)
-}
-
 // GetMetadata gets `AVFrame.metadata` value.
 func (frame *AVFrame) GetMetadata() *AVDictionary {
 	return (*AVDictionary)(frame.metadata)
@@ -896,27 +791,6 @@ const (
 	FF_DECODE_ERROR_CONCEALMENT_ACTIVE = int32(C.FF_DECODE_ERROR_CONCEALMENT_ACTIVE)
 	FF_DECODE_ERROR_DECODE_SLICES      = int32(C.FF_DECODE_ERROR_DECODE_SLICES)
 )
-
-// Deprecated: use ChLayout instead
-//
-// GetChannels gets `AVFrame.channels` value.
-func (frame *AVFrame) GetChannels() int32 {
-	return (int32)(frame.channels)
-}
-
-// Deprecated: use ChLayout instead
-//
-// SetChannels sets `AVFrame.channels` value.
-func (frame *AVFrame) SetChannels(v int32) {
-	frame.channels = (C.int)(v)
-}
-
-// Deprecated: use ChLayout instead
-//
-// GetChannelsAddr gets `AVFrame.channels` address.
-func (frame *AVFrame) GetChannelsAddr() *int32 {
-	return (*int32)(&frame.channels)
-}
 
 // GetPktSize gets `AVFrame.pkt_size` value.
 func (frame *AVFrame) GetPktSize() int32 {
@@ -1175,4 +1049,38 @@ func AvFrameApplyCropping(frame *AVFrame, flags int32) int32 {
 // AvFrameSideDataName returns a string identifying the side data type.
 func AvFrameSideDataName(_type AVFrameSideDataType) string {
 	return C.GoString(C.av_frame_side_data_name((C.enum_AVFrameSideDataType)(_type)))
+}
+
+// AvFrameSideDataFree frees all side data entries and their contents.
+func AvFrameSideDataFree(sd ***AVFrameSideData, nbSd *int32) {
+	C.av_frame_side_data_free((***C.struct_AVFrameSideData)(unsafe.Pointer(sd)), (*C.int)(nbSd))
+}
+
+const (
+	AV_FRAME_SIDE_DATA_FLAG_UNIQUE = uint32(C.AV_FRAME_SIDE_DATA_FLAG_UNIQUE)
+)
+
+// AvFrameSideDataNew adds new side data entry to an array.
+func AvFrameSideDataNew(sd ***AVFrameSideData, nbSd *int32, _type AVFrameSideDataType, size uintptr, flags uint32) *AVFrameSideData {
+	return (*AVFrameSideData)(C.av_frame_side_data_new(
+		(***C.struct_AVFrameSideData)(unsafe.Pointer(sd)), (*C.int)(nbSd),
+		(C.enum_AVFrameSideDataType)(_type), (C.size_t)(size), (C.uint)(flags)))
+}
+
+// AvFrameSideDataClone
+func AvFrameSideDataClone(sd ***AVFrameSideData, nbSd *int32, src *AVFrameSideData, flags uint32) int32 {
+	return (int32)(C.av_frame_side_data_clone((***C.struct_AVFrameSideData)(unsafe.Pointer(sd)), (*C.int)(nbSd),
+		(*C.struct_AVFrameSideData)(src), (C.uint)(flags)))
+}
+
+// AvFrameSideDataGetC
+func AvFrameSideDataGetC(sd **AVFrameSideData, nbSd int32, _type AVFrameSideDataType) *AVFrameSideData {
+	return (*AVFrameSideData)(C.av_frame_side_data_get_c((**C.struct_AVFrameSideData)(unsafe.Pointer(sd)), (C.int)(nbSd),
+		(C.enum_AVFrameSideDataType)(_type)))
+}
+
+// AvFrameSideDataGet
+func AvFrameSideDataGet(sd **AVFrameSideData, nbSd int32, _type AVFrameSideDataType) *AVFrameSideData {
+	return (*AVFrameSideData)(C.av_frame_side_data_get((**C.struct_AVFrameSideData)(unsafe.Pointer(sd)), (C.int)(nbSd),
+		(C.enum_AVFrameSideDataType)(_type)))
 }

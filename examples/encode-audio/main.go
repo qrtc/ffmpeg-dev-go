@@ -166,12 +166,12 @@ func main() {
 		if ret := ffmpeg.AvFrameMakeWritable(frame); ret < 0 {
 			os.Exit(1)
 		}
-		samples := unsafe.Slice((*uint16)(unsafe.Pointer(frame.GetData()[0])), avctx.GetFrameSize()*avctx.GetChannels())
+		samples := unsafe.Slice((*uint16)(unsafe.Pointer(frame.GetData()[0])), avctx.GetFrameSize()*avctx.GetChLayoutAddr().GetNbChannels())
 
 		for j := 0; j < int(avctx.GetFrameSize()); j++ {
 			samples[2*j] = (uint16)(math.Sin(t) * 10000)
 
-			for k := 1; k < int(avctx.GetChannels()); k++ {
+			for k := 1; k < int(avctx.GetChLayoutAddr().GetNbChannels()); k++ {
 				samples[2*j+k] = samples[2*j]
 			}
 			t += tincr

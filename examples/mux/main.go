@@ -240,7 +240,7 @@ func openAudio(oc *ffmpeg.AVFormatContext, codec *ffmpeg.AVCodec, ost *outputStr
 func getAudioFrame(ost *outputStream) (frame *ffmpeg.AVFrame) {
 	frame = ost.tmpFrame
 	data := unsafe.Slice((*int16)(unsafe.Pointer(frame.GetData()[0])),
-		frame.GetNbSamples()*ost.enc.GetChannels())
+		frame.GetNbSamples()*ost.enc.GetChLayoutAddr().GetNbChannels())
 
 	if ffmpeg.AvCompareTs(ost.nextPts, ost.enc.GetTimeBase(), STREAM_DURATION, ffmpeg.AvMakeQ(1, 1)) > 0 {
 		return nil
@@ -248,7 +248,7 @@ func getAudioFrame(ost *outputStream) (frame *ffmpeg.AVFrame) {
 	idx := 0
 	for j := 0; j < int(frame.GetNbSamples()); j++ {
 		v := (int16)(math.Sin(float64(ost.t)) * 10_000)
-		for i := 0; i < int(ost.enc.GetChannels()); i++ {
+		for i := 0; i < int(ost.enc.GetChLayoutAddr().GetNbChannels()); i++ {
 			data[idx] = v
 			idx++
 			ost.t += ost.tincr

@@ -60,9 +60,9 @@ func decode(decCtx *ffmpeg.AVCodecContext, pkt *ffmpeg.AVPacket, frame *ffmpeg.A
 			fmt.Fprintf(os.Stderr, "Failed to calculate data size\n")
 			os.Exit(1)
 		}
-		data := ffmpeg.SliceSlice(&frame.GetData()[0], decCtx.GetChannels(), frame.GetNbSamples()*dataSize)
+		data := ffmpeg.SliceSlice(&frame.GetData()[0], decCtx.GetChLayoutAddr().GetNbChannels(), frame.GetNbSamples()*dataSize)
 		for i := int32(0); i < frame.GetNbSamples(); i++ {
-			for ch := 0; ch < int(decCtx.GetChannels()); ch++ {
+			for ch := 0; ch < int(decCtx.GetChLayoutAddr().GetNbChannels()); ch++ {
 				outfile.Write(data[ch][dataSize*i : dataSize*(i+1)])
 			}
 		}
@@ -175,7 +175,7 @@ func main() {
 		sfmt = ffmpeg.AvGetPackedSampleFmt(sfmt)
 	}
 
-	nChannels := avctx.GetChannels()
+	nChannels := avctx.GetChLayoutAddr().GetNbChannels()
 	fmtStr, ret := getFormatFromSampleFmt(sfmt)
 	if ret < 0 {
 		goto end

@@ -329,91 +329,127 @@ func (h274p *AVFilmGrainH274Params) GetModelIdAddr() *int32 {
 	return (*int32)(&h274p.model_id)
 }
 
+// Deprecated: No use.
+//
 // GetBitDepthLuma gets `AVFilmGrainH274Params.bit_depth_luma` value.
 func (h274p *AVFilmGrainH274Params) GetBitDepthLuma() int32 {
 	return (int32)(h274p.bit_depth_luma)
 }
 
+// Deprecated: No use.
+//
 // SetBitDepthLuma sets `AVFilmGrainH274Params.bit_depth_luma` value.
 func (h274p *AVFilmGrainH274Params) SetBitDepthLuma(v int32) {
 	h274p.bit_depth_luma = (C.int)(v)
 }
 
+// Deprecated: No use.
+//
 // GetBitDepthLumaAddr gets `AVFilmGrainH274Params.bit_depth_luma` address.
 func (h274p *AVFilmGrainH274Params) GetBitDepthLumaAddr() *int32 {
 	return (*int32)(&h274p.bit_depth_luma)
 }
 
+// Deprecated: No use.
+//
 // GetBitDepthChroma gets `AVFilmGrainH274Params.bit_depth_chroma` value.
 func (h274p *AVFilmGrainH274Params) GetBitDepthChroma() int32 {
 	return (int32)(h274p.bit_depth_chroma)
 }
 
+// Deprecated: No use.
+//
 // SetBitDepthChroma sets `AVFilmGrainH274Params.bit_depth_chroma` value.
 func (h274p *AVFilmGrainH274Params) SetBitDepthChroma(v int32) {
 	h274p.bit_depth_chroma = (C.int)(v)
 }
 
+// Deprecated: No use.
+//
 // GetBitDepthChromaAddr gets `AVFilmGrainH274Params.bit_depth_chroma` address.
 func (h274p *AVFilmGrainH274Params) GetBitDepthChromaAddr() *int32 {
 	return (*int32)(&h274p.bit_depth_chroma)
 }
 
+// Deprecated: No use.
+//
 // GetColorRange gets `AVFilmGrainH274Params.color_range` value.
 func (h274p *AVFilmGrainH274Params) GetColorRange() AVColorRange {
 	return (AVColorRange)(h274p.color_range)
 }
 
+// Deprecated: No use.
+//
 // SetColorRange sets `AVFilmGrainH274Params.color_range` value.
 func (h274p *AVFilmGrainH274Params) SetColorRange(v AVColorRange) {
 	h274p.color_range = (C.enum_AVColorRange)(v)
 }
 
+// Deprecated: No use.
+//
 // GetColorRangeAddr gets `AVFilmGrainH274Params.color_range` address.
 func (h274p *AVFilmGrainH274Params) GetColorRangeAddr() *AVColorRange {
 	return (*AVColorRange)(&h274p.color_range)
 }
 
+// Deprecated: No use.
+//
 // GetColorPrimaries gets `AVFilmGrainH274Params.color_primaries` value.
 func (h274p *AVFilmGrainH274Params) GetColorPrimaries() AVColorPrimaries {
 	return (AVColorPrimaries)(h274p.color_primaries)
 }
 
+// Deprecated: No use.
+//
 // SetColorPrimaries sets `AVFilmGrainH274Params.color_primaries` value.
 func (h274p *AVFilmGrainH274Params) SetColorPrimaries(v AVColorPrimaries) {
 	h274p.color_primaries = (C.enum_AVColorPrimaries)(v)
 }
 
+// Deprecated: No use.
+//
 // GetColorPrimariesAddr gets `AVFilmGrainH274Params.color_primaries` address.
 func (h274p *AVFilmGrainH274Params) GetColorPrimariesAddr() *AVColorPrimaries {
 	return (*AVColorPrimaries)(&h274p.color_primaries)
 }
 
+// Deprecated: No use.
+//
 // GetColorTrc gets `AVFilmGrainH274Params.color_trc` value.
 func (h274p *AVFilmGrainH274Params) GetColorTrc() AVColorTransferCharacteristic {
 	return (AVColorTransferCharacteristic)(h274p.color_trc)
 }
 
+// Deprecated: No use.
+//
 // SetColorTrc sets `AVFilmGrainH274Params.color_trc` value.
 func (h274p *AVFilmGrainH274Params) SetColorTrc(v AVColorTransferCharacteristic) {
 	h274p.color_trc = (C.enum_AVColorTransferCharacteristic)(v)
 }
 
+// Deprecated: No use.
+//
 // GetColorTrcAddr gets `AVFilmGrainH274Params.color_trc` address.
 func (h274p *AVFilmGrainH274Params) GetColorTrcAddr() *AVColorTransferCharacteristic {
 	return (*AVColorTransferCharacteristic)(&h274p.color_trc)
 }
 
+// Deprecated: No use.
+//
 // GetColorSpace gets `AVFilmGrainH274Params.color_space` value.
 func (h274p *AVFilmGrainH274Params) GetColorSpace() AVColorSpace {
 	return (AVColorSpace)(h274p.color_space)
 }
 
+// Deprecated: No use.
+//
 // SetColorSpace sets `AVFilmGrainH274Params.color_space` value.
 func (h274p *AVFilmGrainH274Params) SetColorSpace(v AVColorSpace) {
 	h274p.color_space = (C.enum_AVColorSpace)(v)
 }
 
+// Deprecated: No use.
+//
 // GetColorSpaceAddr gets `AVFilmGrainH274Params.color_space` address.
 func (h274p *AVFilmGrainH274Params) GetColorSpaceAddr() *AVColorSpace {
 	return (*AVColorSpace)(&h274p.color_space)
@@ -623,6 +659,156 @@ func (fgp *AVFilmGrainParams) GetCodecAomAddr() *AVFilmGrainAOMParams {
 		(*C.struct_AVFilmGrainParams)(fgp)))
 }
 
+// GetWidth gets `AVFilmGrainParams.width` value.
+func (fgp *AVFilmGrainParams) GetWidth() int32 {
+	return (int32)(fgp.width)
+}
+
+// SetWidth sets `AVFilmGrainParams.width` value.
+func (fgp *AVFilmGrainParams) SetWidth(v int32) {
+	fgp.width = (C.int)(v)
+}
+
+// GetWidthAddr gets `AVFilmGrainParams.width` address.
+func (fgp *AVFilmGrainParams) GetWidthAddr() *int32 {
+	return (*int32)(&fgp.width)
+}
+
+// GetHeight gets `AVFilmGrainParams.height` value.
+func (fgp *AVFilmGrainParams) GetHeight() int32 {
+	return (int32)(fgp.height)
+}
+
+// SetHeight sets `AVFilmGrainParams.height` value.
+func (fgp *AVFilmGrainParams) SetHeight(v int32) {
+	fgp.height = (C.int)(v)
+}
+
+// GetHeightAddr gets `AVFilmGrainParams.height` address.
+func (fgp *AVFilmGrainParams) GetHeightAddr() *int32 {
+	return (*int32)(&fgp.height)
+}
+
+// GetSubsamplingX gets `AVFilmGrainParams.subsampling_x` value.
+func (fgp *AVFilmGrainParams) GetSubsamplingX() int32 {
+	return (int32)(fgp.subsampling_x)
+}
+
+// SetSubsamplingX sets `AVFilmGrainParams.subsampling_x` value.
+func (fgp *AVFilmGrainParams) SetSubsamplingX(v int32) {
+	fgp.subsampling_x = (C.int)(v)
+}
+
+// GetSubsamplingXAddr gets `AVFilmGrainParams.subsampling_x` address.
+func (fgp *AVFilmGrainParams) GetSubsamplingXAddr() *int32 {
+	return (*int32)(&fgp.subsampling_x)
+}
+
+// GetSubsamplingY gets `AVFilmGrainParams.subsampling_y` value.
+func (fgp *AVFilmGrainParams) GetSubsamplingY() int32 {
+	return (int32)(fgp.subsampling_y)
+}
+
+// SetSubsamplingY sets `AVFilmGrainParams.subsampling_y` value.
+func (fgp *AVFilmGrainParams) SetSubsamplingY(v int32) {
+	fgp.subsampling_y = (C.int)(v)
+}
+
+// GetSubsamplingYAddr gets `AVFilmGrainParams.subsampling_y` address.
+func (fgp *AVFilmGrainParams) GetSubsamplingYAddr() *int32 {
+	return (*int32)(&fgp.subsampling_y)
+}
+
+// GetColorRange gets `AVFilmGrainParams.color_range` value.
+func (fgp *AVFilmGrainParams) GetColorRange() AVColorRange {
+	return (AVColorRange)(fgp.color_range)
+}
+
+// SetColorRange sets `AVFilmGrainParams.color_range` value.
+func (fgp *AVFilmGrainParams) SetColorRange(v AVColorRange) {
+	fgp.color_range = (C.enum_AVColorRange)(v)
+}
+
+// GetColorRangeAddr gets `AVFilmGrainParams.color_range` address.
+func (fgp *AVFilmGrainParams) GetColorRangeAddr() *AVColorRange {
+	return (*AVColorRange)(&fgp.color_range)
+}
+
+// GetColorPrimaries gets `AVFilmGrainParams.color_primaries` value.
+func (fgp *AVFilmGrainParams) GetColorPrimaries() AVColorPrimaries {
+	return (AVColorPrimaries)(fgp.color_primaries)
+}
+
+// SetColorPrimaries sets `AVFilmGrainParams.color_primaries` value.
+func (fgp *AVFilmGrainParams) SetColorPrimaries(v AVColorPrimaries) {
+	fgp.color_primaries = (C.enum_AVColorPrimaries)(v)
+}
+
+// GetColorPrimariesAddr gets `AVFilmGrainParams.color_primaries` address.
+func (fgp *AVFilmGrainParams) GetColorPrimariesAddr() *AVColorPrimaries {
+	return (*AVColorPrimaries)(&fgp.color_primaries)
+}
+
+// GetColorTrc gets `AVFilmGrainParams.color_trc` value.
+func (fgp *AVFilmGrainParams) GetColorTrc() AVColorTransferCharacteristic {
+	return (AVColorTransferCharacteristic)(fgp.color_trc)
+}
+
+// SetColorTrc sets `AVFilmGrainParams.color_trc` value.
+func (fgp *AVFilmGrainParams) SetColorTrc(v AVColorTransferCharacteristic) {
+	fgp.color_trc = (C.enum_AVColorTransferCharacteristic)(v)
+}
+
+// GetColorTrcAddr gets `AVFilmGrainParams.color_trc` address.
+func (fgp *AVFilmGrainParams) GetColorTrcAddr() *AVColorTransferCharacteristic {
+	return (*AVColorTransferCharacteristic)(&fgp.color_trc)
+}
+
+// GetColorSpace gets `AVFilmGrainParams.color_space` value.
+func (fgp *AVFilmGrainParams) GetColorSpace() AVColorSpace {
+	return (AVColorSpace)(fgp.color_space)
+}
+
+// SetColorSpace sets `AVFilmGrainParams.color_space` value.
+func (fgp *AVFilmGrainParams) SetColorSpace(v AVColorSpace) {
+	fgp.color_space = (C.enum_AVColorSpace)(v)
+}
+
+// GetColorSpaceAddr gets `AVFilmGrainParams.color_space` address.
+func (fgp *AVFilmGrainParams) GetColorSpaceAddr() *AVColorSpace {
+	return (*AVColorSpace)(&fgp.color_space)
+}
+
+// GetBitDepthLuma gets `AVFilmGrainParams.bit_depth_luma` value.
+func (fgp *AVFilmGrainParams) GetBitDepthLuma() int32 {
+	return (int32)(fgp.bit_depth_luma)
+}
+
+// SetBitDepthLuma sets `AVFilmGrainParams.bit_depth_luma` value.
+func (fgp *AVFilmGrainParams) SetBitDepthLuma(v int32) {
+	fgp.bit_depth_luma = (C.int)(v)
+}
+
+// GetBitDepthLumaAddr gets `AVFilmGrainParams.bit_depth_luma` address.
+func (fgp *AVFilmGrainParams) GetBitDepthLumaAddr() *int32 {
+	return (*int32)(&fgp.bit_depth_luma)
+}
+
+// GetBitDepthChroma gets `AVFilmGrainParams.bit_depth_chroma` value.
+func (fgp *AVFilmGrainParams) GetBitDepthChroma() int32 {
+	return (int32)(fgp.bit_depth_chroma)
+}
+
+// SetBitDepthChroma sets `AVFilmGrainParams.bit_depth_chroma` value.
+func (fgp *AVFilmGrainParams) SetBitDepthChroma(v int32) {
+	fgp.bit_depth_chroma = (C.int)(v)
+}
+
+// GetBitDepthChromaAddr gets `AVFilmGrainParams.bit_depth_chroma` address.
+func (fgp *AVFilmGrainParams) GetBitDepthChromaAddr() *int32 {
+	return (*int32)(&fgp.bit_depth_chroma)
+}
+
 // AvFilmGrainParamsAlloc allocates an AVFilmGrainParams structure and set its fields to
 // default values.
 func AvFilmGrainParamsAlloc(size *uintptr) *AVFilmGrainParams {
@@ -632,4 +818,9 @@ func AvFilmGrainParamsAlloc(size *uintptr) *AVFilmGrainParams {
 // AvFilmGrainParamsCreateSideData allocates a complete AVFilmGrainParams and add it to the frame.
 func AvFilmGrainParamsCreateSideData(frame *AVFrame) *AVFilmGrainParams {
 	return (*AVFilmGrainParams)(C.av_film_grain_params_create_side_data((*C.struct_AVFrame)(frame)))
+}
+
+// AvFilmGrainParamsSelect selects the most appropriate film grain parameters set for the frame.
+func AvFilmGrainParamsSelect(frame *AVFrame) *AVFilmGrainParams {
+	return (*AVFilmGrainParams)(C.av_film_grain_params_select((*C.struct_AVFrame)(frame)))
 }

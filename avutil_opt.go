@@ -67,27 +67,78 @@ import (
 type AVOptionType = int32
 
 const (
-	AV_OPT_TYPE_FLAGS          = AVOptionType(C.AV_OPT_TYPE_FLAGS)
-	AV_OPT_TYPE_INT            = AVOptionType(C.AV_OPT_TYPE_INT)
-	AV_OPT_TYPE_INT64          = AVOptionType(C.AV_OPT_TYPE_INT64)
-	AV_OPT_TYPE_DOUBLE         = AVOptionType(C.AV_OPT_TYPE_DOUBLE)
-	AV_OPT_TYPE_FLOAT          = AVOptionType(C.AV_OPT_TYPE_FLOAT)
-	AV_OPT_TYPE_STRING         = AVOptionType(C.AV_OPT_TYPE_STRING)
-	AV_OPT_TYPE_RATIONAL       = AVOptionType(C.AV_OPT_TYPE_RATIONAL)
-	AV_OPT_TYPE_BINARY         = AVOptionType(C.AV_OPT_TYPE_BINARY)
-	AV_OPT_TYPE_DICT           = AVOptionType(C.AV_OPT_TYPE_DICT)
-	AV_OPT_TYPE_UINT64         = AVOptionType(C.AV_OPT_TYPE_UINT64)
-	AV_OPT_TYPE_CONST          = AVOptionType(C.AV_OPT_TYPE_CONST)
-	AV_OPT_TYPE_IMAGE_SIZE     = AVOptionType(C.AV_OPT_TYPE_IMAGE_SIZE)
-	AV_OPT_TYPE_PIXEL_FMT      = AVOptionType(C.AV_OPT_TYPE_PIXEL_FMT)
-	AV_OPT_TYPE_SAMPLE_FMT     = AVOptionType(C.AV_OPT_TYPE_SAMPLE_FMT)
-	AV_OPT_TYPE_VIDEO_RATE     = AVOptionType(C.AV_OPT_TYPE_VIDEO_RATE)
-	AV_OPT_TYPE_DURATION       = AVOptionType(C.AV_OPT_TYPE_DURATION)
-	AV_OPT_TYPE_COLOR          = AVOptionType(C.AV_OPT_TYPE_COLOR)
-	AV_OPT_TYPE_CHANNEL_LAYOUT = AVOptionType(C.AV_OPT_TYPE_CHANNEL_LAYOUT)
-	AV_OPT_TYPE_BOOL           = AVOptionType(C.AV_OPT_TYPE_BOOL)
-	AV_OPT_TYPE_CHLAYOUT       = AVOptionType(C.AV_OPT_TYPE_CHLAYOUT)
+	AV_OPT_TYPE_FLAGS      = AVOptionType(C.AV_OPT_TYPE_FLAGS)
+	AV_OPT_TYPE_INT        = AVOptionType(C.AV_OPT_TYPE_INT)
+	AV_OPT_TYPE_INT64      = AVOptionType(C.AV_OPT_TYPE_INT64)
+	AV_OPT_TYPE_DOUBLE     = AVOptionType(C.AV_OPT_TYPE_DOUBLE)
+	AV_OPT_TYPE_FLOAT      = AVOptionType(C.AV_OPT_TYPE_FLOAT)
+	AV_OPT_TYPE_STRING     = AVOptionType(C.AV_OPT_TYPE_STRING)
+	AV_OPT_TYPE_RATIONAL   = AVOptionType(C.AV_OPT_TYPE_RATIONAL)
+	AV_OPT_TYPE_BINARY     = AVOptionType(C.AV_OPT_TYPE_BINARY)
+	AV_OPT_TYPE_DICT       = AVOptionType(C.AV_OPT_TYPE_DICT)
+	AV_OPT_TYPE_UINT64     = AVOptionType(C.AV_OPT_TYPE_UINT64)
+	AV_OPT_TYPE_CONST      = AVOptionType(C.AV_OPT_TYPE_CONST)
+	AV_OPT_TYPE_IMAGE_SIZE = AVOptionType(C.AV_OPT_TYPE_IMAGE_SIZE)
+	AV_OPT_TYPE_PIXEL_FMT  = AVOptionType(C.AV_OPT_TYPE_PIXEL_FMT)
+	AV_OPT_TYPE_SAMPLE_FMT = AVOptionType(C.AV_OPT_TYPE_SAMPLE_FMT)
+	AV_OPT_TYPE_VIDEO_RATE = AVOptionType(C.AV_OPT_TYPE_VIDEO_RATE)
+	AV_OPT_TYPE_DURATION   = AVOptionType(C.AV_OPT_TYPE_DURATION)
+	AV_OPT_TYPE_COLOR      = AVOptionType(C.AV_OPT_TYPE_COLOR)
+	AV_OPT_TYPE_BOOL       = AVOptionType(C.AV_OPT_TYPE_BOOL)
+	AV_OPT_TYPE_CHLAYOUT   = AVOptionType(C.AV_OPT_TYPE_CHLAYOUT)
+
+	AV_OPT_TYPE_FLAG_ARRAY = AVOptionType(C.AV_OPT_TYPE_FLAG_ARRAY)
 )
+
+// AVOptionArrayDef
+type AVOptionArrayDef C.struct_AVOptionArrayDef
+
+// GetDef gets `AVOptionArrayDef.def` value.
+func (oadf *AVOptionArrayDef) GetDef() string {
+	return C.GoString(oadf.def)
+}
+
+// GetSizeMin gets `AVOptionArrayDef.siz` value.
+func (oadf *AVOptionArrayDef) GetSizeMin() uint32 {
+	return (uint32)(oadf.size_min)
+}
+
+// SetSizeMin sets `AVOptionArrayDef.siz` value.
+func (oadf *AVOptionArrayDef) SetSizeMin(v uint32) {
+	oadf.size_min = (C.uint)(v)
+}
+
+// GetSizeMinAddr gets `AVOptionArrayDef.siz` address.
+func (oadf *AVOptionArrayDef) GetSizeMinAddr() *uint32 {
+	return (*uint32)(&oadf.size_min)
+}
+
+// GetSizeMax gets `AVOptionArrayDef.siz` value.
+func (oadf *AVOptionArrayDef) GetSizeMax() uint32 {
+	return (uint32)(oadf.size_max)
+}
+
+// SetSizeMax sets `AVOptionArrayDef.siz` value.
+func (oadf *AVOptionArrayDef) SetSizeMax(v uint32) {
+	oadf.size_max = (C.uint)(v)
+}
+
+// GetSizeMaxAddr gets `AVOptionArrayDef.siz` address.
+func (oadf *AVOptionArrayDef) GetSizeMaxAddr() *uint32 {
+	return (*uint32)(&oadf.size_max)
+}
+
+// GetSep gets `AVOptionArrayDef.sep` value.
+func (oadf *AVOptionArrayDef) GetSep() string {
+	return C.GoStringN(&oadf.sep, 1)
+}
+
+// SetSep sets `AVOptionArrayDef.sep` value.
+func (oadf *AVOptionArrayDef) SetSep(v string) {
+	SepPtr, SepFunc := StringCasting(v)
+	defer SepFunc()
+	oadf.sep = (C.char)(*SepPtr)
+}
 
 // AVOption
 type AVOption C.struct_AVOption
@@ -584,16 +635,6 @@ func AvOptSetVideoRate(obj CVoidPointer, name string, val AVRational, searchFlag
 		(C.struct_AVRational)(val), (C.int)(searchFlags)))
 }
 
-// Deprecated: No use.
-//
-// AvOptSetChannelLayout
-func AvOptSetChannelLayout(obj CVoidPointer, name string, chLayout int64, searchFlags int32) int32 {
-	namePtr, nameFunc := StringCasting(name)
-	defer nameFunc()
-	return (int32)(C.av_opt_set_channel_layout(VoidPointer(obj), (*C.char)(namePtr),
-		(C.int64_t)(chLayout), (C.int)(searchFlags)))
-}
-
 // AvOptSetChlayout
 func AvOptSetChlayout(obj CVoidPointer, name string, layout *AVChannelLayout, searchFlags int32) int32 {
 	namePtr, nameFunc := StringCasting(name)
@@ -686,16 +727,6 @@ func AvOptGetVideoRate(obj CVoidPointer, name string, searchFlags int32, outVal 
 	defer nameFunc()
 	return (int32)(C.av_opt_get_video_rate(VoidPointer(obj), (*C.char)(namePtr),
 		(C.int)(searchFlags), (*C.struct_AVRational)(outVal)))
-}
-
-// Deprecated: No use.
-//
-// AvOptGetChannelLayout
-func AvOptGetChannelLayout(obj CVoidPointer, name string, searchFlags int32, outVal *int64) int32 {
-	namePtr, nameFunc := StringCasting(name)
-	defer nameFunc()
-	return (int32)(C.av_opt_get_channel_layout(VoidPointer(obj), (*C.char)(namePtr),
-		(C.int)(searchFlags), (*C.int64_t)(outVal)))
 }
 
 // AvOptGetChlayout

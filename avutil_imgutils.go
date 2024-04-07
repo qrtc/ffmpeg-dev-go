@@ -220,3 +220,22 @@ func AvImageFillBlack(dstData []*uint8, dstLinesize []int,
 		(C.enum_AVPixelFormat)(pixFmt), (C.enum_AVColorRange)(_range),
 		(C.int)(width), (C.int)(height)))
 }
+
+// AvImageFillColor
+func AvImageFillColor(dstData []*uint8, dstLinesize []int,
+	pixFmt AVPixelFormat, color []uint32, width, height, flags int32) int32 {
+	if len(dstData) < 4 {
+		panic("dstData len < 4")
+	}
+	if len(dstLinesize) < 4 {
+		panic("dstLinesize len < 4")
+	}
+	if len(color) < 4 {
+		panic("color len < 4")
+	}
+	return (int32)(C.av_image_fill_color((**C.uint8_t)(unsafe.Pointer(&dstData[0])),
+		(*C.ptrdiff_t)(unsafe.Pointer(&dstLinesize[0])),
+		(C.enum_AVPixelFormat)(pixFmt),
+		(*C.uint32_t)(unsafe.Pointer(&color[0])),
+		(C.int)(width), (C.int)(height), (C.int)(flags)))
+}

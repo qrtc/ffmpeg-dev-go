@@ -144,27 +144,6 @@ func (bsrc *AVBufferSrcParameters) GetSampleRateAddr() *int32 {
 	return (*int32)(&bsrc.sample_rate)
 }
 
-// Deprecated: use ChLayout instead.
-//
-// GetChannelLayout gets `AVBufferSrcParameters.channel_layout` value.
-func (bsrc *AVBufferSrcParameters) GetChannelLayout() uint64 {
-	return (uint64)(bsrc.channel_layout)
-}
-
-// Deprecated: use ChLayout instead.
-//
-// SetChannelLayout sets `AVBufferSrcParameters.channel_layout` value.
-func (bsrc *AVBufferSrcParameters) SetChannelLayout(v uint64) {
-	bsrc.channel_layout = (C.uint64_t)(v)
-}
-
-// Deprecated: use ChLayout instead.
-//
-// GetChannelLayoutAddr gets `AVBufferSrcParameters.channel_layout` address.
-func (bsrc *AVBufferSrcParameters) GetChannelLayoutAddr() *uint64 {
-	return (*uint64)(&bsrc.channel_layout)
-}
-
 // GetChLayout gets `AVBufferSrcParameters.ch_layout` value.
 func (bsrc *AVBufferSrcParameters) GetChLayout() AVChannelLayout {
 	return (AVChannelLayout)(bsrc.ch_layout)
@@ -178,6 +157,36 @@ func (bsrc *AVBufferSrcParameters) SetChLayout(v AVChannelLayout) {
 // GetChLayoutAddr gets `AVBufferSrcParameters.ch_layout` address.
 func (bsrc *AVBufferSrcParameters) GetChLayoutAddr() *AVChannelLayout {
 	return (*AVChannelLayout)(&bsrc.ch_layout)
+}
+
+// GetColorSpace gets `AVBufferSrcParameters.color_space` value.
+func (bsrc *AVBufferSrcParameters) GetColorSpace() AVColorSpace {
+	return (AVColorSpace)(bsrc.color_space)
+}
+
+// SetColorSpace sets `AVBufferSrcParameters.color_space` value.
+func (bsrc *AVBufferSrcParameters) SetColorSpace(v AVColorSpace) {
+	bsrc.color_space = (C.enum_AVColorSpace)(v)
+}
+
+// GetColorSpaceAddr gets `AVBufferSrcParameters.color_space` address.
+func (bsrc *AVBufferSrcParameters) GetColorSpaceAddr() *AVColorSpace {
+	return (*AVColorSpace)(&bsrc.color_space)
+}
+
+// GetColorRange gets `AVBufferSrcParameters.color_range` value.
+func (bsrc *AVBufferSrcParameters) GetColorRange() AVColorRange {
+	return (AVColorRange)(bsrc.color_range)
+}
+
+// SetColorRange sets `AVBufferSrcParameters.color_range` value.
+func (bsrc *AVBufferSrcParameters) SetColorRange(v AVColorRange) {
+	bsrc.color_range = (C.enum_AVColorRange)(v)
+}
+
+// GetColorRangeAddr gets `AVBufferSrcParameters.color_range` address.
+func (bsrc *AVBufferSrcParameters) GetColorRangeAddr() *AVColorRange {
+	return (*AVColorRange)(&bsrc.color_range)
 }
 
 // AvBuffersrcParametersAlloc allocates a new AVBufferSrcParameters instance. It should be freed by the

@@ -328,36 +328,6 @@ func (par *AVCodecParameters) GetVideoDelayAddr() *int32 {
 	return (*int32)(&par.video_delay)
 }
 
-// GetChannelLayout gets `AVCodecParameters.channel_layout` value.
-func (par *AVCodecParameters) GetChannelLayout() uint64 {
-	return (uint64)(par.channel_layout)
-}
-
-// SetChannelLayout sets `AVCodecParameters.channel_layout` value.
-func (par *AVCodecParameters) SetChannelLayout(v uint64) {
-	par.channel_layout = (C.uint64_t)(v)
-}
-
-// GetChannelLayoutAddr gets `AVCodecParameters.channel_layout` address.
-func (par *AVCodecParameters) GetChannelLayoutAddr() *uint64 {
-	return (*uint64)(&par.channel_layout)
-}
-
-// GetChannels gets `AVCodecParameters.channels` value.
-func (par *AVCodecParameters) GetChannels() int32 {
-	return (int32)(par.channels)
-}
-
-// SetChannels sets `AVCodecParameters.channels` value.
-func (par *AVCodecParameters) SetChannels(v int32) {
-	par.channels = (C.int)(v)
-}
-
-// GetChannelsAddr gets `AVCodecParameters.channels` address.
-func (par *AVCodecParameters) GetChannelsAddr() *int32 {
-	return (*int32)(&par.channels)
-}
-
 // GetSampleRate gets `AVCodecParameters.sample_rate` value.
 func (par *AVCodecParameters) GetSampleRate() int32 {
 	return (int32)(par.sample_rate)

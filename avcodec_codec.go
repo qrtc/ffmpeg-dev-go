@@ -106,15 +106,6 @@ func (codec *AVCodec) GetSampleFmts() []AVSampleFormat {
 	})
 }
 
-// Deprecated: Use ChLayouts instead.
-//
-// GetChannelLayouts gets `AVCodec.channel_layouts` value.
-func (codec *AVCodec) GetChannelLayouts() []uint64 {
-	return SliceTrunc((*uint64)(codec.channel_layouts), func(u uint64) bool {
-		return u == 0
-	})
-}
-
 // GetMaxLowres gets `AVCodec.max_lowres` value.
 func (codec *AVCodec) GetMaxLowres() uint8 {
 	return (uint8)(codec.max_lowres)

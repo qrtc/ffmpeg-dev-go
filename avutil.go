@@ -118,17 +118,6 @@ func AvIntListLength[U, V Integer](list *U, term V) uint32 {
 	return (uint32)(C.av_int_list_length_for_size((C.uint)(elsize), (unsafe.Pointer)(list), (C.uint64_t)(term)))
 }
 
-// Deprecated: No use.
-//
-// AvFopenUtf8
-func AvFopenUtf8(path, mode string) *FILE {
-	pathPtr, pathFunc := StringCasting(path)
-	defer pathFunc()
-	modePtr, modeFunc := StringCasting(mode)
-	defer modeFunc()
-	return (*FILE)(C.av_fopen_utf8((*C.char)(pathPtr), (*C.char)(modePtr)))
-}
-
 // AvGetTimeBaseQ returns the fractional representation of the internal time base.
 func AvGetTimeBaseQ() AVRational {
 	return (AVRational)(C.av_get_time_base_q())

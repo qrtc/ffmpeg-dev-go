@@ -40,10 +40,10 @@ func decode(decCtx *ffmpeg.AVCodecContext, frame *ffmpeg.AVFrame, pkt *ffmpeg.AV
 			os.Exit(1)
 		}
 
-		fmt.Fprintf(os.Stdout, "saving frame %3d\n", decCtx.GetFrameNumber())
+		fmt.Fprintf(os.Stdout, "saving frame %3d\n", decCtx.GetFrameNum())
 
 		// the picture is allocated by the decoder. no need to free it
-		fname := fmt.Sprintf("%s-%d", filename, decCtx.GetFrameNumber())
+		fname := fmt.Sprintf("%s-%d", filename, decCtx.GetFrameNum())
 		pgmSave(frame.GetData()[0], frame.GetLinesize()[0], frame.GetWidth(), frame.GetHeight(), fname)
 	}
 }

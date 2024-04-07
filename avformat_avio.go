@@ -237,27 +237,6 @@ type AVIODirContext C.struct_AVIODirContext
 // URLContext
 type URLContext C.struct_URLContext
 
-// Deprecated: No use.
-//
-// GetURLContext gets `AVIODirContext.url_context` value.
-func (dc *AVIODirContext) GetURLContext() *URLContext {
-	return (*URLContext)(dc.url_context)
-}
-
-// Deprecated: No use.
-//
-// SetURLContext sets `AVIODirContext.url_context` value.
-func (dc *AVIODirContext) SetURLContext(v *URLContext) {
-	dc.url_context = (*C.struct_URLContext)(v)
-}
-
-// Deprecated: No use.
-//
-// GetURLContextAddr gets `AVIODirContext.url_context` address.
-func (dc *AVIODirContext) GetURLContextAddr() **URLContext {
-	return (**URLContext)(unsafe.Pointer(&dc.url_context))
-}
-
 // AVIODataMarkerType
 type AVIODataMarkerType = C.enum_AVIODataMarkerType
 

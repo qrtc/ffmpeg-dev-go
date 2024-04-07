@@ -43,7 +43,7 @@ func outputVideoFrame(videoDecCtx *ffmpeg.AVCodecContext, frame *ffmpeg.AVFrame)
 	}
 
 	videoFrameCount++
-	fmt.Fprintf(os.Stdout, "video_frame n:%d coded_n:%d\n", videoFrameCount, frame.GetCodedPictureNumber())
+	fmt.Fprintf(os.Stdout, "video_frame n:%d\n", videoFrameCount)
 
 	// copy decoded frame to destination buffer:
 	// this is required since rawvideo expects non aligned data
@@ -309,7 +309,7 @@ func main() {
 
 	if audioStream != nil {
 		sfmt := audioDecCtx.GetSampleFmt()
-		nChannels := audioDecCtx.GetChannels()
+		nChannels := audioDecCtx.GetChLayoutAddr().GetNbChannels()
 		var _fmt string
 
 		if ffmpeg.AvSampleFmtIsPlanar(sfmt) != 0 {

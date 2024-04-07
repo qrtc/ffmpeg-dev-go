@@ -29,6 +29,7 @@ const (
 	AV_HWDEVICE_TYPE_OPENCL       = AVHWDeviceType(C.AV_HWDEVICE_TYPE_OPENCL)
 	AV_HWDEVICE_TYPE_MEDIACODEC   = AVHWDeviceType(C.AV_HWDEVICE_TYPE_MEDIACODEC)
 	AV_HWDEVICE_TYPE_VULKAN       = AVHWDeviceType(C.AV_HWDEVICE_TYPE_VULKAN)
+	AV_HWDEVICE_TYPE_D3D12VA      = AVHWDeviceType(C.AV_HWDEVICE_TYPE_D3D12VA)
 )
 
 // AVHWDeviceInternal
@@ -53,21 +54,6 @@ func (dc *AVHWDeviceContext) SetAvClass(v *AVClass) {
 // GetAvClassAddr gets `AVHWDeviceContext.av_class` address.
 func (dc *AVHWDeviceContext) GetAvClassAddr() **AVClass {
 	return (**AVClass)(unsafe.Pointer(&dc.av_class))
-}
-
-// GetInternal gets `AVHWDeviceContext.internal` value.
-func (dc *AVHWDeviceContext) GetInternal() *AVHWDeviceInternal {
-	return (*AVHWDeviceInternal)(dc.internal)
-}
-
-// SetInternal sets `AVHWDeviceContext.internal` value.
-func (dc *AVHWDeviceContext) SetInternal(v *AVHWDeviceInternal) {
-	dc.internal = (*C.struct_AVHWDeviceInternal)(v)
-}
-
-// GetInternalAddr gets `AVHWDeviceContext.internal` address.
-func (dc *AVHWDeviceContext) GetInternalAddr() **AVHWDeviceInternal {
-	return (**AVHWDeviceInternal)(unsafe.Pointer(&dc.internal))
 }
 
 // GetType gets `AVHWDeviceContext.type` value.
@@ -142,21 +128,6 @@ func (fc *AVHWFramesContext) SetAvClass(v *AVClass) {
 // GetAvClassAddr gets `AVHWFramesContext.av_class` address.
 func (fc *AVHWFramesContext) GetAvClassAddr() **AVClass {
 	return (**AVClass)(unsafe.Pointer(&fc.av_class))
-}
-
-// GetInternal gets `AVHWFramesContext.internal` value.
-func (fc *AVHWFramesContext) GetInternal() *AVHWFramesInternal {
-	return (*AVHWFramesInternal)(fc.internal)
-}
-
-// SetInternal sets `AVHWFramesContext.internal` value.
-func (fc *AVHWFramesContext) SetInternal(v *AVHWFramesInternal) {
-	fc.internal = (*C.struct_AVHWFramesInternal)(v)
-}
-
-// GetInternalAddr gets `AVHWFramesContext.internal` address.
-func (fc *AVHWFramesContext) GetInternalAddr() **AVHWFramesInternal {
-	return (**AVHWFramesInternal)(unsafe.Pointer(&fc.internal))
 }
 
 // GetDeviceRef gets `AVHWFramesContext.device_ref` value.

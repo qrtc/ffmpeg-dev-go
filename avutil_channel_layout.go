@@ -63,6 +63,8 @@ const struct AVChannelLayout av_channel_layout_cube                  = AV_CHANNE
 const struct AVChannelLayout av_channel_layout_5point1point4_back    = AV_CHANNEL_LAYOUT_5POINT1POINT4_BACK;
 const struct AVChannelLayout av_channel_layout_7point1point2         = AV_CHANNEL_LAYOUT_7POINT1POINT2;
 const struct AVChannelLayout av_channel_layout_7point1point4_back    = AV_CHANNEL_LAYOUT_7POINT1POINT4_BACK;
+const struct AVChannelLayout av_channel_layout_7point2point3         = AV_CHANNEL_LAYOUT_7POINT2POINT3;
+const struct AVChannelLayout av_channel_layout_9point1point4_back    = AV_CHANNEL_LAYOUT_9POINT1POINT4_BACK;
 const struct AVChannelLayout av_channel_layout_hexadecagonal         = AV_CHANNEL_LAYOUT_HEXADECAGONAL;
 const struct AVChannelLayout av_channel_layout_stereo_downmix        = AV_CHANNEL_LAYOUT_STEREO_DOWNMIX;
 const struct AVChannelLayout av_channel_layout_22point2              = AV_CHANNEL_LAYOUT_22POINT2;
@@ -160,8 +162,6 @@ const (
 	AV_CH_BOTTOM_FRONT_CENTER   = uint64(C.AV_CH_BOTTOM_FRONT_CENTER)
 	AV_CH_BOTTOM_FRONT_LEFT     = uint64(C.AV_CH_BOTTOM_FRONT_LEFT)
 	AV_CH_BOTTOM_FRONT_RIGHT    = uint64(C.AV_CH_BOTTOM_FRONT_RIGHT)
-
-	AV_CH_LAYOUT_NATIVE = uint64(C.AV_CH_LAYOUT_NATIVE)
 )
 
 const (
@@ -197,6 +197,8 @@ const (
 	AV_CH_LAYOUT_5POINT1POINT4_BACK = uint64(C.AV_CH_LAYOUT_5POINT1POINT4_BACK)
 	AV_CH_LAYOUT_7POINT1POINT2      = uint64(C.AV_CH_LAYOUT_7POINT1POINT2)
 	AV_CH_LAYOUT_7POINT1POINT4_BACK = uint64(C.AV_CH_LAYOUT_7POINT1POINT4_BACK)
+	AV_CH_LAYOUT_7POINT2POINT3      = uint64(C.AV_CH_LAYOUT_7POINT2POINT3)
+	AV_CH_LAYOUT_9POINT1POINT4_BACK = uint64(C.AV_CH_LAYOUT_9POINT1POINT4_BACK)
 	AV_CH_LAYOUT_HEXADECAGONAL      = uint64(C.AV_CH_LAYOUT_HEXADECAGONAL)
 	AV_CH_LAYOUT_STEREO_DOWNMIX     = uint64(C.AV_CH_LAYOUT_STEREO_DOWNMIX)
 	AV_CH_LAYOUT_22POINT2           = uint64(C.AV_CH_LAYOUT_22POINT2)
@@ -433,6 +435,12 @@ func AV_CHANNEL_LAYOUT_7POINT1POINT2() *AVChannelLayout {
 func AV_CHANNEL_LAYOUT_7POINT1POINT4_BACK() *AVChannelLayout {
 	return (*AVChannelLayout)(&C.av_channel_layout_7point1point4_back)
 }
+func AV_CHANNEL_LAYOUT_7POINT2POINT3() *AVChannelLayout {
+	return (*AVChannelLayout)(&C.av_channel_layout_7point2point3)
+}
+func AV_CHANNEL_LAYOUT_9POINT1POINT4_BACK() *AVChannelLayout {
+	return (*AVChannelLayout)(&C.av_channel_layout_9point1point4_back)
+}
 func AV_CHANNEL_LAYOUT_HEXADECAGONAL() *AVChannelLayout {
 	return (*AVChannelLayout)(&C.av_channel_layout_hexadecagonal)
 }
@@ -445,98 +453,8 @@ func AV_CHANNEL_LAYOUT_22POINT2() *AVChannelLayout {
 func AV_CHANNEL_LAYOUT_AMBISONIC_FIRST_ORDER() *AVChannelLayout {
 	return (*AVChannelLayout)(&C.av_channel_layout_ambisonic_first_order)
 }
-
 func AV_CHANNEL_LAYOUT_7POINT1_TOP_BACK() *AVChannelLayout {
 	return (*AVChannelLayout)(&C.av_channel_layout_7point1_top_back)
-}
-
-// Deprecated: Use AvChannelLayoutFromString() instead.
-//
-// AvGetChannelLayout returns a channel layout id that matches name, or 0 if no match is found.
-func AvGetChannelLayout(name string) uint64 {
-	namePtr, nameFunc := StringCasting(name)
-	defer nameFunc()
-	return (uint64)(C.av_get_channel_layout((*C.char)(namePtr)))
-}
-
-// Deprecated: Use AvChannelLayoutFromString() instead.
-//
-// AvGetExtendedChannelLayout returns a channel layout and the number of channels based on the specified name.
-func AvGetExtendedChannelLayout(name string, channelLayout *uint64, nbChannels *int32) int32 {
-	namePtr, nameFunc := StringCasting(name)
-	defer nameFunc()
-	return (int32)(C.av_get_extended_channel_layout((*C.char)(namePtr),
-		(*C.uint64_t)(channelLayout), (*C.int32_t)(nbChannels)))
-}
-
-// Deprecated: Use AvChannelLayoutDescribe() instead.
-//
-// AvGetChannelLayoutString returns a description of a channel layout.
-func AvGetChannelLayoutString(nbChannels int32, channelLayout uint64) string {
-	buf := make([]C.char, AV_CH_LAYOUT_MAX_STRING_SIZE)
-	C.av_get_channel_layout_string((*C.char)(&buf[0]), (C.int)(AV_CH_LAYOUT_MAX_STRING_SIZE),
-		(C.int)(nbChannels), (C.uint64_t)(channelLayout))
-	return C.GoString((*C.char)(&buf[0]))
-}
-
-// Deprecated: Use AvChannelLayoutDescribe() instead.
-//
-// AvBPrintChannelLayout appends a description of a channel layout to a bprint buffer.
-func AvBPrintChannelLayout(bp *AVBPrint, nbChannels int32, channelLayout uint64) {
-	C.av_bprint_channel_layout((*C.struct_AVBPrint)(bp),
-		(C.int)(nbChannels), (C.uint64_t)(channelLayout))
-}
-
-// Deprecated: Use AVChannelLayout.GetNbChannels() instead.
-//
-// AvGetChannelLayoutNbChannels returns the number of channels in the channel layout.
-func AvGetChannelLayoutNbChannels(channelLayout uint64) int32 {
-	return (int32)(C.av_get_channel_layout_nb_channels((C.uint64_t)(channelLayout)))
-}
-
-// Deprecated: Use AvChannelLayoutDefault() instead.
-//
-// AvGetDefaultChannelLayout returns default channel layout for a given number of channels.
-func AvGetDefaultChannelLayout(nbChannels int32) int64 {
-	return (int64)(C.av_get_default_channel_layout((C.int)(nbChannels)))
-}
-
-// Deprecated: Use AvChannelLayoutIndexFromChannel() instead.
-//
-// AvGetChannelLayoutChannelIndex gets the index of a channel in channel_layout.
-func AvGetChannelLayoutChannelIndex(channelLayout, channel uint64) int32 {
-	return (int32)(C.av_get_channel_layout_channel_index((C.uint64_t)(channelLayout),
-		(C.uint64_t)(channel)))
-}
-
-// Deprecated: Use AvChannelLayoutChannelFromIndex() instead.
-//
-// AvChannelLayoutExtractChannel gets the channel with the given index in channel_layout.
-func AvChannelLayoutExtractChannel(channelLayout uint64, index int32) uint64 {
-	return (uint64)(C.av_channel_layout_extract_channel((C.uint64_t)(channelLayout),
-		(C.int)(index)))
-}
-
-// Deprecated: Use AvChannelName() instead.
-//
-// AvGetChannelName gets the name of a given channel.
-func AvGetChannelName(channel uint64) string {
-	return C.GoString(C.av_get_channel_name((C.uint64_t)(channel)))
-}
-
-// Deprecated: Use AvChannelDescription() instead.
-//
-// AvGetChannelDescription gets the value and name of a standard channel layout.
-func AvGetChannelDescription(channel uint64) string {
-	return C.GoString(C.av_get_channel_description((C.uint64_t)(channel)))
-}
-
-// Deprecated: Use AvChannelLayoutStandard() instead.
-//
-// AvGetStandardChannelLayout Get the value and name of a standard channel layout.
-func AvGetStandardChannelLayout(index uint32, layout *uint64, name **int8) int32 {
-	return (int32)(C.av_get_standard_channel_layout((C.uint)(index),
-		(*C.uint64_t)(layout), (**C.char)(unsafe.Pointer(name))))
 }
 
 // AvChannelName gets a human readable string in an abbreviated form describing a given channel.
@@ -574,6 +492,11 @@ func AvChannelFromString(name string) AVChannel {
 	namePtr, nameFunc := StringCasting(name)
 	defer nameFunc()
 	return (AVChannel)(C.av_channel_from_string((*C.char)(namePtr)))
+}
+
+// AvChannelLayoutCustomInit
+func AvChannelLayoutCustomInit(channelLayout *AVChannelLayout, nbChannels int32) int32 {
+	return (int32)(C.av_channel_layout_custom_init((*C.struct_AVChannelLayout)(channelLayout), (C.int)(nbChannels)))
 }
 
 // AvChannelLayoutFromMask initializes a native channel layout from a bitmask indicating which channels
@@ -677,4 +600,15 @@ func AvChannelLayoutCheck(channelLayout *AVChannelLayout) int32 {
 func AvChannelLayoutCompare(chl, chl1 *AVChannelLayout) int32 {
 	return (int32)(C.av_channel_layout_compare((*C.struct_AVChannelLayout)(chl),
 		(*C.struct_AVChannelLayout)(chl1)))
+}
+
+const (
+	AV_CHANNEL_LAYOUT_RETYPE_FLAG_LOSSLESS  = int32(C.AV_CHANNEL_LAYOUT_RETYPE_FLAG_LOSSLESS)
+	AV_CHANNEL_LAYOUT_RETYPE_FLAG_CANONICAL = int32(C.AV_CHANNEL_LAYOUT_RETYPE_FLAG_CANONICAL)
+)
+
+// AvChannelLayoutRetype changes the AVChannelOrder of a channel layout.
+func AvChannelLayoutRetype(channelLayout *AVChannelLayout, order AVChannelOrder, flags int32) int32 {
+	return (int32)(C.av_channel_layout_retype((*C.struct_AVChannelLayout)(channelLayout),
+		(C.enum_AVChannelOrder)(order), (C.int)(flags)))
 }

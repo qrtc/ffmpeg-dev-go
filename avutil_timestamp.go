@@ -31,6 +31,13 @@ func AvTsMakeTimeString(ts int64, tb *AVRational) string {
 		(C.int64_t)(ts), (*C.struct_AVRational)(tb)))
 }
 
+// AvTsMakeTimeString2 makes a timestamp string.
+func AvTsMakeTimeString2(ts int64, tb AVRational) string {
+	b := make([]C.char, AV_TS_MAX_STRING_SIZE+1)
+	return C.GoString(C.av_ts_make_time_string2((*C.char)(&b[0]),
+		(C.int64_t)(ts), (C.struct_AVRational)(tb)))
+}
+
 // AvTs2timestr
 func AvTs2timestr[T Integer](ts T, tb *AVRational) string {
 	return AvTsMakeTimeString((int64)(ts), tb)

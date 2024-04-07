@@ -189,6 +189,7 @@ const (
 	AV_PIX_FMT_FLAG_ALPHA = C.AV_PIX_FMT_FLAG_ALPHA
 	AV_PIX_FMT_FLAG_BAYER = C.AV_PIX_FMT_FLAG_BAYER
 	AV_PIX_FMT_FLAG_FLOAT = C.AV_PIX_FMT_FLAG_FLOAT
+	AV_PIX_FMT_FLAG_XYZ   = C.AV_PIX_FMT_FLAG_XYZ
 )
 
 // AvGetBitsPerPixel returns the number of bits per pixel used by the pixel format

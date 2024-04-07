@@ -235,7 +235,7 @@ func initResampler(inputCodecContext, outputCodecContext *ffmpeg.AVCodecContext)
 func initFifo(outputCodecContext *ffmpeg.AVCodecContext) (fifo *ffmpeg.AVAudioFifo, ret int32) {
 	// Create the FIFO buffer based on the specified output sample format
 	if fifo = ffmpeg.AvAudioFifoAlloc(outputCodecContext.GetSampleFmt(),
-		outputCodecContext.GetChannels(), 1); fifo == nil {
+		outputCodecContext.GetChLayoutAddr().GetNbChannels(), 1); fifo == nil {
 		fmt.Fprintf(os.Stderr, "Could not allocate FIFO\n")
 		return nil, ffmpeg.AVERROR(syscall.ENOMEM)
 	}
@@ -315,7 +315,7 @@ func initConvertedSamples(outputCodecContext *ffmpeg.AVCodecContext,
 	// Allocate as many pointers as there are audio channels.
 	// Each pointer will later point to the audio samples of the corresponding
 	// channels (although it may be NULL for interleaved formats).
-	if convertedInputSamples = (**uint8)(ffmpeg.AvCalloc(outputCodecContext.GetChannels(),
+	if convertedInputSamples = (**uint8)(ffmpeg.AvCalloc(outputCodecContext.GetChLayoutAddr().GetNbChannels(),
 		unsafe.Sizeof(*convertedInputSamples))); convertedInputSamples == nil {
 		fmt.Fprintf(os.Stderr, "Could not allocate converted input sample pointers\n")
 		return nil, ffmpeg.AVERROR(syscall.ENOMEM)
@@ -324,7 +324,7 @@ func initConvertedSamples(outputCodecContext *ffmpeg.AVCodecContext,
 	// Allocate memory for the samples of all channels in one consecutive
 	// block for convenience.
 	if ret = ffmpeg.AvSamplesAlloc(convertedInputSamples, nil,
-		outputCodecContext.GetChannels(),
+		outputCodecContext.GetChLayoutAddr().GetNbChannels(),
 		frameSize,
 		outputCodecContext.GetSampleFmt(), 0); ret < 0 {
 		fmt.Fprintf(os.Stderr, "Could not allocate converted input samples (error '%s')\n", ffmpeg.AvErr2str(ret))

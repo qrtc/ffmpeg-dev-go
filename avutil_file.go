@@ -23,18 +23,3 @@ func AvFileMap(filename string, bufptr **uint8, size *uintptr, logOffset int32, 
 func AvFileUnmap(bufptr *uint8, size uintptr) {
 	C.av_file_unmap((*C.uint8_t)(bufptr), (C.size_t)(size))
 }
-
-// Deprecated: No use.
-//
-// AvTempfile tries to create file in /tmp first, if possible.
-func AvTempfile(prefix string, logOffset int32, logCtx CVoidPointer) (filename string, ret int32) {
-	prefixPtr, prefixFunc := StringCasting(prefix)
-	defer prefixFunc()
-	var filenamePtr *C.char
-	defer FreePointer(filenamePtr)
-	ret = (int32)(C.av_tempfile((*C.char)(prefixPtr),
-		(**C.char)(unsafe.Pointer(&filenamePtr)),
-		(C.int)(logOffset),
-		VoidPointer(logCtx)))
-	return C.GoString(filenamePtr), ret
-}

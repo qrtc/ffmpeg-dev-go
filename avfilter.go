@@ -320,21 +320,6 @@ func (fltc *AVFilterContext) GetThreadTypeAddr() *int32 {
 	return (*int32)(&fltc.thread_type)
 }
 
-// GetInternal gets `AVFilterContext.internal` value.
-func (fltc *AVFilterContext) GetInternal() *AVFilterInternal {
-	return (*AVFilterInternal)(fltc.internal)
-}
-
-// SetInternal sets `AVFilterContext.internal` value.
-func (fltc *AVFilterContext) SetInternal(v *AVFilterInternal) {
-	fltc.internal = (*C.struct_AVFilterInternal)(v)
-}
-
-// GetInternalAddr gets `AVFilterContext.internal` address.
-func (fltc *AVFilterContext) GetInternalAddr() **AVFilterInternal {
-	return (**AVFilterInternal)(unsafe.Pointer(&fltc.internal))
-}
-
 // AVFilterCommand
 type AVFilterCommand C.struct_AVFilterCommand
 
@@ -634,25 +619,34 @@ func (fltl *AVFilterLink) GetSampleAspectRatioAddr() *AVRational {
 	return (*AVRational)(&fltl.sample_aspect_ratio)
 }
 
-// Deprecated: Use ChLayout instead.
-//
-// GetChannelLayout gets `AVFilterLink.channel_layout` value.
-func (fltl *AVFilterLink) GetChannelLayout() uint64 {
-	return (uint64)(fltl.channel_layout)
+// GetColorspace gets `AVFilterLink.colorspace` value.
+func (fltl *AVFilterLink) GetColorspace() AVColorSpace {
+	return (AVColorSpace)(fltl.colorspace)
 }
 
-// Deprecated: Use ChLayout instead.
-//
-// SetChannelLayout sets `AVFilterLink.channel_layout` value.
-func (fltl *AVFilterLink) SetChannelLayout(v uint64) {
-	fltl.channel_layout = (C.uint64_t)(v)
+// SetColorspace sets `AVFilterLink.colorspace` value.
+func (fltl *AVFilterLink) SetColorspace(v AVColorSpace) {
+	fltl.colorspace = (C.enum_AVColorSpace)(v)
 }
 
-// Deprecated: Use ChLayout instead.
-//
-// GetChannelLayoutAddr gets `AVFilterLink.channel_layout` address.
-func (fltl *AVFilterLink) GetChannelLayoutAddr() *uint64 {
-	return (*uint64)(&fltl.channel_layout)
+// GetColorspaceAddr gets `AVFilterLink.colorspace` address.
+func (fltl *AVFilterLink) GetColorspaceAddr() *AVColorSpace {
+	return (*AVColorSpace)(&fltl.colorspace)
+}
+
+// GetColorRange gets `AVFilterLink.color_range` value.
+func (fltl *AVFilterLink) GetColorRange() AVColorRange {
+	return (AVColorRange)(fltl.color_range)
+}
+
+// SetColorRange sets `AVFilterLink.color_range` value.
+func (fltl *AVFilterLink) SetColorRange(v AVColorRange) {
+	fltl.color_range = (C.enum_AVColorRange)(v)
+}
+
+// GetColorRangeAddr gets `AVFilterLink.color_range` address.
+func (fltl *AVFilterLink) GetColorRangeAddr() *AVColorRange {
+	return (*AVColorRange)(&fltl.color_range)
 }
 
 // GetSampleRate gets `AVFilterLink.sample_rate` value.
@@ -887,21 +881,6 @@ func (fltg *AVFilterGraph) SetNbThreads(v int32) {
 // GetNbThreadsAddr gets `AVFilterGraph.nb_threads` address.
 func (fltg *AVFilterGraph) GetNbThreadsAddr() *int32 {
 	return (*int32)(&fltg.nb_threads)
-}
-
-// GetInternal gets `AVFilterGraph.internal` value.
-func (fltg *AVFilterGraph) GetInternal() *AVFilterGraphInternal {
-	return (*AVFilterGraphInternal)(fltg.internal)
-}
-
-// SetInternal sets `AVFilterGraph.internal` value.
-func (fltg *AVFilterGraph) SetInternal(v *AVFilterGraphInternal) {
-	fltg.internal = (*C.struct_AVFilterGraphInternal)(v)
-}
-
-// GetInternalAddr gets `AVFilterGraph.internal` address.
-func (fltg *AVFilterGraph) GetInternalAddr() **AVFilterGraphInternal {
-	return (**AVFilterGraphInternal)(unsafe.Pointer(&fltg.internal))
 }
 
 // GetOpaque gets `AVFilterGraph.opaque` value.

@@ -66,16 +66,19 @@ func AvBuffersinkGetSampleAspectRatio(ctx *AVFilterContext) AVRational {
 	return (AVRational)(C.av_buffersink_get_sample_aspect_ratio((*C.struct_AVFilterContext)(ctx)))
 }
 
+// AvBuffersinkGetColorspace
+func AvBuffersinkGetColorspace(ctx *AVFilterContext) AVColorSpace {
+	return (AVColorSpace)(C.av_buffersink_get_colorspace((*C.struct_AVFilterContext)(ctx)))
+}
+
+// AvBuffersinkGetColorRange
+func AvBuffersinkGetColorRange(ctx *AVFilterContext) AVColorRange {
+	return (AVColorRange)(C.av_buffersink_get_color_range((*C.struct_AVFilterContext)(ctx)))
+}
+
 // AvBuffersinkGetChannels
 func AvBuffersinkGetChannels(ctx *AVFilterContext) int32 {
 	return (int32)(C.av_buffersink_get_channels((*C.struct_AVFilterContext)(ctx)))
-}
-
-// Deprecated: No use.
-//
-// AvBuffersinkGetChannelLayout
-func AvBuffersinkGetChannelLayout(ctx *AVFilterContext) uint64 {
-	return (uint64)(C.av_buffersink_get_channel_layout((*C.struct_AVFilterContext)(ctx)))
 }
 
 // AvBuffersinkGetChLayout

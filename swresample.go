@@ -75,19 +75,6 @@ func SwrIsInitialized(s *SwrContext) int32 {
 	return (int32)(C.swr_is_initialized((*C.struct_SwrContext)(s)))
 }
 
-// Deprecated: Use SwrAllocSetOpts2() instead.
-//
-// SwrAllocSetOpts allocates SwrContext if needed and set/reset common parameters.
-func SwrAllocSetOpts(s *SwrContext,
-	outChLayout int64, outSampleFmt AVSampleFormat, outSampleRate int32,
-	inChLayout int64, inSampleFmt AVSampleFormat, inSampleRate int32,
-	logOffset int32, logCtx CVoidPointer) *SwrContext {
-	return (*SwrContext)(C.swr_alloc_set_opts((*C.struct_SwrContext)(s),
-		(C.int64_t)(outChLayout), (C.enum_AVSampleFormat)(outSampleFmt), (C.int)(outSampleRate),
-		(C.int64_t)(inChLayout), (C.enum_AVSampleFormat)(inSampleFmt), (C.int)(inSampleRate),
-		(C.int)(logOffset), VoidPointer(logCtx)))
-}
-
 // SwrAllocSetOpts2 allocates SwrContext if needed and set/reset common parameters.
 func SwrAllocSetOpts2(s **SwrContext,
 	outChLayout *AVChannelLayout, outSampleFmt AVSampleFormat, outSampleRate int32,
@@ -132,19 +119,6 @@ func SwrSetCompensation(s *SwrContext, sampleDelta, compensationDistance int32) 
 // SwrSetChannelMapping sets a customized input channel mapping.
 func SwrSetChannelMapping(s *SwrContext, channelMap *int32) int32 {
 	return (int32)(C.swr_set_channel_mapping((*C.struct_SwrContext)(s), (*C.int)(channelMap)))
-}
-
-// Deprecated: Use SwrBuildMatrix2() instead.
-//
-// SwrBuildMatrix generates a channel mixing matrix.
-func SwrBuildMatrix(inLayout, outLayout uint64,
-	centerMixLevel, surroundMixLevel, lfeMixLevel float64,
-	rematrixMaxval, rematrixVolume float64,
-	matrix *float64, stride int32, matrixEncoding AVMatrixEncoding, logCtx CVoidPointer) int32 {
-	return (int32)(C.swr_build_matrix((C.uint64_t)(inLayout), (C.uint64_t)(outLayout),
-		(C.double)(centerMixLevel), (C.double)(surroundMixLevel), (C.double)(lfeMixLevel),
-		(C.double)(rematrixMaxval), (C.double)(rematrixVolume),
-		(*C.double)(matrix), (C.int)(stride), (C.enum_AVMatrixEncoding)(matrixEncoding), VoidPointer(logCtx)))
 }
 
 // SwrBuildMatrix2 generates a channel mixing matrix.
